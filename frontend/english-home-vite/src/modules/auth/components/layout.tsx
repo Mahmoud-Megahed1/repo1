@@ -59,7 +59,11 @@ const Layout: FC<Props> = ({ children }) => {
           }}
           className="bg-background text-foreground absolute top-4 rounded-md px-4 py-1 font-bold ltr:left-4 rtl:right-4"
         />
-        <EnglishHomeSVG />
+        <img
+          src="/images/auth-banner-new.jpg"
+          alt="Welcome to English Home"
+          className="h-full w-full object-cover"
+        />
       </section>
     </div>
   );
