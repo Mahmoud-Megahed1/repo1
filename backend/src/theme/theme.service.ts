@@ -18,21 +18,22 @@ export class ThemeService {
   }
 
   async findAll(): Promise<Theme[]> {
-    return this.themeModel.find().exec();
+    return this.themeModel.find().lean().exec();
   }
 
   async findOne(id: string): Promise<Theme> {
-    return this.themeModel.findById(id).exec();
+    return this.themeModel.findById(id).lean().exec();
   }
 
   async update(id: string, updateThemeDto: UpdateThemeDto): Promise<Theme> {
     return this.themeModel
       .findByIdAndUpdate(id, updateThemeDto, { new: true })
+      .lean()
       .exec();
   }
 
   async remove(id: string): Promise<Theme> {
-    return this.themeModel.findByIdAndDelete(id).exec();
+    return this.themeModel.findByIdAndDelete(id).lean().exec();
   }
 
   async findCurrentTheme(): Promise<Theme | null> {
@@ -43,6 +44,7 @@ export class ThemeService {
         startDate: { $lte: now },
         endDate: { $gte: now },
       })
+      .lean()
       .exec();
   }
 }
