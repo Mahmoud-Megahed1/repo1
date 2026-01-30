@@ -166,18 +166,38 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
             isPending ? (
               <Loading />
             ) : (
-              <SpeakingFeedback
-                result={currentRecord.results!}
-                onReset={() => {
-                  setUsersRecords((prev) => {
-                    const newData = [...prev];
-                    newData[currentIndex].recordUrl = null;
-                    return newData;
-                  });
-                }}
-                recordUrl={currentRecord.recordUrl}
-                className="mt-8"
-              />
+              <div className="flex flex-col items-center gap-4">
+                {currentRecord.results?.isPassed && (
+                  <div className="bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold flex items-center gap-2">
+                    <span>✓</span> {t('Global.completed')}
+                  </div>
+                )}
+                <SpeakingFeedback
+                  result={currentRecord.results!}
+                  onReset={() => {
+                    setUsersRecords((prev) => {
+                      const newData = [...prev];
+                      newData[currentIndex].recordUrl = null;
+                      return newData;
+                    });
+                  }}
+                  recordUrl={currentRecord.recordUrl}
+                  className="mt-4"
+                />
+
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setUsersRecords((prev) => {
+                      const newData = [...prev];
+                      newData[currentIndex].recordUrl = null;
+                      return newData;
+                    });
+                  }}
+                >
+                  {t('Global.tryAgain')}
+                </Button>
+              </div>
             )
           ) : (
             <Recorder
@@ -189,7 +209,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
         </CardContent>
       </Card>
 
-      <div className="flex items-center justify-between">
+      <div className="sticky bottom-0 bg-background/80 backdrop-blur-sm p-4 border-t mt-4 flex items-center justify-between z-10">
         <Button variant="outline" onClick={prev} disabled={!hasPrevItems}>
           {t('Global.prev')}
         </Button>
@@ -199,13 +219,13 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
             .map((_, i) => (
               <li
                 key={i}
-                className={cn('bg-accent size-2 rounded-full', {
-                  'bg-primary scale-105': i === currentIndex,
+                className={cn('bg-accent size-2 rounded-full transition-all duration-300', {
+                  'bg-primary scale-125': i === currentIndex,
                 })}
               />
             ))}
         </ul>
-        <Button variant="outline" onClick={next} disabled={!hasNextItems}>
+        <Button variant="default" onClick={next} disabled={!hasNextItems} className="px-8">
           {t('Global.next')}
         </Button>
       </div>
