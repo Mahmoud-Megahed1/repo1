@@ -335,6 +335,27 @@
       "max": "Must not exceed {max} characters",
       "invalidEmail": "Invalid email address",
       "emailExists": "Email already exists"
+    },
+    "create": "Create",
+    "name": "Name",
+    "status": "Status",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "active": "Active",
+    "inactive": "Inactive",
+    "actions": "Actions",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "Admin": {
+    "themes": {
+      "title": "Themes",
+      "add": "Add Theme",
+      "edit": "Edit Theme",
+      "delete": "Delete Theme",
+      "list": "Themes List"
     }
   }
 }
