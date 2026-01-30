@@ -1,4 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
 import { SYSTEM_PROMPT } from './constants/website-content';
 
@@ -6,14 +7,21 @@ import { SYSTEM_PROMPT } from './constants/website-content';
 export class ChatService {
   private openai: OpenAI;
 
-  constructor() {
+  constructor(private configService: ConfigService) {
+    const apiKey = this.configService.get<string>('OPENAI_API_KEY');
+
+    if (!apiKey) {
+      console.warn('OPENAI_API_KEY is not defined in environment variables');
+    }
+
     this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: apiKey || 'dummy-key-to-prevent-startup-crash',
     });
   }
 
   async generateResponse(userMessage: string) {
-    if (!process.env.OPENAI_API_KEY) {
+    const apiKey = this.configService.get<string>('OPENAI_API_KEY');
+    if (!apiKey) {
       console.error("Missing OPENAI_API_KEY");
       return { reply: "I'm sorry, my brain is offline right now (Missing API Key)." };
     }
