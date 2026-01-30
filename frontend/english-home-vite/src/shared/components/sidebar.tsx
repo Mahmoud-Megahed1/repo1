@@ -13,6 +13,7 @@ import { NavUser } from './nav-user';
 import { useAuth } from './contexts/auth-context';
 import type { SidebarItem } from '@shared/types/entities';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from './contexts/theme-context';
 
 type Props = {
   items?: Array<SidebarItem>;
@@ -26,6 +27,8 @@ export default function AppSidebar({ items = [], user, ...props }: Props) {
   const locale = useLocale();
   const { logout } = useAuth();
   const { t } = useTranslation();
+  const { dynamicTheme } = useTheme();
+
   return (
     <Sidebar
       collapsible="icon"
@@ -42,6 +45,13 @@ export default function AppSidebar({ items = [], user, ...props }: Props) {
             alt="Englishom"
             className="h-8 w-auto rounded-md"
           />
+          {dynamicTheme?.assets?.logo && (
+            <img
+              src={dynamicTheme.assets.logo}
+              alt={dynamicTheme.name}
+              className="h-8 w-auto group-data-[state=collapsed]:hidden"
+            />
+          )}
           <b className="group-data-[state=collapsed]:hidden">
             {t('Global.englishom')}
           </b>

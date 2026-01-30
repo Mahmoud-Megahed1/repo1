@@ -6,11 +6,14 @@ import { Link } from '@shared/i18n/routing';
 import { Globe, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '@components/contexts/theme-context';
 
 export function LandingHeader() {
   const { t } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const locale = useLocale();
+  const { dynamicTheme } = useTheme();
+
   return (
     <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur">
       <div className="container mx-auto">
@@ -22,6 +25,13 @@ export function LandingHeader() {
               alt="Englishom"
               className="h-10 w-auto rounded-md"
             />
+            {dynamicTheme?.assets?.logo && (
+              <img
+                src={dynamicTheme.assets.logo}
+                alt={dynamicTheme.name}
+                className="h-10 w-auto"
+              />
+            )}
             <div className="text-primary text-lg font-bold md:text-2xl">
               {t('Global.englishom')}
             </div>
