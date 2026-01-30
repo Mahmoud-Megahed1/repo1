@@ -21,6 +21,7 @@ import { TestimonialsModule } from './testimonials/testimonials.module';
 import { SupportChatModule } from './support-chat/support-chat.module';
 
 import { ThemeModule } from './theme/theme.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { ThemeModule } from './theme/theme.module';
     TestimonialsModule, // Add Testimonials Module
     SupportChatModule,
     ThemeModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [
