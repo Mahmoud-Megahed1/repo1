@@ -4,16 +4,31 @@ import useLocale from '@hooks/use-locale';
 import { Link } from '@shared/i18n/routing';
 import { ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '@components/contexts/theme-context';
 
 export function HeroSection() {
   const { t } = useTranslation();
   const locale = useLocale() === 'ar' ? 'ar-EG' : 'en-US';
+  const { dynamicTheme } = useTheme();
+
   let currentYear: number | string = new Date().getFullYear();
   currentYear = new Intl.NumberFormat(locale, {
     useGrouping: false,
   }).format(currentYear);
+
+  const backgroundStyle = dynamicTheme?.assets?.backgroundImage
+    ? {
+      backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url(${dynamicTheme.assets.backgroundImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    }
+    : {};
+
   return (
-    <section className="from-background via-background/80 to-accent/20 relative overflow-hidden bg-gradient-to-b py-20 lg:py-32">
+    <section
+      className="from-background via-background/80 to-accent/20 relative overflow-hidden bg-gradient-to-b py-20 lg:py-32"
+      style={backgroundStyle}
+    >
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}

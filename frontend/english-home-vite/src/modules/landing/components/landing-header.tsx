@@ -29,7 +29,7 @@ export function LandingHeader() {
               <img
                 src={dynamicTheme.assets.logo}
                 alt={dynamicTheme.name}
-                className="h-10 w-auto"
+                className="h-12 w-auto animate-pulse"
               />
             )}
             <div className="text-primary text-lg font-bold md:text-2xl">
