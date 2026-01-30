@@ -1,0 +1,47 @@
+/* eslint-disable no-unused-vars */
+/// <reference types="vite/client" />
+
+import 'i18next';
+
+import type { TFunction } from 'i18next';
+import { router } from './main';
+import type { TranslationType } from '@shared/i18n/translation.type';
+import type { AxiosError } from 'axios';
+import type { QueryClient } from '@tanstack/query-core';
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router;
+  }
+}
+
+declare global {
+  interface ImportMetaEnv {
+    readonly VITE_API_URL: string;
+  }
+  interface Window {
+    __TANSTACK_QUERY_CLIENT__: QueryClient;
+  }
+}
+
+declare module 'i18next' {
+  interface i18n {
+    changeLanguage(
+      lng?: 'ar' | 'en',
+      callback?: Callback | undefined
+    ): Promise<TFunction>;
+  }
+
+  interface CustomTypeOptions {
+    defaultNS: 'ar';
+    resources: {
+      ar: TranslationType;
+      en: TranslationType;
+    };
+  }
+}
+
+declare module '@tanstack/react-query' {
+  interface Register {
+    defaultError: AxiosError<{ message: string }>;
+  }
+}

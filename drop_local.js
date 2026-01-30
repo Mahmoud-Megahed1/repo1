@@ -1,0 +1,1 @@
+db.getSiblingDB('local').dropDatabase()

@@ -1,0 +1,31 @@
+
+/* Book Opening Transition */
+@keyframes bookOpen {
+  from {
+    opacity: 0;
+    transform: perspective(1000px) rotateY(-10deg) translateX(-10px);
+    transform-origin: left center;
+  }
+  to {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(0) translateX(0);
+    transform-origin: left center;
+  }
+}
+
+.book-transition {
+  animation: bookOpen 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* Optional: Page Turn Effect on Exit */
+@keyframes bookClose {
+  from {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: perspective(1000px) rotateY(10deg);
+  }
+}

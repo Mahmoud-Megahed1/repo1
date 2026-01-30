@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://englishom.com/sitemap.xml

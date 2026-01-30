@@ -1,0 +1,50 @@
+// filepath: /mnt/DATA/Englishom/src/user/user.module.ts
+import { Module, forwardRef } from '@nestjs/common';
+import { UserService } from './user.service';
+import { UserController } from './user.controller';
+import { UserRepo } from './repo/user.repo';
+import { DatabaseModule } from '../common/database/database.module';
+import { User, UserSchema } from './models/user.schema';
+import { PaymentModule } from '../payment/paymob.module';
+import { UserAuthModule } from '../user-auth/user-auth.module';
+import { CourseModule } from '../course/course.module';
+import { AdminModule } from '../admin/admin.module';
+import { Day, DaySchema } from './models/day.schema';
+import { Task, TaskSchema } from './models/task.schema';
+import {
+  UserProgress,
+  UserProgressSchema,
+} from './models/user-progress.schema';
+import { UserTask, UserTaskSchema } from './models/user-task.schema';
+import { Level, LevelSchema } from './models/level.schema';
+import {
+  Certification,
+  CertificationSchema,
+} from './models/certification.schema';
+import { CertificateRepo } from './repo/certificate.repo';
+import { ConfigModule } from '../common/config/config.module';
+
+// filepath: /mnt/DATA/Englishom/src/user/user.module.ts
+@Module({
+  imports: [
+    DatabaseModule,
+    ConfigModule, // Add ConfigModule for TimeService
+    DatabaseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: UserProgress.name, schema: UserProgressSchema },
+      { name: Day.name, schema: DaySchema },
+      { name: UserTask.name, schema: UserTaskSchema },
+      { name: Task.name, schema: TaskSchema },
+      { name: Level.name, schema: LevelSchema },
+      { name: Certification.name, schema: CertificationSchema },
+    ]),
+    forwardRef(() => PaymentModule), // Use forwardRef here
+    forwardRef(() => UserAuthModule), // Use forwardRef here
+    forwardRef(() => AdminModule), // Use forwardRef here
+    CourseModule, // Add CourseModule to access CourseRepo
+  ],
+  controllers: [UserController],
+  providers: [UserService, UserRepo, CertificateRepo],
+  exports: [UserService, UserRepo, CertificateRepo], // Export UserService
+})
+export class UserModule { }

@@ -1,0 +1,11 @@
+# .prettierignore
+node_modules/
+dist/
+*.min.js
+.next/
+package-lock.json
+yarn.lock
+package.json
+tsconfig.json
+Readme.md
+routeTree.gen.ts

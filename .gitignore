@@ -1,0 +1,14 @@
+node_modules
+dist
+build
+.next
+.env
+*.zip
+.vscode
+.idea
+coverage
+.DS_Store
+*.env
+backend_prod.env
+*.env
+backend_prod.env

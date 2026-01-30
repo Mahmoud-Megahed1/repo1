@@ -1,0 +1,131 @@
+import ComingSoon from '@components/coming-soon';
+import { useAuth } from '@components/contexts/auth-context';
+import { useBreadcrumbStore } from '@hooks/use-breadcrumb-store';
+import usePageTitle from '@hooks/use-page-title';
+import { useSidebarStore } from '@hooks/use-sidebar-store';
+import { useLessonContext, withLessonProvider } from '@modules/lessons/context';
+import DayAccessError from '@modules/levels/components/day-access-error';
+import LevelGuard from '@modules/levels/components/level-guard';
+import { getCompletedTasks } from '@modules/levels/services';
+import { LESSONS_SIDEBAR_DEFAULT_ITEMS } from '@shared/constants';
+import type { LevelId } from '@shared/types/entities';
+import { useQuery } from '@tanstack/react-query';
+import { createFileRoute, Outlet, useParams } from '@tanstack/react-router';
+import { Loader2 } from 'lucide-react';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+
+export const Route = createFileRoute(
+  '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName'
+)({
+  component: withLessonProvider(RouteComponent),
+  onEnter: ({ params: { day, id } }) => {
+    useSidebarStore
+      .getState()
+      .setItems(LESSONS_SIDEBAR_DEFAULT_ITEMS(id as LevelId, day));
+  },
+  onLeave: () => {
+    useSidebarStore.getState().resetItems();
+  },
+});
+
+function RouteComponent() {
+  const { t } = useTranslation();
+  const { id: levelId, day, lessonName } = useParams({ from: Route.id });
+  const { isEmpty, isFetching } = useLessonContext();
+  const { levelsDetails } = useAuth();
+  const currentDay =
+    levelsDetails?.find(({ levelName }) => levelName === levelId)?.currentDay ||
+    1;
+  const canAccessDay = +day <= currentDay;
+
+  // Fetch completed tasks for this day
+  const { data: completedTasks } = useQuery({
+    queryKey: ['completedTasks', levelId, day],
+    queryFn: () => getCompletedTasks(levelId as LevelId, day),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+
+  // Update sidebar items with completion status
+  useEffect(() => {
+    if (completedTasks?.data) {
+      const sidebarItems = LESSONS_SIDEBAR_DEFAULT_ITEMS(levelId as LevelId, day);
+      const updatedItems = sidebarItems.map((item) => ({
+        ...item,
+        isCompleted: completedTasks.data.includes(item.id),
+      }));
+      useSidebarStore.getState().setItems(updatedItems);
+    }
+  }, [completedTasks?.data, levelId, day]);
+
+  useUpdateBreadcrumb({ levelId, day, lessonName });
+  usePageTitle(t(`Global.sidebarItems.${lessonName}` as never));
+  if (!canAccessDay)
+    return (
+      <LevelGuard levelId={levelId as LevelId}>
+        <DayAccessError
+          day={+day}
+          levelId={levelId as LevelId}
+          currentDay={currentDay}
+          lessonName={lessonName}
+        />
+      </LevelGuard>
+    );
+  return (
+    <LevelGuard levelId={levelId as LevelId}>
+      {isFetching ? (
+        <div className="flex flex-1 items-center justify-center gap-2">
+          <Loader2 className="animate-spin" />
+          {t('Global.loading') + '...'}
+        </div>
+      ) : isEmpty ? (
+        <ComingSoon />
+      ) : (
+        <div className="py-8">
+          <Outlet />
+        </div>
+      )}
+    </LevelGuard>
+  );
+}
+
+const useUpdateBreadcrumb = ({
+  levelId,
+  day,
+  lessonName,
+}: {
+  levelId: string;
+  day: string;
+  lessonName: string;
+}) => {
+  const setItems = useBreadcrumbStore((state) => state.setItems);
+  const { t } = useTranslation();
+  const { levelsDetails } = useAuth();
+  const currentDay =
+    levelsDetails?.find(({ levelName }) => levelName === levelId)?.currentDay ||
+    1;
+  useEffect(() => {
+    setItems([
+      {
+        label: t('Global.level', { level: levelId.split('_')[1] }),
+        href: `/app/levels/${levelId}` as never,
+        type: 'dropDownMenu',
+        items: levelsDetails!.map(({ levelName }) => ({
+          label: t('Global.level', { level: levelName.split('_')[1] }),
+          href: `/app/levels/${levelName}/${day}/${lessonName}` as never,
+          isCurrent: levelId === levelName,
+        })),
+      },
+      {
+        label: t('Global.day') + ' ' + day,
+        type: 'dropDownMenu',
+        items: Array.from({ length: currentDay }, (_, i) => ({
+          label: t('Global.day') + ' ' + (i + 1),
+          href: `/app/levels/${levelId}/${i + 1}/${lessonName}` as never,
+          isCurrent: day === String(i + 1),
+        })),
+      },
+    ]);
+  }, [currentDay, day, lessonName, levelId, levelsDetails, setItems, t]);
+};
+

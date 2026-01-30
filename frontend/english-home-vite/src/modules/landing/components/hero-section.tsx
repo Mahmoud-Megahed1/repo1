@@ -1,0 +1,60 @@
+import { Badge } from '@components/ui/badge';
+import { Button } from '@components/ui/button';
+import useLocale from '@hooks/use-locale';
+import { Link } from '@shared/i18n/routing';
+import { ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+
+export function HeroSection() {
+  const { t } = useTranslation();
+  const locale = useLocale() === 'ar' ? 'ar-EG' : 'en-US';
+  let currentYear: number | string = new Date().getFullYear();
+  currentYear = new Intl.NumberFormat(locale, {
+    useGrouping: false,
+  }).format(currentYear);
+  return (
+    <section className="from-background via-background/80 to-accent/20 relative overflow-hidden bg-gradient-to-b py-20 lg:py-32">
+      <div className="container mx-auto px-4">
+        <div className="mx-auto max-w-4xl text-center">
+          {/* Badge */}
+          <Badge variant="outline" className="mb-6 px-4 py-2 text-sm">
+            🚀 {t('Global.englishom')} {currentYear}
+          </Badge>
+
+          {/* Main Title */}
+          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+            {t('Landing.hero.title')}{' '}
+            <span className="from-primary to-primary/60 bg-gradient-to-r bg-clip-text text-transparent">
+              {t('Global.englishom')}
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <h2 className="text-muted-foreground mb-6 text-xl font-semibold sm:text-2xl">
+            {t('Landing.hero.subtitle')}
+          </h2>
+
+          {/* Description */}
+          <p className="text-muted-foreground mx-auto mb-8 max-w-2xl text-lg">
+            {t('Landing.hero.description')}
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
+            <Button asChild size="lg" className="group">
+              <Link to="/signup">
+                {t('Landing.hero.cta')}
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Background decoration */}
+      <div className="absolute -top-24 left-1/2 -translate-x-1/2 opacity-20">
+        <div className="from-primary/30 to-primary/10 h-96 w-96 rounded-full bg-gradient-to-br blur-3xl" />
+      </div>
+    </section>
+  );
+}

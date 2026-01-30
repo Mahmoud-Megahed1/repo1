@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "@types/dompurify": "^3.0.5",
+    "framer-motion": "^12.29.0"
+  },
+  "dependencies": {
+    "@nestjs/config": "^3.2.0",
+    "@radix-ui/react-scroll-area": "^1.2.10",
+    "react-quill": "^2.0.0"
+  }
+}

@@ -1,0 +1,340 @@
+{
+  "LandingPage": {
+    "navbar": {
+      "links": {
+        "howItWorks": "How It Works",
+        "features": "Features",
+        "testimonials": "Testimonials",
+        "faq": "FAQ",
+        "pricing": "Pricing"
+      },
+      "login": "Log In",
+      "signUp": "Sign Up"
+    },
+    "hero": {
+      "title": "Learn English from Zero to Mastery",
+      "description": "Join over 10,000 students learning English through our structured, daily approach. Unlock fluency with just 20 minutes per day.",
+      "ctaButton": "Get Started",
+      "students": "Students",
+      "learningLevels": "Learning Levels",
+      "learningDays": "Learning Days",
+      "skillsPerDay": "Skills Per Day",
+      "kUnit": "K"
+    },
+    "howItWorks": {
+      "title": "How Englishome Works?",
+      "description": "Our structured approach helps you progress systematically through 6 levels of English proficiency, with daily activities that build all essential language skills.",
+      "levelsTitle": "Six Levels to Mastery",
+      "dailyActivities": "Daily Activities",
+      "dailyJourney": {
+        "title": "Your Daily Journey",
+        "description": "Each day presents a structured set of activities focused on all aspects of language learning. Spend just 20 minutes daily to maintain your streak and steadily progress through each level.",
+        "learnMore": "Learn More"
+      }
+    },
+    "features": {
+      "title": "Features",
+      "description": "Our platform combines proven language learning methodologies with modern technology to provide the most effective English learning experience.",
+      "features": [
+        {
+          "title": "Structured, Progressive Learning",
+          "description": "Follow a carefully designed curriculum that builds upon previous lessons, ensuring steady progress from beginner to advanced levels."
+        },
+        {
+          "title": "Engaging Multimedia Content",
+          "description": "Learn through diverse media including audio, video, interactive exercises, and visual aids designed to accommodate different learning styles."
+        },
+        {
+          "title": "Daily Progress Tracking",
+          "description": "Monitor your learning journey with detailed analytics and achievement badges that motivate you to maintain your daily streak."
+        },
+        {
+          "title": "Easy Learning & Unique Experience",
+          "description": "The app features a simple, user-friendly interface and offers a unique learning experience that helps you acquire English in an enjoyable and smooth way."
+        },
+        {
+          "title": "Personalized Learning Path",
+          "description": "Receive custom recommendations based on your progress and areas needing improvement, ensuring efficient learning focused on your specific needs."
+        },
+        {
+          "title": "Cross-device Synchronization",
+          "description": "Continue your learning seamlessly across all your devices, picking up exactly where you left off whether on desktop, tablet, or mobile."
+        }
+      ]
+    },
+    "testimonials": {
+      "title": "What Our Students Say",
+      "description": "Join thousands of satisfied learners who have improved their English skills through our structured daily approach.",
+      "testimonials": [
+        {
+          "name": "Sarah Johnson",
+          "role": "Marketing Professional",
+          "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
+          "quote": "This app transformed my English skills in just 3 months. The daily structure made it easy to stay consistent, and I've finally gained confidence in business meetings.",
+          "stars": "5"
+        },
+        {
+          "name": "Miguel Fernandez",
+          "role": "Software Engineer",
+          "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
+          "quote": "After trying many apps, this app was the only one that helped me improve my technical English. The grammar exercises and professional vocabulary sections are excellent!",
+          "stars": "5"
+        },
+        {
+          "name": "Aiko Tanaka",
+          "role": "University Student",
+          "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956",
+          "quote": "As an international student, I needed to improve quickly for my studies. The daily tests and speaking practice helped me gain confidence to participate in class discussions.",
+          "stars": "4"
+        },
+        {
+          "name": "David Mueller",
+          "role": "Travel Blogger",
+          "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
+          "quote": "The idiom sections and cultural context in this app's lessons have been invaluable for my travels. I can now have natural conversations with locals everywhere I go!",
+          "stars": "5"
+        }
+      ]
+    },
+    "fqa": {
+      "title": "Frequently Asked Questions",
+      "description": "Find answers to common questions about Englishome's learning approach and platform.",
+      "questions": [
+        {
+          "question": "How does the daily learning structure work?",
+          "answer": "Each day, you will complete a set of activities designed to build your skills progressively. This includes reading, listening, speaking, and writing exercises."
+        },
+        {
+          "question": "What levels are available?",
+          "answer": "We offer six levels from A1 (Beginner) to C2 (Proficient). Each level is designed to help you master the language step by step."
+        },
+        {
+          "question": "Can I track my progress?",
+          "answer": "Yes! You can monitor your daily progress, achievements, and areas needing improvement through our analytics dashboard."
+        },
+        {
+          "question": "Is there a mobile app?",
+          "answer": "Yes! Our platform is accessible on both desktop and mobile devices, allowing you to learn anytime, anywhere."
+        }
+      ]
+    },
+    "pricing": {
+      "title": "Pricing",
+      "description": "Unlock your potential with our English Mastery Course. Join now and take the first step towards fluency!",
+      "pricingDetails": {
+        "title": "Englishome Levels",
+        "description": "Comprehensive English learning program for all skill levels",
+        "price": "40",
+        "perLevel": "per level",
+        "features": [
+          "50 days of structured learning content",
+          "Grammar lessons from beginner to advanced",
+          "Vocabulary expansion",
+          "Speaking and listening practice",
+          "Progress tracking and support",
+          "Lifetime access to course materials"
+        ]
+      },
+      "ctaButton": "Get Started Now"
+    },
+    "footer": {
+      "copyRight": "Englishome. All rights reserved."
+    }
+  },
+  "SignUpPage": {
+    "title": "Sign Up",
+    "formTitle": "Create your account now",
+    "inputs": {
+      "firstName": {
+        "label": "First Name",
+        "placeholder": "Enter your first name"
+      },
+      "lastName": {
+        "label": "Last Name",
+        "placeholder": "Enter your last name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password"
+      }
+    },
+    "submitButton": "Sign Up",
+    "loginButton": "Log In",
+    "alreadyHaveAccount": "Already have an account?"
+  },
+  "LoginPage": {
+    "title": "Login",
+    "formTitle": "Log in to your account",
+    "inputs": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password"
+      }
+    },
+    "submitButton": "Log In",
+    "signUpButton": "Create a new account",
+    "haveNotAccount": "Don't have an account?",
+    "invalidCredentials": "Email or password is incorrect"
+  },
+  "OTPPage": {
+    "title": "Email Verification",
+    "formTitle": "Verify Your Email",
+    "inputs": {
+      "otp": {
+        "label": "Verification Code"
+      }
+    },
+    "optInvalid": "The code is invalid",
+    "submitButton": "Verify",
+    "resendSuccess": "Code resent successfully",
+    "resendError": "An error occurred while resending the code",
+    "resendCode": "Resend Code",
+    "dontReceiveCode": "Didn't receive the code?",
+    "optSendSuccessfully": "A verification code has been sent to your email {email}"
+  },
+  "AdminPage": {
+    "title": "Admin Dashboard",
+    "description": "Manage user content and data, control settings, and monitor statistics and reports comprehensively",
+    "welcome": "Welcome to Admin Dashboard",
+    "accessDenied": "Access Denied",
+    "notAuthorized": "You are not authorized to access this page",
+    "goHome": "Go to Home Page"
+  },
+  "LevelsPage": {
+    "title": "Levels",
+    "description": "Choose the level that suits you",
+    "price": "Price",
+    "startLearning": "Start Learning",
+    "unlock": "Unlock",
+    "accessDenied": {
+      "title": "You don't have access to this level",
+      "description": "Unlock this level to start learning"
+    },
+    "levels": {
+      "LEVEL_A1": {
+        "title": "Beginner",
+        "description": "Learn the basics of English. Understand simple phrases, introduce yourself, and engage in short conversations.",
+        "level": "A1"
+      },
+      "LEVEL_A2": {
+        "title": "Elementary",
+        "description": "Communicate in everyday situations. Talk about your daily routine, shopping, and basic personal information.",
+        "level": "A2"
+      },
+      "LEVEL_B1": {
+        "title": "Intermediate",
+        "description": "Discuss familiar topics. Understand the main points of clear standard input on familiar matters.",
+        "level": "B1"
+      },
+      "LEVEL_B2": {
+        "title": "Upper Intermediate",
+        "description": "Engage in conversations on a variety of topics. Understand the main ideas of complex texts.",
+        "level": "B2"
+      },
+      "LEVEL_C1": {
+        "title": "Advanced",
+        "description": "Express yourself fluently and spontaneously. Understand a wide range of demanding texts.",
+        "level": "C1"
+      },
+      "LEVEL_C2": {
+        "title": "Proficient",
+        "description": "Understand virtually everything heard or read. Summarize information from different spoken and written sources.",
+        "level": "C2"
+      }
+    }
+  },
+  "ReadPage": {
+    "reading": "Reading",
+    "listening": "Listening",
+    "haveTasks": "You have {tasksNumber} reading tasks today"
+  },
+  "PicturesPage": {
+    "title": "Picture",
+    "haveTasks": "You have {tasksNumber} picture tasks today",
+    "otherWords": "Other meanings"
+  },
+  "PhrasalVerbsPage": {
+    "title": "Phrasal Verbs",
+    "definition": "Phrasal verbs that consist of a verb + a preposition / an adverb and a preposition",
+    "explanations": [
+      "Phrasal verbs cannot be treated as separate parts but as a whole.",
+      "The difference between phrasal verbs and verbal phrases is that verbal phrases are verbs consisting of a verb and a pronoun."
+    ]
+  },
+  "IdiomsPage": {
+    "title": "Idioms",
+    "definition": "Idioms are phrases that have a figurative meaning different from their literal meaning",
+    "explanations": [
+      "Idioms are often used in everyday conversation and writing.",
+      "They can be difficult to understand for non-native speakers."
+    ]
+  },
+  "DailyTestPage": {
+    "title": "Daily Test",
+    "description": "Choose the correct answers",
+    "pictureDescription": "Please enter the title of the image shown",
+    "audioDescription": "Listen carefully and type out the audio",
+    "grade": "Grade"
+  },
+  "Global": {
+    "appName": "English Home",
+    "welcome": "Welcome to English Home",
+    "description": "Learn English from zero to mastery",
+    "loading": "Loading",
+    "level": "Level",
+    "all": "All",
+    "completed": "Completed",
+    "inComplete": "Incomplete",
+    "day": "Day",
+    "minute": "Minute",
+    "continue": "Continue",
+    "result": "Result",
+    "next": "Next",
+    "prev": "Previous",
+    "definition": "Definition",
+    "useCases": "Use Cases",
+    "examples": "Examples",
+    "noTasks": "No more tasks",
+    "nextTasks": "Next Tasks",
+    "words": "Words",
+    "record": "Record",
+    "stop": "Stop",
+    "review": "Review",
+    "markAsComplete": "Mark as Complete",
+    "or": "Or",
+    "logout": "Logout",
+    "sidebar": {
+      "home": "Home",
+      "levels": "Levels",
+      "admin": "Admin",
+      "lessons": {
+        "READ": "Reading",
+        "PICTURES": "Pictures",
+        "Q_A": "Q&A",
+        "GRAMMAR": "Grammar",
+        "LISTEN": "Listening",
+        "SPEAK": "Speaking",
+        "WRITE": "Writing",
+        "TODAY": "Today Sentences",
+        "DAILY_TEST": "Daily Test",
+        "PHRASAL_VERBS": "Phrasal Verbs",
+        "IDIOMS": "Idioms"
+      }
+    },
+    "formErrors": {
+      "required": "Required",
+      "min": "Must contain at least {min} characters",
+      "max": "Must not exceed {max} characters",
+      "invalidEmail": "Invalid email address",
+      "emailExists": "Email already exists"
+    }
+  }
+}
