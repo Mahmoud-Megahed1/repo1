@@ -48,7 +48,9 @@ export function omit<T extends object>(obj: T, keys: (keyof T)[]): T {
 }
 
 export const formatDate = (dateString: string): string => {
+  if (!dateString) return 'N/A';
   const date = new Date(dateString);
+  if (isNaN(date.getTime())) return 'Invalid Date';
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
