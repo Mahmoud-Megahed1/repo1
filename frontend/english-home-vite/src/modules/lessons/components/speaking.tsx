@@ -71,8 +71,8 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
           const recordKey = record.sentence
             .trim()
             .toLowerCase()
-            .replace(/[^a-z0-9\u0600-\u06FF]/g, '_')
-            .replace(/_+/g, '_')
+            .replace(/[^a-z0-9\u0600-\u06FF]/g, '_') // Keep alphanumeric and Arabic, replace others with _
+            .replace(/_+/g, '_') // Collapse multiple underscores
             .substring(0, 100);
 
           const saved = savedAudios.data.find((s) => s.sentence === recordKey);
