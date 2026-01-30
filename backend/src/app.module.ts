@@ -20,6 +20,8 @@ import { SeederModule } from './common/seeds/seeder.module';
 import { TestimonialsModule } from './testimonials/testimonials.module';
 import { SupportChatModule } from './support-chat/support-chat.module';
 
+import { ThemeModule } from './theme/theme.module';
+
 @Module({
   imports: [
     CommonModule, // Import the global common module
@@ -45,6 +47,7 @@ import { SupportChatModule } from './support-chat/support-chat.module';
     CourseModule,
     TestimonialsModule, // Add Testimonials Module
     SupportChatModule,
+    ThemeModule,
   ],
   controllers: [AppController],
   providers: [

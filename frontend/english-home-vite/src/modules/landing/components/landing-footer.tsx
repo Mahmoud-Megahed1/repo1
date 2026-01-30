@@ -185,7 +185,45 @@ export function LandingFooter() {
           </div>
         </div>
 
-        <div className="text-muted-foreground mt-8 border-t pt-8 text-center text-sm">
+      </div>
+      <div className="container mx-auto mt-8 border-t pt-8">
+        <div className="flex flex-col items-center justify-center gap-6 md:flex-row">
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            <img
+              src="/images/svgs/saudi-business-center.svg"
+              alt="Saudi Business Center"
+              className="h-12 object-contain"
+            />
+            <div className="flex items-center gap-4">
+              <img
+                src="/images/svgs/mada.svg"
+                alt="Mada"
+                className="h-8 object-contain"
+              />
+              <img
+                src="/images/svgs/apple-pay.svg"
+                alt="Apple Pay"
+                className="h-8 object-contain"
+              />
+              <img
+                src="/images/svgs/visa.svg"
+                alt="Visa"
+                className="h-8 object-contain"
+              />
+              <img
+                src="/images/svgs/mastercard.svg"
+                alt="Mastercard"
+                className="h-8 object-contain"
+              />
+            </div>
+            <img
+              src="/images/maroof_new.jpg"
+              alt="Maroof"
+              className="h-12 object-contain rounded-full"
+            />
+          </div>
+        </div>
+        <div className="text-muted-foreground mt-8 text-center text-sm">
           <p>
             © {currentYear} {t('Global.englishom')}.{' '}
             {t('Landing.footer.copyright')}
