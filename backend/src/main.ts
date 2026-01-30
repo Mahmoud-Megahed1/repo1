@@ -64,7 +64,7 @@ async function bootstrap() {
     app.use(express.json({ limit: '20mb' }));
     app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
-    const port = process.env.PORT ?? 3000;
+    const port = process.env.PORT || 5000;
 
     // ON SERVER:
     // 127.0.0.1 run only locally for security reasons
