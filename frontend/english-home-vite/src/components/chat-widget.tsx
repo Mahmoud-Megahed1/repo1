@@ -67,7 +67,12 @@ export const ChatWidget = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/chat`, {
+            // Robustly construct API URL
+            let baseUrl = import.meta.env.VITE_API_URL || 'https://api.englishom.com';
+            if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
+            if (!baseUrl.endsWith('/api')) baseUrl += '/api';
+
+            const response = await fetch(`${baseUrl}/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
