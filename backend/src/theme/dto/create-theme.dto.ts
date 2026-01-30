@@ -40,4 +40,8 @@ export class CreateThemeDto {
     primaryColor?: string;
     secondaryColor?: string;
   };
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  _id?: string;
 }
