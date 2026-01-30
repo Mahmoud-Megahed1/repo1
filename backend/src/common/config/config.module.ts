@@ -42,6 +42,9 @@ import { TimeService } from './time.service';
 
         // Email API (Brevo)
         BREVO_API_KEY: Joi.string().required(),
+
+        // OpenAI (Chatbot)
+        OPENAI_API_KEY: Joi.string().required(),
       }),
       validationOptions: {
         allowUnknown: true, // Allows env vars not specified in the schema
@@ -51,4 +54,4 @@ import { TimeService } from './time.service';
   ],
   exports: [NestConfigModule, TimeService],
 })
-export class ConfigModule {}
+export class ConfigModule { }
