@@ -13,7 +13,8 @@ export class ThemeService {
 
   async create(createThemeDto: CreateThemeDto): Promise<Theme> {
     const createdTheme = new this.themeModel(createThemeDto);
-    return createdTheme.save();
+    const saved = await createdTheme.save();
+    return saved.toObject();
   }
 
   async findAll(): Promise<Theme[]> {
