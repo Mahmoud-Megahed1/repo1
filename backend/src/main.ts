@@ -27,12 +27,9 @@ async function bootstrap() {
 
 
     // Enable CORS for production domains
+    // Enable CORS for production domains (Open for debugging)
     app.enableCors({
-      origin: [
-        'https://englishom.com',
-        'https://www.englishom.com',
-        'https://admin.englishom.com',
-      ],
+      origin: true, // Allow all origins temporarily
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       credentials: true,
     });
