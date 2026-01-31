@@ -10,18 +10,13 @@ import { cn } from '@lib/utils';
 import { useLocation } from '@tanstack/react-router';
 import DOMPurify from 'dompurify';
 
-import { useAuth } from '@shared/components/contexts/auth-context';
+
 
 export function ChatWidget() {
-    const auth = useAuth();
-    const { user } = auth;
     const { isOpen, setIsOpen, messages, sendMessage, isSending, isLoading } = useSupportChat();
     const [inputValue, setInputValue] = useState('');
     const scrollRef = useRef<HTMLDivElement>(null);
     const location = useLocation();
-
-    // Hide if no user
-    if (!user) return null;
 
     // Auto-scroll to bottom
     useEffect(() => {
