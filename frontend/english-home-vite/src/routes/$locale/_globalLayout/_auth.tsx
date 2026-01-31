@@ -1,4 +1,3 @@
-import { ChatWidget } from '@components/chat/chat-widget';
 import { withProtectedRoute } from '@components/protected-route';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 
@@ -10,7 +9,6 @@ function RouteComponent() {
   return (
     <>
       <Outlet />
-      <ChatWidget />
     </>
   );
 }
