@@ -267,7 +267,7 @@
 }
 
 :lang(ar) {
-  font-family: var(--font-cairo);
+  font-family: 'Mada', sans-serif;
   direction: rtl !important;
 }
 
