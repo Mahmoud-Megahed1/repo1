@@ -312,6 +312,26 @@ export class FileUploadController {
     return this.rewriteToLocalOrigin(result, req);
   }
 
+  // Public file upload for Themes and generic assets
+  @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER, AdminRole.OPERATOR)
+  @UseGuards(AdminJwtGuard, AdminRoleGuard)
+  @Post('upload-public')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: {
+        fileSize: 20 * 1024 * 1024, // 20mb
+      },
+    }),
+  )
+  async uploadPublicFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req: Request,
+  ) {
+    this.validateMediaFile(file);
+    const result = await this.uploadService.uploadPublicFile(file);
+    return this.rewriteToLocalOrigin(result, req);
+  }
+
   // Delete from JSON data array - MANAGER+ can delete content
   @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER)
   @UseGuards(AdminJwtGuard, AdminRoleGuard)

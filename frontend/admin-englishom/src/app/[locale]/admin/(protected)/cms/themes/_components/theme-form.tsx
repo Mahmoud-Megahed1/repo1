@@ -103,7 +103,7 @@ export function ThemeForm({ initialData }: ThemeFormProps) {
     const uploadFile = async (file: File) => {
         const formData = new FormData();
         formData.append('file', file);
-        const res = await client.post<{ url: string }>('/files/single-file', formData, {
+        const res = await client.post<{ url: string }>('/files/upload-public', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         });
         return res.data.url;

@@ -80,6 +80,28 @@ export class FileUploadService {
   }
 
   /**
+   * Upload a public file (theme assets, etc) without strict course structure.
+   */
+  async uploadPublicFile(
+    file: Express.Multer.File,
+  ): Promise<{ url: string }> {
+    this.validateFile(file);
+
+    const fileTypePath = this.determineFileType(file.mimetype);
+    const sanitizedName = file.originalname.trim().replaceAll(/\s+/g, '_');
+    const timestamp = Date.now();
+    const key = `Public/${fileTypePath}/${timestamp}_${sanitizedName}`;
+
+    try {
+      await this.uploadToGridFS(file, key);
+      return { url: this.buildPublicUrl(key) };
+    } catch (error) {
+      this.logger.error(`Failed to upload public file: ${error.message}`, error.stack);
+      throw new InternalServerErrorException(`${FileUploadMessages.FAILED_TO_UPLOAD_FILE}: ${error.message}`);
+    }
+  }
+
+  /**
    * Upload the user's daily audio file.
    */
   async uploadUserAudio(
