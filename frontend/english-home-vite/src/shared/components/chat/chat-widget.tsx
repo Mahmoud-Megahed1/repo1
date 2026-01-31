@@ -19,7 +19,7 @@ interface Message {
 }
 
 export const ChatWidget = () => {
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputValue, setInputValue] = useState('');
@@ -119,11 +119,11 @@ export const ChatWidget = () => {
 
     // Use createPortal to render outside of any overflow/transform container
     return createPortal(
-        <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-2 font-cairo" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+        <div className="fixed bottom-24 right-6 z-[100] flex flex-col items-end gap-2 font-cairo pointer-events-none" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
             {/* Chat Window */}
             <div
                 className={cn(
-                    "w-[350px] sm:w-[380px] bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl shadow-2xl transition-all duration-300 overflow-hidden flex flex-col",
+                    "w-[350px] sm:w-[380px] bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl shadow-2xl transition-all duration-300 overflow-hidden flex flex-col pointer-events-auto",
                     isOpen ? "opacity-100 scale-100 translate-y-0 h-[500px]" : "opacity-0 scale-95 translate-y-4 h-0 pointer-events-none"
                 )}
             >
@@ -204,7 +204,7 @@ export const ChatWidget = () => {
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={cn(
-                    "h-14 w-14 rounded-full shadow-xl transition-all duration-300 flex items-center justify-center z-50",
+                    "h-14 w-14 rounded-full shadow-xl transition-all duration-300 flex items-center justify-center z-50 pointer-events-auto",
                     "bg-[#EFBF04] hover:bg-[#d9ad04] text-black border-2 border-white dark:border-zinc-800",
                     isOpen && "rotate-90 scale-0 opacity-0 absolute"
                 )}
@@ -216,7 +216,7 @@ export const ChatWidget = () => {
             <button
                 onClick={() => setIsOpen(false)}
                 className={cn(
-                    "h-14 w-14 rounded-full shadow-xl transition-all duration-300 flex items-center justify-center absolute bottom-0 right-0 z-50",
+                    "h-14 w-14 rounded-full shadow-xl transition-all duration-300 flex items-center justify-center absolute bottom-0 right-0 z-50 pointer-events-auto",
                     "bg-gray-100 hover:bg-gray-200 text-gray-600 dark:bg-zinc-700 dark:text-gray-300",
                     !isOpen && "scale-0 opacity-0 pointer-events-none"
                 )}

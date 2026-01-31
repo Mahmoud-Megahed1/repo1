@@ -227,7 +227,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
             ))}
         </ul>
         {isLast ? (
-          <NextLessonButton lessonName="TODAY" className="px-8" />
+          <NextLessonButton lessonName="DAILY_TEST" className="px-8" />
         ) : (
           <Button variant="default" onClick={next} disabled={!hasNextItems} className="px-8">
             {t('Global.next')}
