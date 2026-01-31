@@ -347,7 +347,10 @@
     "save": "Save",
     "cancel": "Cancel",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "updatedSuccessfully": "Updated successfully",
+    "createdSuccessfully": "Created successfully",
+    "somethingWentWrong": "Something went wrong"
   },
   "Admin": {
     "themes": {

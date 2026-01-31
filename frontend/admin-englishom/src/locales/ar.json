@@ -347,7 +347,10 @@
     "save": "حفظ",
     "cancel": "إلغاء",
     "edit": "تعديل",
-    "delete": "حذف"
+    "delete": "حذف",
+    "updatedSuccessfully": "تم التحديث بنجاح",
+    "createdSuccessfully": "تم الإنشاء بنجاح",
+    "somethingWentWrong": "حدث خطأ ما"
   },
   "Admin": {
     "themes": {
