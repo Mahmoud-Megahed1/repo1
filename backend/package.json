@@ -21,6 +21,7 @@
     "seed:users": "ts-node -r tsconfig-paths/register src/scripts/seeder.ts users",
     "seed:courses": "ts-node -r tsconfig-paths/register src/scripts/seeder.ts courses",
     "seed:orders": "ts-node -r tsconfig-paths/register src/scripts/seeder.ts orders",
+    "seed:super": "ts-node -r tsconfig-paths/register src/scripts/seeder.ts super-user",
     "seed:help": "ts-node -r tsconfig-paths/register src/scripts/seeder.ts help",
     "test:mail": "ts-node -r tsconfig-paths/register src/scripts/test-mail-service.ts"
   },

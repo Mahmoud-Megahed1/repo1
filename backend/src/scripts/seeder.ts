@@ -50,13 +50,13 @@ async function showHelp() {
   console.log('  npm run seed:courses      - Seed courses only');
   console.log('  npm run seed:orders       - Seed orders only');
   console.log('  npm run seed:help         - Show this help\n');
-  
+
   console.log('Seeded Data Details:');
   console.log('  • Admins: Test admins with different roles (SUPER, MANAGER, OPERATOR, VIEW)');
   console.log('  • Users: Test users with various verification states');
   console.log('  • Courses: Complete course structure with levels and content');
   console.log('  • Orders: Sample orders with different payment statuses\n');
-  
+
   console.log('Note: Seeding is only available in development mode (NODE_ENV !== production)\n');
 }
 
@@ -117,6 +117,18 @@ async function runSeeder() {
       console.log('\n🌱 Seeding orders...\n');
       await seederService['seedOrders']();
       console.log('\n✅ Orders seeded successfully!\n');
+      await app.close();
+      process.exit(0);
+      return;
+    }
+
+    if (command === 'super-user') {
+      console.log('\n🌱 Seeding super test user...\n');
+      const result = await seederService.seedSuperTestUser();
+      console.log('\n✅ Super test user seeded:');
+      console.log(`   Email: ${result.email}`);
+      console.log(`   Password: Password123!`);
+      console.log(`   Note: User has full access to all levels and certificates\n`);
       await app.close();
       process.exit(0);
       return;
