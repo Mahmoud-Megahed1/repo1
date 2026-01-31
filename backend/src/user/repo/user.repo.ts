@@ -88,6 +88,7 @@ export class UserRepo extends AbstractRepo<User> {
     userId: string,
     levelName: Level_Name,
     dayNumber: number,
+    dailyTestResult?: any,
   ) {
     const day = await this.getOrCreateDay(levelName, dayNumber);
 
@@ -104,6 +105,7 @@ export class UserRepo extends AbstractRepo<User> {
           $set: {
             completed: true,
             completedAt: new Date(),
+            dailyTestResult,
           },
         },
         { upsert: true },
@@ -126,6 +128,9 @@ export class UserRepo extends AbstractRepo<User> {
     levelName: Level_Name,
     dayNumber: number,
     taskName: string,
+    submission?: any,
+    score?: number,
+    feedback?: string,
   ) {
     try {
       // Convert userId to ObjectId
@@ -157,6 +162,9 @@ export class UserRepo extends AbstractRepo<User> {
           $set: {
             completed: true,
             completedAt: new Date(),
+            submission,
+            score,
+            feedback,
           },
         },
         { upsert: true },

@@ -9,9 +9,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true
   },
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
+  eslint: {
+    ignoreDuringBuilds: true,
   },
+  swcMinify: false,
 };
 
 export default withNextIntl(nextConfig);

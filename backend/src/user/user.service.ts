@@ -240,6 +240,7 @@ export class UserService {
     userId: string,
     levelName: Level_Name,
     dayNumber: number,
+    dailyTestResult?: any,
   ) {
     const userLevels = await this.getUserCompletedLevelNames(userId);
     if (!userLevels.includes(levelName)) {
@@ -258,6 +259,7 @@ export class UserService {
       userId,
       levelName,
       dayNumber,
+      dailyTestResult,
     );
 
     // Check if user has completed day 50 for auto-completion
@@ -271,6 +273,9 @@ export class UserService {
     levelName: Level_Name,
     dayNumber: number,
     taskName: string,
+    submission?: any,
+    score?: number,
+    feedback?: string,
   ) {
     const userLevels = await this.getUserCompletedLevelNames(userId);
     if (!userLevels.includes(levelName)) {
@@ -291,6 +296,9 @@ export class UserService {
       levelName,
       dayNumber,
       taskName,
+      submission,
+      score,
+      feedback,
     );
   }
 

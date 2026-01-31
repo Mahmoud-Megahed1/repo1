@@ -18,6 +18,9 @@ export class UserProgress {
 
   @Prop()
   completedAt?: Date;
+
+  @Prop({ type: MongooseSchema.Types.Mixed })
+  dailyTestResult?: any;
 }
 
 export const UserProgressSchema = SchemaFactory.createForClass(UserProgress);

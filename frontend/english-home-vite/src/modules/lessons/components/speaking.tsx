@@ -35,11 +35,12 @@ type Props = {
 };
 const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
   const { t } = useTranslation();
-  const { id: levelName } = useParams({
+  const { id: levelName, day } = useParams({
     from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
   });
   const { mutate, isPending } = useCompareAudio({
     levelName: levelName as LevelId,
+    day: +day,
   });
   const { data: savedAudios } = useGetSentenceAudios({
     levelName: levelName as LevelId,
@@ -225,11 +226,14 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
               />
             ))}
         </ul>
-        <Button variant="default" onClick={next} disabled={!hasNextItems} className="px-8">
-          {t('Global.next')}
-        </Button>
+        {isLast ? (
+          <NextLessonButton lessonName="TODAY" className="px-8" />
+        ) : (
+          <Button variant="default" onClick={next} disabled={!hasNextItems} className="px-8">
+            {t('Global.next')}
+          </Button>
+        )}
       </div>
-      {isLast && <NextLessonButton lessonName="TODAY" className="mt-8" />}
     </div>
   );
 };

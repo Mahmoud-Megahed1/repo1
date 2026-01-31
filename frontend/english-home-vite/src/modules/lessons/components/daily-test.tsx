@@ -110,9 +110,17 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
 
   useEffect(() => {
     if (testStatus === 'completed' && getResult.isPassed && !isSuccess) {
-      mutate();
+      mutate({
+        levelName: levelName as LevelId,
+        day: +day,
+        dailyTestResult: {
+          score: getResult.score,
+          questions: questionsStates,
+          isPassed: getResult.isPassed
+        }
+      });
     }
-  }, [testStatus, getResult, mutate, isSuccess]);
+  }, [testStatus, getResult, mutate, isSuccess, levelName, day, questionsStates]);
 
   if (!currentItem) return null;
 

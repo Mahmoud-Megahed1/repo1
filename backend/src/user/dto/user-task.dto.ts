@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, IsNotEmpty, IsString, Max, Min } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsString, Max, Min, IsOptional } from 'class-validator';
 import { Level_Name } from '../../common/shared/enums';
 
 export class UserTaskDto {
@@ -14,4 +14,15 @@ export class UserTaskDto {
   @IsNotEmpty()
   @IsString()
   taskName: string;
+
+  @IsOptional()
+  submission?: any;
+
+  @IsOptional()
+  @IsInt()
+  score?: number;
+
+  @IsOptional()
+  @IsString()
+  feedback?: string;
 }

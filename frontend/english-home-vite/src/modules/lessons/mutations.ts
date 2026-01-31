@@ -6,6 +6,7 @@ import {
   markDayAsCompleted,
   uploadAudio,
   getSentenceAudios,
+  markTaskAsCompleted,
 } from './services';
 import type { LessonParams } from './types';
 
@@ -29,7 +30,7 @@ export function useMarkDayAsCompleted(
   });
 }
 
-export function useCompareAudio({ levelName }: { levelName: LevelId }) {
+export function useCompareAudio({ levelName, day }: { levelName: LevelId; day: number }) {
   return useMutation({
     mutationKey: ['compare-audio'],
     mutationFn: ({
@@ -38,7 +39,7 @@ export function useCompareAudio({ levelName }: { levelName: LevelId }) {
     }: {
       audio: File;
       sentenceText: string;
-    }) => compareAudio({ audio, level_name: levelName, sentenceText }),
+    }) => compareAudio({ audio, level_name: levelName, sentenceText, day }),
   });
 }
 
@@ -51,6 +52,18 @@ export function useCombineLevelAudios(levelName: LevelId) {
       queryClient.invalidateQueries({
         queryKey: ['combined-level-audio', levelName],
       });
+    },
+  });
+}
+
+export function useMarkTaskAsCompleted() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['mark-task-completed'],
+    mutationFn: markTaskAsCompleted,
+    onSuccess: () => {
+      // invalidating getMe might differ based on if we track tasks there
+      queryClient.invalidateQueries({ queryKey: ['getMe'] });
     },
   });
 }

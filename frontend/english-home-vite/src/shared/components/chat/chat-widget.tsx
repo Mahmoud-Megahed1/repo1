@@ -51,14 +51,14 @@ export function ChatWidget() {
     const activeChips = getChips();
 
     return createPortal(
-        <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-4 font-sans">
+        <div className="fixed bottom-24 right-6 z-[100] flex flex-col items-end gap-4 font-sans pointer-events-none">
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="border-border bg-card shadow-xl flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl border md:w-[380px]"
+                        className="border-border bg-card shadow-xl flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl border md:w-[380px] pointer-events-auto"
                     >
                         {/* Header */}
                         <div className="bg-primary flex items-center justify-between p-4 text-white">
@@ -149,7 +149,7 @@ export function ChatWidget() {
 
             {/* Toggle Button */}
             <motion.button
-                className="bg-primary hover:bg-primary/90 shadow-primary/25 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
+                className="bg-primary hover:bg-primary/90 shadow-primary/25 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg transition-transform hover:scale-105 active:scale-95 pointer-events-auto"
                 onClick={() => setIsOpen(!isOpen)}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}

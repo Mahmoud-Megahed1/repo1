@@ -18,6 +18,15 @@ export class UserTask {
 
   @Prop()
   completedAt?: Date;
+
+  @Prop({ type: MongooseSchema.Types.Mixed })
+  submission?: any;
+
+  @Prop()
+  score?: number;
+
+  @Prop()
+  feedback?: string;
 }
 
 export const UserTaskSchema = SchemaFactory.createForClass(UserTask);

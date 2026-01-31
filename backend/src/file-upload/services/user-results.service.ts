@@ -4,6 +4,7 @@ import { SpeakCompareTranscriptsDto } from '../dto/speak-compare-transcripts.dto
 import { TransformersAudioTranscribe } from '../../common/services/transformers-audio-transcribe.service';
 import { FileUploadService } from '../file-upload.service';
 import { User } from '../../user/models/user.schema';
+import { UserService } from '../../user/user.service';
 
 @Injectable()
 export class UserResultsService {
@@ -11,7 +12,8 @@ export class UserResultsService {
 
   constructor(
     private readonly transformersAudioTranscribe: TransformersAudioTranscribe,
-    private readonly fileUploadService: FileUploadService
+    private readonly fileUploadService: FileUploadService,
+    private readonly userService: UserService,
   ) { }
 
   async compareSpeakTranscript(
@@ -57,6 +59,18 @@ export class UserResultsService {
         }
       );
       audioUrl = uploadResult.url;
+
+      // Persist the task completion with result
+      await this.userService.markTaskAsCompleted(
+        user._id.toString(),
+        speakCompareTranscriptsDto.level_name,
+        speakCompareTranscriptsDto.day,
+        correctSentence, // Task Name often matches sentence or ID
+        { audioUrl, userTranscript, correctSentence, similarityPercentage },
+        similarityPercentage,
+        similarityPercentage >= 70 ? 'Passed' : 'Try Again'
+      );
+
     } catch (err) {
       this.logger.warn(`Failed to persist user sentence audio: ${err.message}`);
       // Don't fail the comparison if save fails, just log it

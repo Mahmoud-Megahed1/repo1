@@ -1,6 +1,9 @@
 import useItemsPagination from '@hooks/use-items-pagination';
 import { cn, localizedNumber } from '@lib/utils';
 import type { WritingLesson } from '@modules/lessons/types';
+import { useMarkTaskAsCompleted } from '@modules/lessons/mutations';
+import { useParams } from '@tanstack/react-router';
+import type { LevelId } from '@shared/types/entities';
 import { Button } from '@ui/button';
 import {
   Card,
@@ -61,6 +64,11 @@ export const WritingProvider: FC<{
     isLast,
   } = useItemsPagination(sentences);
 
+  const { id: levelName, day } = useParams({
+    from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
+  });
+  const { mutate } = useMarkTaskAsCompleted();
+
   const [sentenceStates, setSentenceStates] = useState<
     Record<number, SentenceState>
   >({});
@@ -104,6 +112,17 @@ export const WritingProvider: FC<{
         isCorrect: allCorrect,
       },
     }));
+
+    if (allCorrect) {
+      mutate({
+        levelName: levelName as LevelId,
+        day: +day,
+        taskName: currentItem,
+        submission: { answers: currentState.answers },
+        score: 100,
+        feedback: 'Correct',
+      });
+    }
   };
 
   const resetAll = () => {
