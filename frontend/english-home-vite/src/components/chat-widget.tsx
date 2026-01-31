@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { MessageCircle, X, Send, Loader2, Minimize2 } from 'lucide-react';
 import { type ClassValue, clsx } from 'clsx';
@@ -116,8 +117,9 @@ export const ChatWidget = () => {
         }
     };
 
-    return (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 font-cairo" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+    // Use createPortal to render outside of any overflow/transform container
+    return createPortal(
+        <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-2 font-cairo" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
             {/* Chat Window */}
             <div
                 className={cn(
@@ -222,6 +224,7 @@ export const ChatWidget = () => {
                 <X className="h-6 w-6" />
             </button>
 
-        </div>
+        </div>,
+        document.body
     );
 };

@@ -1,25 +1,24 @@
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { MessageCircle, X, Send, Bot, Loader2 } from 'lucide-react'; // Assuming valid imports
-import { Button } from '@ui/button'; // Adjust path
-import { Input } from '@ui/input'; // Adjust path
+import { MessageCircle, X, Send, Bot, Loader2 } from 'lucide-react';
+import { Button } from '@ui/button';
+import { Input } from '@ui/input';
 
 import { useSupportChat, type ChatMessage } from '@hooks/use-support-chat';
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@lib/utils';
-import { useLocation } from '@tanstack/react-router'; // Or useLocation depending on router
-// For rendering HTML safely (XSS protection)
+import { useLocation } from '@tanstack/react-router';
 import DOMPurify from 'dompurify';
 
 import { useAuth } from '@shared/components/contexts/auth-context';
 
 export function ChatWidget() {
     const auth = useAuth();
-    // console.log('ChatWidget Rendered. Auth Context:', auth);
     const { user } = auth;
     const { isOpen, setIsOpen, messages, sendMessage, isSending, isLoading } = useSupportChat();
     const [inputValue, setInputValue] = useState('');
     const scrollRef = useRef<HTMLDivElement>(null);
-    const location = useLocation(); // Getting current path for dynamic chips
+    const location = useLocation();
 
     // Hide if no user
     if (!user) return null;
@@ -51,8 +50,8 @@ export function ChatWidget() {
 
     const activeChips = getChips();
 
-    return (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4 font-sans">
+    return createPortal(
+        <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-4 font-sans">
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -157,7 +156,8 @@ export function ChatWidget() {
             >
                 <MessageCircle size={28} />
             </motion.button>
-        </div>
+        </div>,
+        document.body
     );
 }
 
