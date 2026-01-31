@@ -21,6 +21,6 @@ import { UserModule } from '../user/user.module';
     ],
     controllers: [SupportChatController, ChatRulesController],
     providers: [SupportChatService, ChatRulesService, ChatRuleRepo],
-    exports: [SupportChatService],
+    exports: [SupportChatService, ChatRulesService],
 })
 export class SupportChatModule { }
