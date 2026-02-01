@@ -4,6 +4,7 @@ export enum AllowedImageMimeTypes {
   GIF = 'image/gif',
   BMP = 'image/bmp',
   TIFF = 'image/tiff',
+  WEBP = 'image/webp',
 }
 
 export enum AllowedAudioMimeTypes {
