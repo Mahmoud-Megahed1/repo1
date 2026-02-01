@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateThemeDto } from './dto/create-theme.dto';
 import { UpdateThemeDto } from './dto/update-theme.dto';
 import { Theme, ThemeDocument } from './theme.schema';
@@ -12,7 +12,11 @@ export class ThemeService {
   ) { }
 
   async create(createThemeDto: CreateThemeDto): Promise<Theme> {
-    const createdTheme = new this.themeModel(createThemeDto);
+    const data = { ...createThemeDto };
+    if (!data._id) {
+      data._id = new Types.ObjectId().toString();
+    }
+    const createdTheme = new this.themeModel(data);
     const saved = await createdTheme.save();
     return saved.toObject();
   }
