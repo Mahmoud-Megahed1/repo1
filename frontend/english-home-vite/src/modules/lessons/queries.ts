@@ -19,49 +19,49 @@ import { useEffect } from 'react';
 
 type DataMap =
   | {
-      type: CustomExtract<LessonId, 'READ'>;
-      data: ReadLesson[];
-    }
+    type: CustomExtract<LessonId, 'READ'>;
+    data: ReadLesson[];
+  }
   | {
-      type: CustomExtract<LessonId, 'LISTEN'>;
-      data: ListenLesson[];
-    }
+    type: CustomExtract<LessonId, 'LISTEN'>;
+    data: ListenLesson[];
+  }
   | {
-      type: CustomExtract<LessonId, 'PICTURES'>;
-      data: PictureLesson[];
-    }
+    type: CustomExtract<LessonId, 'PICTURES'>;
+    data: PictureLesson[];
+  }
   | {
-      type: CustomExtract<LessonId, 'GRAMMAR'>;
-      data: GrammarLesson[];
-    }
+    type: CustomExtract<LessonId, 'GRAMMAR'>;
+    data: GrammarLesson[];
+  }
   | {
-      type: CustomExtract<LessonId, 'Q_A'>;
-      data: QuestionAnswerLesson[];
-    }
+    type: CustomExtract<LessonId, 'Q_A'>;
+    data: QuestionAnswerLesson[];
+  }
   | {
-      type: CustomExtract<LessonId, 'PHRASAL_VERBS'>;
-      data: PhrasalVerbLesson[];
-    }
+    type: CustomExtract<LessonId, 'PHRASAL_VERBS'>;
+    data: PhrasalVerbLesson[];
+  }
   | {
-      type: CustomExtract<LessonId, 'IDIOMS'>;
-      data: IdiomLesson[];
-    }
+    type: CustomExtract<LessonId, 'IDIOMS'>;
+    data: IdiomLesson[];
+  }
   | {
-      type: CustomExtract<LessonId, 'TODAY'>;
-      data: TodayLesson[];
-    }
+    type: CustomExtract<LessonId, 'TODAY'>;
+    data: TodayLesson[];
+  }
   | {
-      type: CustomExtract<LessonId, 'WRITE'>;
-      data: WritingLesson[];
-    }
+    type: CustomExtract<LessonId, 'WRITE'>;
+    data: WritingLesson[];
+  }
   | {
-      type: CustomExtract<LessonId, 'SPEAK'>;
-      data: SpeakLesson[];
-    }
+    type: CustomExtract<LessonId, 'SPEAK'>;
+    data: SpeakLesson[];
+  }
   | {
-      type: CustomExtract<LessonId, 'DAILY_TEST'>;
-      data: DailyTestLesson[];
-    };
+    type: CustomExtract<LessonId, 'DAILY_TEST'>;
+    data: DailyTestLesson[];
+  };
 
 export type LessonName = DataMap['type'];
 
@@ -97,16 +97,23 @@ export const useLessonQuery = <T extends LessonName>({
   const lesson = data?.data.data || [];
   const isEmpty = !isLoading && !isFetching && lesson.length === 0;
   useEffect(() => {
-    if (lessonName === 'TODAY')
+    if (lessonName === 'TODAY') {
       queryClient.prefetchQuery({
         queryKey: ['today-audio', day, levelId],
-        queryFn: () =>
-          getTodayAudio({
-            day: `${day}`,
-            level_name: levelId,
-          }),
+        queryFn: async () => {
+          try {
+            return await getTodayAudio({
+              day: `${day}`,
+              level_name: levelId,
+            });
+          } catch (error) {
+            return null;
+          }
+        },
         staleTime: Infinity,
+        retry: false,
       });
+    }
   }, [day, lessonName, levelId, queryClient]);
   return {
     lesson: {
@@ -129,12 +136,18 @@ export function useTodayAudio({
 }) {
   return useQuery({
     queryKey: ['today-audio', day, levelId],
-    queryFn: () =>
-      getTodayAudio({
-        day: `${day}`,
-        level_name: levelId,
-      }),
+    queryFn: async () => {
+      try {
+        return await getTodayAudio({
+          day: `${day}`,
+          level_name: levelId,
+        });
+      } catch (err) {
+        return null; // Return null on 404 or other errors to suppress console noise
+      }
+    },
     throwOnError: false,
+    retry: false,
   });
 }
 
