@@ -202,15 +202,7 @@ export const ChatWidget = () => {
 
             {/* Toggle Button */}
             <button
-                onClick={() => {
-                    const token = localStorage.getItem('token');
-                    if (!token) {
-                        const lang = i18n.language === 'ar' ? 'ar' : 'en';
-                        window.location.href = `/${lang}/login`;
-                        return;
-                    }
-                    setIsOpen(!isOpen);
-                }}
+                onClick={() => setIsOpen(!isOpen)}
                 className={cn(
                     "h-14 w-14 rounded-full shadow-xl transition-all duration-300 flex items-center justify-center z-50 pointer-events-auto",
                     "bg-[#EFBF04] hover:bg-[#d9ad04] text-black border-2 border-white dark:border-zinc-800",

@@ -10,6 +10,7 @@ function RouteComponent() {
   return (
     <>
       <Outlet />
+      <ChatWidget />
     </>
   );
 }
