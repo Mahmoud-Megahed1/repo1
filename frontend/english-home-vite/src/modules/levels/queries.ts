@@ -83,10 +83,12 @@ export function useLocalizedLevelById(levelId: LevelId, locale = 'en') {
   return { level, ...rest };
 }
 
-export function useCertification(levelName: LevelId) {
+export function useCertification(levelName: LevelId, enabled = true) {
   return useQuery({
     queryKey: ['certification', levelName],
     queryFn: () => getCertification(levelName),
     throwOnError: false,
+    enabled,
+    retry: false, // Don't retry if it fails (e.g. 404)
   });
 }

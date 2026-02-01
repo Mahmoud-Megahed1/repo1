@@ -17,7 +17,7 @@ const Certification = ({
   canCertificate = false,
   ...props
 }: Props) => {
-  const { data, isLoading } = useCertification(levelId);
+  const { data, isLoading } = useCertification(levelId, canCertificate);
   const { t } = useTranslation();
   const [isGenerating, setIsGenerating] = useState(false);
   const certification = data?.data;
