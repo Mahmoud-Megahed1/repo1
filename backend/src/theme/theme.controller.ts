@@ -19,8 +19,13 @@ export class ThemeController {
   constructor(private readonly themeService: ThemeService) { }
 
   @Post()
-  create(@Body() createThemeDto: CreateThemeDto) {
-    return this.themeService.create(createThemeDto);
+  async create(@Body() createThemeDto: CreateThemeDto) {
+    try {
+      return await this.themeService.create(createThemeDto);
+    } catch (error) {
+      console.error('Error in ThemeController.create:', error);
+      throw error;
+    }
   }
 
   @Get()
@@ -35,22 +40,42 @@ export class ThemeController {
 
   @Public()
   @Get('current')
-  findCurrent() {
-    return this.themeService.findCurrentTheme();
+  async findCurrent() {
+    try {
+      return await this.themeService.findCurrentTheme();
+    } catch (error) {
+      console.error('Error in ThemeController.findCurrent:', error);
+      throw error;
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.themeService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    try {
+      return await this.themeService.findOne(id);
+    } catch (error) {
+      console.error(`Error in ThemeController.findOne(${id}):`, error);
+      throw error;
+    }
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateThemeDto: UpdateThemeDto) {
-    return this.themeService.update(id, updateThemeDto);
+  async update(@Param('id') id: string, @Body() updateThemeDto: UpdateThemeDto) {
+    try {
+      return await this.themeService.update(id, updateThemeDto);
+    } catch (error) {
+      console.error(`Error in ThemeController.update(${id}):`, error);
+      throw error;
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.themeService.remove(id);
+  async remove(@Param('id') id: string) {
+    try {
+      return await this.themeService.remove(id);
+    } catch (error) {
+      console.error(`Error in ThemeController.remove(${id}):`, error);
+      throw error;
+    }
   }
 }
