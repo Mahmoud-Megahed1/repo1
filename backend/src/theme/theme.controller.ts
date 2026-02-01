@@ -24,8 +24,13 @@ export class ThemeController {
   }
 
   @Get()
-  findAll() {
-    return this.themeService.findAll();
+  async findAll() {
+    try {
+      return await this.themeService.findAll();
+    } catch (error) {
+      console.error('Error in ThemeController.findAll:', error);
+      throw error;
+    }
   }
 
   @Public()

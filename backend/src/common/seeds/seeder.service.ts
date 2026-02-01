@@ -135,6 +135,7 @@ export class SeederService implements OnModuleInit {
       await this.seedOrders();
       await this.seedUserProgress();
       await this.seedUserTasks();
+      await this.seedThemes();
       await this.seedCertifications();
       // Create a super test user with full access and progress
       await this.seedSuperTestUser();
