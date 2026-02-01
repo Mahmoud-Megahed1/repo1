@@ -54,7 +54,7 @@ const ListenItem: FC<Props> = ({
         {soundSrc && (
           <div className="mb-2">
             <p className="mb-1 font-semibold">Audio:</p>
-            <audio controls className="w-full">
+            <audio controls className="w-full" crossOrigin="anonymous">
               <track
                 default
                 kind="captions"

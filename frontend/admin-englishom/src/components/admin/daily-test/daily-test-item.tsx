@@ -44,6 +44,7 @@ const DailyTestItem: FC<Props> = ({
       )}
       {type === 'audio' && (
         <audio
+          crossOrigin="anonymous"
           controls
           src={question}
           controlsList="nodownload"
