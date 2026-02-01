@@ -11,7 +11,7 @@ import { LESSONS_SIDEBAR_DEFAULT_ITEMS } from '@shared/constants';
 import type { LevelId } from '@shared/types/entities';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Outlet, useParams } from '@tanstack/react-router';
-import { Loader2 } from 'lucide-react';
+import BookLoader from '@ui/book-loader';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -74,9 +74,8 @@ function RouteComponent() {
   return (
     <LevelGuard levelId={levelId as LevelId}>
       {isFetching ? (
-        <div className="flex flex-1 items-center justify-center gap-2">
-          <Loader2 className="animate-spin" />
-          {t('Global.loading') + '...'}
+        <div className="flex h-full flex-1 items-center justify-center">
+          <BookLoader className="text-primary" />
         </div>
       ) : isEmpty ? (
         <ComingSoon />
