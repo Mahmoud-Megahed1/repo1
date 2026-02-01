@@ -1,5 +1,6 @@
 import useLocale from '@hooks/use-locale';
 import { createFileRoute, notFound, Outlet } from '@tanstack/react-router';
+import { ChatWidget } from '@shared/components/chat/chat-widget';
 import i18next from 'i18next';
 import { useEffect } from 'react';
 import { DirectionProvider } from '@radix-ui/react-direction';
@@ -29,6 +30,7 @@ function LayoutComponent() {
     <DirectionProvider dir={dir}>
       <div>
         <Outlet />
+        <ChatWidget />
       </div>
 
     </DirectionProvider>
