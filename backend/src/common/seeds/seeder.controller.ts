@@ -4,11 +4,17 @@ import { AdminRoles } from '../../admin-auth/decorators';
 import { AdminRole } from '../shared';
 import { SeederService } from './seeder.service';
 
-@UseGuards(AdminJwtGuard, AdminRoleGuard)
 @Controller('dev/seeder')
 export class SeederController {
   constructor(private readonly seederService: SeederService) { }
 
+  @Post('reset-admin-password')
+  async resetAdminPassword() {
+    await this.seederService.resetAdminPassword();
+    return { message: 'Admin passwords reset successfully' };
+  }
+
+  @UseGuards(AdminJwtGuard, AdminRoleGuard)
   @AdminRoles(AdminRole.SUPER)
   @Post('seed-all')
   async seedAll() {
@@ -19,6 +25,7 @@ export class SeederController {
     };
   }
 
+  @UseGuards(AdminJwtGuard, AdminRoleGuard)
   @AdminRoles(AdminRole.SUPER)
   @Post('seed-admins')
   async seedAdmins() {
@@ -29,6 +36,7 @@ export class SeederController {
     };
   }
 
+  @UseGuards(AdminJwtGuard, AdminRoleGuard)
   @AdminRoles(AdminRole.SUPER)
   @Post('seed-users')
   async seedUsers() {
@@ -39,6 +47,7 @@ export class SeederController {
     };
   }
 
+  @UseGuards(AdminJwtGuard, AdminRoleGuard)
   @AdminRoles(AdminRole.SUPER)
   @Post('seed-courses')
   async seedCourses() {
@@ -49,6 +58,7 @@ export class SeederController {
     };
   }
 
+  @UseGuards(AdminJwtGuard, AdminRoleGuard)
   @AdminRoles(AdminRole.SUPER)
   @Post('seed-orders')
   async seedOrders() {
@@ -59,6 +69,7 @@ export class SeederController {
     };
   }
 
+  @UseGuards(AdminJwtGuard, AdminRoleGuard)
   @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER)
   @Post('seed-themes')
   async seedThemes() {
@@ -69,6 +80,7 @@ export class SeederController {
     };
   }
 
+  @UseGuards(AdminJwtGuard, AdminRoleGuard)
   @AdminRoles(AdminRole.SUPER)
   @Post('seed-super-test-user')
   async seedSuperTestUser() {
@@ -81,6 +93,7 @@ export class SeederController {
     };
   }
 
+  @UseGuards(AdminJwtGuard, AdminRoleGuard)
   @AdminRoles(AdminRole.SUPER)
   @Delete('clear-all')
   async clearAll() {
