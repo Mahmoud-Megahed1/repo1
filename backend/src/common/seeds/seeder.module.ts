@@ -8,6 +8,7 @@ import { UserModule } from '../../user/user.module';
 import { CourseModule } from '../../course/course.module';
 import { UserAuthModule } from '../../user-auth/user-auth.module';
 import { PaymentModule } from '../../payment/paymob.module';
+import { ThemeModule } from '../../theme/theme.module';
 import { SeederService } from './seeder.service';
 
 @Module({
@@ -18,9 +19,10 @@ import { SeederService } from './seeder.service';
     CourseModule,
     UserAuthModule,
     PaymentModule,
+    ThemeModule,
   ],
   controllers: [SeederController],
   providers: [SeederService],
   exports: [SeederService],
 })
-export class SeederModule {}
+export class SeederModule { }

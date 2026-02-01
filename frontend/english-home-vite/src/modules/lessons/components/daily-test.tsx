@@ -66,7 +66,7 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
 
   const onSubmit = useCallback(() => {
     setQuestionsStates((prev) => {
-      const isCorrect = prev[currentIndex].answers.some(
+      const isCorrect = prev[currentIndex].answers?.some(
         (ans) => ans.text === prev[currentIndex].selectedAnswer && ans.isCorrect
       );
       prev[currentIndex].isSubmitted = true;
@@ -111,7 +111,7 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
   useEffect(() => {
     if (testStatus === 'completed' && getResult.isPassed && !isSuccess) {
       mutate({
-        levelName: levelName as LevelId,
+        levelName: levelId as LevelId,
         day: +day,
         dailyTestResult: {
           score: getResult.score,
@@ -120,7 +120,7 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
         }
       });
     }
-  }, [testStatus, getResult, mutate, isSuccess, levelName, day, questionsStates]);
+  }, [testStatus, getResult, mutate, isSuccess, levelId, day, questionsStates]);
 
   if (!currentItem) return null;
 
@@ -194,7 +194,7 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
               defaultValue={currentItem.selectedAnswer}
               onValueChange={onSelectValue}
             >
-              {answers.map(({ text, isCorrect }, index) => (
+              {answers && answers.map(({ text, isCorrect }, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <RadioGroupItem
                     value={text}

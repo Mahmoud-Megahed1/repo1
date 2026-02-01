@@ -7,7 +7,7 @@ import { SeederService } from './seeder.service';
 @UseGuards(AdminJwtGuard, AdminRoleGuard)
 @Controller('dev/seeder')
 export class SeederController {
-  constructor(private readonly seederService: SeederService) {}
+  constructor(private readonly seederService: SeederService) { }
 
   @AdminRoles(AdminRole.SUPER)
   @Post('seed-all')
@@ -55,6 +55,16 @@ export class SeederController {
     await this.seederService['seedOrders']();
     return {
       message: '💳 Order data seeded successfully!',
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER)
+  @Post('seed-themes')
+  async seedThemes() {
+    await this.seederService['seedThemes']();
+    return {
+      message: '🎨 Theme data seeded successfully!',
       timestamp: new Date().toISOString(),
     };
   }

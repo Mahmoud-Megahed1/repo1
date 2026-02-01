@@ -688,6 +688,7 @@
     "forSixtyDays": "60 days",
     "expired": "Expired",
     "completed": "Completed",
+    "dailySpeakingSuccess": "Excellent! You have successfully completed today's practice",
     "expiredOn": "Expired on",
     "expiresAt": "Expires at",
     "renew": "Renew",

@@ -10,6 +10,7 @@ import { CourseRepo } from '../../course/repo/course.repo';
 import { OrderRepo } from '../../payment/repo/order.repo';
 import { OtpRepo } from '../../user-auth/repo/repo.otp';
 import { CertificateRepo } from '../../user/repo/certificate.repo';
+import { ThemeService } from '../../theme/theme.service';
 
 // Enums
 import { AdminRole, Role, UserStatus } from '../shared';
@@ -33,6 +34,7 @@ export class SeederService implements OnModuleInit {
     private readonly certificateRepo: CertificateRepo,
     // PREVENT SEED JOB INTERFERENCE
     private readonly clusterHelper: ClusterHelper,
+    private readonly themeService: ThemeService,
   ) {
     this.isDevelopment = this.configService.get('NODE_ENV') !== 'production';
   }
@@ -64,7 +66,7 @@ export class SeederService implements OnModuleInit {
           this.logger.warn('Failed ensuring super test user:', err?.message || err);
         }
       }
-      
+
     }
   }
 
@@ -828,7 +830,7 @@ export class SeederService implements OnModuleInit {
               completed: true,
               completedAt: new Date(
                 progress.completedAt.getTime() +
-                  Math.random() * 24 * 60 * 60 * 1000,
+                Math.random() * 24 * 60 * 60 * 1000,
               ), // Same day as progress completion
             });
           }
@@ -1114,6 +1116,77 @@ export class SeederService implements OnModuleInit {
     } catch (error) {
       this.logger.error('Error seeding super test user:', error.message);
       throw error;
+    }
+  }
+  async seedThemes() {
+    this.logger.log('🎨 Seeding Themes...');
+    const themes = [
+      {
+        name: 'Ramadan 2026',
+        startDate: new Date('2026-02-17'),
+        endDate: new Date('2026-03-19'),
+        isActive: true,
+        styles: { primaryColor: '#1a472a', secondaryColor: '#d4af37' },
+        assets: { logo: 'https://englishom.com/assets/ramadan-logo.png', backgroundImage: 'https://englishom.com/assets/ramadan-bg.jpg' }
+      },
+      {
+        name: 'Eid Al-Fitr 2026',
+        startDate: new Date('2026-03-20'),
+        endDate: new Date('2026-03-23'),
+        isActive: true,
+        styles: { primaryColor: '#2a9d8f', secondaryColor: '#e9c46a' },
+      },
+      {
+        name: 'Summer Vibes',
+        startDate: new Date('2026-06-01'),
+        endDate: new Date('2026-08-31'),
+        isActive: true,
+        styles: { primaryColor: '#f4a261', secondaryColor: '#e76f51' },
+      },
+      {
+        name: 'Back to School',
+        startDate: new Date('2026-09-01'),
+        endDate: new Date('2026-09-30'),
+        isActive: true,
+        styles: { primaryColor: '#264653', secondaryColor: '#2a9d8f' },
+      },
+      {
+        name: 'Winter Wonderland',
+        startDate: new Date('2026-12-01'),
+        endDate: new Date('2027-02-28'),
+        isActive: true,
+        styles: { primaryColor: '#a8dadc', secondaryColor: '#457b9d' },
+      },
+      {
+        name: 'Spring Blossom',
+        startDate: new Date('2026-03-24'),
+        endDate: new Date('2026-05-31'),
+        isActive: true,
+        styles: { primaryColor: '#ffb7b2', secondaryColor: '#ffdac1' },
+      },
+      {
+        name: 'Dark Mode Exclusive',
+        startDate: new Date('2026-10-01'),
+        endDate: new Date('2026-10-31'),
+        isActive: true,
+        styles: { primaryColor: '#000000', secondaryColor: '#333333' },
+      },
+      {
+        name: 'National Day',
+        startDate: new Date('2026-09-23'),
+        endDate: new Date('2026-09-24'),
+        isActive: true,
+        styles: { primaryColor: '#006C35', secondaryColor: '#FFFFFF' },
+      }
+    ];
+
+    for (const themeData of themes) {
+      try {
+        await this.themeService.create(themeData as any);
+        this.logger.log(`Created theme: ${themeData.name}`);
+      } catch (e) {
+        this.logger.warn(`Skipped theme ${themeData.name}: ${e.message}`);
+      }
     }
   }
 }

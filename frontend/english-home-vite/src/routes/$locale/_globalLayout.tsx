@@ -3,7 +3,6 @@ import { createFileRoute, notFound, Outlet } from '@tanstack/react-router';
 import i18next from 'i18next';
 import { useEffect } from 'react';
 import { DirectionProvider } from '@radix-ui/react-direction';
-import { ChatWidget } from '@shared/components/chat/chat-widget';
 
 export const Route = createFileRoute('/$locale/_globalLayout')({
   component: LayoutComponent,
@@ -28,9 +27,8 @@ function LayoutComponent() {
   }, [locale, dir]);
   return (
     <DirectionProvider dir={dir}>
-      <div className="book-transition">
+      <div>
         <Outlet />
-        <ChatWidget />
       </div>
 
     </DirectionProvider>

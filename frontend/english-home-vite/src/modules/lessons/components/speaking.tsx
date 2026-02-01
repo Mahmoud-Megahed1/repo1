@@ -16,7 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@ui/card';
-import { Mic } from 'lucide-react';
+import { Mic, CheckCircle2, RotateCcw } from 'lucide-react';
 import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -169,8 +169,9 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
             ) : (
               <div className="flex flex-col items-center gap-4">
                 {currentRecord.results?.isPassed && (
-                  <div className="bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold flex items-center gap-2">
-                    <span>✓</span> {t('Global.completed')}
+                  <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-6 py-3 rounded-lg font-bold flex items-center gap-3 shadow-sm animate-in fade-in zoom-in duration-300">
+                    <CheckCircle2 className="w-6 h-6" />
+                    <span>{t('Global.dailySpeakingSuccess')}</span>
                   </div>
                 )}
                 <SpeakingFeedback
@@ -183,11 +184,13 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
                     });
                   }}
                   recordUrl={currentRecord.recordUrl}
-                  className="mt-4"
+                  className="mt-4 w-full"
                 />
 
                 <Button
                   variant="outline"
+                  size="lg"
+                  className="mt-4 w-full md:w-auto"
                   onClick={() => {
                     setUsersRecords((prev) => {
                       const newData = [...prev];
@@ -196,6 +199,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
                     });
                   }}
                 >
+                  <RotateCcw className="mr-2 h-4 w-4" />
                   {t('Global.tryAgain')}
                 </Button>
               </div>
