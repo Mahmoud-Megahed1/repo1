@@ -31,10 +31,8 @@ export function RouteComponent() {
       />
       <SidebarInset>
         <Header breadcrumbItems={breadcrumbItems} />
-        <div className="flex flex-1 flex-col gap-4 p-4 perspective-[1500px]">
-          <BookTransition>
-            <Outlet />
-          </BookTransition>
+        <div className="flex flex-1 flex-col gap-4 p-4">
+          <Outlet />
         </div>
       </SidebarInset>
     </SidebarProvider>
