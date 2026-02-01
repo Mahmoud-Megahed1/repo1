@@ -39,6 +39,7 @@ const PracticeSpeaking: FC<Props> = ({
     isPending,
   } = useCompareAudio({
     levelName: levelId,
+    day: +day,
   });
   useEffect(() => {
     setAudioUrl(defaultAudioUrl);
