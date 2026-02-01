@@ -13,6 +13,7 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -37,7 +38,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { cleanResponse } from '../common/utils/response.utils';
 import { Level_Name } from '../common/shared/enums';
 
-@UseGuards(UserJwtGuard)
+// @UseGuards(UserJwtGuard) - Removed class level guard
 @Controller('users')
 export class UserController {
   constructor(
@@ -46,6 +47,7 @@ export class UserController {
   ) { }
 
   @SkipVerifiedGuard()
+  @UseGuards(AuthGuard(['user-jwt', 'admin-jwt']))
   @Get('me')
   async getMe(@CurrentUser() user: User | Admin) {
     // Check if user is an admin
@@ -83,6 +85,7 @@ export class UserController {
     };
   }
 
+  @UseGuards(UserJwtGuard)
   @Get('levels')
   async getUserLevels(@CurrentUser() user: User) {
     return await this.userService.getUserCompletedLevelNames(
@@ -91,6 +94,7 @@ export class UserController {
   }
 
   // Simple API: level access details (purchase, expiry, days left)
+  @UseGuards(UserJwtGuard)
   @Get('level-details')
   async getLevelAccessDetails(
     @CurrentUser('_id') userId: string,
@@ -99,11 +103,13 @@ export class UserController {
     return await this.userService.getLevelAccessDetails(userId, levelName);
   }
 
+  @UseGuards(UserJwtGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.findOneAndUpdate(id, updateUserDto);
   }
 
+  @UseGuards(AdminJwtGuard)
   @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER)
   @Delete(':id')
   async remove(@CurrentUser() user: User, @Param('id') id: string) {
@@ -114,6 +120,7 @@ export class UserController {
     return await this.userService.deleteUser(id);
   }
 
+  @UseGuards(UserJwtGuard)
   @Get('certificate/:level_name')
   async getUserCertificate(
     @CurrentUser() user: User,
@@ -129,6 +136,7 @@ export class UserController {
     return cleanResponse(certificate);
   }
 
+  @UseGuards(UserJwtGuard)
   @Get('completed-days')
   async getCompletedDaysInLevel(
     @Query(ValidationPipe) dto: GetCompletedDaysDto,
@@ -140,6 +148,7 @@ export class UserController {
     );
   }
 
+  @UseGuards(UserJwtGuard)
   @Get('completed-tasks')
   async getCompletedTasksInDay(
     @Query(ValidationPipe) dto: GetCompletedTasksDto,
@@ -152,6 +161,7 @@ export class UserController {
     );
   }
 
+  @UseGuards(UserJwtGuard)
   @Post('complete-day')
   async markDayAsCompleted(
     @Body() finishDayDto: UserFinishDayDto,
@@ -164,6 +174,7 @@ export class UserController {
     );
   }
 
+  @UseGuards(UserJwtGuard)
   @Post('complete-task')
   async markTaskAsCompleted(
     @Body() taskDto: UserTaskDto,
@@ -177,6 +188,7 @@ export class UserController {
     );
   }
 
+  @UseGuards(UserJwtGuard)
   @Post('complete-level')
   async markLevelAsCompleted(
     @CurrentUser() user: User,
@@ -193,6 +205,7 @@ export class UserController {
     return cleanResponse(certificate);
   }
 
+  @UseGuards(AuthGuard(['user-jwt', 'admin-jwt']))
   @Post('reset-password')
   async resetPassword(
     @CurrentUser() user: User | Admin,
