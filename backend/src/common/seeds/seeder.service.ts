@@ -124,6 +124,24 @@ export class SeederService implements OnModuleInit {
     }
   }
 
+  async resetAdminPassword() {
+    this.logger.log('🔐 Resetting admin passwords...');
+    const badrPassword = await bcrypt.hash('123456789asd', 12);
+    await this.adminRepo['adminModel'].updateOne(
+      { email: 'badr-admin@englishom.com' },
+      { $set: { password: badrPassword, isActive: true } },
+      { upsert: true }
+    );
+
+    const superPassword = await bcrypt.hash('SuperAdmin123!', 12);
+    await this.adminRepo['adminModel'].updateOne(
+      { email: 'superadmin@englishom.com' },
+      { $set: { password: superPassword, isActive: true } },
+      { upsert: true }
+    );
+    this.logger.log('✅ Admin passwords reset successfully');
+  }
+
   private async runAllSeeders() {
     try {
       // Seed in order of dependencies with individual checks
