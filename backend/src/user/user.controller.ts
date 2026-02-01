@@ -231,6 +231,13 @@ export class UserController {
     return await this.userService.deleteUserCourse(userId, levelName, admin._id.toString());
   }
 
+  @UseGuards(AdminJwtGuard)
+  @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER)
+  @Patch('admin/:userId/activate')
+  async activateUser(@Param('userId') userId: string) {
+    return await this.userService.activateUser(userId);
+  }
+
   /// MUST BE AT THE END AND ADMIN ONLY
   @UseGuards(AdminJwtGuard)
   @Get(':id')
