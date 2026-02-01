@@ -10,7 +10,7 @@ import type { LessonId, LevelId } from '@shared/types/entities';
 import { Button } from '@ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@ui/card';
 import { Skeleton } from '@ui/skeleton';
-import { Mic } from 'lucide-react';
+import { Mic, CheckCircle2 } from 'lucide-react';
 import { useEffect, useMemo, useState, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 type Props = {
@@ -72,15 +72,24 @@ const PracticeSpeaking: FC<Props> = ({
                 isPending ? (
                     <AnalyzingSkeleton />
                 ) : data?.data ? (
-                    <SpeakingFeedback
-                        result={{
-                            ...data!.data,
-                        }}
-                        recordUrl={audioUrl}
-                        onReset={() => {
-                            setAudioUrl(null);
-                        }}
-                    />
+                    <div className="flex flex-col items-center gap-4 w-full">
+                        {data.data.isPassed && (
+                            <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-6 py-3 rounded-lg font-bold flex items-center gap-3 shadow-sm animate-in fade-in zoom-in duration-300 w-full justify-center">
+                                <CheckCircle2 className="w-6 h-6" />
+                                <span>{t('Global.dailySpeakingSuccess')}</span>
+                            </div>
+                        )}
+                        <SpeakingFeedback
+                            result={{
+                                ...data!.data,
+                            }}
+                            recordUrl={audioUrl}
+                            onReset={() => {
+                                setAudioUrl(null);
+                            }}
+                            className="w-full"
+                        />
+                    </div>
                 ) : (
                     recorder
                 )
