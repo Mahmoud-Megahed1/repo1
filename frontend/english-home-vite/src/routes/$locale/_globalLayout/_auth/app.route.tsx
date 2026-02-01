@@ -6,10 +6,15 @@ import { useSidebarStore } from '@hooks/use-sidebar-store';
 import { MAIN_SIDEBAR_ITEMS } from '@shared/constants';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { SidebarInset, SidebarProvider } from '@ui/sidebar';
-import { BookTransition } from '@components/book-transition';
+import BookLoader from '@components/ui/book-loader';
 
 export const Route = createFileRoute('/$locale/_globalLayout/_auth/app')({
   component: RouteComponent,
+  pendingComponent: () => (
+    <div className="flex bg-background h-screen w-full items-center justify-center">
+      <BookLoader className="text-primary" />
+    </div>
+  ),
   onEnter() {
     useSidebarStore.getState().setItems(MAIN_SIDEBAR_ITEMS());
   },
