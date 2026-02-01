@@ -629,6 +629,8 @@ export class FileUploadService {
     if (!file) throw new NotFoundException(FileUploadMessages.FILE_NOT_FOUND);
     const contentType = file.contentType || 'application/octet-stream';
     res.setHeader('Content-Type', contentType);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
 
     // Derive original filename (last segment after '/')
     const originalName = key.split('/').pop() || 'file';
