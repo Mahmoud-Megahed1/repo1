@@ -188,7 +188,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
                 {currentRecord.results?.isPassed && (
                   <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-6 py-3 rounded-lg font-bold flex items-center gap-3 shadow-sm animate-in fade-in zoom-in duration-300">
                     <CheckCircle2 className="w-6 h-6" />
-                    <span>{t('Global.dailySpeakingSuccess')}</span>
+                    <span>{t('Global.dailySpeakingSuccess' as any)}</span>
                   </div>
                 )}
                 <SpeakingFeedback

@@ -1,8 +1,11 @@
 import { AudioPlayback } from '@components/audio-playback';
 import NextLessonButton from '@components/next-lesson-button';
 import { cn } from '@lib/utils';
-import { type ComponentProps, type FC } from 'react';
+import { useParams } from '@tanstack/react-router';
+import { type ComponentProps, type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { type LevelId } from '../../types';
+import { useMarkTaskAsCompleted } from '../../mutations';
 import type { ReadLesson } from '../../types';
 import { ReadingCard } from './reading-card';
 
@@ -15,6 +18,23 @@ const Reading: FC<Props> = ({
   ...props
 }) => {
   const { t } = useTranslation();
+  const { id: levelId, day } = useParams({
+    from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
+  });
+  const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
+
+  useEffect(() => {
+    if (levelId && day) {
+      markTaskCompleted({
+        levelName: levelId as LevelId,
+        day: +day,
+        taskName: 'READ',
+        submission: { completed: true },
+        score: 100,
+        feedback: 'Reading Completed',
+      });
+    }
+  }, [day, levelId, markTaskCompleted]);
 
   return (
     <div

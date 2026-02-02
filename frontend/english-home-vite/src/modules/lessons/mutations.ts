@@ -18,13 +18,12 @@ export function useUploadAudio(options: LessonParams) {
   });
 }
 
-export function useMarkDayAsCompleted(
-  options: Parameters<typeof markDayAsCompleted>['0']
-) {
+export function useMarkDayAsCompleted() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ['mark-day-as-completed', options],
-    mutationFn: () => markDayAsCompleted(options),
+    mutationKey: ['mark-day-as-completed'],
+    mutationFn: (options: Parameters<typeof markDayAsCompleted>['0']) =>
+      markDayAsCompleted(options),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getMe'] });
     },

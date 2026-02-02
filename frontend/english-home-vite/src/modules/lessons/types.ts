@@ -1,4 +1,5 @@
-import type { LessonId, LevelId } from '@shared/types/entities';
+import type { LessonId, LevelId } from '../../shared/types/entities';
+export type { LessonId, LevelId };
 
 export type LessonProps = {
   levelId: string;

@@ -275,7 +275,7 @@
               "title": "Daily Speaking Practice (25 seconds)",
               "description": "Every day, you will record your voice for 25 seconds. You will find pre-written sentences about yourself (like your name, where you live, your interests), tailored to your current vocabulary level. This daily exercise will force you to practice effective pronunciation and repetition."
             },
-            "speaking": {
+            "speakingAbility": {
               "title": "Building Continuous Speaking Ability",
               "description": "Over these 50 days, these sentences and words will accumulate in your active memory. By the last day of each level, you will find yourself able to speak about yourself, give an overview, or present your biography for 15 consecutive minutes, using the 1000 words you have mastered."
             },
@@ -688,6 +688,8 @@
     "forSixtyDays": "60 days",
     "expired": "Expired",
     "completed": "Completed",
+    "lessonCompleted": "Lesson Completed",
+    "nextDay": "Next Day {{day}}",
     "dailySpeakingSuccess": "Excellent! You have successfully completed today's practice",
     "expiredOn": "Expired on",
     "expiresAt": "Expires at",

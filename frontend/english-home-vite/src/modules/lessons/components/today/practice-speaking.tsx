@@ -102,7 +102,7 @@ const PracticeSpeaking: FC<Props> = ({
                         {resultData.isPassed && (
                             <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-6 py-3 rounded-lg font-bold flex items-center gap-3 shadow-sm animate-in fade-in zoom-in duration-300 w-full justify-center">
                                 <CheckCircle2 className="w-6 h-6" />
-                                <span>{t('Global.dailySpeakingSuccess')}</span>
+                                <span>{t('Global.dailySpeakingSuccess' as any)}</span>
                             </div>
                         )}
                         <SpeakingFeedback
@@ -199,7 +199,9 @@ const Recorder: FC<RecorderProps> = ({
                         </>
                     )}
                 </Button>
-                <span className="text-muted-foreground inline-block text-sm">
+                <p className="text-secondary-foreground mt-2 text-center text-lg">
+                    {t('Global.dailySpeakingSuccess' as any)}
+                </p>                <span className="text-muted-foreground inline-block text-sm">
                     <span
                         className="bg-destructive me-2 inline-block size-2 animate-pulse rounded-full"
                         hidden={!isRecording}

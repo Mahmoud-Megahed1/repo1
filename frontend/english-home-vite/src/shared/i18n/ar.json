@@ -688,6 +688,8 @@
     "forSixtyDays": " 60 يومًا",
     "expired": "منتهي الصلاحية",
     "completed": "مكتمل",
+    "lessonCompleted": "تم إكمال الدرس",
+    "nextDay": "اليوم التالي {{day}}",
     "dailySpeakingSuccess": "أحسنت! لقد أنجزت تدريب اليوم بنجاح",
     "expiredOn": "انتهت الصلاحية في",
     "expiresAt": "تنتهي الصلاحية في",

@@ -1,19 +1,41 @@
 import { AudioPlayback } from '@components/audio-playback';
+import NextLessonButton from '@components/next-lesson-button';
 import RichTextViewer from '@components/rich-text-viewer';
+import { useParams } from '@tanstack/react-router';
 import { Button } from '@ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@ui/card';
 import { FileText } from 'lucide-react';
-import { useState, type ComponentProps, type FC } from 'react';
+import { type ComponentProps, type FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { type LevelId } from '../../types';
 import type { ListenLesson } from '../../types';
+import { useMarkTaskAsCompleted } from '../../mutations';
 import { DefinitionCard } from './definition-card';
-import NextLessonButton from '@components/next-lesson-button';
+
 type Props = {
   lesson: ListenLesson;
 } & ComponentProps<'div'>;
 const Listening: FC<Props> = ({ lesson, ...props }) => {
   const { t } = useTranslation();
   const [isTranscriptVisible, setTranscriptVisible] = useState(false);
+  const { id: levelId, day } = useParams({
+    from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
+  });
+  const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
+
+  useEffect(() => {
+    if (levelId && day) {
+      markTaskCompleted({
+        levelName: levelId as LevelId,
+        day: +day,
+        taskName: 'LISTEN',
+        submission: { completed: true },
+        score: 100,
+        feedback: 'Listening Completed',
+      });
+    }
+  }, [day, levelId, markTaskCompleted]);
+
   return (
     <div className="mx-auto flex size-full max-w-2xl flex-col gap-4" {...props}>
       <div>

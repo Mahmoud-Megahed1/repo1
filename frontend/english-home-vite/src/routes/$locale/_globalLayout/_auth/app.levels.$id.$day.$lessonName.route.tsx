@@ -85,7 +85,7 @@ function RouteComponent() {
           {completedTasks?.data?.includes(lessonName) && (
             <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-3 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
               <CheckCircle2 className="w-6 h-6" />
-              <span>{t('Global.lessonCompleted')}</span>
+              <span>{t('Global.lessonCompleted' as any)}</span>
             </div>
           )}
           <Outlet />

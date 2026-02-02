@@ -23,10 +23,13 @@ import {
   SwatchBook,
   type LucideIcon,
 } from 'lucide-react';
-import type { ComponentProps, FC, ReactNode } from 'react';
+import { type ComponentProps, type FC, type ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { GrammarLesson } from '../types';
 import NextLessonButton from '@components/next-lesson-button';
+import { useParams } from '@tanstack/react-router';
+import { type LevelId } from '../types';
+import { useMarkTaskAsCompleted } from '../mutations';
 
 type Props = {
   lesson: GrammarLesson;
@@ -48,6 +51,25 @@ const Grammar: FC<Props> = ({
   const { t } = useTranslation();
   const locale = useLocale();
   const title = locale === 'ar' ? nameAr : nameEn;
+
+  const { id: levelId, day } = useParams({
+    from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
+  });
+  const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
+
+  useEffect(() => {
+    if (levelId && day) {
+      markTaskCompleted({
+        levelName: levelId as LevelId,
+        day: +day,
+        taskName: 'GRAMMAR',
+        submission: { completed: true },
+        score: 100,
+        feedback: 'Grammar Completed',
+      });
+    }
+  }, [day, levelId, markTaskCompleted]);
+
   const definition = locale === 'ar' ? definitionAr : definitionEn;
   const useCases = locale === 'ar' ? rest.useCases.ar : rest.useCases.en;
 

@@ -35,10 +35,7 @@ type QuestionState = {
 } & DailyTestLesson;
 const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
   const { t } = useTranslation();
-  const { mutate, isSuccess } = useMarkDayAsCompleted({
-    day,
-    levelName: levelId,
-  });
+  const { mutate, isSuccess } = useMarkDayAsCompleted();
   // Fetch existing status
   const { data: dayStatus } = useGetDayStatus({
     levelName: levelId as LevelId,
@@ -415,7 +412,7 @@ const ResultCard = ({
             to="/app/levels/$id/$day/$lessonName"
             params={{ id, day: String(+day + 1), lessonName: 'READ' }}
           >
-            Next Day {+day + 1}
+            {t('Global.nextDay' as any, { day: +day + 1 })}
           </Link>
         </Button>
       )}
