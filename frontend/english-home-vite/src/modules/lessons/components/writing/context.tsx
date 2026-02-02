@@ -156,6 +156,17 @@ export const WritingProvider: FC<{
         score: 100,
         feedback: 'Correct',
       });
+
+      if (isLast) {
+        mutate({
+          levelName: levelName as LevelId,
+          day: +day,
+          taskName: 'WRITE',
+          submission: { completed: true },
+          score: 100,
+          feedback: 'Module Completed',
+        });
+      }
     }
   };
 

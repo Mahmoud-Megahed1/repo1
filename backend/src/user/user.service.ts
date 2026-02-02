@@ -156,6 +156,10 @@ export class UserService {
     return await this.userRepo.userProgress(userId, levelName);
   }
 
+  async getDayStatus(userId: string, levelName: Level_Name, day: number) {
+    return await this.userRepo.getDayStatus(userId, levelName, day);
+  }
+
   async markLevelAsCompleted(
     userId: string,
     completeLevelDto: CompleteLevelDto,

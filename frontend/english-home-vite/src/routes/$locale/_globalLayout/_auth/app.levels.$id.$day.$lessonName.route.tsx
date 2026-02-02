@@ -12,6 +12,7 @@ import type { LevelId } from '@shared/types/entities';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Outlet, useParams } from '@tanstack/react-router';
 import BookLoader from '@ui/book-loader';
+import { CheckCircle2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -80,7 +81,13 @@ function RouteComponent() {
       ) : isEmpty ? (
         <ComingSoon />
       ) : (
-        <div className="py-8">
+        <div className="py-8 space-y-6">
+          {completedTasks?.data?.includes(lessonName) && (
+            <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-3 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
+              <CheckCircle2 className="w-6 h-6" />
+              <span>{t('Global.lessonCompleted')}</span>
+            </div>
+          )}
           <Outlet />
         </div>
       )}

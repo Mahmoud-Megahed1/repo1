@@ -149,6 +149,19 @@ export class UserController {
   }
 
   @UseGuards(UserJwtGuard)
+  @Get('day-status')
+  async getDayStatus(
+    @Query() query: { levelName: Level_Name; day: number },
+    @CurrentUser('_id') userId: string,
+  ) {
+    return await this.userService.getDayStatus(
+      userId,
+      query.levelName,
+      +query.day,
+    );
+  }
+
+  @UseGuards(UserJwtGuard)
   @Get('completed-tasks')
   async getCompletedTasksInDay(
     @Query(ValidationPipe) dto: GetCompletedTasksDto,

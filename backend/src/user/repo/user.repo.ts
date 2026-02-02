@@ -69,6 +69,37 @@ export class UserRepo extends AbstractRepo<User> {
     }
   }
 
+  async getDayStatus(
+    userId: string,
+    levelName: Level_Name,
+    dayNumber: number,
+  ) {
+    try {
+      const day = await this.dayModel.findOne({ levelName, dayNumber });
+      if (!day) return null;
+
+      const progress = await this.userProgressModel
+        .findOne({
+          userId: toObjectId(userId),
+          dayId: day._id,
+        })
+        .lean();
+
+      return progress
+        ? {
+          completed: progress.completed,
+          dailyTestResult: progress.dailyTestResult,
+        }
+        : null;
+    } catch (error) {
+      this.logger.error(
+        `Error getting day status: ${error.message}`,
+        error.stack,
+      );
+      throw new InternalServerErrorException('Failed to get day status');
+    }
+  }
+
   async getTotalDaysInLevel(levelName: Level_Name): Promise<number> {
     try {
       const totalDays = await this.dayModel.countDocuments({ levelName });

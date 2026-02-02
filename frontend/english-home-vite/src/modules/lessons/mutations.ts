@@ -7,6 +7,7 @@ import {
   uploadAudio,
   getSentenceAudios,
   markTaskAsCompleted,
+  getDayStatus,
 } from './services';
 import type { LessonParams } from './types';
 
@@ -68,10 +69,23 @@ export function useMarkTaskAsCompleted() {
     },
   });
 }
-
 export function useGetSentenceAudios({ levelName }: { levelName: LevelId }) {
   return useQuery({
     queryKey: ['get-sentence-audios', levelName],
     queryFn: () => getSentenceAudios({ levelName }),
+  });
+}
+
+export function useGetDayStatus({
+  levelName,
+  day,
+}: {
+  levelName: LevelId;
+  day: number;
+}) {
+  return useQuery({
+    queryKey: ['day-status', levelName, day],
+    queryFn: () => getDayStatus(levelName, day),
+    enabled: !!levelName && !!day,
   });
 }

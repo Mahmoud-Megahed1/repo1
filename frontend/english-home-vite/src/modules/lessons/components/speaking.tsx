@@ -5,7 +5,7 @@ import useItemsPagination from '@hooks/use-items-pagination';
 import useLocale from '@hooks/use-locale';
 import useRecorder from '@hooks/use-recorder';
 import { cn, localizedNumber } from '@lib/utils';
-import { useCompareAudio, useGetSentenceAudios } from '@modules/lessons/mutations';
+import { useCompareAudio, useGetSentenceAudios, useMarkTaskAsCompleted } from '@modules/lessons/mutations';
 import type { LevelId } from '@shared/types/entities';
 import { useParams } from '@tanstack/react-router';
 import { Button } from '@ui/button';
@@ -97,6 +97,22 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
       );
     }
   }, [savedAudios]);
+
+  const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
+  const allPassed = usersRecords.length > 0 && usersRecords.every((r) => r.results?.isPassed);
+
+  useEffect(() => {
+    if (allPassed) {
+      markTaskCompleted({
+        levelName: levelName as LevelId,
+        day: +day,
+        taskName: 'SPEAK',
+        submission: { completed: true },
+        score: 100,
+        feedback: 'Speaking Module Completed',
+      });
+    }
+  }, [allPassed, day, levelName, markTaskCompleted]);
 
   const handleRecordChange = async (file: File) => {
     const recordUrl = URL.createObjectURL(file);
@@ -232,7 +248,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
             ))}
         </ul>
         {isLast ? (
-          <NextLessonButton lessonName="DAILY_TEST" className="px-8" />
+          <NextLessonButton lessonName="TODAY" className="px-8" />
         ) : (
           <Button variant="default" onClick={next} disabled={!hasNextItems} className="px-8">
             {t('Global.next')}

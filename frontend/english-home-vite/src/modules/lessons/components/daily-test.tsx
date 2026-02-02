@@ -17,7 +17,7 @@ import { Label } from '@ui/label';
 import { cn, localizedNumber } from '@lib/utils';
 import { Progress } from '@ui/progress';
 import useLocale from '@hooks/use-locale';
-import { useMarkDayAsCompleted } from '../mutations';
+import { useMarkDayAsCompleted, useMarkTaskAsCompleted, useGetDayStatus } from '../mutations';
 import type { LevelId } from '@shared/types/entities';
 import { useParams } from '@tanstack/react-router';
 import { Link } from '@shared/i18n/routing';
@@ -39,6 +39,19 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
     day,
     levelName: levelId,
   });
+  // Fetch existing status
+  const { data: dayStatus } = useGetDayStatus({
+    levelName: levelId as LevelId,
+    day: +day,
+  });
+
+  useEffect(() => {
+    if (dayStatus?.data?.dailyTestResult?.isPassed) {
+      const savedResult = dayStatus.data.dailyTestResult;
+      setQuestionsStates(savedResult.questions);
+      setTestStatus('completed');
+    }
+  }, [dayStatus]);
   const [testStatus, setTestStatus] = useState<
     'idle' | 'completed' | 'reviewed'
   >('idle');
@@ -101,12 +114,18 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
     );
   }, [reset]);
 
+
+
   useEffect(() => {
     setTestStatus((prev) => {
+      // If already completed/reviewed (from hydration), don't revert to idle/completed loop
+      if (prev === 'completed' || prev === 'reviewed') return prev;
       if (questionsStates.every((q) => q.isSubmitted)) return 'completed';
       return prev;
     });
   }, [questionsStates]);
+
+  const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
 
   useEffect(() => {
     if (testStatus === 'completed' && getResult.isPassed && !isSuccess) {
@@ -119,8 +138,17 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
           isPassed: getResult.isPassed
         }
       });
+      // Also mark the task as completed for sidebar checkmark
+      markTaskCompleted({
+        levelName: levelId as LevelId,
+        day: +day,
+        taskName: 'DAILY_TEST',
+        submission: { completed: true },
+        score: getResult.score,
+        feedback: 'Daily Test Passed',
+      });
     }
-  }, [testStatus, getResult, mutate, isSuccess, levelId, day, questionsStates]);
+  }, [testStatus, getResult, mutate, isSuccess, levelId, day, questionsStates, markTaskCompleted]);
 
   if (!currentItem) return null;
 

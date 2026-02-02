@@ -5,7 +5,7 @@ import { SpeakingFeedback } from '@components/speaking-feedback';
 import useLocale from '@hooks/use-locale';
 import useRecorder from '@hooks/use-recorder';
 import { localizedNumber } from '@lib/utils';
-import { useCompareAudio, useUploadAudio } from '@modules/lessons/mutations';
+import { useCompareAudio, useUploadAudio, useMarkTaskAsCompleted } from '@modules/lessons/mutations';
 import type { LessonId, LevelId } from '@shared/types/entities';
 import { Button } from '@ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@ui/card';
@@ -50,9 +50,24 @@ const PracticeSpeaking: FC<Props> = ({
         similarityPercentage: +defaultResult.metadata.similarityPercentage
     } : undefined);
 
+    const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
+
     useEffect(() => {
         setAudioUrl(defaultResult?.url);
     }, [defaultResult]);
+
+    useEffect(() => {
+        if (resultData?.isPassed) {
+            markTaskCompleted({
+                levelName: levelId,
+                day: +day,
+                taskName: 'TODAY',
+                submission: { completed: true },
+                score: 100,
+                feedback: 'Daily Speaking Completed',
+            });
+        }
+    }, [resultData?.isPassed, day, levelId, markTaskCompleted]);
 
     const recorder = useMemo(
         () => (
