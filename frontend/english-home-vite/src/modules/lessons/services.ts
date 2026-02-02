@@ -110,3 +110,12 @@ export function markTaskAsCompleted({
     feedback,
   });
 }
+
+export function getDayStatus(levelName: LevelId, day: number) {
+  return axiosClient.get<{
+    dailyTestResult?: any;
+    completed: boolean;
+  }>('/users/day-status', {
+    params: { levelName, day },
+  });
+}
