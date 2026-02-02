@@ -27,7 +27,7 @@ export const getTodayAudio = ({
   day,
   level_name,
 }: Omit<LessonParams, 'lesson_name'>) => {
-  return axiosClient.get<{ url: string }>(
+  return axiosClient.get<{ url: string; metadata?: any }>(
     `/files/user-audio/${level_name}/${day}`
   );
 };

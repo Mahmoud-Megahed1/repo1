@@ -69,7 +69,7 @@ const Today: FC<Props> = ({
         day={day}
         lessonName={lessonName}
         levelId={levelId}
-        defaultAudioUrl={data?.data.url}
+        defaultResult={data?.data}
         isLoading={isFetching}
         sentenceText={sentences.join(' ')}
       />

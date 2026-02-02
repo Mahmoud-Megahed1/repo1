@@ -5,6 +5,7 @@ import { TransformersAudioTranscribe } from '../../common/services/transformers-
 import { FileUploadService } from '../file-upload.service';
 import { User } from '../../user/models/user.schema';
 import { UserService } from '../../user/user.service';
+import { LESSONS } from '../../common/shared/enums';
 
 @Injectable()
 export class UserResultsService {
@@ -46,11 +47,15 @@ export class UserResultsService {
     // Save the recording for persistence
     let audioUrl: string | null = null;
     try {
-      const uploadResult = await this.fileUploadService.uploadUserSentenceAudio(
+      // We use uploadUserAudio to save as "today_audio.wav" which is what the "Today" page expects
+      const uploadResult = await this.fileUploadService.uploadUserAudio(
         audioFile,
+        {
+          level_name: speakCompareTranscriptsDto.level_name,
+          day: speakCompareTranscriptsDto.day.toString(),
+          lesson_name: LESSONS.SPEAK,
+        },
         user._id.toString(),
-        speakCompareTranscriptsDto.level_name,
-        correctSentence,
         {
           similarityPercentage,
           correctSentence,

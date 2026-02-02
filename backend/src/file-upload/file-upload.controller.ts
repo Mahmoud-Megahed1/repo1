@@ -341,17 +341,17 @@ export class FileUploadController {
     return { message: 'Object deleted successfully' };
   }
 
-  private rewriteToLocalOrigin(result: { url: string }, req: Request): { url: string } {
+  private rewriteToLocalOrigin(result: { url: string } & Record<string, any>, req: Request): { url: string } & Record<string, any> {
     try {
       const url = new URL(result.url);
       const origin = `https://${req.get('host')}`;
       const rebuilt = `${origin}${url.pathname}${url.search}`;
-      return { url: rebuilt };
+      return { ...result, url: rebuilt };
     } catch {
       const keyMatch = /[?&]key=([^&]+)/.exec(result.url);
       const key = keyMatch ? keyMatch[1] : '';
       const origin = `https://${req.get('host')}`;
-      return { url: `${origin}/api/files/raw?key=${key}` };
+      return { ...result, url: `${origin}/api/files/raw?key=${key}` };
     }
   }
 

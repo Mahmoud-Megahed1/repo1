@@ -2,6 +2,8 @@ import useItemsPagination from '@hooks/use-items-pagination';
 import { cn, localizedNumber } from '@lib/utils';
 import type { WritingLesson } from '@modules/lessons/types';
 import { useMarkTaskAsCompleted } from '@modules/lessons/mutations';
+import { getCompletedTasks } from '@modules/levels/services';
+import { useQuery } from '@tanstack/react-query';
 import { useParams } from '@tanstack/react-router';
 import type { LevelId } from '@shared/types/entities';
 import { Button } from '@ui/button';
@@ -72,6 +74,38 @@ export const WritingProvider: FC<{
   const [sentenceStates, setSentenceStates] = useState<
     Record<number, SentenceState>
   >({});
+
+  const { data: completedTasks } = useQuery({
+    queryKey: ['completedTasks', levelName, day],
+    queryFn: () => getCompletedTasks(levelName as LevelId, day),
+    enabled: !!levelName && !!day,
+  });
+
+  useEffect(() => {
+    if (completedTasks?.data) {
+      setSentenceStates((prev) => {
+        const nextState = { ...prev };
+        let hasChanges = false;
+
+        sentences.forEach((sentence, index) => {
+          // Normalization logic to match backend task name storage if needed
+          // Assuming exact match for now as displayed text
+          const isCompleted = completedTasks.data.includes(sentence);
+
+          if (isCompleted && !nextState[index]?.isCorrect) {
+            hasChanges = true;
+            nextState[index] = {
+              answers: extractBraces(sentence),
+              isChecked: true,
+              isCorrect: true,
+            };
+          }
+        });
+
+        return hasChanges ? nextState : prev;
+      });
+    }
+  }, [completedTasks?.data, sentences]);
 
   useEffect(() => {
     setSentenceStates((prev) => {

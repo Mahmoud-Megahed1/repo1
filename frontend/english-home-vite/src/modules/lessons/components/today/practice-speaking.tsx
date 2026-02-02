@@ -17,7 +17,7 @@ type Props = {
     day: number | string;
     lessonName: LessonId;
     levelId: LevelId;
-    defaultAudioUrl?: string | null;
+    defaultResult?: { url: string; metadata?: any };
     isLoading?: boolean;
     sentenceText: string;
 };
@@ -26,12 +26,12 @@ const PracticeSpeaking: FC<Props> = ({
     lessonName,
     levelId,
     isLoading = false,
-    defaultAudioUrl,
+    defaultResult,
     sentenceText,
 }) => {
     const { t } = useTranslation();
     const [audioUrl, setAudioUrl] = useState<string | null | undefined>(
-        defaultAudioUrl
+        defaultResult?.url
     );
     const {
         mutate: compareMutate,
@@ -41,9 +41,18 @@ const PracticeSpeaking: FC<Props> = ({
         levelName: levelId,
         day: +day,
     });
+
+    // Initialize data from defaultResult if available
+    const resultData = data?.data || (defaultResult?.metadata ? {
+        ...defaultResult.metadata,
+        isPassed: defaultResult.metadata.isPassed === 'true' || defaultResult.metadata.isPassed === true,
+        similarityPercentage: +defaultResult.metadata.similarityPercentage
+    } : undefined);
+
     useEffect(() => {
-        setAudioUrl(defaultAudioUrl);
-    }, [defaultAudioUrl]);
+        setAudioUrl(defaultResult?.url);
+    }, [defaultResult]);
+
     const recorder = useMemo(
         () => (
             <Recorder
@@ -62,6 +71,7 @@ const PracticeSpeaking: FC<Props> = ({
         ),
         [audioUrl, compareMutate, day, isLoading, lessonName, levelId, sentenceText]
     );
+
     return (
         <CustomAccordion
             variant={'purple'}
@@ -71,9 +81,9 @@ const PracticeSpeaking: FC<Props> = ({
             {audioUrl ? (
                 isPending ? (
                     <AnalyzingSkeleton />
-                ) : data?.data ? (
+                ) : resultData ? (
                     <div className="flex flex-col items-center gap-4 w-full">
-                        {data.data.isPassed && (
+                        {resultData.isPassed && (
                             <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-6 py-3 rounded-lg font-bold flex items-center gap-3 shadow-sm animate-in fade-in zoom-in duration-300 w-full justify-center">
                                 <CheckCircle2 className="w-6 h-6" />
                                 <span>{t('Global.dailySpeakingSuccess')}</span>
@@ -81,7 +91,7 @@ const PracticeSpeaking: FC<Props> = ({
                         )}
                         <SpeakingFeedback
                             result={{
-                                ...data!.data,
+                                ...resultData,
                             }}
                             recordUrl={audioUrl}
                             onReset={() => {

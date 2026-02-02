@@ -23,9 +23,9 @@ type ContextType = {
 
 const ImageUploaderContext = createContext<ContextType>({
   image: undefined,
-  setImage: () => {},
+  setImage: () => { },
   id: '',
-  handleSetImage: () => {},
+  handleSetImage: () => { },
 });
 
 type ImageUploaderProps = Omit<React.ComponentProps<'input'>, 'value'> & {
@@ -81,7 +81,7 @@ const ImageUploader = ({
       {children}
       <input
         type="file"
-        accept="image/png, image/jpeg, image/jpg"
+        accept="image/png, image/jpeg, image/jpg, image/webp"
         onChange={handleOnChange}
         tabIndex={-1}
         hidden

@@ -108,13 +108,14 @@ export class FileUploadService {
     file: Express.Multer.File,
     uploadFileDTO: UploadFileDTO,
     userId: string,
+    metadata?: Record<string, any>,
   ): Promise<{ url: string }> {
     this.validateFile(file);
     const isWav = file.mimetype?.includes('wav') || file.originalname?.toLowerCase().endsWith('.wav');
     const ext = isWav ? 'wav' : 'mp3';
     const key = `UserAudios/${userId}/${uploadFileDTO.level_name}/${uploadFileDTO.day}/today_audio.${ext}`;
     try {
-      await this.uploadToGridFS(file, key);
+      await this.uploadToGridFS(file, key, metadata);
       return { url: this.buildPublicUrl(key) };
     } catch (error) {
       this.logger.error(`Failed to upload user audio: ${error.message}`, error.stack);
@@ -200,7 +201,7 @@ export class FileUploadService {
     userId: string,
     levelName: string,
     day: string,
-  ): Promise<{ url: string } | null> {
+  ): Promise<{ url: string; metadata?: any } | null> {
     // Try WAV first then MP3 for backward compatibility
     const wavKey = `UserAudios/${userId}/${levelName}/${day}/today_audio.wav`;
     const mp3Key = `UserAudios/${userId}/${levelName}/${day}/today_audio.mp3`;
@@ -212,7 +213,7 @@ export class FileUploadService {
         key = mp3Key;
       }
       if (!file) return null;
-      return { url: this.buildPublicUrl(key) };
+      return { url: this.buildPublicUrl(key), metadata: file.metadata };
     } catch (error) {
       this.logger.error(`Error retrieving day audio: ${error.message}`, error.stack);
       throw new InternalServerErrorException(`${FileUploadMessages.FAILED_TO_RETRIEVE_DAY_AUDIO}: ${error.message}`);
