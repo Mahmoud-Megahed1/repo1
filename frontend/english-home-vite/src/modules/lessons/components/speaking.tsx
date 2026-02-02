@@ -41,6 +41,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
   const { mutate, isPending } = useCompareAudio({
     levelName: levelName as LevelId,
     day: +day,
+    lessonName: 'SPEAK', // Force 'SPEAK' (or rely on prop, but explicit is safer for granular logic)
   });
   const { data: savedAudios } = useGetSentenceAudios({
     levelName: levelName as LevelId,

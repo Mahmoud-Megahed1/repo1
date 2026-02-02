@@ -30,7 +30,7 @@ export function useMarkDayAsCompleted(
   });
 }
 
-export function useCompareAudio({ levelName, day }: { levelName: LevelId; day: number }) {
+export function useCompareAudio({ levelName, day, lessonName }: { levelName: LevelId; day: number; lessonName?: string }) {
   return useMutation({
     mutationKey: ['compare-audio'],
     mutationFn: ({
@@ -39,7 +39,7 @@ export function useCompareAudio({ levelName, day }: { levelName: LevelId; day: n
     }: {
       audio: File;
       sentenceText: string;
-    }) => compareAudio({ audio, level_name: levelName, sentenceText, day }),
+    }) => compareAudio({ audio, level_name: levelName, sentenceText, day, lesson_name: lessonName }),
   });
 }
 
@@ -64,6 +64,7 @@ export function useMarkTaskAsCompleted() {
     onSuccess: () => {
       // invalidating getMe might differ based on if we track tasks there
       queryClient.invalidateQueries({ queryKey: ['getMe'] });
+      queryClient.invalidateQueries({ queryKey: ['completedTasks'] });
     },
   });
 }

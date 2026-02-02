@@ -40,6 +40,7 @@ const PracticeSpeaking: FC<Props> = ({
     } = useCompareAudio({
         levelName: levelId,
         day: +day,
+        lessonName: 'TODAY', // Force 'TODAY' to ensure backend saves as today_audio.wav
     });
 
     // Initialize data from defaultResult if available

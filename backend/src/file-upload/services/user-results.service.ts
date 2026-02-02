@@ -47,22 +47,40 @@ export class UserResultsService {
     // Save the recording for persistence
     let audioUrl: string | null = null;
     try {
-      // We use uploadUserAudio to save as "today_audio.wav" which is what the "Today" page expects
-      const uploadResult = await this.fileUploadService.uploadUserAudio(
-        audioFile,
-        {
-          level_name: speakCompareTranscriptsDto.level_name,
-          day: speakCompareTranscriptsDto.day.toString(),
-          lesson_name: LESSONS.SPEAK,
-        },
-        user._id.toString(),
-        {
-          similarityPercentage,
+      // Save based on lesson type: TODAY -> single file, SPEAK -> granular
+      let uploadResult;
+
+      if (speakCompareTranscriptsDto.lesson_name === LESSONS.TODAY) {
+        uploadResult = await this.fileUploadService.uploadUserAudio(
+          audioFile,
+          {
+            level_name: speakCompareTranscriptsDto.level_name,
+            day: speakCompareTranscriptsDto.day.toString(),
+            lesson_name: LESSONS.SPEAK, // Legacy: "Today" expects SPEAK folder or similar? Wait, keeping it consistent with old behavior
+          },
+          user._id.toString(),
+          {
+            similarityPercentage,
+            correctSentence,
+            userTranscript,
+            isPassed: similarityPercentage >= 70,
+          }
+        );
+      } else {
+        // Default (including SPEAK): Save unique files per sentence
+        uploadResult = await this.fileUploadService.uploadUserSentenceAudio(
+          audioFile,
+          user._id.toString(),
+          speakCompareTranscriptsDto.level_name,
           correctSentence,
-          userTranscript,
-          isPassed: similarityPercentage >= 70,
-        }
-      );
+          {
+            similarityPercentage,
+            correctSentence,
+            userTranscript,
+            isPassed: similarityPercentage >= 70,
+          }
+        );
+      }
       audioUrl = uploadResult.url;
 
       // Persist the task completion with result

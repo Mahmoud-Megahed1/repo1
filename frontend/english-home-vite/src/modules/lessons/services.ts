@@ -53,6 +53,7 @@ export async function compareAudio(data: {
   level_name: LevelId;
   sentenceText: string;
   day: number;
+  lesson_name?: string;
 }) {
   return axiosClient.post<{
     similarityPercentage: number;
