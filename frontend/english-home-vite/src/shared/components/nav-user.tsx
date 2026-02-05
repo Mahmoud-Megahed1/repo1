@@ -46,12 +46,16 @@ export function NavUser({ user, onLogout }: Props) {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <Button variant={'outline'} className="mb-2 w-full" asChild>
+        <Button
+          variant={'default'}
+          className="mb-2 w-full text-base font-bold py-5 bg-primary hover:bg-primary/90"
+          asChild
+        >
           <Link to="/user-guide">
             <span className="group-data-[state=collapsed]:hidden">
               {t('Landing.footer.support.userGuide')}
             </span>
-            <ExternalLink />
+            <ExternalLink className="h-5 w-5" />
           </Link>
         </Button>
       </SidebarMenuItem>
