@@ -21,9 +21,6 @@ export const Route = createFileRoute(
   '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName'
 )({
   component: withLessonProvider(RouteComponent),
-  onLeave: () => {
-    useSidebarStore.getState().resetItems();
-  },
 });
 
 function RouteComponent() {
@@ -47,7 +44,7 @@ function RouteComponent() {
     refetch();
   }, [lessonName, refetch]);
 
-  // Update sidebar items with completion status
+  // Handle Sidebar Lifecycle (Update)
   useEffect(() => {
     const defaultItems = LESSONS_SIDEBAR_DEFAULT_ITEMS(levelId as LevelId, day);
     const completed = completedTasks?.data || [];
@@ -56,8 +53,16 @@ function RouteComponent() {
       ...item,
       isCompleted: completed.includes(item.id),
     }));
+
     useSidebarStore.getState().setItems(updatedItems);
   }, [completedTasks?.data, levelId, day]);
+
+  // Separate effect for unmount cleanup
+  useEffect(() => {
+    return () => {
+      useSidebarStore.getState().resetItems();
+    };
+  }, []);
 
   useUpdateBreadcrumb({ levelId, day, lessonName });
   usePageTitle(t(`Global.sidebarItems.${lessonName}` as never));
