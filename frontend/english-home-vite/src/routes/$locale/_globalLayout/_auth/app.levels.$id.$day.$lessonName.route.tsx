@@ -21,11 +21,6 @@ export const Route = createFileRoute(
   '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName'
 )({
   component: withLessonProvider(RouteComponent),
-  onEnter: ({ params: { day, id } }) => {
-    useSidebarStore
-      .getState()
-      .setItems(LESSONS_SIDEBAR_DEFAULT_ITEMS(id as LevelId, day));
-  },
   onLeave: () => {
     useSidebarStore.getState().resetItems();
   },
@@ -54,14 +49,14 @@ function RouteComponent() {
 
   // Update sidebar items with completion status
   useEffect(() => {
-    if (completedTasks?.data) {
-      const sidebarItems = LESSONS_SIDEBAR_DEFAULT_ITEMS(levelId as LevelId, day);
-      const updatedItems = sidebarItems.map((item) => ({
-        ...item,
-        isCompleted: completedTasks.data.includes(item.id),
-      }));
-      useSidebarStore.getState().setItems(updatedItems);
-    }
+    const defaultItems = LESSONS_SIDEBAR_DEFAULT_ITEMS(levelId as LevelId, day);
+    const completed = completedTasks?.data || [];
+
+    const updatedItems = defaultItems.map((item) => ({
+      ...item,
+      isCompleted: completed.includes(item.id),
+    }));
+    useSidebarStore.getState().setItems(updatedItems);
   }, [completedTasks?.data, levelId, day]);
 
   useUpdateBreadcrumb({ levelId, day, lessonName });
