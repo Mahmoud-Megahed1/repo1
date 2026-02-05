@@ -5,7 +5,7 @@ import { SpeakingFeedback } from '@components/speaking-feedback';
 import useLocale from '@hooks/use-locale';
 import useRecorder from '@hooks/use-recorder';
 import { localizedNumber } from '@lib/utils';
-import { useCompareAudio, useUploadAudio, useMarkTaskAsCompleted } from '@modules/lessons/mutations';
+import { useCompareAudio, useMarkTaskAsCompleted } from '@modules/lessons/mutations';
 import type { LessonId, LevelId } from '@shared/types/entities';
 import { Button } from '@ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@ui/card';
@@ -23,7 +23,6 @@ type Props = {
 };
 const PracticeSpeaking: FC<Props> = ({
     day,
-    lessonName,
     levelId,
     isLoading = false,
     defaultResult,
@@ -72,9 +71,6 @@ const PracticeSpeaking: FC<Props> = ({
     const recorder = useMemo(
         () => (
             <Recorder
-                day={day}
-                lessonName={lessonName}
-                levelId={levelId}
                 defaultAudioUrl={audioUrl}
                 isLoading={isLoading}
                 maxDurationInSeconds={25}
@@ -85,7 +81,7 @@ const PracticeSpeaking: FC<Props> = ({
                 }}
             />
         ),
-        [audioUrl, compareMutate, day, isLoading, lessonName, levelId, sentenceText]
+        [audioUrl, compareMutate, isLoading, sentenceText]
     );
 
     return (
@@ -129,9 +125,6 @@ const PracticeSpeaking: FC<Props> = ({
 type RecorderProps = {
     defaultAudioUrl?: string | null;
     isLoading?: boolean;
-    day: number | string;
-    lessonName: LessonId;
-    levelId: LevelId;
     // eslint-disable-next-line no-unused-vars
     onStop?: (file: File) => void;
     maxDurationInSeconds?: number;
@@ -139,18 +132,10 @@ type RecorderProps = {
 const Recorder: FC<RecorderProps> = ({
     defaultAudioUrl,
     isLoading,
-    day,
-    lessonName,
-    levelId,
     onStop,
     maxDurationInSeconds = 20,
 }) => {
     const { t } = useTranslation();
-    const { mutate: uploadMutate } = useUploadAudio({
-        day: `${day}`,
-        lesson_name: lessonName,
-        level_name: levelId,
-    });
     const {
         isRecording,
         audioURL: recordUrl,
@@ -160,7 +145,6 @@ const Recorder: FC<RecorderProps> = ({
         maxDurationInSeconds,
         onStop: (file) => {
             if (!file) return;
-            uploadMutate(file);
             onStop?.(file);
         },
     });
