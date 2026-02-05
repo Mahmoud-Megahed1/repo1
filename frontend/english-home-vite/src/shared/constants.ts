@@ -43,10 +43,13 @@ export const MAIN_SIDEBAR_ITEMS = (): Array<SidebarItem> => [
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TFunction = (key: string) => string;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const defaultT: TFunction = (key: string) => i18next.t(key as any) as string;
+
 export const LESSONS_SIDEBAR_DEFAULT_ITEMS = (
   levelId: LevelId = 'LEVEL_A1',
   day: string | number = '1',
-  t: TFunction = i18next.t.bind(i18next)
+  t: TFunction = defaultT
 ): Array<SidebarItem> => {
   const baseRoute = `/app/levels/${levelId}/${day}`;
   return [

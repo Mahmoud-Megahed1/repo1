@@ -7,6 +7,7 @@ import { LevelsSection } from './levels-section';
 import { TestimonialsSection } from './testimonials-section';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { useEffect } from 'react';
+import ScrollArrows from '@shared/components/scroll-arrows';
 
 export function LandingPage() {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ export function LandingPage() {
           <AboutSection />
         </div>
       </main>
+      <ScrollArrows />
     </LandingLayout>
   );
 }
