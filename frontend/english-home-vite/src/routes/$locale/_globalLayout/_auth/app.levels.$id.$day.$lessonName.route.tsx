@@ -43,9 +43,10 @@ function RouteComponent() {
 
   // Fetch completed tasks for this day
   const { data: completedTasks } = useQuery({
-    queryKey: ['completedTasks', levelId, day],
-    queryFn: () => getCompletedTasks(levelId as LevelId, day),
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    queryKey: ['completedTasks', levelId, +day],
+    queryFn: () => getCompletedTasks(levelId as LevelId, +day),
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
 
   // Update sidebar items with completion status
