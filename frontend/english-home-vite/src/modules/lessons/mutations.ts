@@ -31,6 +31,7 @@ export function useMarkDayAsCompleted() {
 }
 
 export function useCompareAudio({ levelName, day, lessonName }: { levelName: LevelId; day: number; lessonName?: string }) {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['compare-audio'],
     mutationFn: ({
@@ -40,6 +41,10 @@ export function useCompareAudio({ levelName, day, lessonName }: { levelName: Lev
       audio: File;
       sentenceText: string;
     }) => compareAudio({ audio, level_name: levelName, sentenceText, day, lesson_name: lessonName }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['today-audio', day, levelName] });
+      queryClient.invalidateQueries({ queryKey: ['get-sentence-audios', levelName] });
+    },
   });
 }
 
