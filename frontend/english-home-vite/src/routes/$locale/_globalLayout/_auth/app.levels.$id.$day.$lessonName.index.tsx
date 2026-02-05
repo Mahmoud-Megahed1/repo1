@@ -63,6 +63,19 @@ function RouteComponent() {
       {lesson.type === 'DAILY_TEST' && (
         <DailyTest lesson={lesson.data} day={day} levelId={id as never} />
       )}
+      {!LESSONS_IDS.includes(lesson.type as never) && (
+        <div className="flex h-64 w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-6 text-center">
+          <p className="text-destructive font-semibold">
+            Error: Unknown lesson type "{lesson.type}"
+          </p>
+          <p className="text-muted-foreground text-sm">
+            Expected one of: {LESSONS_IDS.join(', ')}
+          </p>
+          <p className="text-muted-foreground text-xs">
+            URL Param: {lessonName}
+          </p>
+        </div>
+      )}
     </>
   );
 }

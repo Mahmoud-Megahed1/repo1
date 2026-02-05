@@ -76,8 +76,11 @@ function RouteComponent() {
   return (
     <LevelGuard levelId={levelId as LevelId}>
       {isFetching ? (
-        <div className="flex h-full flex-1 items-center justify-center">
+        <div className="flex h-full flex-1 flex-col items-center justify-center gap-4 py-10">
           <BookLoader className="text-primary" />
+          <p className="text-muted-foreground animate-pulse font-medium">
+            {t('Global.loadingLesson' as any) || 'Loading Lesson...'}
+          </p>
         </div>
       ) : isEmpty ? (
         <ComingSoon />
