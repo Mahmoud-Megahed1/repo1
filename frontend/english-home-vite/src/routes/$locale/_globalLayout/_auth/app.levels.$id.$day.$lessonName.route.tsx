@@ -42,12 +42,15 @@ function RouteComponent() {
   const canAccessDay = +day <= currentDay;
 
   // Fetch completed tasks for this day
-  const { data: completedTasks } = useQuery({
+  const { data: completedTasks, refetch } = useQuery({
     queryKey: ['completedTasks', levelId, +day],
     queryFn: () => getCompletedTasks(levelId as LevelId, +day),
-    staleTime: 0,
-    refetchOnMount: 'always',
   });
+
+  // Force refetch when navigating between lessons to ensure latest status
+  useEffect(() => {
+    refetch();
+  }, [lessonName, refetch]);
 
   // Update sidebar items with completion status
   useEffect(() => {
