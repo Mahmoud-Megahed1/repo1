@@ -55,7 +55,7 @@ function RouteComponent() {
     }));
 
     useSidebarStore.getState().setItems(updatedItems);
-  }, [completedTasks?.data, levelId, day]);
+  }, [completedTasks?.data, levelId, day, t]);
 
   // Separate effect for unmount cleanup
   useEffect(() => {
