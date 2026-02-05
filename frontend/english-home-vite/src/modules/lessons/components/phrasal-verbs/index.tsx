@@ -8,6 +8,9 @@ import PhrasalCard from './phrasal-card';
 import { useTranslation } from 'react-i18next';
 import useLocale from '@hooks/use-locale';
 import NextLessonButton from '@components/next-lesson-button';
+import { useParams } from '@tanstack/react-router';
+import { useMarkTaskAsCompleted } from '../../mutations';
+import { type LevelId } from '../../types';
 
 type Props = {
   lesson: PhrasalVerbLesson[];
@@ -20,6 +23,24 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
   const searchParams = new URLSearchParams(window.location.search);
   let defaultIndex = searchParams.get('index') || 0;
   defaultIndex = isNaN(Number(defaultIndex)) ? 0 : Number(defaultIndex);
+
+  const { id: levelId, day } = useParams({
+    from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
+  });
+  const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
+
+  const handleComplete = () => {
+    if (levelId && day) {
+      markTaskCompleted({
+        levelName: levelId as LevelId,
+        day: +day,
+        taskName: 'PHRASAL_VERBS',
+        submission: { completed: true },
+        score: 100,
+        feedback: 'Phrasal Verbs Completed',
+      });
+    }
+  };
 
   const {
     currentItem,
@@ -95,7 +116,7 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
           </ul>
         </CardContent>
       </Card>
-      {isLast && <NextLessonButton lessonName="IDIOMS" className="mt-6" />}
+      {isLast && <NextLessonButton lessonName="IDIOMS" className="mt-6" onClick={handleComplete} />}
     </div>
   );
 };

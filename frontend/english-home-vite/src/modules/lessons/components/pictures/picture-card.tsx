@@ -19,6 +19,7 @@ type Props = Omit<PictureLesson, 'id'> & {
   hasPrevItems: boolean;
   hasNextItems: boolean;
   showNextLessonButton?: boolean;
+  onComplete?: () => void;
 };
 
 const PictureCard: FC<Props> = ({
@@ -33,6 +34,7 @@ const PictureCard: FC<Props> = ({
   next,
   prev,
   showNextLessonButton,
+  onComplete,
 }) => {
   const { ref, togglePlay, isPlaying } = useAudioPlayer();
   const { t } = useTranslation();
@@ -135,7 +137,9 @@ const PictureCard: FC<Props> = ({
             </div>
           </CardContent>
         </Card>
-        {showNextLessonButton && <NextLessonButton lessonName="LISTEN" />}
+        {showNextLessonButton && (
+          <NextLessonButton lessonName="LISTEN" onClick={onComplete} />
+        )}
       </div>
     </div>
   );

@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 import type { PictureLesson } from '../../types';
 import PictureCard from './picture-card';
 import PictureSidebar from './picture-sidebar';
+import { useParams } from '@tanstack/react-router';
+import { useMarkTaskAsCompleted } from '../../mutations';
+import { type LevelId } from '../../types';
 type Props = {
   lesson: PictureLesson[];
 } & ComponentProps<'div'>;
@@ -13,6 +16,24 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
   const searchParams = new URLSearchParams(window.location.search);
   let pictureIndex = searchParams.get('picture') || 0;
   pictureIndex = isNaN(Number(pictureIndex)) ? 0 : Number(pictureIndex);
+
+  const { id: levelId, day } = useParams({
+    from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
+  });
+  const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
+
+  const handleComplete = () => {
+    if (levelId && day) {
+      markTaskCompleted({
+        levelName: levelId as LevelId,
+        day: +day,
+        taskName: 'PICTURES',
+        submission: { completed: true },
+        score: 100,
+        feedback: 'Pictures Completed',
+      });
+    }
+  };
 
   const {
     currentItem,
@@ -54,6 +75,7 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
           hasNextItems={hasNextItems}
           hasPrevItems={hasPrevItems}
           showNextLessonButton={isLast}
+          onComplete={handleComplete}
           {...currentItem}
         />
         <PictureSidebar

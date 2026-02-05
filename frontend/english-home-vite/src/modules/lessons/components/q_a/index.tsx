@@ -7,6 +7,9 @@ import type { QuestionAnswerLesson } from '../../types';
 import QuestionAnswerList from './question-answer-list';
 import QuestionAnswerWithPagination from './question-answer-with-pagination';
 import NextLessonButton from '@components/next-lesson-button';
+import { useParams } from '@tanstack/react-router';
+import { useMarkTaskAsCompleted } from '../../mutations';
+import { type LevelId } from '../../types';
 type Props = {
   lesson: QuestionAnswerLesson[];
 } & ComponentProps<'div'>;
@@ -18,6 +21,24 @@ const Q_A: FC<Props> = ({ lesson, className, ...props }) => {
   questionIndex = isNaN(Number(questionIndex)) ? 0 : Number(questionIndex);
 
   const [currentIndex, setCurrentIndex] = useState(questionIndex);
+
+  const { id: levelId, day } = useParams({
+    from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
+  });
+  const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
+
+  const handleComplete = () => {
+    if (levelId && day) {
+      markTaskCompleted({
+        levelName: levelId as LevelId,
+        day: +day,
+        taskName: 'Q_A',
+        submission: { completed: true },
+        score: 100,
+        feedback: 'Q&A Completed',
+      });
+    }
+  };
 
   // Update search params when current index changes
   useEffect(() => {
@@ -65,7 +86,7 @@ const Q_A: FC<Props> = ({ lesson, className, ...props }) => {
         />
       )}
       {(showAll || currentIndex === lesson.length - 1) && (
-        <NextLessonButton lessonName="GRAMMAR" className="mt-8" />
+        <NextLessonButton lessonName="GRAMMAR" className="mt-8" onClick={handleComplete} />
       )}
     </div>
   );

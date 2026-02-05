@@ -5,7 +5,7 @@ import { useParams } from '@tanstack/react-router';
 import { Button } from '@ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@ui/card';
 import { FileText } from 'lucide-react';
-import { type ComponentProps, type FC, useEffect, useState } from 'react';
+import { type ComponentProps, type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { type LevelId } from '../../types';
 import type { ListenLesson } from '../../types';
@@ -23,7 +23,7 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
   });
   const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
 
-  useEffect(() => {
+  const handleComplete = () => {
     if (levelId && day) {
       markTaskCompleted({
         levelName: levelId as LevelId,
@@ -34,7 +34,7 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
         feedback: 'Listening Completed',
       });
     }
-  }, [day, levelId, markTaskCompleted]);
+  };
 
   return (
     <div className="mx-auto flex size-full max-w-2xl flex-col gap-4" {...props}>
@@ -91,7 +91,7 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
             ))}
           </ul>
         </div>
-        <NextLessonButton lessonName="WRITE" />
+        <NextLessonButton lessonName="WRITE" onClick={handleComplete} />
       </div>
     </div>
   );

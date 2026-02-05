@@ -2,7 +2,7 @@ import { AudioPlayback } from '@components/audio-playback';
 import NextLessonButton from '@components/next-lesson-button';
 import { cn } from '@lib/utils';
 import { useParams } from '@tanstack/react-router';
-import { type ComponentProps, type FC, useEffect } from 'react';
+import { type ComponentProps, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { type LevelId } from '../../types';
 import { useMarkTaskAsCompleted } from '../../mutations';
@@ -23,7 +23,7 @@ const Reading: FC<Props> = ({
   });
   const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
 
-  useEffect(() => {
+  const handleComplete = () => {
     if (levelId && day) {
       markTaskCompleted({
         levelName: levelId as LevelId,
@@ -34,7 +34,7 @@ const Reading: FC<Props> = ({
         feedback: 'Reading Completed',
       });
     }
-  }, [day, levelId, markTaskCompleted]);
+  };
 
   return (
     <div
@@ -54,7 +54,7 @@ const Reading: FC<Props> = ({
           title={t('Global.sidebarItems.LISTEN')}
         />
       </div>
-      <NextLessonButton lessonName="PICTURES" />
+      <NextLessonButton lessonName="PICTURES" onClick={handleComplete} />
     </div>
   );
 };

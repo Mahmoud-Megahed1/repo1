@@ -23,7 +23,7 @@ import {
   SwatchBook,
   type LucideIcon,
 } from 'lucide-react';
-import { type ComponentProps, type FC, type ReactNode, useEffect } from 'react';
+import { type ComponentProps, type FC, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { GrammarLesson } from '../types';
 import NextLessonButton from '@components/next-lesson-button';
@@ -57,7 +57,7 @@ const Grammar: FC<Props> = ({
   });
   const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
 
-  useEffect(() => {
+  const handleComplete = () => {
     if (levelId && day) {
       markTaskCompleted({
         levelName: levelId as LevelId,
@@ -68,7 +68,7 @@ const Grammar: FC<Props> = ({
         feedback: 'Grammar Completed',
       });
     }
-  }, [day, levelId, markTaskCompleted]);
+  };
 
   const definition = locale === 'ar' ? definitionAr : definitionEn;
   const useCases = locale === 'ar' ? rest.useCases.ar : rest.useCases.en;
@@ -160,7 +160,7 @@ const Grammar: FC<Props> = ({
           </Accordion>
         </CardContent>
       </Card>
-      <NextLessonButton lessonName="PHRASAL_VERBS" />
+      <NextLessonButton lessonName="PHRASAL_VERBS" onClick={handleComplete} />
     </div>
   );
 };
