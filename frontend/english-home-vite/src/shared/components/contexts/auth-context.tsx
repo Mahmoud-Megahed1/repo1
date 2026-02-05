@@ -29,6 +29,8 @@ const AuthContext = createContext<ContextType>({
   levelsDetails: [],
 });
 
+const EMPTY_LEVELS: LevelDetails[] = [];
+
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const queryClient = useQueryClient();
   const { data, isLoading, isSuccess, isError, refetch, error } = useQuery({
@@ -52,7 +54,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const value = useMemo(() => ({
     user: data?.data.user,
-    levelsDetails: data?.data.levelsDetails || [],
+    levelsDetails: data?.data.levelsDetails || EMPTY_LEVELS,
     isLoading,
     isSuccess,
     isError,
