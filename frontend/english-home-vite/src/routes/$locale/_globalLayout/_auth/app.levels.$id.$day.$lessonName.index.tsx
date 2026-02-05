@@ -31,23 +31,35 @@ function RouteComponent() {
   const { day, id, lessonName } = useParams({ from: Route.id });
   return (
     <>
-      {lesson.type === 'READ' && <Reading lesson={lesson.data.at(0)!} />}
-      {lesson.type === 'LISTEN' && <Listening lesson={lesson.data.at(0)!} />}
+      {lesson.type === 'READ' && lesson.data[0] && (
+        <Reading lesson={lesson.data[0]} />
+      )}
+      {lesson.type === 'LISTEN' && lesson.data[0] && (
+        <Listening lesson={lesson.data[0]} />
+      )}
       {lesson.type === 'PICTURES' && <Pictures lesson={lesson.data} />}
-      {lesson.type === 'GRAMMAR' && <Grammar lesson={lesson.data.at(0)!} />}
+      {lesson.type === 'GRAMMAR' && lesson.data[0] && (
+        <Grammar lesson={lesson.data[0]} />
+      )}
       {lesson.type === 'Q_A' && <Q_A lesson={lesson.data} />}
       {lesson.type === 'PHRASAL_VERBS' && <PhrasalVerbs lesson={lesson.data} />}
-      {lesson.type === 'IDIOMS' && <Idioms lesson={lesson.data.at(0)!} />}
-      {lesson.type === 'TODAY' && (
+      {lesson.type === 'IDIOMS' && lesson.data[0] && (
+        <Idioms lesson={lesson.data[0]} />
+      )}
+      {lesson.type === 'TODAY' && lesson.data[0] && (
         <Today
-          lesson={lesson.data.at(0)!}
+          lesson={lesson.data[0]}
           levelId={id as never}
           day={day}
           lessonName={lessonName as never}
         />
       )}
-      {lesson.type === 'WRITE' && <Writing lesson={lesson.data.at(0)!} />}
-      {lesson.type === 'SPEAK' && <Speaking lesson={lesson.data.at(0)!} />}
+      {lesson.type === 'WRITE' && lesson.data[0] && (
+        <Writing lesson={lesson.data[0]} />
+      )}
+      {lesson.type === 'SPEAK' && lesson.data[0] && (
+        <Speaking lesson={lesson.data[0]} />
+      )}
       {lesson.type === 'DAILY_TEST' && (
         <DailyTest lesson={lesson.data} day={day} levelId={id as never} />
       )}
