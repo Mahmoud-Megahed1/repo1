@@ -60,7 +60,7 @@ function RouteComponent() {
     }
   }, [completedTasks?.data, levelId, day]);
 
-  useUpdateBreadcrumb({ levelId, day, lessonName });
+  // useUpdateBreadcrumb({ levelId, day, lessonName });
   usePageTitle(t(`Global.sidebarItems.${lessonName}` as never));
   if (!canAccessDay)
     return (
@@ -85,7 +85,7 @@ function RouteComponent() {
       ) : isEmpty ? (
         <ComingSoon />
       ) : (
-        <div key={lessonName} className="py-8 space-y-6">
+        <div key={lessonName} className="py-8 space-y-6 border-2 border-transparent hover:border-red-500 transition-colors">
           {completedTasks?.data?.includes(lessonName) && (
             <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-3 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
               <CheckCircle2 className="w-6 h-6" />
@@ -95,7 +95,7 @@ function RouteComponent() {
           <Outlet />
         </div>
       )}
-      <ScrollArrows />
+      {/* <ScrollArrows /> */}
     </LevelGuard>
   );
 }
