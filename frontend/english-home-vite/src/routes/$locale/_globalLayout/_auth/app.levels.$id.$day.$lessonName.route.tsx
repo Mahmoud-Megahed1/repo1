@@ -46,7 +46,7 @@ function RouteComponent() {
 
   // Handle Sidebar Lifecycle (Update)
   useEffect(() => {
-    const defaultItems = LESSONS_SIDEBAR_DEFAULT_ITEMS(levelId as LevelId, day);
+    const defaultItems = LESSONS_SIDEBAR_DEFAULT_ITEMS(levelId as LevelId, day, t as never);
     const completed = completedTasks?.data || [];
 
     const updatedItems = defaultItems.map((item) => ({

@@ -40,74 +40,78 @@ export const MAIN_SIDEBAR_ITEMS = (): Array<SidebarItem> => [
   },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type TFunction = (key: string) => string;
+
 export const LESSONS_SIDEBAR_DEFAULT_ITEMS = (
   levelId: LevelId = 'LEVEL_A1',
-  day: string | number = '1'
+  day: string | number = '1',
+  t: TFunction = i18next.t.bind(i18next)
 ): Array<SidebarItem> => {
   const baseRoute = `/app/levels/${levelId}/${day}`;
   return [
     {
-      title: i18next.t('Global.sidebarItems.READ'),
+      title: t('Global.sidebarItems.READ'),
       icon: Book,
       id: 'READ',
       url: `${baseRoute}/READ` as never,
     },
     {
-      title: i18next.t('Global.sidebarItems.PICTURES'),
+      title: t('Global.sidebarItems.PICTURES'),
       icon: Image,
       id: 'PICTURES',
       url: `${baseRoute}/PICTURES` as never,
     },
     {
-      title: i18next.t('Global.sidebarItems.LISTEN'),
+      title: t('Global.sidebarItems.LISTEN'),
       icon: Ear,
       id: 'LISTEN',
       url: `${baseRoute}/LISTEN` as never,
     },
     {
-      title: i18next.t('Global.sidebarItems.WRITE'),
+      title: t('Global.sidebarItems.WRITE'),
       icon: PencilLine,
       id: 'WRITE',
       url: `${baseRoute}/WRITE` as never,
     },
     {
-      title: i18next.t('Global.sidebarItems.SPEAK'),
+      title: t('Global.sidebarItems.SPEAK'),
       icon: Speech,
       id: 'SPEAK',
       url: `${baseRoute}/SPEAK` as never,
     },
     {
-      title: i18next.t('Global.sidebarItems.TODAY'),
+      title: t('Global.sidebarItems.TODAY'),
       icon: Calendar,
       id: 'TODAY',
       url: `${baseRoute}/TODAY` as never,
     },
     {
-      title: i18next.t('Global.sidebarItems.Q_A'),
+      title: t('Global.sidebarItems.Q_A'),
       icon: MessageCircleQuestion,
       id: 'Q_A',
       url: `${baseRoute}/Q_A` as never,
     },
     {
-      title: i18next.t('Global.sidebarItems.GRAMMAR'),
+      title: t('Global.sidebarItems.GRAMMAR'),
       icon: ListChecks,
       id: 'GRAMMAR',
       url: `${baseRoute}/GRAMMAR` as never,
     },
     {
-      title: i18next.t('Global.sidebarItems.PHRASAL_VERBS'),
+      title: t('Global.sidebarItems.PHRASAL_VERBS'),
       icon: CaseSensitive,
       id: 'PHRASAL_VERBS',
       url: `${baseRoute}/PHRASAL_VERBS` as never,
     },
     {
-      title: i18next.t('Global.sidebarItems.IDIOMS'),
+      title: t('Global.sidebarItems.IDIOMS'),
       icon: Search,
       id: 'IDIOMS',
       url: `${baseRoute}/IDIOMS` as never,
     },
     {
-      title: i18next.t('Global.sidebarItems.DAILY_TEST'),
+      title: t('Global.sidebarItems.DAILY_TEST'),
       icon: NotebookPen,
       id: 'DAILY_TEST',
       url: `${baseRoute}/DAILY_TEST` as never,
