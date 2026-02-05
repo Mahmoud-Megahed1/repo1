@@ -10,14 +10,14 @@ import Reading from '@modules/lessons/components/reading';
 import Speaking from '@modules/lessons/components/speaking';
 import Today from '@modules/lessons/components/today';
 import Writing from '@modules/lessons/components/writing';
-import { useLessonContext, withLessonProvider } from '@modules/lessons/context';
+import { useLessonContext } from '@modules/lessons/context';
 import { LESSONS_IDS } from '@shared/constants';
 import { createFileRoute, notFound, useParams } from '@tanstack/react-router';
 
 export const Route = createFileRoute(
   '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName/'
 )({
-  component: withLessonProvider(RouteComponent),
+  component: RouteComponent,
   onEnter: ({ params: { lessonName } }) => {
     useSidebarStore.getState().handleActiveItem(lessonName as never);
   },
