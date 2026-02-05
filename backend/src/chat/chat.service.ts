@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
 import { SYSTEM_PROMPT } from './constants/website-content';
 import { ChatRulesService } from '../support-chat/services/chat-rules.service';
+import { FileUploadService } from '../file-upload/file-upload.service';
 
 @Injectable()
 export class ChatService {
@@ -11,6 +12,7 @@ export class ChatService {
   constructor(
     private configService: ConfigService,
     private chatRulesService: ChatRulesService,
+    private fileUploadService: FileUploadService,
   ) {
     const apiKey = this.configService.get<string>('OPENAI_API_KEY');
 
@@ -78,6 +80,65 @@ export class ChatService {
     } catch (error) {
       console.error('OpenAI Error:', error);
       throw new InternalServerErrorException('Failed to generate response');
+    }
+  }
+
+  async generateLessonReviewResponse(params: { message: string; levelName: string; day: string; lessonName: string }) {
+    const apiKey = this.configService.get<string>('OPENAI_API_KEY');
+    if (!apiKey) {
+      return { reply: "I'm sorry, my brain is offline right now (Missing API Key)." };
+    }
+
+    try {
+      // 1. Retrieve Lesson Content
+      // Map frontend camelCase to backend snake_case for DTO if necessary, assuming FileUploadService expects snake_case in DTO or arguments
+      // Looking at FileUploadService.getContentByName(uploadFileDTO: UploadFileDTO), DTO has level_name, day, lesson_name
+
+      const lessonData = await this.fileUploadService.getContentByName({
+        level_name: params.levelName as any,
+        day: params.day,
+        lesson_name: params.lessonName as any
+      });
+
+      let lessonContextString = "No specific lesson content found.";
+      let aiInstructions = "";
+
+      if (lessonData && lessonData.data && lessonData.data.length > 0) {
+        const lesson = lessonData.data[0];
+        lessonContextString = JSON.stringify(lesson);
+        // Extract optional AI instructions if they exist in the lesson object
+        if (lesson.aiInstructions) {
+          aiInstructions = `\n\nSPECIAL INSTRUCTIONS FOR AI:\n${lesson.aiInstructions}`;
+        }
+      }
+
+      // 2. Build Prompt
+      const systemPromptWithContext = `${SYSTEM_PROMPT}
+      
+      CURRENT LESSON CONTEXT:
+      The user has just completed the following lesson. Use this content to guide the review. 
+      Ask questions about the vocabulary, sentences, or concepts found here.
+      
+      ${lessonContextString}
+
+      ${aiInstructions}
+      `;
+
+      const completion = await this.openai.chat.completions.create({
+        messages: [
+          { role: 'system', content: systemPromptWithContext },
+          { role: 'user', content: params.message },
+        ],
+        model: 'gpt-4o-mini',
+        temperature: 0.5, // Slightly higher for more natural conversation
+        max_tokens: 400,
+      });
+
+      return { reply: completion.choices[0].message.content };
+
+    } catch (error) {
+      console.error('Lesson Review AI Error:', error);
+      throw new InternalServerErrorException('Failed to generate lesson review');
     }
   }
 }

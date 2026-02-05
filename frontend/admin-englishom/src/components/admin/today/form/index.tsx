@@ -28,6 +28,7 @@ export const formSchema = z
     sentences: z.array(z.string().min(2)),
     levelId: z.enum(LEVELS_ID),
     day: z.string(),
+    aiInstructions: z.string().optional(),
   })
   .refine((data) => data.instructions.length > 0, {
     message: 'At least one instruction is required.',
@@ -55,6 +56,12 @@ const ListenForm = ({ form, className, ...props }: Props) => {
             control={form.control}
             label="Description"
             placeholder="Description"
+          />
+          <TextareaFormField
+            name="aiInstructions"
+            control={form.control}
+            label="AI Instructions (Optional)"
+            placeholder="Enter specific instructions for the AI reviewer (e.g., 'Focus on pronunciation', 'Roleplay as a doctor')."
           />
           <div className="mt-4">
             <label htmlFor="soundSrc">Audio</label>

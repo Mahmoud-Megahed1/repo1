@@ -6,7 +6,7 @@ import useLocale from '@hooks/use-locale';
 import useRecorder from '@hooks/use-recorder';
 import { cn, localizedNumber } from '@lib/utils';
 import { useCompareAudio, useGetSentenceAudios, useMarkTaskAsCompleted } from '@modules/lessons/mutations';
-import type { LevelId } from '@shared/types/entities';
+import type { LevelId, LessonId } from '@shared/types/entities';
 import { useParams } from '@tanstack/react-router';
 import { Button } from '@ui/button';
 import {
@@ -16,12 +16,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@ui/card';
-import { Mic, CheckCircle2, RotateCcw } from 'lucide-react';
+import { Mic, CheckCircle2, RotateCcw, Bot } from 'lucide-react';
 import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Loading from '../../../shared/components/analyzing-skeleton';
 import { SpeakingFeedback } from '../../../shared/components/speaking-feedback';
+import AIReviewChat from './today/ai-review-chat';
 import type { SpeakingResult, SpeakLesson } from '../types';
 
 type UserRecord = {
@@ -35,7 +36,7 @@ type Props = {
 };
 const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
   const { t } = useTranslation();
-  const { id: levelName, day } = useParams({
+  const { id: levelName, day, lessonName } = useParams({
     from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
   });
   const { mutate, isPending } = useCompareAudio({
@@ -55,6 +56,8 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
     next,
     prev,
   } = useItemsPagination(sentences);
+
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
 
   const [usersRecords, setUsersRecords] = useState<UserRecord[]>(
     sentences.map((sentence) => ({
@@ -231,6 +234,16 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
         </CardContent>
       </Card>
 
+
+
+      <AIReviewChat
+        open={isReviewOpen}
+        onOpenChange={setIsReviewOpen}
+        levelName={levelName as LevelId}
+        day={day}
+        lessonName={lessonName as LessonId}
+      />
+
       <div className="sticky bottom-0 bg-background/80 backdrop-blur-sm p-4 border-t mt-4 flex items-center justify-between z-10">
         <Button variant="outline" onClick={prev} disabled={!hasPrevItems}>
           {t('Global.prev')}
@@ -247,13 +260,27 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
               />
             ))}
         </ul>
-        {isLast ? (
-          <NextLessonButton lessonName="TODAY" className="px-8" />
-        ) : (
-          <Button variant="default" onClick={next} disabled={!hasNextItems} className="px-8">
-            {t('Global.next')}
-          </Button>
-        )}
+
+        <div className="flex gap-2">
+          {allPassed && (
+            <Button
+              variant="default"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white animate-in fade-in"
+              onClick={() => setIsReviewOpen(true)}
+            >
+              <Bot className="w-4 h-4 me-2" />
+              {t('Global.reviewWithAI', 'Review with AI')}
+            </Button>
+          )}
+
+          {isLast ? (
+            <NextLessonButton lessonName="TODAY" className="px-8" />
+          ) : (
+            <Button variant="default" onClick={next} disabled={!hasNextItems} className="px-8">
+              {t('Global.next')}
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

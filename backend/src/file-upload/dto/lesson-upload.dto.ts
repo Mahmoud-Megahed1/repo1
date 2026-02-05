@@ -185,7 +185,15 @@ class TODAY {
   @IsNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => Instructions)
+  @IsArray()
+  @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => Instructions)
   instructions: Instructions[];
+
+  @IsOptional()
+  @IsString()
+  aiInstructions?: string;
 }
 
 class PICTURES {

@@ -10,4 +10,10 @@ export class ChatController {
   async chat(@Body() body: { message: string }) {
     return this.chatService.generateResponse(body.message);
   }
+
+  @Post('lesson-review')
+  @HttpCode(HttpStatus.OK)
+  async lessonReview(@Body() body: { message: string; levelName: string; day: string; lessonName: string }) {
+    return this.chatService.generateLessonReviewResponse(body);
+  }
 }
