@@ -15,6 +15,7 @@ import BookLoader from '@ui/book-loader';
 import { CheckCircle2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import ScrollArrows from '@components/scroll-arrows';
 
 export const Route = createFileRoute(
   '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName'
@@ -91,6 +92,7 @@ function RouteComponent() {
           <Outlet />
         </div>
       )}
+      <ScrollArrows />
     </LevelGuard>
   );
 }

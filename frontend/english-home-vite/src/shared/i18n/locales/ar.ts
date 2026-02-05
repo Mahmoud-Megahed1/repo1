@@ -904,7 +904,7 @@ export default {
       IDIOMS: 'التعابير الاصطلاحية',
       GRAMMAR: 'القواعد',
       PICTURES: 'الصور',
-      TODAY: 'جمل اليوم',
+      TODAY: 'مشهد اليوم',
       Q_A: 'أسئلة وأجوبة',
       SPEAK: 'التحدث',
     },

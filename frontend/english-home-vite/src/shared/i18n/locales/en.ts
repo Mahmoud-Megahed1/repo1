@@ -917,7 +917,7 @@ export default {
       WRITE: 'Writing',
       GRAMMAR: 'Grammar',
       PICTURES: 'Pictures',
-      TODAY: "Today's Sentences",
+      TODAY: "Today's Scene",
       Q_A: 'Q&A',
       SPEAK: 'Speaking',
       DAILY_TEST: 'Daily Test',
