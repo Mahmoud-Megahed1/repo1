@@ -21,11 +21,11 @@ const Reading: FC<Props> = ({
   const { id: levelId, day } = useParams({
     from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
   });
-  const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
+  const { mutateAsync: markTaskCompletedAsync } = useMarkTaskAsCompleted();
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
     if (levelId && day) {
-      markTaskCompleted({
+      await markTaskCompletedAsync({
         levelName: levelId as LevelId,
         day: +day,
         taskName: 'READ',
