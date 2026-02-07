@@ -41,7 +41,19 @@ export function useCompareAudio({ levelName, day, lessonName }: { levelName: Lev
       audio: File;
       sentenceText: string;
     }) => compareAudio({ audio, level_name: levelName, sentenceText, day, lesson_name: lessonName }),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // Optimistically update the cache to prevent "revert" to old data
+      queryClient.setQueryData(['today-audio', day, levelName], {
+        data: {
+          url: data.data.audioUrl,
+          metadata: {
+            // matches structure expected by PracticeSpeaking
+            ...data.data,
+            similarityPercentage: data.data.similarityPercentage.toString(),
+            isPassed: data.data.isPassed.toString(),
+          }
+        }
+      });
       queryClient.invalidateQueries({ queryKey: ['today-audio', day, levelName] });
       queryClient.invalidateQueries({ queryKey: ['get-sentence-audios', levelName] });
     },
