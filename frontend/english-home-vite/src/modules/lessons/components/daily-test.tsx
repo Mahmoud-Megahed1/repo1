@@ -35,7 +35,7 @@ type QuestionState = {
 } & DailyTestLesson;
 const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
   const { t } = useTranslation();
-  const { mutate, isSuccess } = useMarkDayAsCompleted();
+  const { mutate, isSuccess, reset: resetMutation } = useMarkDayAsCompleted();
   // Fetch existing status
   const { data: dayStatus } = useGetDayStatus({
     levelName: levelId as LevelId,
@@ -100,6 +100,7 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
 
   const resetTest = useCallback(() => {
     reset();
+    resetMutation();
     setTestStatus('idle');
     setQuestionsStates((prev) =>
       prev.map((q) => ({
@@ -109,7 +110,7 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
         selectedAnswer: undefined,
       }))
     );
-  }, [reset]);
+  }, [reset, resetMutation]);
 
 
 
