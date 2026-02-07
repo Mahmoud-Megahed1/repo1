@@ -52,8 +52,10 @@ const PracticeSpeaking: FC<Props> = ({
     const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
 
     useEffect(() => {
-        setAudioUrl(defaultResult?.url);
-    }, [defaultResult]);
+        if (!audioUrl && defaultResult?.url) {
+            setAudioUrl(defaultResult.url);
+        }
+    }, [defaultResult, audioUrl]);
 
     useEffect(() => {
         if (resultData?.isPassed) {
