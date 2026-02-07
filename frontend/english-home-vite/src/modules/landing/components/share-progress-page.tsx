@@ -29,153 +29,136 @@ export function ShareProgressPage() {
   const remainingDays = Math.max(totalDays - day, 0);
 
   return (
-    <div className="from-background to-background/50 min-h-screen bg-gradient-to-b px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
-        {/* Header */}
-        <div className="mb-12 space-y-8 text-center">
-          <Link to="/" className="flex items-center justify-center space-x-2">
+    <div className="from-background to-background/50 min-h-screen bg-gradient-to-b px-4 py-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl">
+        {/* Header - Compact */}
+        <div className="mb-4 text-center">
+          <Link to="/" className="mb-2 flex items-center justify-center space-x-2">
             <img
               src="/logo.jpeg"
               alt="Englishom"
-              className="h-10 w-auto rounded-md"
+              className="h-8 w-auto rounded-md"
             />
-            <div className="text-primary text-lg font-bold md:text-2xl">
+            <div className="text-primary text-lg font-bold">
               {t('Global.englishom')}
             </div>
           </Link>
-          <h2 className="text-primary text-4xl font-bold sm:text-5xl rtl:mb-6">
+          <h2 className="text-primary mb-1 text-2xl font-bold sm:text-3xl rtl:mb-2">
             {t('ShareProgress.title')}
           </h2>
-          <p className="text-muted-foreground text-base sm:text-lg">
+          <p className="text-muted-foreground text-sm">
             {t('ShareProgress.subtitle')}
           </p>
+        </div>
 
-          {/* Student Profile Card */}
+        {/* Main Content - All in one row */}
+        <div className="mb-4 grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3">
+          {/* Student Profile Card - Compact */}
           {studentName && (
-            <div className="bg-card mx-auto max-w-md rounded-2xl p-6 shadow-md">
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="bg-secondary rounded-full p-3">
-                    <User className="text-secondary-foreground h-5 w-5" />
-                  </div>
-                  <div className="flex flex-col items-start">
-                    <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
-                      {t('ShareProgress.student')}
-                    </p>
-                    <p lang="en" className="text-foreground text-lg font-bold">
-                      {studentName}
-                    </p>
-                  </div>
+            <div className="bg-card rounded-xl p-4 shadow-md">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="bg-secondary rounded-full p-2">
+                  <User className="text-secondary-foreground h-4 w-4" />
                 </div>
-
-                {/* Level Badge */}
-                <div className="border-border flex items-center gap-3 border-t pt-4">
-                  <div className="bg-accent rounded-full p-3">
-                    <Award className="text-accent-foreground h-5 w-5" />
-                  </div>
-                  <div className="flex flex-col items-start">
-                    <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
-                      {t('ShareProgress.currentLevel')}
-                    </p>
-                    <p className="text-foreground text-lg font-bold">
-                      {t('Global.level', {
-                        level: levelParam.split('_')[1],
-                        defaultValue: `Level ${levelParam.split('_')[1]}`,
-                      })}
-                    </p>
-                  </div>
+                <div className="flex flex-col items-start">
+                  <p className="text-muted-foreground text-xs font-semibold uppercase">
+                    {t('ShareProgress.student')}
+                  </p>
+                  <p lang="en" className="text-foreground text-sm font-bold">
+                    {studentName}
+                  </p>
+                </div>
+              </div>
+              <div className="border-border flex items-center gap-3 border-t pt-3">
+                <div className="bg-accent rounded-full p-2">
+                  <Award className="text-accent-foreground h-4 w-4" />
+                </div>
+                <div className="flex flex-col items-start">
+                  <p className="text-muted-foreground text-xs font-semibold uppercase">
+                    {t('ShareProgress.currentLevel')}
+                  </p>
+                  <p className="text-foreground text-sm font-bold">
+                    {t('Global.level', {
+                      level: levelParam.split('_')[1],
+                      defaultValue: `Level ${levelParam.split('_')[1]}`,
+                    })}
+                  </p>
                 </div>
               </div>
             </div>
           )}
-        </div>
 
-        {/* Main Content */}
-        <div className="mb-12 grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
-          {/* Left: Stats Cards */}
-          <div className="space-y-6">
+          {/* Stats Cards - Combined */}
+          <div className="space-y-3">
             {/* Current Progress Card */}
-            <div className="rbg-card dark:bg-muted rounded-2xl p-6 shadow-md sm:p-8">
-              <div className="mb-4 flex items-start justify-between">
-                <div className="flex-1">
-                  <p className="text-muted-foreground mb-2 text-sm sm:text-base">
-                    {t('ShareProgress.currentProgress', {
-                      defaultValue: 'التقدم الحالي',
-                    })}
+            <div className="bg-card dark:bg-muted rounded-xl p-4 shadow-md">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-muted-foreground text-xs">
+                    {t('ShareProgress.currentProgress', { defaultValue: 'التقدم الحالي' })}
                   </p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-primary text-3xl font-bold sm:text-4xl">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-primary text-2xl font-bold">
                       {Math.round(progressPercentage)}%
                     </span>
-                    <span className="text-muted-foreground text-xs sm:text-sm">
-                      {t('ShareProgress.completed', {
-                        defaultValue: 'مكتمل',
-                      })}
+                    <span className="text-muted-foreground text-xs">
+                      {t('ShareProgress.completed', { defaultValue: 'مكتمل' })}
                     </span>
                   </div>
                 </div>
-                <div className="bg-primary/10 flex-shrink-0 rounded-xl p-3">
-                  <TrendingUp className="text-primary h-6 w-6" />
+                <div className="bg-primary/10 rounded-lg p-2">
+                  <TrendingUp className="text-primary h-5 w-5" />
                 </div>
               </div>
             </div>
 
             {/* Remaining Days Card */}
-            <div className="bg-card dark:bg-muted rounded-2xl p-6 shadow-md sm:p-8">
-              <div className="mb-4 flex items-start justify-between">
-                <div className="flex-1">
-                  <p className="text-muted-foreground mb-2 text-sm sm:text-base">
-                    {t('ShareProgress.remainingDuration', {
-                      defaultValue: 'المدة المتبقية',
-                    })}
+            <div className="bg-card dark:bg-muted rounded-xl p-4 shadow-md">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-muted-foreground text-xs">
+                    {t('ShareProgress.remainingDuration', { defaultValue: 'المدة المتبقية' })}
                   </p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-orange-500 sm:text-4xl">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-bold text-orange-500">
                       {remainingDays}
                     </span>
-                    <span className="text-muted-foreground text-xs sm:text-sm">
-                      {t('ShareProgress.daysToComplete', {
-                        defaultValue: 'يوم لإكمال الدورة',
-                      })}
+                    <span className="text-muted-foreground text-xs">
+                      {t('ShareProgress.daysToComplete', { defaultValue: 'يوم' })}
                     </span>
                   </div>
                 </div>
-                <div className="flex-shrink-0 rounded-xl bg-orange-500/10 p-3">
-                  <Bookmark className="h-6 w-6 text-orange-500" />
+                <div className="rounded-lg bg-orange-500/10 p-2">
+                  <Bookmark className="h-5 w-5 text-orange-500" />
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right: Circular Progress */}
-          <div className="flex justify-center lg:justify-end">
+          {/* Circular Progress - Smaller */}
+          <div className="flex items-center justify-center">
             <ProgressCircle
               value={progressPercentage}
-              size={200}
-              strokeWidth={12}
+              size={150}
+              strokeWidth={10}
               label={`${day}`}
-              subLabel={t('ShareProgress.ofDays', {
-                totalDays: 50,
-              })}
+              subLabel={t('ShareProgress.ofDays', { totalDays: 50 })}
             />
           </div>
         </div>
 
-        {/* CTA Section */}
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-muted-foreground mb-6 text-sm sm:text-base">
+        {/* CTA Section - Compact */}
+        <div className="mx-auto max-w-xl text-center">
+          <p className="text-muted-foreground mb-3 text-sm">
             {t('ShareProgress.cta', {
-              defaultValue:
-                'انضم إليّ إلى عالم واسع وتعلم الإنجليزية الخاصة بك مع EnglishHome',
+              defaultValue: 'انضم إليّ إلى عالم واسع وتعلم الإنجليزية الخاصة بك مع EnglishHome',
             })}
           </p>
           <a
             href={`${window.location.origin}/`}
-            className="bg-primary text-primary-foreground inline-block rounded-full px-8 py-3 font-semibold transition-all hover:scale-105 hover:shadow-lg active:scale-95 sm:px-12 sm:py-4"
+            className="bg-primary text-primary-foreground inline-block rounded-full px-6 py-2 text-sm font-semibold transition-all hover:scale-105 hover:shadow-lg active:scale-95 sm:px-8 sm:py-3"
           >
-            {t('ShareProgress.startLearning', {
-              defaultValue: 'ابدأ التعلم',
-            })}
+            {t('ShareProgress.startLearning', { defaultValue: 'ابدأ التعلم' })}
           </a>
         </div>
       </div>
