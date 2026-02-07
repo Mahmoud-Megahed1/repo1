@@ -28,9 +28,7 @@ export function ReadingCard({ title, content, className, ...props }: Props) {
       <CardContent className="space-y-4">
         {/* Reading Content */}
         <div className="bg-accent/30 w-full rounded-lg p-2 *:mx-auto">
-          <RichTextViewer lang="en" className="prose-img:max-h-[400px] prose-img:w-auto prose-img:mx-auto">
-            {content}
-          </RichTextViewer>
+          <RichTextViewer lang="en">{content}</RichTextViewer>
         </div>
       </CardContent>
     </Card>
