@@ -148,9 +148,9 @@ export class UserResultsService {
 
       const wordSimilarity = wordMatches / originalWords.length;
 
-      // Length penalty - penalize extra words
+      // Length penalty - penalize extra words (relaxed from 0.1 to 0.02)
       const lengthPenalty = spokenWords.length > originalWords.length
-        ? Math.max(0, 1 - (spokenWords.length - originalWords.length) * 0.1)
+        ? Math.max(0.8, 1 - (spokenWords.length - originalWords.length) * 0.02)
         : 1;
 
       // Combine metrics (favor word-level accuracy)
