@@ -8,7 +8,7 @@ export async function generateMetadata({
 }) {
     const t = await getTranslations({ locale, namespace: 'Global' });
     return {
-        title: `AI Settings | ${t('title')}`,
+        title: `AI Settings | ${t('appName')}`,
     };
 }
 

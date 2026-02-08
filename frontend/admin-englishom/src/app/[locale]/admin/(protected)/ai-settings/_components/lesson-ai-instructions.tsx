@@ -13,16 +13,18 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { LESSONS_LINKS, LEVELS_ID } from '@/constants';
 import { getLesson, updateLessonMetadata } from '@/services/lessons';
+import { LessonsId } from '@/types/global.types';
 import { LessonParams } from '@/types/lessons.types';
+import { LevelId } from '@/types/user.types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export default function LessonAIInstructions() {
-  const [selectedLevel, setSelectedLevel] = useState<string>(LEVELS_ID[0]);
+  const [selectedLevel, setSelectedLevel] = useState<LevelId>(LEVELS_ID[0]);
   const [selectedDay, setSelectedDay] = useState<string>('1');
-  const [selectedLessonType, setSelectedLessonType] = useState<string>(
+  const [selectedLessonType, setSelectedLessonType] = useState<LessonsId>(
     LESSONS_LINKS[0].id,
   );
   const [instructions, setInstructions] = useState<string>('');
@@ -42,10 +44,12 @@ export default function LessonAIInstructions() {
 
   // Update local state when data is fetched
   useEffect(() => {
-    if (lessonData?.data && lessonData.data.length > 0) {
+    // The API returns { data: [{...}] } inside the axios response.
+    // So access path is lessonData.data.data
+    if (lessonData?.data?.data && lessonData.data.data.length > 0) {
       // The API returns an array, we take the first item
       // @ts-ignore
-      setInstructions(lessonData.data[0]?.aiInstructions || '');
+      setInstructions(lessonData.data.data[0]?.aiInstructions || '');
     } else {
       setInstructions('');
     }
@@ -84,7 +88,10 @@ export default function LessonAIInstructions() {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <div className="space-y-2">
               <Label>Level</Label>
-              <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+              <Select
+                value={selectedLevel}
+                onValueChange={(val) => setSelectedLevel(val as LevelId)}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select Level" />
                 </SelectTrigger>
@@ -118,7 +125,7 @@ export default function LessonAIInstructions() {
               <Label>Lesson Type</Label>
               <Select
                 value={selectedLessonType}
-                onValueChange={setSelectedLessonType}
+                onValueChange={(val) => setSelectedLessonType(val as LessonsId)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select Lesson Type" />
