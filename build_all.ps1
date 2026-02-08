@@ -8,7 +8,7 @@ cd ..
 
 Write-Host "Building Admin Panel..." -ForegroundColor Green
 cd frontend/admin-englishom
-npm install
+npm install --legacy-peer-deps
 npm run build
 cd ../..
 

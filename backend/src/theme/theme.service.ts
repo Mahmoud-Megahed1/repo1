@@ -51,4 +51,20 @@ export class ThemeService {
       .lean()
       .exec();
   }
+
+  async appendKnowledgeContext(id: string, newContext: string): Promise<Theme> {
+    const theme = await this.themeModel.findById(id);
+    if (!theme) {
+      throw new Error('Theme not found');
+    }
+
+    const currentContext = theme.aiKnowledgeContext || '';
+    const separator = '\n\n---\n\n';
+    const updatedContext = currentContext ? `${currentContext}${separator}${newContext}` : newContext;
+
+    return this.themeModel
+      .findByIdAndUpdate(id, { aiKnowledgeContext: updatedContext }, { new: true })
+      .lean()
+      .exec();
+  }
 }

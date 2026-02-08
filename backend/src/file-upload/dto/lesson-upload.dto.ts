@@ -112,6 +112,10 @@ export class UploadDTO {
   @IsNotEmpty()
   @IsArray()
   data: any[];
+
+  @IsOptional()
+  @IsString()
+  aiInstructions?: string;
 }
 
 export class UploadJsonFileDTO {
@@ -126,7 +130,14 @@ export class UploadJsonFileDTO {
   @IsNotEmpty()
   // matches days from 1 to 50 only
   @Matches(/^([1-9]|[1-4][0-9]|50)$/)
+  @Matches(/^([1-9]|[1-4][0-9]|50)$/)
   day: string;
+}
+
+export class LessonMetadataDTO extends UploadJsonFileDTO {
+  @IsOptional()
+  @IsString()
+  aiInstructions?: string;
 }
 
 // Validation classes
@@ -143,6 +154,10 @@ class READ {
   @IsString()
   @IsNotEmpty()
   transcript: string;
+
+  @IsOptional()
+  @IsString()
+  aiInstructions?: string;
 }
 
 class WRITE {
@@ -155,6 +170,10 @@ class WRITE {
   @IsString({ each: true })
   @IsNotEmpty({ each: true })
   sentences: Array<string>;
+
+  @IsOptional()
+  @IsString()
+  aiInstructions?: string;
 }
 
 class TODAY {
@@ -222,6 +241,10 @@ class PICTURES {
   @IsString({ each: true })
   @IsNotEmpty({ each: true })
   examples: Array<string>;
+
+  @IsOptional()
+  @IsString()
+  aiInstructions?: string;
 }
 
 class LISTEN {
@@ -243,6 +266,10 @@ class LISTEN {
   @ValidateNested({ each: true })
   @Type(() => Definition)
   definitions: Definition[];
+
+  @IsOptional()
+  @IsString()
+  aiInstructions?: string;
 }
 
 class Q_A {
@@ -266,6 +293,10 @@ class Q_A {
   @IsString()
   @IsNotEmpty()
   answerSrc: string;
+
+  @IsOptional()
+  @IsString()
+  aiInstructions?: string;
 }
 
 class SPEAK {
@@ -279,6 +310,10 @@ class SPEAK {
   @ValidateNested({ each: true })
   @Type(() => Sentence)
   sentences: Sentence[];
+
+  @IsOptional()
+  @IsString()
+  aiInstructions?: string;
 }
 
 class GRAMMAR {
@@ -322,6 +357,10 @@ class GRAMMAR {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  @IsOptional()
+  @IsString()
+  aiInstructions?: string;
 }
 
 class PHRASAL_VERBS {
@@ -349,6 +388,10 @@ class PHRASAL_VERBS {
   @IsString()
   @IsNotEmpty()
   pictureSrc: string;
+
+  @IsOptional()
+  @IsString()
+  aiInstructions?: string;
 }
 
 class DAILY_TEST {
@@ -371,6 +414,10 @@ class DAILY_TEST {
   @IsString()
   @IsNotEmpty()
   question: string;
+
+  @IsOptional()
+  @IsString()
+  aiInstructions?: string;
 }
 
 class IDIOMS {
@@ -397,6 +444,10 @@ class IDIOMS {
   @ValidateNested({ each: true })
   @Type(() => Example)
   examples: Example[];
+
+  @IsOptional()
+  @IsString()
+  aiInstructions?: string;
 }
 
 // Type-safe mapping from key to validation class

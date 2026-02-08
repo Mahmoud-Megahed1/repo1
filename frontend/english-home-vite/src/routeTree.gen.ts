@@ -29,6 +29,7 @@ import { Route as LocaleGlobalLayoutAuthAppRouteRouteImport } from './routes/$lo
 import { Route as LocaleGlobalLayoutAuthAppIndexRouteImport } from './routes/$locale/_globalLayout/_auth/app.index'
 import { Route as LocaleGlobalLayoutAuthAppAccountRouteImport } from './routes/$locale/_globalLayout/_auth/app.account'
 import { Route as LocaleGlobalLayoutAuthAppLevelsIndexRouteImport } from './routes/$locale/_globalLayout/_auth/app.levels.index'
+import { Route as LocaleGlobalLayoutAuthAppAdminAiSettingsRouteImport } from './routes/$locale/_globalLayout/_auth/app.admin.ai-settings'
 import { Route as LocaleGlobalLayoutAuthAppLevelsIdIndexRouteImport } from './routes/$locale/_globalLayout/_auth/app.levels.$id.index'
 import { Route as LocaleGlobalLayoutAuthAppLevelsIdDayLessonNameRouteRouteImport } from './routes/$locale/_globalLayout/_auth/app.levels.$id.$day.$lessonName.route'
 import { Route as LocaleGlobalLayoutAuthAppLevelsIdDayLessonNameIndexRouteImport } from './routes/$locale/_globalLayout/_auth/app.levels.$id.$day.$lessonName.index'
@@ -145,6 +146,12 @@ const LocaleGlobalLayoutAuthAppLevelsIndexRoute =
     path: '/levels/',
     getParentRoute: () => LocaleGlobalLayoutAuthAppRouteRoute,
   } as any)
+const LocaleGlobalLayoutAuthAppAdminAiSettingsRoute =
+  LocaleGlobalLayoutAuthAppAdminAiSettingsRouteImport.update({
+    id: '/admin/ai-settings',
+    path: '/admin/ai-settings',
+    getParentRoute: () => LocaleGlobalLayoutAuthAppRouteRoute,
+  } as any)
 const LocaleGlobalLayoutAuthAppLevelsIdIndexRoute =
   LocaleGlobalLayoutAuthAppLevelsIdIndexRouteImport.update({
     id: '/levels/$id/',
@@ -184,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/$locale/verify-email': typeof LocaleGlobalLayoutAuthVerifyEmailRoute
   '/$locale/app/account': typeof LocaleGlobalLayoutAuthAppAccountRoute
   '/$locale/app/': typeof LocaleGlobalLayoutAuthAppIndexRoute
+  '/$locale/app/admin/ai-settings': typeof LocaleGlobalLayoutAuthAppAdminAiSettingsRoute
   '/$locale/app/levels/': typeof LocaleGlobalLayoutAuthAppLevelsIndexRoute
   '/$locale/app/levels/$id/': typeof LocaleGlobalLayoutAuthAppLevelsIdIndexRoute
   '/$locale/app/levels/$id/$day/$lessonName': typeof LocaleGlobalLayoutAuthAppLevelsIdDayLessonNameRouteRouteWithChildren
@@ -206,6 +214,7 @@ export interface FileRoutesByTo {
   '/$locale/verify-email': typeof LocaleGlobalLayoutAuthVerifyEmailRoute
   '/$locale/app/account': typeof LocaleGlobalLayoutAuthAppAccountRoute
   '/$locale/app': typeof LocaleGlobalLayoutAuthAppIndexRoute
+  '/$locale/app/admin/ai-settings': typeof LocaleGlobalLayoutAuthAppAdminAiSettingsRoute
   '/$locale/app/levels': typeof LocaleGlobalLayoutAuthAppLevelsIndexRoute
   '/$locale/app/levels/$id': typeof LocaleGlobalLayoutAuthAppLevelsIdIndexRoute
   '/$locale/app/levels/$id/$day/$lessonName': typeof LocaleGlobalLayoutAuthAppLevelsIdDayLessonNameIndexRoute
@@ -231,6 +240,7 @@ export interface FileRoutesById {
   '/$locale/_globalLayout/_auth/verify-email': typeof LocaleGlobalLayoutAuthVerifyEmailRoute
   '/$locale/_globalLayout/_auth/app/account': typeof LocaleGlobalLayoutAuthAppAccountRoute
   '/$locale/_globalLayout/_auth/app/': typeof LocaleGlobalLayoutAuthAppIndexRoute
+  '/$locale/_globalLayout/_auth/app/admin/ai-settings': typeof LocaleGlobalLayoutAuthAppAdminAiSettingsRoute
   '/$locale/_globalLayout/_auth/app/levels/': typeof LocaleGlobalLayoutAuthAppLevelsIndexRoute
   '/$locale/_globalLayout/_auth/app/levels/$id/': typeof LocaleGlobalLayoutAuthAppLevelsIdIndexRoute
   '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName': typeof LocaleGlobalLayoutAuthAppLevelsIdDayLessonNameRouteRouteWithChildren
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/$locale/verify-email'
     | '/$locale/app/account'
     | '/$locale/app/'
+    | '/$locale/app/admin/ai-settings'
     | '/$locale/app/levels/'
     | '/$locale/app/levels/$id/'
     | '/$locale/app/levels/$id/$day/$lessonName'
@@ -279,6 +290,7 @@ export interface FileRouteTypes {
     | '/$locale/verify-email'
     | '/$locale/app/account'
     | '/$locale/app'
+    | '/$locale/app/admin/ai-settings'
     | '/$locale/app/levels'
     | '/$locale/app/levels/$id'
     | '/$locale/app/levels/$id/$day/$lessonName'
@@ -303,6 +315,7 @@ export interface FileRouteTypes {
     | '/$locale/_globalLayout/_auth/verify-email'
     | '/$locale/_globalLayout/_auth/app/account'
     | '/$locale/_globalLayout/_auth/app/'
+    | '/$locale/_globalLayout/_auth/app/admin/ai-settings'
     | '/$locale/_globalLayout/_auth/app/levels/'
     | '/$locale/_globalLayout/_auth/app/levels/$id/'
     | '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName'
@@ -458,6 +471,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleGlobalLayoutAuthAppLevelsIndexRouteImport
       parentRoute: typeof LocaleGlobalLayoutAuthAppRouteRoute
     }
+    '/$locale/_globalLayout/_auth/app/admin/ai-settings': {
+      id: '/$locale/_globalLayout/_auth/app/admin/ai-settings'
+      path: '/admin/ai-settings'
+      fullPath: '/$locale/app/admin/ai-settings'
+      preLoaderRoute: typeof LocaleGlobalLayoutAuthAppAdminAiSettingsRouteImport
+      parentRoute: typeof LocaleGlobalLayoutAuthAppRouteRoute
+    }
     '/$locale/_globalLayout/_auth/app/levels/$id/': {
       id: '/$locale/_globalLayout/_auth/app/levels/$id/'
       path: '/levels/$id'
@@ -500,6 +520,7 @@ const LocaleGlobalLayoutAuthAppLevelsIdDayLessonNameRouteRouteWithChildren =
 interface LocaleGlobalLayoutAuthAppRouteRouteChildren {
   LocaleGlobalLayoutAuthAppAccountRoute: typeof LocaleGlobalLayoutAuthAppAccountRoute
   LocaleGlobalLayoutAuthAppIndexRoute: typeof LocaleGlobalLayoutAuthAppIndexRoute
+  LocaleGlobalLayoutAuthAppAdminAiSettingsRoute: typeof LocaleGlobalLayoutAuthAppAdminAiSettingsRoute
   LocaleGlobalLayoutAuthAppLevelsIndexRoute: typeof LocaleGlobalLayoutAuthAppLevelsIndexRoute
   LocaleGlobalLayoutAuthAppLevelsIdIndexRoute: typeof LocaleGlobalLayoutAuthAppLevelsIdIndexRoute
   LocaleGlobalLayoutAuthAppLevelsIdDayLessonNameRouteRoute: typeof LocaleGlobalLayoutAuthAppLevelsIdDayLessonNameRouteRouteWithChildren
@@ -510,6 +531,8 @@ const LocaleGlobalLayoutAuthAppRouteRouteChildren: LocaleGlobalLayoutAuthAppRout
     LocaleGlobalLayoutAuthAppAccountRoute:
       LocaleGlobalLayoutAuthAppAccountRoute,
     LocaleGlobalLayoutAuthAppIndexRoute: LocaleGlobalLayoutAuthAppIndexRoute,
+    LocaleGlobalLayoutAuthAppAdminAiSettingsRoute:
+      LocaleGlobalLayoutAuthAppAdminAiSettingsRoute,
     LocaleGlobalLayoutAuthAppLevelsIndexRoute:
       LocaleGlobalLayoutAuthAppLevelsIndexRoute,
     LocaleGlobalLayoutAuthAppLevelsIdIndexRoute:

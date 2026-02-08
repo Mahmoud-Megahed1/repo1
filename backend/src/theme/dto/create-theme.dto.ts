@@ -44,4 +44,20 @@ export class CreateThemeDto {
   @ApiProperty({ required: false })
   @IsOptional()
   _id?: string;
+
+  // AI Chat Settings
+  @ApiProperty({ required: false, description: 'Show/hide support chat widget' })
+  @IsBoolean()
+  @IsOptional()
+  showSupportChat?: boolean;
+
+  @ApiProperty({ required: false, description: 'Show/hide AI lesson review chat' })
+  @IsBoolean()
+  @IsOptional()
+  showAIReviewChat?: boolean;
+
+  @ApiProperty({ required: false, description: 'Custom knowledge/context for AI (e.g., content from uploaded documents)' })
+  @IsString()
+  @IsOptional()
+  aiKnowledgeContext?: string;
 }

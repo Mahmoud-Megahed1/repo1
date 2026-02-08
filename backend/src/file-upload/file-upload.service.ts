@@ -7,7 +7,7 @@ import {
   BadRequestException
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UploadDTO } from './dto';
+import { UploadDTO, LessonMetadataDTO } from './dto';
 import { v4 as uuid } from 'uuid';
 import { DeleteObjDTO } from './dto/delete-obj.dto';
 import { InjectConnection } from '@nestjs/mongoose';
@@ -26,6 +26,7 @@ enum FileType {
 
 interface JsonFile {
   data: any[];
+  aiInstructions?: string;
 }
 
 @Injectable()
@@ -497,6 +498,20 @@ export class FileUploadService {
       if (error instanceof NotFoundException) throw error;
       this.logger.error('Error in deleteFromJsonDataArray:', error);
       throw new InternalServerErrorException(`${FileUploadMessages.FAILED_TO_DELETE_OBJECT}: ${error.message}`);
+    }
+  }
+
+  async updateLessonMetadata(dto: LessonMetadataDTO): Promise<void> {
+    const key = this.createJsonKey(dto);
+    try {
+      const jsonData = await this.getOrInitializeJsonData(key);
+      if (dto.aiInstructions !== undefined) {
+        jsonData.aiInstructions = dto.aiInstructions;
+      }
+      await this.saveJsonToGridFS(key, jsonData);
+    } catch (error) {
+      this.logger.error(`Failed to update lesson metadata: ${error.message}`, error.stack);
+      throw new InternalServerErrorException(`${FileUploadMessages.FAILED_TO_UPDATE_METADATA}: ${error.message}`);
     }
   }
 

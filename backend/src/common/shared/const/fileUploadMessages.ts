@@ -30,4 +30,5 @@ export const FileUploadMessages = {
     FAILED_TO_DELETE_FILE: 'Failed to delete file',
     FAILED_TO_GET_CONTENT: 'Failed to get content by name',
     INVALID_JSON_STRUCTURE: 'Invalid JSON structure: "data" is not an array',
+    FAILED_TO_UPDATE_METADATA: 'Failed to update metadata',
 }

@@ -36,7 +36,8 @@ export default function AIReviewChat({
     day,
     lessonName,
 }: Props) {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const isArabic = i18n.language === 'ar';
     const [messages, setMessages] = useState<Message[]>([]);
     const [isProcessing, setIsProcessing] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -54,7 +55,9 @@ export default function AIReviewChat({
         if (!synth) return;
         synth.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-US';
+        // Dynamic language: Arabic or English based on user preference
+        utterance.lang = isArabic ? 'ar-SA' : 'en-US';
+        utterance.rate = 0.9; // Slightly slower for clarity
         utterance.onstart = () => {
             setMessages(prev => prev.map((m, i) => i === index ? { ...m, isAudioPlaying: true } : { ...m, isAudioPlaying: false }));
         };
@@ -78,18 +81,53 @@ export default function AIReviewChat({
         }
     }, [messages]);
 
-    // Initial Greeting
+    // Initial Load & Greeting
     useEffect(() => {
-        if (open && messages.length === 0) {
-            const greeting = "Hello! Great job completing the lesson. I'm here to review what you've learned. How was the lesson for you?";
-            const initialMsg: Message = { role: 'assistant', content: greeting };
-            setMessages([initialMsg]);
-            speak(greeting, 0);
-        }
-        if (!open) {
+        if (open) {
+            const fetchHistory = async () => {
+                try {
+                    const res = await axiosClient.get<any[]>('/chat/lesson-review', {
+                        params: { levelName, day, lessonName }
+                    });
+
+                    if (res.data && res.data.length > 0) {
+                        // Map backend history to frontend messages
+                        const historyMessages: Message[] = res.data.map(m => ({
+                            role: m.role,
+                            content: m.content,
+                            isAudioPlaying: false
+                        }));
+                        setMessages(historyMessages);
+                        // Scroll to bottom after loading history
+                        setTimeout(() => {
+                            if (scrollRef.current) {
+                                scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+                            }
+                        }, 100);
+                    } else {
+                        // No history, show greeting
+                        const greeting = isArabic
+                            ? "مرحباً! أحسنت على إكمال الدرس. أنا هنا لمراجعة ما تعلمته. كيف كان الدرس بالنسبة لك؟"
+                            : "Hello! Great job completing the lesson. I'm here to review what you've learned. How was the lesson for you?";
+                        const initialMsg: Message = { role: 'assistant', content: greeting };
+                        setMessages([initialMsg]);
+                        speak(greeting, 0);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch chat history", error);
+                    // Fallback to greeting on error
+                    const greeting = isArabic
+                        ? "مرحباً! أحسنت على إكمال الدرس. أنا هنا لمراجعة ما تعلمته. كيف كان الدرس بالنسبة لك؟"
+                        : "Hello! Great job completing the lesson. I'm here to review what you've learned. How was the lesson for you?";
+                    setMessages([{ role: 'assistant', content: greeting }]);
+                }
+            };
+
+            fetchHistory();
+        } else {
             stopSpeaking();
         }
-    }, [open]);
+    }, [open, levelName, day, lessonName, isArabic]);
 
     const handleSendMessage = async (text: string) => {
         setMessages(prev => [...prev, { role: 'user', content: text }]);
@@ -121,7 +159,8 @@ export default function AIReviewChat({
             const SpeechRecognition = (window as any).webkitSpeechRecognition;
             const recog = new SpeechRecognition();
             recog.continuous = false;
-            recog.lang = 'en-US';
+            // Dynamic language for speech recognition
+            recog.lang = isArabic ? 'ar-SA' : 'en-US';
             recog.interimResults = false;
 
             recog.onresult = (event: any) => {

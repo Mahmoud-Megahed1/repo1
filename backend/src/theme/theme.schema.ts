@@ -36,6 +36,19 @@ export class Theme extends AbstractDocument {
     primaryColor?: string;
     secondaryColor?: string;
   };
+
+  // AI Chat Settings
+  @ApiProperty({ description: 'Show/hide the support chat widget' })
+  @Prop({ default: true })
+  showSupportChat: boolean;
+
+  @ApiProperty({ description: 'Show/hide the AI lesson review chat' })
+  @Prop({ default: true })
+  showAIReviewChat: boolean;
+
+  @ApiProperty({ description: 'Additional context/knowledge for the AI to use (e.g., uploaded document content)' })
+  @Prop({ default: '' })
+  aiKnowledgeContext: string;
 }
 
 export const ThemeSchema = SchemaFactory.createForClass(Theme);

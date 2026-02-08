@@ -18,7 +18,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { UploadDTO, UploadJsonFileDTO, validateData } from './dto';
+import { UploadDTO, UploadJsonFileDTO, validateData, LessonMetadataDTO } from './dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AllowedAudioMimeTypes, AllowedImageMimeTypes } from './enum';
 import { DeleteObjDTO } from './dto/delete-obj.dto';
@@ -295,6 +295,15 @@ export class FileUploadController {
     await validateData(dataUploadDTO.lesson_name, dataUploadDTO.data);
     await this.uploadService.insertIntoJsonDataArray(dataUploadDTO);
     return { message: 'Data uploaded successfully' };
+  }
+
+  // Update Lesson Metadata (AI Instructions) - MANAGER+
+  @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER)
+  @UseGuards(AdminJwtGuard, AdminRoleGuard)
+  @Post('metadata')
+  async updateLessonMetadata(@Body() body: LessonMetadataDTO) {
+    await this.uploadService.updateLessonMetadata(body);
+    return { message: 'Lesson metadata updated successfully' };
   }
 
   // Single file upload - OPERATOR+ can upload content

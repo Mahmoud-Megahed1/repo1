@@ -6,17 +6,51 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { CreateThemeDto } from './dto/create-theme.dto';
 import { UpdateThemeDto } from './dto/update-theme.dto';
 import { ThemeService } from './theme.service';
+import { DocumentParserService } from './document-parser.service';
 import { Public } from '../admin-auth/decorators/public.decorator';
 
 @ApiTags('Themes')
 @Controller('themes')
 export class ThemeController {
-  constructor(private readonly themeService: ThemeService) { }
+  constructor(
+    private readonly themeService: ThemeService,
+    private readonly documentParserService: DocumentParserService
+  ) { }
+
+  @Post(':id/upload-knowledge')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadKnowledge(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    try {
+      const text = await this.documentParserService.parseFile(file);
+      return await this.themeService.appendKnowledgeContext(id, text);
+    } catch (error) {
+      console.error('Error uploading knowledge:', error);
+      throw error;
+    }
+  }
 
   @Post()
   async create(@Body() createThemeDto: CreateThemeDto) {

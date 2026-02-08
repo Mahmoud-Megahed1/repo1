@@ -4,6 +4,10 @@ import OpenAI from 'openai';
 import { SYSTEM_PROMPT } from './constants/website-content';
 import { ChatRulesService } from '../support-chat/services/chat-rules.service';
 import { FileUploadService } from '../file-upload/file-upload.service';
+import { ThemeService } from '../theme/theme.service';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { LessonReviewChat, LessonReviewChatDocument } from './schemas/lesson-review-chat.schema';
 
 @Injectable()
 export class ChatService {
@@ -13,6 +17,8 @@ export class ChatService {
     private configService: ConfigService,
     private chatRulesService: ChatRulesService,
     private fileUploadService: FileUploadService,
+    private themeService: ThemeService,
+    @InjectModel(LessonReviewChat.name) private lessonChatModel: Model<LessonReviewChatDocument>,
   ) {
     const apiKey = this.configService.get<string>('OPENAI_API_KEY');
 
@@ -26,14 +32,16 @@ export class ChatService {
   }
 
   async generateResponse(userMessage: string) {
+    // 0. Check Theme Settings
+    const theme = await this.themeService.findCurrentTheme();
+    if (theme && theme.showSupportChat === false) {
+      return { reply: "Chat support is currently disabled by the administrator." };
+    }
+
     // 1. Check for Chatbot Rules (Priority)
     try {
       const activeRules = this.chatRulesService.getActiveRules();
       const lowerMessage = userMessage.toLowerCase().trim();
-
-      // Sort rules by priority (highest first) if not already sorted
-      // Assuming getActiveRules returns them sorted or we sort here if needed
-      // Currently simple matching:
 
       for (const rule of activeRules) {
         if (!rule.isActive) continue;
@@ -66,9 +74,14 @@ export class ChatService {
     }
 
     try {
+      let finalSystemPrompt = SYSTEM_PROMPT;
+      if (theme && theme.aiKnowledgeContext) {
+        finalSystemPrompt += `\n\nADDITIONAL KNOWLEDGE BASE:\n${theme.aiKnowledgeContext}\nUse this information to answer user questions if relevant.`;
+      }
+
       const completion = await this.openai.chat.completions.create({
         messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'system', content: finalSystemPrompt },
           { role: 'user', content: userMessage },
         ],
         model: 'gpt-4o-mini',
@@ -83,7 +96,18 @@ export class ChatService {
     }
   }
 
-  async generateLessonReviewResponse(params: { message: string; levelName: string; day: string; lessonName: string }) {
+  async getLessonReviewHistory(userId: string, levelName: string, day: string, lessonName: string) {
+    const chat = await this.lessonChatModel.findOne({ userId, levelName, day, lessonName });
+    return chat ? chat.messages : [];
+  }
+
+  async generateLessonReviewResponse(userId: string, params: { message: string; levelName: string; day: string; lessonName: string }) {
+    // 0. Check Theme Settings
+    const theme = await this.themeService.findCurrentTheme();
+    if (theme && theme.showAIReviewChat === false) {
+      return { reply: "AI Lesson Review is currently disabled by the administrator." };
+    }
+
     const apiKey = this.configService.get<string>('OPENAI_API_KEY');
     if (!apiKey) {
       return { reply: "I'm sorry, my brain is offline right now (Missing API Key)." };
@@ -91,9 +115,6 @@ export class ChatService {
 
     try {
       // 1. Retrieve Lesson Content
-      // Map frontend camelCase to backend snake_case for DTO if necessary, assuming FileUploadService expects snake_case in DTO or arguments
-      // Looking at FileUploadService.getContentByName(uploadFileDTO: UploadFileDTO), DTO has level_name, day, lesson_name
-
       const lessonData = await this.fileUploadService.getContentByName({
         level_name: params.levelName as any,
         day: params.day,
@@ -106,35 +127,67 @@ export class ChatService {
       if (lessonData && lessonData.data && lessonData.data.length > 0) {
         const lesson = lessonData.data[0];
         lessonContextString = JSON.stringify(lesson);
-        // Extract optional AI instructions if they exist in the lesson object
         if (lesson.aiInstructions) {
           aiInstructions = `\n\nSPECIAL INSTRUCTIONS FOR AI:\n${lesson.aiInstructions}`;
         }
       }
 
-      // 2. Build Prompt
-      const systemPromptWithContext = `${SYSTEM_PROMPT}
-      
+      // 2. Retrieve Chat History for Context
+      const history = await this.getLessonReviewHistory(userId, params.levelName, params.day, params.lessonName);
+      // Format history for OpenAI (last 6 messages for context window)
+      const recentHistory = history.slice(-6).map(msg => ({
+        role: msg.role as 'user' | 'assistant' | 'system',
+        content: msg.content
+      }));
+
+      // 3. Build Prompt
+      let systemPromptWithContext = `${SYSTEM_PROMPT}
+
       CURRENT LESSON CONTEXT:
       The user has just completed the following lesson. Use this content to guide the review. 
       Ask questions about the vocabulary, sentences, or concepts found here.
-      
+
       ${lessonContextString}
 
       ${aiInstructions}
       `;
 
+      if (theme && theme.aiKnowledgeContext) {
+        systemPromptWithContext += `\n\nADDITIONAL KNOWLEDGE BASE:\n${theme.aiKnowledgeContext}`;
+      }
+
+      const messages: any[] = [
+        { role: 'system', content: systemPromptWithContext },
+        ...recentHistory,
+        { role: 'user', content: params.message },
+      ];
+
       const completion = await this.openai.chat.completions.create({
-        messages: [
-          { role: 'system', content: systemPromptWithContext },
-          { role: 'user', content: params.message },
-        ],
+        messages: messages,
         model: 'gpt-4o-mini',
-        temperature: 0.5, // Slightly higher for more natural conversation
+        temperature: 0.5,
         max_tokens: 400,
       });
 
-      return { reply: completion.choices[0].message.content };
+      const reply = completion.choices[0].message.content;
+
+      // 4. Save History
+      await this.lessonChatModel.findOneAndUpdate(
+        { userId, levelName: params.levelName, day: params.day, lessonName: params.lessonName },
+        {
+          $push: {
+            messages: {
+              $each: [
+                { role: 'user', content: params.message },
+                { role: 'assistant', content: reply }
+              ]
+            }
+          }
+        },
+        { upsert: true, new: true }
+      );
+
+      return { reply };
 
     } catch (error) {
       console.error('Lesson Review AI Error:', error);
