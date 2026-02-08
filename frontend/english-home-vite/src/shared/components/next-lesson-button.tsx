@@ -10,7 +10,7 @@ type Props = {
   lessonName: LessonId;
 } & React.ComponentProps<typeof Button>;
 
-const NextLessonButton: FC<Props> = ({ lessonName, className, ...props }) => {
+const NextLessonButton: FC<Props> = ({ lessonName, className, onClick, ...restProps }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const params = useParams({
@@ -19,9 +19,9 @@ const NextLessonButton: FC<Props> = ({ lessonName, className, ...props }) => {
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     // Fire onClick (task completion) async without waiting - navigate immediately
-    if (props.onClick) {
+    if (onClick) {
       // Fire and forget - don't await, just let it run in background
-      Promise.resolve(props.onClick(e)).catch((error) => {
+      Promise.resolve(onClick(e)).catch((error) => {
         console.error('Error in NextLessonButton onClick:', error);
       });
     }
@@ -35,10 +35,9 @@ const NextLessonButton: FC<Props> = ({ lessonName, className, ...props }) => {
   return (
     <Button
       variant={'outline-primary'}
+      {...restProps}
       className={cn('self-end', className)}
-      disabled={props.disabled}
       onClick={handleClick}
-      {...props}
     >
       {t('Global.next')} - {t(`Global.sidebarItems.${lessonName}`)}
     </Button>
