@@ -57,3 +57,11 @@ export const deleteLesson = (
   };
   return client.delete(`/files/delete-obj`, { params });
 };
+
+export const updateLessonMetadata = (
+  data: {
+    aiInstructions?: string;
+  } & LessonParams,
+) => {
+  return client.post('/files/metadata', data);
+};

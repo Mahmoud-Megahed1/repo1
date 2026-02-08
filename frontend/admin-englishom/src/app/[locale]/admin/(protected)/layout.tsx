@@ -100,6 +100,12 @@ const useAdminLayoutSetup = () => {
         isHidden: adminRole === 'view' || adminRole === 'operator',
       },
       {
+        href: '/admin/ai-settings',
+        label: 'AI Settings',
+        icon: Bot,
+        isHidden: false,
+      },
+      {
         href: '/admin/users',
         label: 'Users',
         isHidden: adminRole === 'view' || adminRole === 'operator',
