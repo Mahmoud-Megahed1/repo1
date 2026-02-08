@@ -73,7 +73,7 @@ export default function ThemesPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {themes?.map((theme: Theme) => (
+              {Array.isArray(themes) && themes.map((theme: Theme) => (
                 <TableRow key={theme._id}>
                   <TableCell>{theme.name}</TableCell>
                   <TableCell>{formatDate(theme.startDate)}</TableCell>
