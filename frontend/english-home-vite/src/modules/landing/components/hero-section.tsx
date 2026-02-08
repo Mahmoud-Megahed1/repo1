@@ -32,31 +32,31 @@ export function HeroSection() {
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
-          <Badge variant="outline" className="mb-6 px-4 py-2 text-sm">
+          <Badge variant="outline" className={`mb-6 px-4 py-2 text-sm ${dynamicTheme?.assets?.backgroundImage ? 'text-white border-white/50 bg-black/20 backdrop-blur-sm' : ''}`}>
             🚀 {t('Global.englishom')} {currentYear}
           </Badge>
 
           {/* Main Title */}
-          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className={`mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl drop-shadow-md ${dynamicTheme?.assets?.backgroundImage ? 'text-white' : ''}`}>
             {t('Landing.hero.title')}{' '}
-            <span className="from-primary to-primary/60 bg-gradient-to-r bg-clip-text text-transparent">
+            <span className="from-primary to-primary/60 bg-gradient-to-r bg-clip-text text-transparent font-extrabold drop-shadow-sm">
               {t('Global.englishom')}
             </span>
           </h1>
 
           {/* Subtitle */}
-          <h2 className="text-muted-foreground mb-6 text-xl font-semibold sm:text-2xl">
+          <h2 className={`mb-6 text-xl font-semibold sm:text-2xl ${dynamicTheme?.assets?.backgroundImage ? 'text-zinc-200 drop-shadow-md' : 'text-muted-foreground'}`}>
             {t('Landing.hero.subtitle')}
           </h2>
 
           {/* Description */}
-          <p className="text-muted-foreground mx-auto mb-8 max-w-2xl text-lg">
+          <p className={`mx-auto mb-8 max-w-2xl text-lg ${dynamicTheme?.assets?.backgroundImage ? 'text-zinc-100 drop-shadow-md' : 'text-muted-foreground'}`}>
             {t('Landing.hero.description')}
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Button asChild size="lg" className="group">
+            <Button asChild size="lg" className="group shadow-xl hover:shadow-2xl transition-all duration-300">
               <Link to="/signup">
                 {t('Landing.hero.cta')}
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -67,7 +67,7 @@ export function HeroSection() {
       </div>
 
       {/* Background decoration */}
-      <div className="absolute -top-24 left-1/2 -translate-x-1/2 opacity-20">
+      <div className="absolute -top-24 left-1/2 -translate-x-1/2 opacity-20 pointer-events-none">
         <div className="from-primary/30 to-primary/10 h-96 w-96 rounded-full bg-gradient-to-br blur-3xl" />
       </div>
     </section>
