@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { getThemes, updateTheme, uploadThemeKnowledge } from '@/services/themes';
-import { Theme } from '@/types/themes';
+import { Theme, UpdateThemeDto } from '@/types/themes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { FileText, Loader2, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
@@ -49,7 +49,7 @@ export default function GlobalAISettings() {
     }, [themes]);
 
     const { mutate: updateSettings } = useMutation({
-        mutationFn: (data: Partial<Theme>) => {
+        mutationFn: (data: UpdateThemeDto) => {
             if (!currentTheme) throw new Error('No active theme');
             return updateTheme(currentTheme._id, data);
         },
@@ -69,7 +69,7 @@ export default function GlobalAISettings() {
         if (!currentTheme) return;
         // Optimistic update local state for UI responsiveness
         setCurrentTheme({ ...currentTheme, [key]: checked });
-        updateSettings({ [key]: checked });
+        updateSettings({ [key]: checked } as UpdateThemeDto);
     };
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {

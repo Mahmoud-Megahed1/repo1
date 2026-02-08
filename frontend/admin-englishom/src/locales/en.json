@@ -350,6 +350,7 @@
     "delete": "Delete",
     "updatedSuccessfully": "Updated successfully",
     "createdSuccessfully": "Created successfully",
+    "deletedSuccessfully": "Deleted successfully",
     "somethingWentWrong": "Something went wrong"
   },
   "Admin": {
