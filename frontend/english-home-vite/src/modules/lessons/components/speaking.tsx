@@ -67,11 +67,16 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
     }))
   );
 
-  // Hydrate saved recordings
+  // Hydrate saved recordings (only if no local result exists to prevent overwriting fresh data)
   useEffect(() => {
     if (savedAudios?.data) {
       setUsersRecords((prev) =>
         prev.map((record) => {
+          // If local record already has results, don't overwrite with backend data
+          if (record.results) {
+            return record;
+          }
+
           // Backend sanitization logic match
           const recordKey = record.sentence
             .trim()
