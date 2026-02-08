@@ -28,7 +28,7 @@ const NextLessonButton: FC<Props> = ({ lessonName, className, onClick, ...restPr
     // Navigate immediately without waiting for onClick to complete
     navigate({
       to: '/app/levels/$id/$day/$lessonName',
-      params: { ...params, lessonName },
+      params: { ...params, lessonName } as never,
     });
   };
 
