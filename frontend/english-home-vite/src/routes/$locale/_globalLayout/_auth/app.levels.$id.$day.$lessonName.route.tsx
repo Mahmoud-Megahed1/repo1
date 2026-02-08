@@ -101,7 +101,7 @@ function RouteComponent() {
         </div>
       )}
       <ScrollArrows />
-      <GlobalAiChat />
+      <GlobalAiChat isLessonCompleted={completedTasks?.data?.includes(lessonName)} />
     </LevelGuard>
   );
 }

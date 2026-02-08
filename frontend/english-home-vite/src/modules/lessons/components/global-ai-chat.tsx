@@ -6,7 +6,11 @@ import { useTranslation } from 'react-i18next';
 import AIReviewChat from './today/ai-review-chat';
 import type { LessonId, LevelId } from '@shared/types/entities';
 
-export function GlobalAiChat() {
+type Props = {
+    isLessonCompleted?: boolean;
+};
+
+export function GlobalAiChat({ isLessonCompleted = false }: Props) {
     const { t } = useTranslation();
     const { isOpen, setIsOpen } = useAiChatStore();
     const params = useParams({ strict: false });
@@ -16,9 +20,9 @@ export function GlobalAiChat() {
 
     return (
         <>
-            {/* Floating Action Button */}
-            {!isOpen && (
-                <div className="fixed bottom-6 start-6 z-40 group">
+            {/* Floating Action Button - Only show if lesson is completed */}
+            {!isOpen && isLessonCompleted && (
+                <div className="fixed bottom-28 start-6 z-40 group">
                     <Button
                         size="icon"
                         className="h-14 w-14 rounded-full shadow-lg bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:scale-110 transition-all duration-300 animate-bounce-slow ring-4 ring-white/20 dark:ring-black/20"
