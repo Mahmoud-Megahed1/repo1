@@ -54,7 +54,7 @@ export function useCompareAudio({ levelName, day, lessonName }: { levelName: Lev
           }
         }
       });
-      queryClient.invalidateQueries({ queryKey: ['today-audio', day, levelName] });
+      // queryClient.invalidateQueries({ queryKey: ['today-audio', day, levelName] });
       queryClient.invalidateQueries({ queryKey: ['get-sentence-audios', levelName] });
     },
   });
