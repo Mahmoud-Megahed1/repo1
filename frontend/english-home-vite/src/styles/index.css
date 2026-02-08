@@ -1,5 +1,5 @@
 @import './book-transition.css';
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Inconsolata:wght@200..900&family=Mada:wght@200..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Inconsolata:wght@200..900&family=Mada:wght@200..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Tajawal:wght@200..900&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @custom-variant dark (&:is(.dark *));
@@ -267,7 +267,7 @@
 }
 
 :lang(ar) {
-  font-family: 'Cairo', 'Mada', 'Noto Sans', sans-serif;
+  font-family: 'Tajawal', 'Cairo', 'Mada', 'Noto Sans', sans-serif;
   direction: rtl !important;
 }
 

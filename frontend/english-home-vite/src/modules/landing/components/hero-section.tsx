@@ -37,9 +37,9 @@ export function HeroSection() {
           </Badge>
 
           {/* Main Title */}
-          <h1 className={`mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl drop-shadow-md ${dynamicTheme?.assets?.backgroundImage ? 'text-white' : ''}`}>
+          <h1 className={`mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl ${dynamicTheme?.assets?.backgroundImage ? 'text-white drop-shadow-md' : ''}`}>
             {t('Landing.hero.title')}{' '}
-            <span className="from-primary to-primary/60 bg-gradient-to-r bg-clip-text text-transparent font-extrabold drop-shadow-sm">
+            <span className="from-primary to-primary/60 bg-gradient-to-r bg-clip-text text-transparent">
               {t('Global.englishom')}
             </span>
           </h1>
