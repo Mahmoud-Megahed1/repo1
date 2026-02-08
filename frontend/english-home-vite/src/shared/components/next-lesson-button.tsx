@@ -24,6 +24,9 @@ const NextLessonButton: FC<Props> = ({ lessonName, className, ...props }) => {
       setIsLoading(true);
       try {
         await props.onClick(e);
+      } catch (error) {
+        // Log error but don't block navigation
+        console.error('Error in NextLessonButton onClick:', error);
       } finally {
         setIsLoading(false);
       }
