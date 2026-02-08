@@ -41,21 +41,79 @@ export function useCompareAudio({ levelName, day, lessonName }: { levelName: Lev
       audio: File;
       sentenceText: string;
     }) => compareAudio({ audio, level_name: levelName, sentenceText, day, lesson_name: lessonName }),
-    onSuccess: (data) => {
-      // Optimistically update the cache to prevent "revert" to old data
+    onSuccess: (data, variables) => {
+      // Optimistically update the 'today-audio' cache
       queryClient.setQueryData(['today-audio', day, levelName], {
         data: {
           url: data.data.audioUrl,
           metadata: {
-            // matches structure expected by PracticeSpeaking
             ...data.data,
             similarityPercentage: data.data.similarityPercentage.toString(),
             isPassed: data.data.isPassed.toString(),
           }
         }
       });
+
+      // Optimistically update the 'get-sentence-audios' cache to persist on navigation
+      queryClient.setQueryData(
+        ['get-sentence-audios', levelName],
+        (oldData: { data: { sentence: string; url: string; metadata?: any }[] } | undefined) => {
+          if (!oldData?.data) {
+            // If no old data, create a new array with this result
+            const sentenceKey = variables.sentenceText
+              .trim()
+              .toLowerCase()
+              .replace(/[^a-z0-9\u0600-\u06FF]/g, '_')
+              .replace(/_+/g, '_')
+              .substring(0, 100);
+            return {
+              data: [{
+                sentence: sentenceKey,
+                url: data.data.audioUrl,
+                metadata: {
+                  similarityPercentage: data.data.similarityPercentage,
+                  correctSentence: data.data.correctSentence,
+                  userTranscript: data.data.userTranscript,
+                  isPassed: data.data.isPassed,
+                }
+              }]
+            };
+          }
+          // Update existing array
+          const sentenceKey = variables.sentenceText
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9\u0600-\u06FF]/g, '_')
+            .replace(/_+/g, '_')
+            .substring(0, 100);
+
+          const existingIndex = oldData.data.findIndex(s => s.sentence === sentenceKey);
+          const newEntry = {
+            sentence: sentenceKey,
+            url: data.data.audioUrl || '',
+            metadata: {
+              similarityPercentage: data.data.similarityPercentage,
+              correctSentence: data.data.correctSentence,
+              userTranscript: data.data.userTranscript,
+              isPassed: data.data.isPassed,
+            }
+          };
+
+          if (existingIndex >= 0) {
+            // Update existing entry
+            const newData = [...oldData.data];
+            newData[existingIndex] = newEntry;
+            return { data: newData };
+          } else {
+            // Add new entry
+            return { data: [...oldData.data, newEntry] };
+          }
+        }
+      );
+
+      // Don't invalidate queries - rely on optimistic updates to prevent stale data race conditions
       // queryClient.invalidateQueries({ queryKey: ['today-audio', day, levelName] });
-      queryClient.invalidateQueries({ queryKey: ['get-sentence-audios', levelName] });
+      // queryClient.invalidateQueries({ queryKey: ['get-sentence-audios', levelName] });
     },
   });
 }
