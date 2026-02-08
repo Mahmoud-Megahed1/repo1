@@ -22,8 +22,8 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Loading from '../../../shared/components/analyzing-skeleton';
 import { SpeakingFeedback } from '../../../shared/components/speaking-feedback';
-import AIReviewChat from './today/ai-review-chat';
 import type { SpeakingResult, SpeakLesson } from '../types';
+import { useAiChatStore } from '@hooks/use-ai-chat-store';
 
 type UserRecord = {
   sentence: string;
@@ -57,7 +57,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
     prev,
   } = useItemsPagination(sentences);
 
-  const [isReviewOpen, setIsReviewOpen] = useState(false);
+  const { setIsOpen } = useAiChatStore();
 
   const [usersRecords, setUsersRecords] = useState<UserRecord[]>(
     sentences.map((sentence) => ({
@@ -239,16 +239,6 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
         </CardContent>
       </Card>
 
-
-
-      <AIReviewChat
-        open={isReviewOpen}
-        onOpenChange={setIsReviewOpen}
-        levelName={levelName as LevelId}
-        day={day}
-        lessonName={lessonName as LessonId}
-      />
-
       <div className="sticky bottom-0 bg-background/80 backdrop-blur-sm p-4 border-t mt-4 flex items-center justify-between z-10">
         <Button variant="outline" onClick={prev} disabled={!hasPrevItems}>
           {t('Global.prev')}
@@ -271,7 +261,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
             <Button
               variant="default"
               className="bg-indigo-600 hover:bg-indigo-700 text-white animate-in fade-in"
-              onClick={() => setIsReviewOpen(true)}
+              onClick={() => setIsOpen(true)}
             >
               <Bot className="w-4 h-4 me-2" />
               {t('Global.reviewWithAI', 'Review with AI')}

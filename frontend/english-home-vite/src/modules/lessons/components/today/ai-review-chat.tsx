@@ -132,6 +132,13 @@ export default function AIReviewChat({
             recog.onerror = (event: any) => {
                 console.error("Speech recognition error", event.error);
                 setIsProcessing(false);
+                if (event.error === 'network') {
+                    alert(t('Global.errors.networkError', 'Network error. Please check your connection or VPN.'));
+                } else if (event.error === 'not-allowed') {
+                    alert(t('Global.errors.micPermission', 'Microphone permission denied.'));
+                } else {
+                    alert(t('Global.errors.speechError', 'Speech recognition error: ') + event.error);
+                }
             };
 
             setRecognition(recog);

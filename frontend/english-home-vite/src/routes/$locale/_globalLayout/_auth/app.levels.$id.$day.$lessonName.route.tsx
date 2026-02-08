@@ -16,6 +16,7 @@ import { CheckCircle2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import ScrollArrows from '@components/scroll-arrows';
+import { GlobalAiChat } from '@modules/lessons/components/global-ai-chat';
 
 export const Route = createFileRoute(
   '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName'
@@ -100,6 +101,7 @@ function RouteComponent() {
         </div>
       )}
       <ScrollArrows />
+      <GlobalAiChat />
     </LevelGuard>
   );
 }

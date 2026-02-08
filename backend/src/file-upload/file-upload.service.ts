@@ -167,23 +167,27 @@ export class FileUploadService {
     levelName: string,
   ): Promise<{ sentence: string; url: string; metadata?: any }[]> {
     const prefix = `UserAudios/${userId}/${levelName}/sentences/`;
-    const cursor = this.bucket.find({ filename: { $regex: `^${prefix}` } });
+    // Sort by uploadDate descending to get latest versions first
+    const cursor = this.bucket.find({ filename: { $regex: `^${prefix}` } }).sort({ uploadDate: -1 });
 
-    const results: { sentence: string; url: string; metadata?: any }[] = [];
+    const sentenceMap = new Map<string, { sentence: string; url: string; metadata?: any }>();
+
     for await (const doc of cursor) {
       // Extract sentence from filename: .../sentences/hello_world.wav -> hello_world
       const parts = doc.filename.split('/');
       const filename = parts[parts.length - 1];
       const basename = filename.replace(/\.(wav|mp3)$/, '');
 
-      // We return the "safe" sentence key. Frontend needs to match this.
-      results.push({
-        sentence: basename,
-        url: this.buildPublicUrl(doc.filename),
-        metadata: doc.metadata
-      });
+      // Only add if not already present (since we sort by date desc, first one is latest)
+      if (!sentenceMap.has(basename)) {
+        sentenceMap.set(basename, {
+          sentence: basename,
+          url: this.buildPublicUrl(doc.filename),
+          metadata: doc.metadata
+        });
+      }
     }
-    return results;
+    return Array.from(sentenceMap.values());
   }
 
   async getUserAudios(userId: string): Promise<{ url: string }[]> {
@@ -535,6 +539,13 @@ export class FileUploadService {
   }
 
   private async uploadToGridFS(file: Express.Multer.File, key: string, metadata: Record<string, any> = {}): Promise<void> {
+    // Delete existing file if present to prevent duplicates
+    const existing = await this.findFileByName(key);
+    if (existing) {
+      this.logger.log(`Deleting existing file before upload: ${key}`);
+      await this.bucket.delete(existing._id);
+    }
+
     await new Promise<void>((resolve, reject) => {
       const uploadStream = this.bucket.openUploadStream(key, {
         contentType: file.mimetype,

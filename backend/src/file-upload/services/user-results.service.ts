@@ -95,7 +95,8 @@ export class UserResultsService {
       );
 
     } catch (err) {
-      this.logger.warn(`Failed to persist user sentence audio: ${err.message}`);
+      console.error('CRITICAL: Failed to persist user sentence audio:', err);
+      this.logger.error(`Failed to persist user sentence audio: ${err.message}`, err.stack);
       // Don't fail the comparison if save fails, just log it
     }
 
