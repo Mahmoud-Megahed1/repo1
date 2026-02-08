@@ -119,7 +119,7 @@ export const ChatWidget = () => {
 
     // Use createPortal to render outside of any overflow/transform container
     return createPortal(
-        <div className="fixed bottom-24 right-6 z-[100] flex flex-col items-end gap-2 font-cairo pointer-events-none" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+        <div className="fixed bottom-36 right-6 z-[100] flex flex-col items-end gap-2 font-cairo pointer-events-none" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
             {/* Chat Window */}
             <div
                 className={cn(

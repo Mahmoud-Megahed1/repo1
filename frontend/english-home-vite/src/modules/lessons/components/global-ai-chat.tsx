@@ -22,7 +22,7 @@ export function GlobalAiChat({ isLessonCompleted = false }: Props) {
         <>
             {/* Floating Action Button - Only show if lesson is completed */}
             {!isOpen && isLessonCompleted && (
-                <div className="fixed bottom-48 start-6 z-40 group">
+                <div className="fixed bottom-28 start-6 z-40 group">
                     <Button
                         size="icon"
                         className="h-14 w-14 rounded-full shadow-lg bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:scale-110 transition-all duration-300 animate-bounce-slow ring-4 ring-white/20 dark:ring-black/20"
