@@ -3,7 +3,7 @@ import { useNavigate } from '@shared/i18n/routing';
 import type { LessonId } from '@shared/types/entities';
 import { useParams } from '@tanstack/react-router';
 import { Button } from '@ui/button';
-import { type FC, useState } from 'react';
+import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
@@ -16,21 +16,16 @@ const NextLessonButton: FC<Props> = ({ lessonName, className, ...props }) => {
   const params = useParams({
     from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
   });
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // Fire onClick (task completion) async without waiting - navigate immediately
     if (props.onClick) {
-      e.preventDefault();
-      setIsLoading(true);
-      try {
-        await props.onClick(e);
-      } catch (error) {
-        // Log error but don't block navigation
+      // Fire and forget - don't await, just let it run in background
+      Promise.resolve(props.onClick(e)).catch((error) => {
         console.error('Error in NextLessonButton onClick:', error);
-      } finally {
-        setIsLoading(false);
-      }
+      });
     }
+    // Navigate immediately without waiting for onClick to complete
     navigate({
       to: '/app/levels/$id/$day/$lessonName',
       params: { ...params, lessonName },
@@ -41,17 +36,11 @@ const NextLessonButton: FC<Props> = ({ lessonName, className, ...props }) => {
     <Button
       variant={'outline-primary'}
       className={cn('self-end', className)}
-      disabled={isLoading || props.disabled}
+      disabled={props.disabled}
       onClick={handleClick}
       {...props}
     >
-      {isLoading ? (
-        <span className="animate-pulse">{t('Global.processing')}...</span>
-      ) : (
-        <>
-          {t('Global.next')} - {t(`Global.sidebarItems.${lessonName}`)}
-        </>
-      )}
+      {t('Global.next')} - {t(`Global.sidebarItems.${lessonName}`)}
     </Button>
   );
 };
