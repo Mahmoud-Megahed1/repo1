@@ -48,13 +48,63 @@ export default function GlobalAISettings() {
         }
     }, [themes]);
 
-    // ... (keep usage of updateSettings same) ...
+    const { mutate: updateSettings } = useMutation({
+        mutationFn: (data: Partial<Theme>) => {
+            if (!currentTheme) throw new Error('No active theme');
+            return updateTheme(currentTheme._id, data);
+        },
+        onSuccess: () => {
+            toast.success('Settings updated successfully');
+            queryClient.invalidateQueries({ queryKey: ['themes'] });
+        },
+        onError: () => {
+            toast.error('Failed to update settings');
+        },
+    });
 
-    // ... (keep handleToggle same) ...
+    const handleToggle = (
+        key: 'showSupportChat' | 'showAIReviewChat',
+        checked: boolean,
+    ) => {
+        if (!currentTheme) return;
+        // Optimistic update local state for UI responsiveness
+        setCurrentTheme({ ...currentTheme, [key]: checked });
+        updateSettings({ [key]: checked });
+    };
 
-    // ... (keep handleFileUpload same) ...
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files || e.target.files.length === 0 || !currentTheme) return;
 
-    // (isLoading check remains same)
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+
+        setUploading(true);
+        try {
+            const res = await uploadThemeKnowledge(currentTheme._id, formData);
+            if (res.data && res.data.aiKnowledgeContext) {
+                setCurrentTheme({
+                    ...currentTheme,
+                    aiKnowledgeContext: res.data.aiKnowledgeContext,
+                });
+                toast.success('Knowledge base updated successfully');
+            }
+        } catch (error) {
+            console.error('Upload failed', error);
+            toast.error('Failed to upload document');
+        } finally {
+            setUploading(false);
+            e.target.value = ''; // Reset input
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <div className="flex h-40 items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        );
+    }
 
     if (!currentTheme) {
         return (
