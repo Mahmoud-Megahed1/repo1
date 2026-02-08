@@ -30,22 +30,7 @@ export function RouteComponent() {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user?.role === 'admin') {
-      const defaultItems = MAIN_SIDEBAR_ITEMS();
-      // Check if already added to prevent duplicates
-      // Casting 'AI_SETTINGS' to any to avoid strict type collision with SidebarItem.id
-      if (!sidebarItems.find(i => (i.id as any) === 'AI_SETTINGS')) {
-        setSidebarItems([
-          ...defaultItems,
-          {
-            title: 'AI Settings',
-            url: '/app/admin/ai-settings' as any,
-            icon: Bot,
-            id: 'AI_SETTINGS' as any,
-          } as any,
-        ]);
-      }
-    }
+    // Admin specific sidebar items can be added here if needed in the future
   }, [user, setSidebarItems, sidebarItems]);
 
   return (

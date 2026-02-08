@@ -20,3 +20,11 @@ export const updateTheme = async (id: string, data: UpdateThemeDto) => {
 export const deleteTheme = async (id: string) => {
     return client.delete<Theme>(`/themes/${id}`);
 };
+
+export const uploadThemeKnowledge = async (id: string, data: FormData) => {
+    return client.post<{ aiKnowledgeContext: string }>(`/themes/${id}/upload-knowledge`, data, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};

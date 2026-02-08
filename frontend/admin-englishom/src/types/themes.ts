@@ -14,6 +14,9 @@ export interface Theme {
   };
   createdAt: string;
   updatedAt: string;
+  showSupportChat?: boolean;
+  showAIReviewChat?: boolean;
+  aiKnowledgeContext?: string;
 }
 
 export interface CreateThemeDto {
@@ -29,6 +32,9 @@ export interface CreateThemeDto {
     primaryColor?: string;
     secondaryColor?: string;
   };
+  showSupportChat?: boolean;
+  showAIReviewChat?: boolean;
+  aiKnowledgeContext?: string;
 }
 
 export type UpdateThemeDto = Partial<CreateThemeDto>;

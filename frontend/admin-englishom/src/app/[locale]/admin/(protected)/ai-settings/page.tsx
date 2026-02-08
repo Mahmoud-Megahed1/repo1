@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server';
-import LessonAIInstructions from './_components/lesson-ai-instructions';
+import SettingsTabs from './_components/settings-tabs';
 
 export async function generateMetadata({
     params: { locale },
@@ -21,7 +21,7 @@ export default function AISettingsPage() {
                     Manage AI behavior and instructions for lessons.
                 </p>
             </div>
-            <LessonAIInstructions />
+            <SettingsTabs />
         </div>
     );
 }
