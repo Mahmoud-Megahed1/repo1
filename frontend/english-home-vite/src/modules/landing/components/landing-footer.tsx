@@ -188,38 +188,38 @@ export function LandingFooter() {
       </div>
       <div className="container mx-auto mt-8 border-t pt-8">
         <div className="flex flex-col items-center justify-center gap-6 md:flex-row">
-          <div className="flex flex-wrap items-center justify-center gap-6">
+          <div className="bg-white/5 dark:bg-white/10 rounded-xl p-4 flex flex-wrap items-center justify-center gap-4 border border-border/10">
             <img
               src="/images/svgs/saudi-business-center.svg"
               alt="Saudi Business Center"
-              className="h-12 object-contain"
+              className="h-8 object-contain dark:brightness-0 dark:invert"
             />
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 bg-white/50 dark:bg-zinc-100 rounded-lg px-3 py-1">
               <img
                 src="/images/svgs/mada.svg"
                 alt="Mada"
-                className="h-8 object-contain"
+                className="h-5 object-contain"
               />
               <img
                 src="/images/svgs/apple-pay.svg"
                 alt="Apple Pay"
-                className="h-8 object-contain"
+                className="h-5 object-contain"
               />
               <img
                 src="/images/svgs/visa.svg"
                 alt="Visa"
-                className="h-8 object-contain"
+                className="h-5 object-contain"
               />
               <img
                 src="/images/svgs/mastercard.svg"
                 alt="Mastercard"
-                className="h-8 object-contain"
+                className="h-5 object-contain"
               />
             </div>
             <img
               src="/images/maroof_new.jpg"
               alt="Maroof"
-              className="h-12 object-contain rounded-full"
+              className="h-8 object-contain rounded-full border border-border/20"
             />
           </div>
         </div>

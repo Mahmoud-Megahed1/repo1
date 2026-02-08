@@ -157,12 +157,15 @@ export function LandingHeader() {
                 {t('Landing.header.navigation.contact')}
               </Link>
               <div className="space-y-3 border-t pt-4">
-                <Button variant="ghost" asChild>
-                  <LanguageSwitcher>
-                    <Globe className="text-muted-foreground" />{' '}
-                    {locale === 'ar' ? 'الانجليزية' : 'Arabic'}
-                  </LanguageSwitcher>
-                </Button>
+                <div className="flex items-center justify-between gap-2">
+                  <Button variant="ghost" asChild>
+                    <LanguageSwitcher>
+                      <Globe className="text-muted-foreground mr-2 h-4 w-4" />
+                      {locale === 'ar' ? 'English' : 'العربية'}
+                    </LanguageSwitcher>
+                  </Button>
+                  <ThemeSwitcher />
+                </div>
                 <div className="flex flex-col space-y-2">
                   <Button variant="ghost" asChild className="justify-start">
                     <Link to="/login">{t('Landing.header.cta.login')}</Link>
