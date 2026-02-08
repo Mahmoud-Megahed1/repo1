@@ -147,9 +147,25 @@ export class FileUploadService {
     const isWav = file.mimetype?.includes('wav') || file.originalname?.toLowerCase().endsWith('.wav');
     const ext = isWav ? 'wav' : 'mp3';
 
-    const key = `UserAudios/${userId}/${levelName}/sentences/${safeFilename}.${ext}`;
+    // Robustly delete ANY existing version (wav or mp3) to prevent duplicates/stale data
+    const keyBase = `UserAudios/${userId}/${levelName}/sentences/${safeFilename}`;
+    const keyWav = `${keyBase}.wav`;
+    const keyMp3 = `${keyBase}.mp3`;
 
     try {
+      const existingWav = await this.findFileByName(keyWav);
+      if (existingWav) {
+        this.logger.log(`Deleting existing WAV: ${keyWav}`);
+        await this.bucket.delete(existingWav._id);
+      }
+
+      const existingMp3 = await this.findFileByName(keyMp3);
+      if (existingMp3) {
+        this.logger.log(`Deleting existing MP3: ${keyMp3}`);
+        await this.bucket.delete(existingMp3._id);
+      }
+
+      const key = `${keyBase}.${ext}`;
       await this.uploadToGridFS(file, key, metadata);
       return { url: this.buildPublicUrl(key) };
     } catch (error) {

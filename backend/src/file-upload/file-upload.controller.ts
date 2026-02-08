@@ -112,10 +112,16 @@ export class FileUploadController {
   async getUserSentenceAudios(
     @CurrentUser() user: User,
     @Param('levelName') levelName: string,
+    @Res({ passthrough: true }) res: Response,
   ) {
     if (!user?._id) {
       throw new BadRequestException('User not authenticated');
     }
+    // Prevent caching of this response to ensure latest recordings are always fetched
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+
     const items = await this.uploadService.getUserSentenceAudios(
       user._id.toString(),
       levelName,
