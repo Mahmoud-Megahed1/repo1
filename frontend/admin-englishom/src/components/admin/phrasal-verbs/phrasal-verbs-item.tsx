@@ -180,4 +180,19 @@ const PhrasalVerbItem: FC<Props> = ({
   );
 };
 
+
+export const PhrasalVerbSkeleton = () => {
+  return (
+    <li className="flex h-64 w-full flex-col justify-between rounded-lg bg-secondary p-4 shadow-md animate-pulse">
+      <div className="h-6 w-3/4 rounded bg-muted-foreground/20" />
+      <div className="my-4 h-[1px] w-full bg-border" />
+      <div className="space-y-2">
+        <div className="h-4 w-1/2 rounded bg-muted-foreground/20" />
+        <div className="h-20 w-full rounded bg-muted-foreground/20" />
+        <div className="h-20 w-full rounded bg-muted-foreground/20" />
+      </div>
+    </li>
+  );
+};
+
 export default PhrasalVerbItem;

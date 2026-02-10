@@ -39,16 +39,14 @@ const PhrasalVerbs: FC = () => {
       >
         {isLoading
           ? Array.from({ length: 4 }).map((_, index) => (
-              <PhrasalVerbSkeleton key={index} />
-            ))
+            <PhrasalVerbSkeleton key={index} />
+          ))
           : phrasalVerbs.map((phrasalVerb) => (
-              <PhrasalVerbItem
-                key={phrasalVerb.id}
-                phrasalVerb={phrasalVerb}
-                day={`${day}`}
-                levelId={levelId}
-              />
-            ))}
+            <PhrasalVerbItem
+              key={phrasalVerb.id}
+              data={phrasalVerb} // Changed prop name to match component definition
+            />
+          ))}
       </ul>
       {isEmpty && (
         <div className="flex h-full items-center justify-center">
