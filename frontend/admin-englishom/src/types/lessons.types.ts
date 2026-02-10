@@ -42,12 +42,22 @@ export type QuestionAnswerLesson = {
 
 export type PhrasalVerbLesson = {
   id: string;
-  exampleAr: string;
-  exampleEn: string;
-  sentence: string;
-  soundSrc: string;
-  pictureSrc: string;
+  definitionEn: string;
+  definitionAr: string;
+  useCases: {
+    en: string[];
+    ar: string[];
+  };
+  examples: Array<{
+    exampleAr: string;
+    exampleEn: string;
+    sentence: string;
+    soundSrc: string;
+    pictureSrc: string;
+  }>;
 };
+
+export type PhrasalVerb = PhrasalVerbLesson;
 
 export type IdiomLesson = {
   id: string;

@@ -371,23 +371,22 @@ class PHRASAL_VERBS {
 
   @IsString()
   @IsNotEmpty()
-  exampleAr: string;
+  definitionEn: string;
 
   @IsString()
   @IsNotEmpty()
-  exampleEn: string;
+  definitionAr: string;
 
-  @IsString()
-  @IsNotEmpty()
-  sentence: string;
+  @IsNotEmptyObject()
+  @ValidateNested({ each: true })
+  @Type(() => UseCase)
+  useCases: UseCase;
 
-  @IsString()
+  @IsArray()
   @IsNotEmpty()
-  soundSrc: string;
-
-  @IsString()
-  @IsNotEmpty()
-  pictureSrc: string;
+  @ValidateNested({ each: true })
+  @Type(() => Example)
+  examples: Example[];
 
   @IsOptional()
   @IsString()
@@ -479,9 +478,9 @@ export async function validateData(
 
   // Validate each item in the data array
   for (const item of data) {
-    // Special transformation only for IDIOMS which has nested Example objects
+    // Special transformation for IDIOMS and PHRASAL_VERBS which have nested Example objects
     let instance;
-    if (key === LESSONS.IDIOMS) {
+    if (key === LESSONS.IDIOMS || key === LESSONS.PHRASAL_VERBS) {
       const transformedItem = {
         ...item,
         examples: Array.isArray(item.examples)

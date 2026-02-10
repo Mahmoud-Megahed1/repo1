@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { getThemes, updateTheme, uploadThemeKnowledge } from '@/services/themes';
+import LessonAIInstructions from './lesson-ai-instructions';
 import { Theme, UpdateThemeDto } from '@/types/themes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { FileText, Loader2, MessageSquare } from 'lucide-react';
@@ -153,6 +154,22 @@ export default function GlobalAISettings() {
                                 onCheckedChange={(c) => handleToggle('showAIReviewChat', c)}
                             />
                         </div>
+                    </CardContent>
+                </Card>
+
+                {/* Lesson AI Instructions */}
+                <Card className="md:col-span-2">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <MessageSquare className="h-5 w-5" />
+                            Lesson Specific Instructions
+                        </CardTitle>
+                        <CardDescription>
+                            Define custom AI behavior for specific lessons, levels, and days.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <LessonAIInstructions />
                     </CardContent>
                 </Card>
 

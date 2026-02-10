@@ -14,6 +14,7 @@ export type TranslationSchema = {
   IdiomsPage: IdiomsPage;
   DailyTestPage: DailyTestPage;
   Global: Global;
+  Admin: Admin;
 };
 
 type LabeledField = {
@@ -215,6 +216,8 @@ type DailyTestPage = {
   grade: string;
 };
 
+
+
 type Global = {
   appName: string;
   welcome: string;
@@ -254,5 +257,31 @@ type Global = {
     max: string;
     invalidEmail: string;
     emailExists: string;
+  };
+  create: string;
+  name: string;
+  status: string;
+  startDate: string;
+  endDate: string;
+  active: string;
+  inactive: string;
+  actions: string;
+  save: string;
+  cancel: string;
+  edit: string;
+  delete: string;
+  updatedSuccessfully: string;
+  createdSuccessfully: string;
+  deletedSuccessfully: string;
+  somethingWentWrong: string;
+};
+
+type Admin = {
+  themes: {
+    title: string;
+    add: string;
+    edit: string;
+    delete: string;
+    list: string;
   };
 };
