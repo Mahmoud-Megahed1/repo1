@@ -65,3 +65,12 @@ export const updateLessonMetadata = (
 ) => {
   return client.post('/files/metadata', data);
 };
+
+export const getAllLessonInstructions = () => {
+  return client.get<{
+    level: string;
+    day: string;
+    lessonType: string;
+    instructions: string;
+  }[]>('/files/metadata');
+};

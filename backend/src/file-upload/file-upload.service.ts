@@ -29,6 +29,13 @@ interface JsonFile {
   aiInstructions?: string;
 }
 
+export interface LessonInstructionItem {
+  level: string;
+  day: string;
+  lessonType: string;
+  instructions: string;
+}
+
 @Injectable()
 export class FileUploadService {
   private readonly logger = new Logger(FileUploadService.name);
@@ -629,13 +636,42 @@ export class FileUploadService {
     await new Promise<void>((resolve, reject) => {
       const uploadStream = this.bucket.openUploadStream(key, {
         contentType: 'application/json',
-        metadata: { logicalKey: key },
+        metadata: {
+          logicalKey: key,
+          aiInstructions: data.aiInstructions // Store instructions in metadata for quick querying
+        },
       });
       uploadStream.on('error', (err) => reject(err));
       uploadStream.on('finish', () => resolve());
       uploadStream.write(jsonBuffer);
       uploadStream.end();
     });
+  }
+
+  async getAllLessonInstructions(): Promise<LessonInstructionItem[]> {
+    // Find all files that have aiInstructions in metadata
+    const cursor = this.bucket.find({
+      'metadata.aiInstructions': { $exists: true, $ne: '' }
+    });
+
+    const results: LessonInstructionItem[] = [];
+
+    for await (const doc of cursor) {
+      if (doc.metadata && doc.metadata.aiInstructions) {
+        // Parse filename Key: Levels/<level>/<day>/<lesson>.json
+        const parts = doc.filename.split('/');
+        if (parts.length >= 4) {
+          results.push({
+            level: parts[1],
+            day: parts[2],
+            lessonType: parts[3].replace('.json', ''),
+            instructions: doc.metadata.aiInstructions
+          });
+        }
+      }
+    }
+
+    return results;
   }
 
   private async listObjectsWithPrefix(prefix: string): Promise<{ url: string }[]> {

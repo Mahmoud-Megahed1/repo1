@@ -306,6 +306,13 @@ export class FileUploadController {
     return { message: 'Lesson metadata updated successfully' };
   }
 
+  @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER)
+  @UseGuards(AdminJwtGuard, AdminRoleGuard)
+  @Get('metadata')
+  async getAllLessonInstructions() {
+    return this.uploadService.getAllLessonInstructions();
+  }
+
   // Single file upload - OPERATOR+ can upload content
   @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER, AdminRole.OPERATOR)
   @UseGuards(AdminJwtGuard, AdminRoleGuard)
