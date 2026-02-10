@@ -258,22 +258,7 @@ type Global = {
     invalidEmail: string;
     emailExists: string;
   };
-  create: string;
-  name: string;
-  status: string;
-  startDate: string;
-  endDate: string;
-  active: string;
-  inactive: string;
-  actions: string;
-  save: string;
-  cancel: string;
-  edit: string;
-  delete: string;
-  updatedSuccessfully: string;
-  createdSuccessfully: string;
-  deletedSuccessfully: string;
-  somethingWentWrong: string;
+
 };
 
 type Admin = {
