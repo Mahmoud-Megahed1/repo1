@@ -18,7 +18,7 @@ import { LessonParams } from '@/types/lessons.types';
 import { LevelId } from '@/types/user.types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2, Trash2, Edit } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { toast } from 'sonner';
 import {
   Table,
@@ -37,6 +37,7 @@ export default function LessonAIInstructions() {
   );
   const [instructions, setInstructions] = useState<string>('');
   const queryClient = useQueryClient();
+  const formRef = useRef<HTMLDivElement>(null);
 
   const lessonParams: LessonParams = {
     level_name: selectedLevel,
@@ -73,6 +74,7 @@ export default function LessonAIInstructions() {
     onSuccess: () => {
       toast.success('AI Instructions saved successfully');
       queryClient.invalidateQueries({ queryKey: ['lesson', lessonParams] });
+      queryClient.invalidateQueries({ queryKey: ['all-instructions'] });
     },
     onError: () => {
       toast.error('Failed to save instructions');
@@ -87,7 +89,7 @@ export default function LessonAIInstructions() {
   const days = Array.from({ length: 30 }, (_, i) => (i + 1).toString());
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" ref={formRef}>
       <Card>
         <CardHeader>
           <CardTitle>Lesson AI Instructions</CardTitle>
@@ -216,7 +218,7 @@ function InstructionsList({ onEdit }: { onEdit: (level: string, day: string, les
 
   const { mutate: deleteInstruction } = useMutation({
     mutationFn: (params: { level_name: string, day: string, lesson_name: string }) =>
-      updateLessonMetadata({ ...params, aiInstructions: '' }),
+      updateLessonMetadata({ ...params, lesson_name: params.lesson_name as LessonsId, aiInstructions: '' }),
     onSuccess: () => {
       toast.success('Instruction deleted');
       queryClient.invalidateQueries({ queryKey: ['all-instructions'] });
