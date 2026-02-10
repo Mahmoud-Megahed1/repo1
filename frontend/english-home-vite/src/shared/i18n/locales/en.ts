@@ -1298,7 +1298,7 @@ export default {
     daysToComplete: 'days to complete the course',
     days: 'Days',
     completed: 'Completed',
-    cta: 'Join me to a wide world and learn English with Englishom',
+    cta: 'Join us in a vast world and develop your English with Englishom.',
     startLearning: 'Start Learning',
     ofDays: 'Of {{totalDays}} days',
     student: 'Student',
