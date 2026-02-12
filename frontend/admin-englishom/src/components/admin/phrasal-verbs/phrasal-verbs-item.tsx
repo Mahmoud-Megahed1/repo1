@@ -10,20 +10,13 @@ import {
 } from '@/components/ui/alert-dialog';
 import AudioPlayer from '@/components/ui/audio-player';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import useDeleteLesson from '@/hooks/use-delete-lesson';
 import { cn } from '@/lib/utils';
 import { PhrasalVerb } from '@/types/lessons.types';
 import { LevelId } from '@/types/user.types';
 import { useLocale, useTranslations } from 'next-intl';
-import Image from 'next/image';
 import { FC, useState } from 'react';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -142,18 +135,17 @@ const PhrasalVerbItem: FC<Props> = ({
 };
 
 
-export const PhrasalVerbSkeleton = () => {
-  return (
-    <li className="flex h-64 w-full flex-col justify-between rounded-lg bg-secondary p-4 shadow-md animate-pulse">
-      <div className="h-6 w-3/4 rounded bg-muted-foreground/20" />
-      <div className="my-4 h-[1px] w-full bg-border" />
-      <div className="space-y-2">
-        <div className="h-4 w-1/2 rounded bg-muted-foreground/20" />
-        <div className="h-20 w-full rounded bg-muted-foreground/20" />
-        <div className="h-20 w-full rounded bg-muted-foreground/20" />
-      </div>
-    </li>
-  );
-};
+export const PhrasalVerbSkeleton = () => (
+  <li className="flex flex-col rounded-lg bg-secondary p-4 text-secondary-foreground shadow-md">
+    <Skeleton className="mb-4 h-48 w-full rounded-md bg-muted-foreground/20" />
+    <div className="flex flex-col space-y-2">
+      <Skeleton className="h-6 w-3/4 rounded-full bg-muted-foreground/20" />
+      <Skeleton className="h-4 w-full rounded-full bg-muted-foreground/20" />
+      <Skeleton className="h-4 w-full rounded-full bg-muted-foreground/20" />
+    </div>
+    <Skeleton className="mt-4 h-12 w-full rounded-full bg-muted-foreground/20" />
+    <Skeleton className="ms-auto mt-4 h-8 w-24 rounded-full bg-muted-foreground/20" />
+  </li>
+);
 
 export default PhrasalVerbItem;

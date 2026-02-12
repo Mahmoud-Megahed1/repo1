@@ -33,7 +33,7 @@ const PhrasalVerbs: FC = () => {
         <FormDialog levelId={levelId} day={`${day}`} />
       </div>
       <ul
-        className={cn('grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3', {
+        className={cn('grid grid-cols-1 gap-4', {
           'animate-pulse duration-1000': isFetching,
         })}
       >
