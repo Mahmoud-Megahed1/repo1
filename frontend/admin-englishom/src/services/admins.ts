@@ -63,7 +63,7 @@ export const updateAdmin = ({
 };
 
 export const getAdminById = (id: string) => {
-  return client.get<Admin>(`/admin/${id}`);
+  return client.get<Admin>(`/admin/details/${id}`);
 };
 
 export const createAdmin = (data: {

@@ -9,12 +9,13 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { getThemes, updateTheme, uploadThemeKnowledge } from '@/services/themes';
 import { Theme, UpdateThemeDto } from '@/types/themes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { FileText, Loader2, MessageSquare } from 'lucide-react';
+import { FileText, Loader2, MessageSquare, Edit, Save, X } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -22,6 +23,8 @@ import { toast } from 'sonner';
 export default function GlobalAISettings() {
     const [currentTheme, setCurrentTheme] = useState<Theme | null>(null);
     const [uploading, setUploading] = useState(false);
+    const [isEditingKnowledge, setIsEditingKnowledge] = useState(false);
+    const [editedKnowledge, setEditedKnowledge] = useState('');
     const queryClient = useQueryClient();
 
     // Fetch themes to find the active one
@@ -96,6 +99,13 @@ export default function GlobalAISettings() {
             setUploading(false);
             e.target.value = ''; // Reset input
         }
+    };
+
+    const handleSaveKnowledgeEdit = () => {
+        if (!currentTheme) return;
+        updateSettings({ aiKnowledgeContext: editedKnowledge } as UpdateThemeDto);
+        setCurrentTheme({ ...currentTheme, aiKnowledgeContext: editedKnowledge });
+        setIsEditingKnowledge(false);
     };
 
     if (isLoading) {
@@ -198,7 +208,34 @@ export default function GlobalAISettings() {
                                 </span>
                             </div>
 
-                            {currentTheme.aiKnowledgeContext ? (
+                            {isEditingKnowledge ? (
+                                <div className="space-y-3">
+                                    <Textarea
+                                        value={editedKnowledge}
+                                        onChange={(e) => setEditedKnowledge(e.target.value)}
+                                        className="min-h-[200px] font-mono text-xs"
+                                        placeholder="Enter knowledge base text here..."
+                                    />
+                                    <div className="flex gap-2">
+                                        <Button
+                                            size="sm"
+                                            onClick={handleSaveKnowledgeEdit}
+                                            disabled={uploading}
+                                        >
+                                            <Save className="mr-2 h-4 w-4" />
+                                            Save Changes
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            onClick={() => setIsEditingKnowledge(false)}
+                                        >
+                                            <X className="mr-2 h-4 w-4" />
+                                            Cancel
+                                        </Button>
+                                    </div>
+                                </div>
+                            ) : currentTheme.aiKnowledgeContext ? (
                                 <>
                                     <div className="rounded border bg-background p-3 max-h-[200px] overflow-y-auto">
                                         <p className="whitespace-pre-wrap text-xs text-muted-foreground leading-relaxed">
@@ -206,18 +243,31 @@ export default function GlobalAISettings() {
                                             {currentTheme.aiKnowledgeContext.length > 500 && '...'}
                                         </p>
                                     </div>
-                                    <Button
-                                        variant="destructive"
-                                        size="sm"
-                                        onClick={() => {
-                                            if (confirm('Are you sure you want to clear the entire knowledge base? This cannot be undone.')) {
-                                                updateSettings({ aiKnowledgeContext: '' } as UpdateThemeDto);
-                                                setCurrentTheme({ ...currentTheme, aiKnowledgeContext: '' });
-                                            }
-                                        }}
-                                    >
-                                        Clear Knowledge Base
-                                    </Button>
+                                    <div className="flex gap-2">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => {
+                                                setEditedKnowledge(currentTheme.aiKnowledgeContext || '');
+                                                setIsEditingKnowledge(true);
+                                            }}
+                                        >
+                                            <Edit className="mr-2 h-4 w-4" />
+                                            Edit Context
+                                        </Button>
+                                        <Button
+                                            variant="destructive"
+                                            size="sm"
+                                            onClick={() => {
+                                                if (confirm('Are you sure you want to clear the entire knowledge base? This cannot be undone.')) {
+                                                    updateSettings({ aiKnowledgeContext: '' } as UpdateThemeDto);
+                                                    setCurrentTheme({ ...currentTheme, aiKnowledgeContext: '' });
+                                                }
+                                            }}
+                                        >
+                                            Clear All
+                                        </Button>
+                                    </div>
                                 </>
                             ) : (
                                 <p className="text-xs text-muted-foreground italic">

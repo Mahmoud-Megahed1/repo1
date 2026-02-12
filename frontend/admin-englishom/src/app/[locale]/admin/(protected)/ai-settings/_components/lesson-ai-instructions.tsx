@@ -35,7 +35,10 @@ export default function LessonAIInstructions() {
   const [selectedLessonType, setSelectedLessonType] = useState<LessonsId>(
     LESSONS_LINKS[0].id,
   );
-  const [instructions, setInstructions] = useState<string>('');
+  const [instructionsList, setInstructionsList] = useState<string[]>([]);
+  const [newInstruction, setNewInstruction] = useState('');
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editValue, setEditValue] = useState('');
   const queryClient = useQueryClient();
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -53,14 +56,18 @@ export default function LessonAIInstructions() {
 
   // Update local state when data is fetched
   useEffect(() => {
-    // The API returns { data: [{...}] } inside the axios response.
-    // So access path is lessonData.data.data
-    if (lessonData?.data?.data && lessonData.data.data.length > 0) {
-      // The API returns an array, we take the first item
-      // @ts-ignore
-      setInstructions(lessonData.data.data[0]?.aiInstructions || '');
+    if (lessonData?.data) {
+      // First try to find instructions in the first item of the data array
+      // Then try the root property aiInstructions (which backend sets)
+      const rootInstructions = (lessonData.data as any).aiInstructions;
+      const itemInstructions = lessonData.data.data?.[0]?.aiInstructions;
+
+      // Parse instructions string into array (split by newlines and filter empty)
+      const rawText = itemInstructions || rootInstructions || '';
+      const list = rawText.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+      setInstructionsList(list);
     } else {
-      setInstructions('');
+      setInstructionsList([]);
     }
   }, [lessonData]);
 
@@ -81,9 +88,33 @@ export default function LessonAIInstructions() {
     },
   });
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    saveInstructions(instructions);
+  const handleAdd = () => {
+    if (!newInstruction.trim()) return;
+    const updated = [...instructionsList, newInstruction.trim()];
+    setInstructionsList(updated);
+    setNewInstruction('');
+    saveInstructions(updated.join('\n'));
+  };
+
+  const handleDelete = (index: number) => {
+    const updated = instructionsList.filter((_, i) => i !== index);
+    setInstructionsList(updated);
+    saveInstructions(updated.join('\n'));
+  };
+
+  const startEdit = (index: number) => {
+    setEditingIndex(index);
+    setEditValue(instructionsList[index]);
+  };
+
+  const saveEdit = () => {
+    if (editingIndex === null) return;
+    const updated = [...instructionsList];
+    updated[editingIndex] = editValue.trim();
+    setInstructionsList(updated);
+    setEditingIndex(null);
+    setEditValue('');
+    saveInstructions(updated.join('\n'));
   };
 
   const days = Array.from({ length: 30 }, (_, i) => (i + 1).toString());
@@ -95,7 +126,7 @@ export default function LessonAIInstructions() {
           <CardTitle>Lesson AI Instructions</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSave} className="space-y-6">
+          <div className="space-y-6">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div className="space-y-2">
                 <Label>Level</Label>
@@ -152,47 +183,76 @@ export default function LessonAIInstructions() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label>AI Instructions</Label>
-              <div className="relative">
+            <div className="space-y-4">
+              <Label>Instructions List</Label>
+
+              {/* Add New Instruction */}
+              <div className="flex gap-2">
                 <Textarea
-                  placeholder="Enter specific instructions for the AI reviewer (e.g., 'Focus on pronunciation', 'Roleplay as a doctor')."
-                  className="min-h-[200px] resize-y"
-                  value={instructions}
-                  onChange={(e) => setInstructions(e.target.value)}
-                  disabled={isLoading}
+                  placeholder="Add a new instruction (e.g. 'Focus on pronunciation')"
+                  className="min-h-[80px]"
+                  value={newInstruction}
+                  onChange={(e) => setNewInstruction(e.target.value)}
                 />
-                {isLoading && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-background/50">
-                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                <Button
+                  onClick={handleAdd}
+                  disabled={isSaving || !newInstruction.trim()}
+                  className="h-auto"
+                >
+                  Add
+                </Button>
+              </div>
+
+              {/* List of Instructions */}
+              <div className="space-y-3 mt-4">
+                {instructionsList.map((inst, idx) => (
+                  <div key={idx} className="flex items-start gap-3 p-3 rounded-lg border bg-muted/30 group">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary mt-0.5">
+                      {idx + 1}
+                    </span>
+
+                    {editingIndex === idx ? (
+                      <div className="flex-1 flex gap-2">
+                        <Textarea
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          className="min-h-[60px]"
+                        />
+                        <div className="flex flex-col gap-2">
+                          <Button size="sm" onClick={saveEdit}>Save</Button>
+                          <Button size="sm" variant="ghost" onClick={() => setEditingIndex(null)}>Cancel</Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <p className="flex-1 text-sm leading-relaxed whitespace-pre-wrap pt-0.5">{inst}</p>
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => startEdit(idx)}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => handleDelete(idx)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </>
+                    )}
                   </div>
+                ))}
+
+                {instructionsList.length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-8 italic border rounded-lg border-dashed">
+                    No specific instructions yet. Add one above.
+                  </p>
                 )}
               </div>
-              <p className="text-sm text-muted-foreground">
-                These instructions will be injected into the AI system prompt when
-                the user reviews this specific lesson.
-              </p>
-            </div>
 
-            <div className="flex gap-4">
-              <Button type="submit" disabled={isSaving || isLoading}>
-                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {isSaving ? 'Saving...' : 'Save Instructions'}
-              </Button>
-
-              <Button
-                type="button"
-                variant="destructive"
-                disabled={isSaving || isLoading || !instructions}
-                onClick={() => {
-                  setInstructions('');
-                  saveInstructions('');
-                }}
-              >
-                Delete Instructions
-              </Button>
+              {isSaving && (
+                <div className="flex items-center justify-end text-xs text-muted-foreground animate-pulse">
+                  <Loader2 className="mr-1 h-3 w-3 animate-spin" /> Saving changes...
+                </div>
+              )}
             </div>
-          </form>
+          </div>
         </CardContent>
       </Card>
 
@@ -270,8 +330,15 @@ function InstructionsList({ onEdit }: { onEdit: (level: string, day: string, les
                 <TableCell>{item.level}</TableCell>
                 <TableCell>Day {item.day}</TableCell>
                 <TableCell>{item.lessonType}</TableCell>
-                <TableCell className="truncate max-w-[400px]" title={item.instructions}>
-                  {item.instructions.substring(0, 100)}...
+                <TableCell className="max-w-[400px]" title={item.instructions}>
+                  <div className="flex flex-col">
+                    <span className="font-medium text-xs text-muted-foreground">
+                      {item.instructions.split('\n').filter(s => s.trim()).length} items
+                    </span>
+                    <span className="truncate text-sm">
+                      {item.instructions.split('\n')[0]}
+                    </span>
+                  </div>
                 </TableCell>
                 <TableCell className="flex gap-2">
                   <Button variant="outline" size="sm" onClick={() => onEdit(item.level, item.day, item.lessonType)}>
