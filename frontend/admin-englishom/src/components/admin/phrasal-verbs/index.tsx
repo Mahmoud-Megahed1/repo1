@@ -45,6 +45,8 @@ const PhrasalVerbs: FC = () => {
             <PhrasalVerbItem
               key={phrasalVerb.id}
               data={phrasalVerb} // Changed prop name to match component definition
+              levelId={levelId}
+              day={`${day}`}
             />
           ))}
       </ul>

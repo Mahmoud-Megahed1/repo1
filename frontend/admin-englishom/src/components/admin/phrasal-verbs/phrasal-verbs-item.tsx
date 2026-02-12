@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import useDeleteLesson from '@/hooks/use-delete-lesson';
 import { cn } from '@/lib/utils';
 import { PhrasalVerb } from '@/types/lessons.types';
+import { LevelId } from '@/types/user.types';
 import { useLocale, useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC, useState } from 'react';
@@ -27,10 +28,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: PhrasalVerb | any; // using any to handle potential backend mismatches during migration
+  levelId: string;
+  day: string;
 };
 
 const PhrasalVerbItem: FC<Props> = ({
   data: { id, examples, definitionAr, definitionEn, useCases },
+  levelId,
+  day,
 }) => {
   const locale = useLocale() as 'en' | 'ar';
   const t = useTranslations('Global');
@@ -41,10 +46,10 @@ const PhrasalVerbItem: FC<Props> = ({
   const safeUseCases = useCases || { en: [], ar: [] };
 
   const { mutate, isPending } = useDeleteLesson({
-    day: '1', // These props might need to be passed from parent if they vary
+    day,
     id,
-    levelId: 'LEVEL_A1', // These props might need to be passed from parent if they vary
-    lessonName: 'PHRASAL_VERBS', // Changed to PHRASAL_VERBS
+    levelId: levelId as LevelId,
+    lessonName: 'PHRASAL_VERBS',
     onSuccess() {
       setOpen(false);
     },

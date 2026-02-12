@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 type Props = {
   exampleAr: string;
   exampleEn: string;
-
   sentence: string;
   onFlip?: () => void;
 };

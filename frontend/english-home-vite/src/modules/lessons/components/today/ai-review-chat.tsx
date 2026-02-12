@@ -148,8 +148,8 @@ export default function AIReviewChat({
                         setMessages(historyMessages);
                     } else {
                         const greeting = isArabic
-                            ? "مرحباً! 🎉 أحسنت على إكمال الدرس. أنا مُعلّمك الذكي وسأراجع معك ما تعلمته. يمكنك الكتابة أو استخدام الميكروفون للتحدث معي. هيا نبدأ! ما أكثر شيء أعجبك في الدرس؟"
-                            : "Hello! 🎉 Great job completing the lesson! I'm your AI tutor and I'll help you review what you've learned. You can type or use the microphone to talk to me. Let's begin — what did you find most interesting in this lesson?";
+                            ? "مرحباً! 🎉 أحسنت على إكمال الدرس. أنا مُعلّمك الذكي وسأراجع معك ما تعلمته حول ( " + (lessonName.replace(/_/g, ' ')) + " ). يمكنك الكتابة أو استخدام الميكروفون للتحدث معي.\n\nاضغط على زر الميكروفون بالأسفل للتحدث، أو استخدم لوحة المفاتيح."
+                            : "Hello! 🎉 Great job completing the lesson! I'm your AI tutor and I'll help you review " + (lessonName.replace(/_/g, ' ')) + ". You can type or use the microphone to talk to me.\n\nTap the microphone below to speak, or use the keyboard.";
                         const initialMsg: Message = { role: 'assistant', content: greeting, status: 'sent' };
                         setMessages([initialMsg]);
                         speak(greeting, 0);
@@ -157,8 +157,8 @@ export default function AIReviewChat({
                 } catch (error) {
                     console.error("Failed to fetch chat history", error);
                     const greeting = isArabic
-                        ? "مرحباً! أنا هنا لمراجعة الدرس معك. اكتب رسالتك أو اضغط على الميكروفون."
-                        : "Hello! I'm here to review the lesson with you. Type your message or tap the microphone.";
+                        ? "مرحباً! أنا هنا لمراجعة الدرس معك. اضغط على الميكروفون للتحدث أو اكتب رسالتك."
+                        : "Hello! I'm here to review the lesson with you. Tap the microphone or type your message.";
                     setMessages([{ role: 'assistant', content: greeting, status: 'sent' }]);
                 }
             };
@@ -410,10 +410,15 @@ export default function AIReviewChat({
                                     <Bot size={14} />
                                 </div>
                                 <div className="bg-muted rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
-                                    <div className="flex items-center gap-1.5">
-                                        <span className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" />
-                                        <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce [animation-delay:150ms]" />
-                                        <span className="w-2 h-2 bg-pink-500 rounded-full animate-bounce [animation-delay:300ms]" />
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" />
+                                            <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce [animation-delay:150ms]" />
+                                            <span className="w-2 h-2 bg-pink-500 rounded-full animate-bounce [animation-delay:300ms]" />
+                                        </div>
+                                        <span className="text-xs text-muted-foreground font-medium">
+                                            {isArabic ? 'الذكاء الاصطناعي يفكر...' : 'AI is thinking...'}
+                                        </span>
                                     </div>
                                 </div>
                             </div>

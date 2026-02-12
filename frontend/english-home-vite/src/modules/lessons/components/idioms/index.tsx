@@ -6,23 +6,7 @@ import UseCasesCard from './use-cases-card';
 import NextLessonButton from '@components/next-lesson-button';
 import { useParams } from '@tanstack/react-router';
 import { useMarkTaskAsCompleted } from '../../mutations';
-import { type LevelId } from '../../types';
-export type IdiomLesson = {
-  id: string;
-  definitionEn: string;
-  definitionAr: string;
-  useCases: {
-    en: string[];
-    ar: string[];
-  };
-  examples: Array<{
-    exampleAr: string; // Idiom in Arabic
-    exampleEn: string; // Idiom in English
-    sentence: string; // Sentence using the idiom
-    soundSrc: string;
-    pictureSrc: string;
-  }>;
-};
+import { type IdiomLesson, type LevelId } from '../../types';
 
 type Props = {
   lesson: IdiomLesson;

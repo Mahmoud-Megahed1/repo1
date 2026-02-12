@@ -1,5 +1,4 @@
 import { cn } from '@lib/utils';
-import type { PhrasalVerbLesson } from '@modules/lessons/types';
 import { type FC } from 'react';
 import BackSide from './back-side';
 import FrontSide from './front-side';
@@ -7,12 +6,28 @@ import FrontSide from './front-side';
 type Props = {
   isFlipped: boolean;
   onFlip?: () => void;
-  phrasalVerb: Omit<PhrasalVerbLesson, 'id'>;
+  phrasalVerb: {
+    definitionAr: string;
+    definitionEn: string;
+    exampleAr: string;
+    exampleEn: string;
+    pictureSrc: string;
+    soundSrc: string;
+    sentence: string;
+  };
 };
 const PhrasalCard: FC<Props> = ({
   isFlipped,
   onFlip,
-  phrasalVerb: { exampleAr, exampleEn, pictureSrc, soundSrc, sentence },
+  phrasalVerb: {
+    definitionAr,
+    definitionEn,
+    exampleAr,
+    exampleEn,
+    pictureSrc,
+    soundSrc,
+    sentence,
+  },
 }) => {
   return (
     <div
@@ -24,8 +39,8 @@ const PhrasalCard: FC<Props> = ({
       )}
     >
       <FrontSide
-        exampleAr={exampleAr}
-        exampleEn={exampleEn}
+        definitionAr={definitionAr}
+        definitionEn={definitionEn}
         pictureSrc={pictureSrc}
         soundSrc={soundSrc}
         onFlip={onFlip}

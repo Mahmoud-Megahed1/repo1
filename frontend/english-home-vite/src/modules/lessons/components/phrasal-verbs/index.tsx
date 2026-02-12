@@ -65,7 +65,10 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
   }, [currentIndex]);
 
   if (!currentItem) return null;
-  const { exampleAr, exampleEn, pictureSrc, sentence, soundSrc } = currentItem;
+  const { definitionAr, definitionEn, examples } = currentItem;
+  const firstExample = examples[0] || { exampleAr: '', exampleEn: '', pictureSrc: '', sentence: '', soundSrc: '' };
+  const { exampleAr, exampleEn, pictureSrc, sentence, soundSrc } = firstExample;
+
   return (
     <div
       className={cn(
@@ -79,6 +82,8 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
         isFlipped={isFlipped}
         onFlip={() => setIsFlipped(!isFlipped)}
         phrasalVerb={{
+          definitionAr,
+          definitionEn,
           exampleAr,
           exampleEn,
           pictureSrc,
@@ -100,7 +105,7 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
         </CardHeader>
         <CardContent>
           <ul className="grid gap-2 sm:grid-cols-2 md:grid-cols-3">
-            {lesson.map(({ exampleEn, exampleAr }, index) => (
+            {lesson.map(({ definitionEn, definitionAr }, index) => (
               <li key={index}>
                 <Button
                   variant={'ghost'}
@@ -109,7 +114,7 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
                   })}
                   onClick={() => setCurrentIndex(index)}
                 >
-                  {locale === 'ar' ? exampleAr : exampleEn}
+                  {locale === 'ar' ? definitionAr : definitionEn}
                 </Button>
               </li>
             ))}

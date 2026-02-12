@@ -178,7 +178,7 @@ export class ChatService {
         messages: messages,
         model: 'gpt-4o-mini',
         temperature: 0.5,
-        max_tokens: 700,
+        max_tokens: 1000,
       });
 
       const reply = completion.choices[0].message.content;

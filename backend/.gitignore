@@ -62,3 +62,8 @@ uploads
 *.dio
 
 Frontend
+*.zip
+*.tar.gz
+testing_server.txt
+verify-mongo.js
+cleanup-orphaned-files.js

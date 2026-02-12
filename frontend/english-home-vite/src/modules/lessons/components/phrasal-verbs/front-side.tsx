@@ -7,15 +7,15 @@ import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
-  exampleAr: string;
-  exampleEn: string;
+  definitionAr: string;
+  definitionEn: string;
   pictureSrc: string;
   soundSrc: string;
   onFlip?: () => void;
 };
 const FrontSide: FC<Props> = ({
-  exampleAr,
-  exampleEn,
+  definitionAr,
+  definitionEn,
   pictureSrc,
   soundSrc,
   onFlip,
@@ -28,15 +28,15 @@ const FrontSide: FC<Props> = ({
         <img
           src={pictureSrc}
           className="mx-auto h-48 w-full rounded-xl object-contain"
-          alt={exampleAr}
+          alt={definitionAr}
         />
       </CardHeader>
       <CardContent className="flex flex-col items-center">
         <h3 lang="en" className="text-lg font-bold capitalize">
-          {exampleEn}
+          {definitionEn}
         </h3>
         <h3 lang="ar" className="text-lg font-bold">
-          {exampleAr}
+          {definitionAr}
         </h3>
         <div className="mt-6 flex items-center gap-4">
           <audio ref={ref} src={soundSrc} preload="auto" hidden />
