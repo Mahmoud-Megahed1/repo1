@@ -48,6 +48,12 @@ export default function AIReviewChat({
     const { t, i18n } = useTranslation();
     const isArabic = i18n.language === 'ar';
 
+    const [speechLang, setSpeechLang] = useState<'ar-SA' | 'en-US'>(isArabic ? 'ar-SA' : 'en-US');
+
+    useEffect(() => {
+        setSpeechLang(isArabic ? 'ar-SA' : 'en-US');
+    }, [isArabic]);
+
     const [messages, setMessages] = useState<Message[]>([]);
     const [isProcessing, setIsProcessing] = useState(false);
     const [isListening, setIsListening] = useState(false);
@@ -246,7 +252,7 @@ export default function AIReviewChat({
 
         const recognition = new SpeechRecognitionClass();
         recognition.continuous = false;
-        recognition.lang = isArabic ? 'ar-SA' : 'en-US';
+        recognition.lang = speechLang;
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
 
@@ -294,7 +300,7 @@ export default function AIReviewChat({
         } catch {
             toast.error(isArabic ? 'فشل تشغيل الميكروفون' : 'Failed to start microphone');
         }
-    }, [isArabic, stopSpeaking, handleSendMessage]);
+    }, [isArabic, stopSpeaking, handleSendMessage, speechLang]);
 
     const stopListening = useCallback(() => {
         if (recognitionRef.current) {
@@ -466,7 +472,7 @@ export default function AIReviewChat({
                             </>
                         ) : (
                             /* Voice input mode */
-                            <div className="flex-1 flex justify-center">
+                            <div className="flex-1 flex justify-center relative">
                                 <Button
                                     size="lg"
                                     variant={isListening ? "outline" : "default"}
@@ -483,6 +489,17 @@ export default function AIReviewChat({
                                         ? <StopCircle className="w-7 h-7 text-red-500 animate-pulse" />
                                         : <Mic className="w-7 h-7" />
                                     }
+                                </Button>
+
+                                {/* Language Toggle */}
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="absolute right-0 top-1/2 -translate-y-1/2 rounded-full px-3 text-xs font-semibold bg-muted/50 hover:bg-muted text-muted-foreground"
+                                    onClick={() => setSpeechLang(prev => prev === 'en-US' ? 'ar-SA' : 'en-US')}
+                                    title={isArabic ? 'تغيير لغة التحدث' : 'Change speaking language'}
+                                >
+                                    {speechLang === 'en-US' ? '🇺🇸 EN' : '🇸🇦 AR'}
                                 </Button>
                             </div>
                         )}
