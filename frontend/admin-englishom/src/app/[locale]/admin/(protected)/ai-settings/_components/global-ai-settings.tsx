@@ -188,13 +188,42 @@ export default function GlobalAISettings() {
                             </div>
                         )}
 
-                        <div className="mt-4 rounded-md bg-muted p-4">
-                            <h4 className="mb-2 text-sm font-semibold">
-                                Current Knowledge Context Size:
-                            </h4>
-                            <p className="font-mono text-xs text-muted-foreground">
-                                {(currentTheme.aiKnowledgeContext || '').length} characters
-                            </p>
+                        <div className="mt-4 rounded-md bg-muted p-4 space-y-3">
+                            <div className="flex items-center justify-between">
+                                <h4 className="text-sm font-semibold">
+                                    Knowledge Context
+                                </h4>
+                                <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                                    {(currentTheme.aiKnowledgeContext || '').length.toLocaleString()} characters
+                                </span>
+                            </div>
+
+                            {currentTheme.aiKnowledgeContext ? (
+                                <>
+                                    <div className="rounded border bg-background p-3 max-h-[200px] overflow-y-auto">
+                                        <p className="whitespace-pre-wrap text-xs text-muted-foreground leading-relaxed">
+                                            {currentTheme.aiKnowledgeContext.substring(0, 500)}
+                                            {currentTheme.aiKnowledgeContext.length > 500 && '...'}
+                                        </p>
+                                    </div>
+                                    <Button
+                                        variant="destructive"
+                                        size="sm"
+                                        onClick={() => {
+                                            if (confirm('Are you sure you want to clear the entire knowledge base? This cannot be undone.')) {
+                                                updateSettings({ aiKnowledgeContext: '' } as UpdateThemeDto);
+                                                setCurrentTheme({ ...currentTheme, aiKnowledgeContext: '' });
+                                            }
+                                        }}
+                                    >
+                                        Clear Knowledge Base
+                                    </Button>
+                                </>
+                            ) : (
+                                <p className="text-xs text-muted-foreground italic">
+                                    No knowledge base content uploaded yet. Upload a PDF or Word document above.
+                                </p>
+                            )}
                         </div>
                     </CardContent>
                 </Card>

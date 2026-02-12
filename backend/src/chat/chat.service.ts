@@ -85,14 +85,16 @@ export class ChatService {
           { role: 'user', content: userMessage },
         ],
         model: 'gpt-4o-mini',
-        temperature: 0.3, // Low temperature for strict adherence to context
-        max_tokens: 300,
+        temperature: 0.3,
+        max_tokens: 500,
       });
 
       return { reply: completion.choices[0].message.content };
     } catch (error) {
       console.error('OpenAI Error:', error);
-      throw new InternalServerErrorException('Failed to generate response');
+      return {
+        reply: 'I\'m sorry, I\'m having trouble right now. Please try again in a moment, or contact us at support@englishom.com for help.'
+      };
     }
   }
 
@@ -134,8 +136,8 @@ export class ChatService {
 
       // 2. Retrieve Chat History for Context
       const history = await this.getLessonReviewHistory(userId, params.levelName, params.day, params.lessonName);
-      // Format history for OpenAI (last 6 messages for context window)
-      const recentHistory = history.slice(-6).map(msg => ({
+      // Format history for OpenAI (last 10 messages for better context)
+      const recentHistory = history.slice(-10).map(msg => ({
         role: msg.role as 'user' | 'assistant' | 'system',
         content: msg.content
       }));
@@ -144,9 +146,19 @@ export class ChatService {
       let systemPromptWithContext = `${SYSTEM_PROMPT}
 
       CURRENT LESSON CONTEXT:
-      The user has just completed the following lesson. Use this content to guide the review. 
-      Ask questions about the vocabulary, sentences, or concepts found here.
+      The user has just completed the following lesson. Use this content to guide the review.
 
+      ## YOUR LESSON REVIEW STRATEGY:
+      1. **Start with encouragement** — congratulate the student on completing the lesson.
+      2. **Quiz vocabulary** — Pick 2-3 words from the lesson and ask the student to use them in sentences.
+      3. **Check comprehension** — Ask questions about the lesson content to verify understanding.
+      4. **Correct gently** — If the student makes a mistake, correct it kindly with the right answer and a brief explanation.
+      5. **Use spaced repetition** — Refer back to earlier answers in the conversation to reinforce learning.
+      6. **End each response with a question** — Keep the conversation going by asking a follow-up question.
+      7. **Be concise** — Keep responses 2-5 sentences maximum. Students learn better with short, focused interactions.
+      8. **Mix languages when helpful** — For Arabic-speaking students, you can explain grammar in Arabic while practicing English vocabulary.
+
+      LESSON DATA:
       ${lessonContextString}
 
       ${aiInstructions}
@@ -166,7 +178,7 @@ export class ChatService {
         messages: messages,
         model: 'gpt-4o-mini',
         temperature: 0.5,
-        max_tokens: 400,
+        max_tokens: 700,
       });
 
       const reply = completion.choices[0].message.content;
@@ -191,7 +203,10 @@ export class ChatService {
 
     } catch (error) {
       console.error('Lesson Review AI Error:', error);
-      throw new InternalServerErrorException('Failed to generate lesson review');
+      // Return a friendly error message instead of crashing
+      return {
+        reply: 'I\'m sorry, I\'m having trouble responding right now. Please try again in a moment. If the issue persists, please contact support.'
+      };
     }
   }
 }

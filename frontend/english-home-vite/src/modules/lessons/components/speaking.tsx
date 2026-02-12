@@ -24,6 +24,7 @@ import Loading from '../../../shared/components/analyzing-skeleton';
 import { SpeakingFeedback } from '../../../shared/components/speaking-feedback';
 import type { SpeakingResult, SpeakLesson } from '../types';
 import { useAiChatStore } from '@hooks/use-ai-chat-store';
+import { useTheme } from '@components/contexts/theme-context';
 
 type UserRecord = {
   sentence: string;
@@ -36,6 +37,7 @@ type Props = {
 };
 const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
   const { t } = useTranslation();
+  const { dynamicTheme } = useTheme();
   const { id: levelName, day, lessonName } = useParams({
     from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
   });
@@ -257,7 +259,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
         </ul>
 
         <div className="flex gap-2">
-          {allPassed && (
+          {allPassed && dynamicTheme?.showAIReviewChat !== false && (
             <Button
               variant="default"
               className="bg-indigo-600 hover:bg-indigo-700 text-white animate-in fade-in"

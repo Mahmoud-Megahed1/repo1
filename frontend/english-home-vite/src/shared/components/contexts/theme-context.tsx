@@ -13,6 +13,8 @@ interface DynamicTheme {
     primaryColor?: string;
     secondaryColor?: string;
   };
+  showSupportChat?: boolean;
+  showAIReviewChat?: boolean;
 }
 
 type ThemeProviderProps = {

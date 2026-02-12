@@ -200,8 +200,16 @@ export default function LessonAIInstructions() {
         onEdit={(level, day, lesson) => {
           setSelectedLevel(level as LevelId);
           setSelectedDay(day);
-          setSelectedLessonType(lesson as LessonsId);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+
+          const matchingLesson = LESSONS_LINKS.find(
+            (l) => l.id.toLowerCase() === lesson.toLowerCase()
+          );
+          if (matchingLesson) {
+            setSelectedLessonType(matchingLesson.id);
+          }
+
+          formRef.current?.scrollIntoView({ behavior: 'smooth' });
+          toast.info('Instruction loaded. Make changes above and click Save.');
         }}
       />
     </div>
@@ -218,7 +226,7 @@ function InstructionsList({ onEdit }: { onEdit: (level: string, day: string, les
 
   const { mutate: deleteInstruction } = useMutation({
     mutationFn: (params: { level_name: string, day: string, lesson_name: string }) =>
-      updateLessonMetadata({ ...params, lesson_name: params.lesson_name as LessonsId, aiInstructions: '' }),
+      updateLessonMetadata({ ...params, level_name: params.level_name as LevelId, lesson_name: params.lesson_name as LessonsId, aiInstructions: '' }),
     onSuccess: () => {
       toast.success('Instruction deleted');
       queryClient.invalidateQueries({ queryKey: ['all-instructions'] });

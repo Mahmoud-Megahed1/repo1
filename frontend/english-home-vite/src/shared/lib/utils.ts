@@ -50,22 +50,27 @@ export function maskEmail(email: string) {
   return `${firstChar}${stars}${twoLastChar}@${domain}`;
 }
 
-export async function convertWebmToWav(file: File): Promise<File> {
-  // Step 1: Read the .webm file as an ArrayBuffer
+export async function convertAudioToWav(file: File): Promise<File> {
+  // Step 1: Read the audio file as an ArrayBuffer (works with any format)
   const arrayBuffer = await file.arrayBuffer();
 
-  // Step 2: Decode audio data using Web Audio API
+  // Step 2: Decode audio data using Web Audio API (handles webm, mp4, ogg, etc.)
   const audioCtx = new AudioContext();
   const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+  await audioCtx.close();
 
   // Step 3: Convert AudioBuffer to WAV ArrayBuffer
   const wavBuffer = audioBufferToWav(audioBuffer);
 
   // Step 4: Create a File object for the WAV
-  return new File([wavBuffer], file.name.replace(/\.webm$/, '.wav'), {
+  const baseName = file.name.replace(/\.[^.]+$/, '');
+  return new File([wavBuffer], `${baseName}.wav`, {
     type: 'audio/wav',
   });
 }
+
+// Keep backward compatibility
+export const convertWebmToWav = convertAudioToWav;
 
 // Utility: Convert AudioBuffer → WAV ArrayBuffer
 function audioBufferToWav(buffer: AudioBuffer): ArrayBuffer {

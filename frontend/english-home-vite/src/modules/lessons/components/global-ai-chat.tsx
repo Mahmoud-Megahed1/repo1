@@ -1,4 +1,5 @@
 import { useAiChatStore } from '@hooks/use-ai-chat-store';
+import { useTheme } from '@components/contexts/theme-context';
 import { useParams } from '@tanstack/react-router';
 import { Button } from '@ui/button';
 import { Bot, Sparkles } from 'lucide-react';
@@ -13,10 +14,14 @@ type Props = {
 export function GlobalAiChat({ isLessonCompleted = false }: Props) {
     const { t } = useTranslation();
     const { isOpen, setIsOpen } = useAiChatStore();
+    const { dynamicTheme } = useTheme();
     const params = useParams({ strict: false });
 
     // Only show if we have valid lesson context
     if (!params.id || !params.day || !params.lessonName) return null;
+
+    // Respect admin visibility toggle
+    if (dynamicTheme?.showAIReviewChat === false) return null;
 
     return (
         <>
