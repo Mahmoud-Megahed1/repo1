@@ -71,7 +71,12 @@ export default function AIReviewChat({
     const speak = useCallback((text: string, index: number) => {
         if (!synth) return;
         synth.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
+        const cleanText = text
+            .replace(/[#*`_]/g, '') // Remove markdown symbols
+            .replace(/\n\s*\n/g, '. ') // Replace double newlines with pause
+            .trim();
+
+        const utterance = new SpeechSynthesisUtterance(cleanText);
         utterance.lang = isArabic ? 'ar-SA' : 'en-US';
         utterance.rate = 0.9;
         utterance.pitch = 1.0;
