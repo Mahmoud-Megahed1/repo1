@@ -2,15 +2,17 @@ import useItemsPagination from '@hooks/use-items-pagination';
 import { cn } from '@lib/utils';
 import { Button } from '@ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@ui/card';
-import { useEffect, useState, type ComponentProps, type FC } from 'react';
+import { useEffect, type ComponentProps, type FC } from 'react';
 import type { PhrasalVerbLesson } from '../../types';
-import PhrasalCard from './phrasal-card';
 import { useTranslation } from 'react-i18next';
 import useLocale from '@hooks/use-locale';
 import NextLessonButton from '@components/next-lesson-button';
 import { useParams } from '@tanstack/react-router';
 import { useMarkTaskAsCompleted } from '../../mutations';
 import { type LevelId } from '../../types';
+import DefinitionCard from './definition-card';
+import UseCasesCard from './use-cases-card';
+import ExamplesCard from './examples-card';
 
 type Props = {
   lesson: PhrasalVerbLesson[];
@@ -18,7 +20,6 @@ type Props = {
 const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
   const { t } = useTranslation();
   const locale = useLocale();
-  const [isFlipped, setIsFlipped] = useState(false);
 
   const searchParams = new URLSearchParams(window.location.search);
   let defaultIndex = searchParams.get('index') || 0;
@@ -44,10 +45,6 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
 
   const {
     currentItem,
-    next,
-    prev,
-    hasNextItems,
-    hasPrevItems,
     currentIndex,
     setCurrentIndex,
     isLast,
@@ -65,55 +62,33 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
   }, [currentIndex]);
 
   if (!currentItem) return null;
-  const { definitionAr, definitionEn, examples } = currentItem;
-  const firstExample = examples[0] || { exampleAr: '', exampleEn: '', pictureSrc: '', sentence: '', soundSrc: '' };
-  const { exampleAr, exampleEn, pictureSrc, sentence, soundSrc } = firstExample;
+
+  const useCases = locale === 'ar' ? currentItem.useCases.ar : currentItem.useCases.en;
 
   return (
     <div
       className={cn(
-        'mx-auto flex w-full max-w-2xl flex-col space-y-8 pb-10',
+        'mx-auto flex w-full max-w-4xl flex-col space-y-8 pb-10',
         className
       )}
       {...props}
     >
-      <PhrasalCard
-        key={currentIndex}
-        isFlipped={isFlipped}
-        onFlip={() => setIsFlipped(!isFlipped)}
-        phrasalVerb={{
-          definitionAr,
-          definitionEn,
-          exampleAr,
-          exampleEn,
-          pictureSrc,
-          soundSrc,
-          sentence,
-        }}
-      />
-      <div className="flex justify-between items-center gap-4">
-        <Button
-          variant={'outline'}
-          onClick={prev}
-          disabled={!hasPrevItems}
-          className="h-12 px-8 font-semibold transition-all hover:bg-primary/5 active:scale-95"
-        >
-          {t('Global.prev')}
-        </Button>
-        <div className="text-muted-foreground text-sm font-medium">
-          {currentIndex + 1} / {lesson.length}
-        </div>
-        <Button
-          onClick={next}
-          variant={'outline'}
-          disabled={!hasNextItems}
-          className="h-12 px-8 font-semibold transition-all hover:bg-primary/5 active:scale-95"
-        >
-          {t('Global.next')}
-        </Button>
+      <div className="flex flex-col space-y-8">
+        <DefinitionCard
+          definitionAr={currentItem.definitionAr}
+          definitionEn={currentItem.definitionEn}
+        />
+        <UseCasesCard useCases={useCases} />
+        <ExamplesCard examples={currentItem.examples} />
       </div>
 
-      <Card className="mt-20 border-border/50 bg-secondary/30 backdrop-blur-sm">
+      <div className="flex justify-center items-center gap-4 py-4">
+        <div className="text-muted-foreground text-sm font-medium border px-4 py-2 rounded-full bg-secondary/50">
+          {currentIndex + 1} / {lesson.length}
+        </div>
+      </div>
+
+      <Card className="mt-8 border-border/50 bg-secondary/30 backdrop-blur-sm">
         <CardHeader className="pb-4">
           <CardTitle className="text-center text-lg">{t('Global.otherPhrasalVerbs')}</CardTitle>
         </CardHeader>
@@ -140,7 +115,12 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
           </ul>
         </CardContent>
       </Card>
-      {isLast && <NextLessonButton lessonName="IDIOMS" className="mt-6" onClick={handleComplete} />}
+
+      {isLast && (
+        <div className="flex justify-end mt-10">
+          <NextLessonButton lessonName="IDIOMS" onClick={handleComplete} />
+        </div>
+      )}
     </div>
   );
 };

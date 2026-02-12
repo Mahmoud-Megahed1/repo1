@@ -58,108 +58,49 @@ const PhrasalVerbItem: FC<Props> = ({
   return (
     <li
       className={cn(
-        'flex flex-col gap-6 rounded-xl bg-card border border-border/50 p-6 text-card-foreground shadow-lg transition-all hover:shadow-xl',
+        'flex flex-col gap-4 rounded-lg bg-secondary p-4 text-secondary-foreground shadow-md',
         {
           'animate-pulse duration-700': isPending,
         },
       )}
     >
-      <div className="flex flex-col sm:flex-row justify-between items-center bg-muted/30 rounded-lg p-5 border border-border/30">
-        <div className="flex flex-col gap-1 w-full sm:w-auto">
-          <span className="text-xs font-bold text-primary uppercase tracking-wider">{t('definition')}</span>
-          <h3 className="text-2xl font-bold">
-            {definition}
-          </h3>
-        </div>
-        <div className="flex gap-2 mt-4 sm:mt-0">
-          <div className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase ring-1 ring-primary/20">
-            {definitionEn}
+      <h3 className="mx-auto mb-2 mt-4 rounded-lg bg-muted-foreground/10 p-4 text-xl font-semibold">
+        {t('definition')}: {definition}
+      </h3>
+      <b>{t('useCases')}:</b>
+      <ul className="mb-4 list-inside list-disc text-foreground">
+        {safeUseCases[locale].map((useCase: string, index: number) => (
+          <li key={index}>{useCase}</li>
+        ))}
+      </ul>
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {safeExamples.map((example: any, index: number) => (
+          <div
+            key={index}
+            className="flex flex-col rounded-md bg-muted-foreground/10"
+          >
+            {example.pictureSrc && (
+              <img
+                src={example.pictureSrc}
+                alt={example.sentence}
+                className="h-auto w-full rounded-md"
+              />
+            )}
+            <article className="flex flex-1 flex-col gap-2 p-4">
+              <p lang="en" className="break-words text-md">
+                <b>Example (En):</b> {example.exampleEn}
+              </p>
+              <p className="font-cairo text-md">
+                <b>Example (Ar):</b> {example.exampleAr}
+              </p>
+              <p lang="en" className="mb-8">
+                <b>Sentence:</b> {example.sentence}
+              </p>
+              <AudioPlayer src={example.soundSrc} className="mt-auto" />
+            </article>
           </div>
-        </div>
+        ))}
       </div>
-
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="space-y-4">
-          <h4 className="text-sm font-bold flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-blue-500" />
-            Use Cases (English)
-          </h4>
-          <Card className="bg-muted/10 border-dashed">
-            <CardContent className="p-4">
-              <ul className="list-inside list-disc space-y-2">
-                {safeUseCases.en?.map((useCase: string, index: number) => (
-                  <li key={index} className="text-sm leading-relaxed text-muted-foreground">
-                    {useCase}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-        <div className="space-y-4">
-          <h4 className="text-sm font-bold flex items-center justify-end gap-2">
-            Use Cases (Arabic)
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
-          </h4>
-          <Card className="bg-muted/10 border-dashed">
-            <CardContent className="p-4">
-              <ul className="list-inside list-disc space-y-2 text-right" dir="rtl">
-                {safeUseCases.ar?.map((useCase: string, index: number) => (
-                  <li key={index} className="text-sm leading-relaxed text-muted-foreground">
-                    {useCase}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="examples" className="border-none">
-          <AccordionTrigger className="hover:no-underline py-3 px-4 bg-secondary/30 rounded-lg group">
-            <span className="flex items-center gap-2 font-bold">
-              {t('examples')}
-              <span className="bg-primary text-primary-foreground px-2 py-0.5 rounded-full text-[10px]">
-                {safeExamples.length}
-              </span>
-            </span>
-          </AccordionTrigger>
-          <AccordionContent className="pt-4">
-            <div className="grid gap-6 md:grid-cols-2">
-              {safeExamples.map((example: any, index: number) => (
-                <Card key={index} className="overflow-hidden border-border/40 shadow-sm transition-hover hover:shadow-md">
-                  <div className="relative aspect-video w-full bg-muted/20">
-                    {example.pictureSrc && (
-                      <Image
-                        src={example.pictureSrc}
-                        alt={example.sentence || 'Example image'}
-                        fill
-                        className="object-contain p-2"
-                      />
-                    )}
-                  </div>
-                  <CardContent className="space-y-4 p-5">
-                    <div className="border-l-4 border-primary pl-4 py-1">
-                      <p className="font-bold text-lg">{example.exampleEn}</p>
-                      <p className="text-sm font-medium text-muted-foreground/80">
-                        {example.exampleAr}
-                      </p>
-                    </div>
-                    <div className="rounded-lg bg-muted/40 p-4 text-sm font-medium leading-relaxed italic border border-border/50">
-                      "{example.sentence}"
-                    </div>
-                    <div className="pt-2">
-                      <AudioPlayer src={example.soundSrc} />
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogTrigger asChild>
           <Button
