@@ -58,85 +58,100 @@ const PhrasalVerbItem: FC<Props> = ({
   return (
     <li
       className={cn(
-        'flex flex-col gap-4 rounded-lg bg-secondary p-4 text-secondary-foreground shadow-md',
+        'flex flex-col gap-6 rounded-xl bg-card border border-border/50 p-6 text-card-foreground shadow-lg transition-all hover:shadow-xl',
         {
           'animate-pulse duration-700': isPending,
         },
       )}
     >
-      <div className="flex justify-between items-start">
-        <h3 className="mb-2 mt-4 rounded-lg bg-muted-foreground/10 p-4 text-xl font-semibold flex-1">
-          {t('definition')}: {definition}
-        </h3>
+      <div className="flex flex-col sm:flex-row justify-between items-center bg-muted/30 rounded-lg p-5 border border-border/30">
+        <div className="flex flex-col gap-1 w-full sm:w-auto">
+          <span className="text-xs font-bold text-primary uppercase tracking-wider">{t('definition')}</span>
+          <h3 className="text-2xl font-bold">
+            {definition}
+          </h3>
+        </div>
+        <div className="flex gap-2 mt-4 sm:mt-0">
+          <div className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase ring-1 ring-primary/20">
+            {definitionEn}
+          </div>
+        </div>
       </div>
 
-      <div className="my-4 h-[1px] w-full bg-border" />
-
-      <b>{t('useCases')}:</b>
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Use Cases (EN)</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-inside list-disc space-y-1">
-              {safeUseCases.en?.map((useCase: string, index: number) => (
-                <li key={index} className="text-sm">
-                  {useCase}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base text-right">
-              Use Cases (AR)
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-inside list-disc space-y-1 text-right" dir="rtl">
-              {safeUseCases.ar?.map((useCase: string, index: number) => (
-                <li key={index} className="text-sm">
-                  {useCase}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+      <div className="grid gap-6 md:grid-cols-2">
+        <div className="space-y-4">
+          <h4 className="text-sm font-bold flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-blue-500" />
+            Use Cases (English)
+          </h4>
+          <Card className="bg-muted/10 border-dashed">
+            <CardContent className="p-4">
+              <ul className="list-inside list-disc space-y-2">
+                {safeUseCases.en?.map((useCase: string, index: number) => (
+                  <li key={index} className="text-sm leading-relaxed text-muted-foreground">
+                    {useCase}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="space-y-4">
+          <h4 className="text-sm font-bold flex items-center justify-end gap-2">
+            Use Cases (Arabic)
+            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+          </h4>
+          <Card className="bg-muted/10 border-dashed">
+            <CardContent className="p-4">
+              <ul className="list-inside list-disc space-y-2 text-right" dir="rtl">
+                {safeUseCases.ar?.map((useCase: string, index: number) => (
+                  <li key={index} className="text-sm leading-relaxed text-muted-foreground">
+                    {useCase}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
-      {/* Examples Accordion */}
       <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="examples">
-          <AccordionTrigger>
-            {t('examples')} ({safeExamples.length})
+        <AccordionItem value="examples" className="border-none">
+          <AccordionTrigger className="hover:no-underline py-3 px-4 bg-secondary/30 rounded-lg group">
+            <span className="flex items-center gap-2 font-bold">
+              {t('examples')}
+              <span className="bg-primary text-primary-foreground px-2 py-0.5 rounded-full text-[10px]">
+                {safeExamples.length}
+              </span>
+            </span>
           </AccordionTrigger>
-          <AccordionContent>
-            <div className="grid gap-4 pt-4 md:grid-cols-2">
+          <AccordionContent className="pt-4">
+            <div className="grid gap-6 md:grid-cols-2">
               {safeExamples.map((example: any, index: number) => (
-                <Card key={index} className="overflow-hidden">
-                  <div className="relative aspect-video w-full">
+                <Card key={index} className="overflow-hidden border-border/40 shadow-sm transition-hover hover:shadow-md">
+                  <div className="relative aspect-video w-full bg-muted/20">
                     {example.pictureSrc && (
                       <Image
                         src={example.pictureSrc}
                         alt={example.sentence || 'Example image'}
                         fill
-                        className="object-cover"
+                        className="object-contain p-2"
                       />
                     )}
                   </div>
-                  <CardContent className="space-y-4 p-4">
-                    <div>
-                      <p className="font-medium">{example.exampleEn}</p>
-                      <p className="text-sm text-muted-foreground">
+                  <CardContent className="space-y-4 p-5">
+                    <div className="border-l-4 border-primary pl-4 py-1">
+                      <p className="font-bold text-lg">{example.exampleEn}</p>
+                      <p className="text-sm font-medium text-muted-foreground/80">
                         {example.exampleAr}
                       </p>
                     </div>
-                    <div className="rounded-md bg-muted p-3 text-sm italic">
+                    <div className="rounded-lg bg-muted/40 p-4 text-sm font-medium leading-relaxed italic border border-border/50">
                       "{example.sentence}"
                     </div>
-                    <AudioPlayer src={example.soundSrc} />
+                    <div className="pt-2">
+                      <AudioPlayer src={example.soundSrc} />
+                    </div>
                   </CardContent>
                 </Card>
               ))}

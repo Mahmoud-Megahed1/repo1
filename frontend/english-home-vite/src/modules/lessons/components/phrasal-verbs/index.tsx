@@ -72,7 +72,7 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
   return (
     <div
       className={cn(
-        'mx-auto flex w-full max-w-xl flex-col space-y-4',
+        'mx-auto flex w-full max-w-2xl flex-col space-y-8 pb-10',
         className
       )}
       {...props}
@@ -91,30 +91,49 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
           sentence,
         }}
       />
-      <div className="inline-flex justify-between gap-2">
-        <Button variant={'outline'} onClick={prev} disabled={!hasPrevItems}>
+      <div className="flex justify-between items-center gap-4">
+        <Button
+          variant={'outline'}
+          onClick={prev}
+          disabled={!hasPrevItems}
+          className="h-12 px-8 font-semibold transition-all hover:bg-primary/5 active:scale-95"
+        >
           {t('Global.prev')}
         </Button>
-        <Button onClick={next} variant={'outline'} disabled={!hasNextItems}>
+        <div className="text-muted-foreground text-sm font-medium">
+          {currentIndex + 1} / {lesson.length}
+        </div>
+        <Button
+          onClick={next}
+          variant={'outline'}
+          disabled={!hasNextItems}
+          className="h-12 px-8 font-semibold transition-all hover:bg-primary/5 active:scale-95"
+        >
           {t('Global.next')}
         </Button>
       </div>
-      <Card className="mt-16 border-none">
-        <CardHeader>
-          <CardTitle>{t('Global.otherPhrasalVerbs')}</CardTitle>
+
+      <Card className="mt-20 border-border/50 bg-secondary/30 backdrop-blur-sm">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-center text-lg">{t('Global.otherPhrasalVerbs')}</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="grid gap-2 sm:grid-cols-2 md:grid-cols-3">
+          <ul className="flex flex-wrap items-center justify-center gap-3">
             {lesson.map(({ definitionEn, definitionAr }, index) => (
-              <li key={index}>
+              <li key={index} className="w-full sm:w-auto">
                 <Button
                   variant={'ghost'}
-                  className={cn('bg-accent w-full capitalize', {
-                    'ring-primary ring-2 ring-offset-1': index === currentIndex,
-                  })}
+                  className={cn(
+                    'bg-background hover:bg-accent border border-border/50 h-auto py-2 px-4 transition-all !normal-case text-start h-full w-full',
+                    {
+                      'ring-primary bg-primary/5 border-primary/50 font-bold ring-1': index === currentIndex,
+                    }
+                  )}
                   onClick={() => setCurrentIndex(index)}
                 >
-                  {locale === 'ar' ? definitionAr : definitionEn}
+                  <span className="text-sm">
+                    {locale === 'ar' ? definitionAr : definitionEn}
+                  </span>
                 </Button>
               </li>
             ))}
