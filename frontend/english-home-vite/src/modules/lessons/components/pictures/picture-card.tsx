@@ -45,10 +45,10 @@ const PictureCard: FC<Props> = ({
   }, [isMobile]);
   return (
     <div className="flex flex-col gap-4 md:w-2/3">
-      <div className="relative flex w-full items-center justify-center overflow-hidden rounded-md bg-black/5 dark:bg-white/5">
+      <div className="relative flex w-fit mx-auto items-center justify-center overflow-hidden rounded-md bg-black/5 dark:bg-white/5">
         <img
           src={pictureSrc}
-          className="h-auto w-full max-w-full md:max-w-[80%] md:max-h-[400px] rounded-md object-contain"
+          className="h-auto w-full max-w-full md:max-h-[400px] rounded-md object-contain"
           alt={wordEn}
         />
         <Button
