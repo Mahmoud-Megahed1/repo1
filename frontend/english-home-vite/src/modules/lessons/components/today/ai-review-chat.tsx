@@ -259,8 +259,9 @@ export default function AIReviewChat({
 
             if (event.error === 'network') {
                 toast.error(isArabic
-                    ? 'خطأ في الشبكة. تحقق من اتصالك بالإنترنت.'
-                    : 'Network error. Check your internet connection.');
+                    ? 'خطأ في الشبكة (أو المتصفح يحظر الخدمة). تم التحويل للكتابة تلقائياً.'
+                    : 'Network/Browser error. Switched to text mode automatically.');
+                setInputMode('text');
             } else if (event.error === 'not-allowed') {
                 toast.error(isArabic
                     ? 'تم رفض إذن الميكروفون. اسمح بالوصول من إعدادات المتصفح.'
