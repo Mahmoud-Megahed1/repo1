@@ -82,40 +82,6 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
         <ExamplesCard examples={currentItem.examples} />
       </div>
 
-      <div className="flex justify-center items-center gap-4 py-4">
-        <div className="text-muted-foreground text-sm font-medium border px-4 py-2 rounded-full bg-secondary/50">
-          {currentIndex + 1} / {lesson.length}
-        </div>
-      </div>
-
-      <Card className="mt-8 border-border/50 bg-secondary/30 backdrop-blur-sm">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-center text-lg">{t('Global.otherPhrasalVerbs')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="flex flex-wrap items-center justify-center gap-3">
-            {lesson.map(({ definitionEn, definitionAr }, index) => (
-              <li key={index} className="w-full sm:w-auto">
-                <Button
-                  variant={'ghost'}
-                  className={cn(
-                    'bg-background hover:bg-accent border border-border/50 h-auto py-2 px-4 transition-all !normal-case text-start h-full w-full',
-                    {
-                      'ring-primary bg-primary/5 border-primary/50 font-bold ring-1': index === currentIndex,
-                    }
-                  )}
-                  onClick={() => setCurrentIndex(index)}
-                >
-                  <span className="text-sm">
-                    {locale === 'ar' ? definitionAr : definitionEn}
-                  </span>
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
-
       {isLast && (
         <div className="flex justify-end mt-10">
           <NextLessonButton lessonName="IDIOMS" onClick={handleComplete} />
