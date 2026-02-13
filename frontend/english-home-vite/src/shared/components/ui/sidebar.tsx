@@ -206,7 +206,6 @@ function Sidebar({
 
   return (
     <div
-      key={side}
       className="text-sidebar-foreground group peer hidden md:block"
       data-state={state}
       data-collapsible={state === 'collapsed' ? collapsible : ''}
