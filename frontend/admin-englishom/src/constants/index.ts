@@ -28,24 +28,24 @@ export const LESSONS_LINKS: Array<{
   id: LessonsId;
   icon: LucideIcon;
 }> = [
-  { id: 'READ', href: '#', label: 'Read', icon: Icons.BookOpenText },
-  { id: 'PICTURES', href: '#', label: 'Pictures', icon: Icons.Image },
-  { id: 'Q_A', href: '#', label: 'Q&A', icon: Icons.MessageCircleQuestion },
-  { id: 'GRAMMAR', href: '#', label: 'Grammar', icon: Icons.ListChecks },
-  { id: 'LISTEN', href: '#', label: 'Listen', icon: Icons.Ear },
-  // { id: 'TODAY', href: '#', label: 'Today', icon: Icons.Calendar },
-  { id: 'WRITE', href: '#', label: 'Write', icon: Icons.PencilLine },
-  { id: 'SPEAK', href: '#', label: 'Speak', icon: Icons.Speech },
-  { id: 'TODAY', href: '#', label: 'Today', icon: Icons.Calendar },
-  { id: 'DAILY_TEST', href: '#', label: 'Daily Test', icon: Icons.NotebookPen },
-  {
-    id: 'PHRASAL_VERBS',
-    href: '#',
-    label: 'Phrasal Verbs',
-    icon: Icons.CaseSensitive,
-  },
-  { id: 'IDIOMS', href: '#', label: 'Idioms', icon: Icons.Search },
-];
+    { id: 'READ', href: '#', label: 'Read', icon: Icons.BookOpenText },
+    { id: 'PICTURES', href: '#', label: 'Pictures', icon: Icons.Image },
+    { id: 'Q_A', href: '#', label: 'Q&A', icon: Icons.MessageCircleQuestion },
+    { id: 'GRAMMAR', href: '#', label: 'Grammar', icon: Icons.ListChecks },
+    { id: 'LISTEN', href: '#', label: 'Listen', icon: Icons.Ear },
+    // { id: 'TODAY', href: '#', label: 'Today', icon: Icons.Calendar },
+    { id: 'WRITE', href: '#', label: 'Write', icon: Icons.PencilLine },
+    { id: 'SPEAK', href: '#', label: 'Speak', icon: Icons.Speech },
+    { id: 'TODAY', href: '#', label: 'Today', icon: Icons.Calendar },
+    { id: 'DAILY_TEST', href: '#', label: 'Daily Test', icon: Icons.NotebookPen },
+    {
+      id: 'PHRASAL_VERBS',
+      href: '#',
+      label: 'Phrasal Verbs',
+      icon: Icons.CaseSensitive,
+    },
+    { id: 'IDIOMS', href: '#', label: 'Idioms', icon: Icons.Search },
+  ];
 
 export enum LevelIdEnum {
   LEVEL_A1 = 'LEVEL_A1',
