@@ -213,7 +213,7 @@ export const ChatWidget = () => {
     };
 
     return createPortal(
-        <div className="fixed bottom-36 right-6 z-[100] flex flex-col items-end gap-2 font-cairo pointer-events-none" dir={isArabic ? 'rtl' : 'ltr'}>
+        <div className="fixed bottom-36 end-6 z-[100] flex flex-col items-end gap-2 font-cairo pointer-events-none" dir={isArabic ? 'rtl' : 'ltr'}>
             {/* Chat Window */}
             <div
                 className={cn(
@@ -323,11 +323,10 @@ export const ChatWidget = () => {
                 </div>
             </div>
 
-            {/* Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={cn(
-                    "h-14 w-14 rounded-full shadow-xl transition-all duration-300 flex items-center justify-center z-50 pointer-events-auto",
+                    "h-14 w-14 rounded-full shadow-xl transition-all duration-300 flex items-center justify-center z-50 pointer-events-auto relative",
                     "bg-[#EFBF04] hover:bg-[#d9ad04] text-black border-2 border-white dark:border-zinc-800 hover:scale-110",
                     isOpen && "rotate-90 scale-0 opacity-0 absolute"
                 )}
@@ -335,7 +334,7 @@ export const ChatWidget = () => {
                 <MessageCircle className="h-7 w-7" />
                 {/* Notification dot */}
                 {!isOpen && messages.length === 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white dark:border-zinc-800 animate-pulse" />
+                    <span className="absolute -top-0.5 -end-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white dark:border-zinc-800 animate-pulse" />
                 )}
             </button>
 
@@ -343,7 +342,7 @@ export const ChatWidget = () => {
             <button
                 onClick={() => setIsOpen(false)}
                 className={cn(
-                    "h-14 w-14 rounded-full shadow-xl transition-all duration-300 flex items-center justify-center absolute bottom-0 right-0 z-50 pointer-events-auto",
+                    "h-14 w-14 rounded-full shadow-xl transition-all duration-300 flex items-center justify-center absolute bottom-0 end-0 z-50 pointer-events-auto",
                     "bg-gray-100 hover:bg-gray-200 text-gray-600 dark:bg-zinc-700 dark:text-gray-300",
                     !isOpen && "scale-0 opacity-0 pointer-events-none"
                 )}
