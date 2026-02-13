@@ -1,11 +1,9 @@
 import useItemsPagination from '@hooks/use-items-pagination';
 import { cn } from '@lib/utils';
-import { Button } from '@ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@ui/card';
 import { useEffect, type ComponentProps, type FC } from 'react';
 import type { PhrasalVerbLesson } from '../../types';
-import { useTranslation } from 'react-i18next';
 import useLocale from '@hooks/use-locale';
+import { useTranslation } from 'react-i18next';
 import NextLessonButton from '@components/next-lesson-button';
 import { useParams } from '@tanstack/react-router';
 import { useMarkTaskAsCompleted } from '../../mutations';
@@ -17,8 +15,9 @@ import ExamplesCard from './examples-card';
 type Props = {
   lesson: PhrasalVerbLesson[];
 } & ComponentProps<'div'>;
+
 const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
-  const { t } = useTranslation();
+  useTranslation();
   const locale = useLocale();
 
   const searchParams = new URLSearchParams(window.location.search);
@@ -43,12 +42,10 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
     }
   };
 
-  const {
-    currentItem,
-    currentIndex,
-    setCurrentIndex,
-    isLast,
-  } = useItemsPagination(lesson, defaultIndex);
+  const { currentItem, currentIndex, isLast } = useItemsPagination(
+    lesson,
+    defaultIndex
+  );
 
   // Update search params when current index changes
   useEffect(() => {
