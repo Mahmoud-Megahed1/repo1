@@ -31,7 +31,6 @@ export default function AppSidebar({ items = [], user, ...props }: Props) {
 
   return (
     <Sidebar
-      key={locale}
       collapsible="icon"
       side={locale === 'ar' ? 'right' : 'left'}
       {...props}
