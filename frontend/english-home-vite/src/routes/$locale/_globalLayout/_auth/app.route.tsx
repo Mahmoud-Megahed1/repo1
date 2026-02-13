@@ -4,7 +4,7 @@ import AppSidebar from '@components/sidebar';
 import { useBreadcrumbStore } from '@hooks/use-breadcrumb-store';
 import { useSidebarStore } from '@hooks/use-sidebar-store';
 import { MAIN_SIDEBAR_ITEMS } from '@shared/constants';
-import { createFileRoute, Outlet, useLocation } from '@tanstack/react-router';
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { SidebarInset, SidebarProvider } from '@ui/sidebar';
 import BookLoader from '@components/ui/book-loader';
 
@@ -27,14 +27,13 @@ export function RouteComponent() {
   const sidebarItems = useSidebarStore((state) => state.items);
   const setSidebarItems = useSidebarStore((state) => state.setItems);
   const { user } = useAuth();
-  const location = useLocation();
 
   useEffect(() => {
     // Admin specific sidebar items can be added here if needed in the future
   }, [user, setSidebarItems, sidebarItems]);
 
   return (
-    <SidebarProvider key={location.pathname.split('/')[1]}>
+    <SidebarProvider>
       <AppSidebar
         user={{
           email: user?.email || 'user@example.com',

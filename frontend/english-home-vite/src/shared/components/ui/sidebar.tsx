@@ -229,9 +229,10 @@ function Sidebar({
         data-slot="sidebar-container"
         className={cn(
           'w-(--sidebar-width) fixed inset-y-0 z-10 hidden h-svh transition-[width] duration-200 ease-linear md:flex',
-          side === 'left'
-            ? 'left-0 right-auto group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
-            : 'right-0 left-auto group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
+          'start-0 group-data-[side=right]:start-auto group-data-[side=right]:end-0',
+          'group-data-[collapsible=offcanvas]:start-[calc(var(--sidebar-width)*-1)]',
+          'group-data-[side=right]:group-data-[collapsible=offcanvas]:start-auto',
+          'group-data-[side=right]:group-data-[collapsible=offcanvas]:end-[calc(var(--sidebar-width)*-1)]',
           // Adjust the padding for floating and inset variants.
           variant === 'floating' || variant === 'inset'
             ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]'
@@ -291,13 +292,13 @@ function SidebarRail({ className, ...props }: React.ComponentProps<'button'>) {
       title="Toggle Sidebar"
       className={cn(
         'hover:after:bg-sidebar-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex',
-        'group-data-[side=left]:-right-4 group-data-[side=left]:left-auto',
-        'group-data-[side=right]:left-0 group-data-[side=right]:right-auto',
+        'group-data-[side=left]:end-0 group-data-[side=left]:start-auto group-data-[side=left]:translate-x-1/2',
+        'group-data-[side=right]:start-0 group-data-[side=right]:end-auto group-data-[side=right]:-translate-x-1/2',
         'in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize',
         '[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
         'hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full',
-        '[[data-side=left][data-collapsible=offcanvas]_&]:-right-2 [[data-side=left][data-collapsible=offcanvas]_&]:left-auto',
-        '[[data-side=right][data-collapsible=offcanvas]_&]:-left-2 [[data-side=right][data-collapsible=offcanvas]_&]:right-auto',
+        '[[data-side=left][data-collapsible=offcanvas]_&]:end-0 [[data-side=left][data-collapsible=offcanvas]_&]:start-auto',
+        '[[data-side=right][data-collapsible=offcanvas]_&]:start-0 [[data-side=right][data-collapsible=offcanvas]_&]:end-auto',
         className
       )}
       {...props}
@@ -312,8 +313,8 @@ function SidebarInset({ className, ...props }: React.ComponentProps<'main'>) {
       className={cn(
         'bg-background relative flex w-full flex-1 flex-col',
         'md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm',
-        'md:peer-data-[side=left]:peer-data-[variant=inset]:ml-0 md:peer-data-[side=left]:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2',
-        'md:peer-data-[side=right]:peer-data-[variant=inset]:mr-0 md:peer-data-[side=right]:peer-data-[variant=inset]:peer-data-[state=collapsed]:mr-2',
+        'md:peer-data-[side=left]:peer-data-[variant=inset]:ms-0 md:peer-data-[side=left]:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2',
+        'md:peer-data-[side=right]:peer-data-[variant=inset]:me-0 md:peer-data-[side=right]:peer-data-[variant=inset]:peer-data-[state=collapsed]:me-2',
         className
       )}
       {...props}
@@ -589,7 +590,7 @@ function SidebarMenuBadge({
       data-slot="sidebar-menu-badge"
       data-sidebar="menu-badge"
       className={cn(
-        'text-sidebar-foreground pointer-events-none absolute right-1 flex h-5 min-w-5 select-none items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums',
+        'text-sidebar-foreground pointer-events-none absolute end-1 flex h-5 min-w-5 select-none items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums',
         'peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground',
         'peer-data-[size=sm]/menu-button:top-1',
         'peer-data-[size=default]/menu-button:top-1.5',
