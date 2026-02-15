@@ -44,7 +44,7 @@ type Props = {
 };
 
 export function NavUser({ user, onLogout }: Props) {
-  const { isMobile } = useSidebar();
+  const { isMobile, setOpenMobile } = useSidebar();
   const { t } = useTranslation();
   const locale = useLocale();
   const { dynamicTheme } = useTheme();
@@ -62,7 +62,10 @@ export function NavUser({ user, onLogout }: Props) {
         <div className="flex gap-2 px-2">
           {showAiReview && (
             <Button
-              onClick={() => setOpenAiChat(true)}
+              onClick={() => {
+                setOpenAiChat(true);
+                if (isMobile) setOpenMobile(false);
+              }}
               className="flex-1 h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg text-white p-0 transition-transform active:scale-95 border-none"
               title={t('Global.aiReview.title' as any)}
             >
@@ -74,7 +77,10 @@ export function NavUser({ user, onLogout }: Props) {
           )}
           {showSupportChat && (
             <Button
-              onClick={() => setOpenChat(true)}
+              onClick={() => {
+                setOpenChat(true);
+                if (isMobile) setOpenMobile(false);
+              }}
               className="flex-1 h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-[#EFBF04] via-[#f5d44a] to-[#d9ad04] hover:opacity-90 shadow-lg text-black p-0 transition-transform active:scale-95 border-none"
               title={t('Global.chatbot.title' as any)}
             >
@@ -93,7 +99,12 @@ export function NavUser({ user, onLogout }: Props) {
           className="mb-2 w-full bg-primary hover:bg-primary/90"
           asChild
         >
-          <Link to="/user-guide">
+          <Link
+            to="/user-guide"
+            onClick={() => {
+              if (isMobile) setOpenMobile(false);
+            }}
+          >
             <span className="group-data-[state=collapsed]:hidden">
               {t('Landing.footer.support.userGuide')}
             </span>
@@ -147,7 +158,11 @@ export function NavUser({ user, onLogout }: Props) {
             <DropdownMenuGroup>
               <ModeToggle />
               <DropdownMenuItem asChild>
-                <LanguageSwitcher>
+                <LanguageSwitcher
+                  onClick={() => {
+                    if (isMobile) setOpenMobile(false);
+                  }}
+                >
                   <Globe /> {locale === 'ar' ? 'الانجليزية' : 'Arabic'}
                 </LanguageSwitcher>
               </DropdownMenuItem>
@@ -155,14 +170,24 @@ export function NavUser({ user, onLogout }: Props) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link to="/app/account">
+                <Link
+                  to="/app/account"
+                  onClick={() => {
+                    if (isMobile) setOpenMobile(false);
+                  }}
+                >
                   <BadgeCheck />
                   {t('Global.account')}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={onLogout}>
+            <DropdownMenuItem
+              onClick={() => {
+                onLogout?.();
+                if (isMobile) setOpenMobile(false);
+              }}
+            >
               <LogOut />
               {t('Global.logout')}
             </DropdownMenuItem>
