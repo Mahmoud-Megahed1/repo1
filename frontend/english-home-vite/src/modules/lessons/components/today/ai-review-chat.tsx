@@ -116,12 +116,12 @@ export default function AIReviewChat({
                     const audioCtx = new AudioContextClass();
                     const source = audioCtx.createMediaElementSource(audio);
                     const gainNode = audioCtx.createGain();
-                    gainNode.gain.value = 2.0; // 100% boost (double volume)
+                    gainNode.gain.value = 3.0; // 200% boost (3x volume)
                     source.connect(gainNode);
                     gainNode.connect(audioCtx.destination);
                 }
-            } catch (e) {
-                console.warn("Web Audio API boost failed, falling back to standard volume:", e);
+            } catch (err) {
+                console.warn("Audio boost failed, using default:", err);
             }
 
             // Preload to ensure metadata is there
@@ -346,15 +346,19 @@ export default function AIReviewChat({
 
         recognition.onerror = (event: any) => {
             console.error("Speech recognition error", event.error);
+
+            // Handle transient network errors
+            if (event.error === 'network') {
+                console.warn("Speech network error - keep trying...");
+                // Don't kill the listening state immediately, wait for onend to reset or retry
+                return;
+            }
+
             setIsListening(false);
             setInterimTranscript('');
 
-            if (event.error === 'network') {
-                toast.error(isArabic
-                    ? 'فشل الاتصال بالميكروفون (Network Error). جرب الكتابة.'
-                    : 'Mic network error. Please try typing instead.');
-            } else if (event.error === 'no-speech') {
-                // Ignore no-speech if it's just silence
+            if (event.error === 'no-speech') {
+                // Silent timeout
             } else if (event.error !== 'aborted') {
                 toast.error(`${isArabic ? 'خطأ:' : 'Error:'} ${event.error}`);
             }
