@@ -9,6 +9,12 @@ import { User } from '../user/models/user.schema';
 export class ChatController {
   constructor(private readonly chatService: ChatService) { }
 
+  @Get('check')
+  @HttpCode(HttpStatus.OK)
+  async check() {
+    return { status: 'alive', timestamp: new Date().toISOString() };
+  }
+
   @Post()
   @HttpCode(HttpStatus.OK)
   async chat(@Body() body: { message: string }) {

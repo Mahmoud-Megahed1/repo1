@@ -99,8 +99,17 @@ export class ChatService {
   }
 
   async getLessonReviewHistory(userId: string, levelName: string, day: string, lessonName: string) {
-    const chat = await this.lessonChatModel.findOne({ userId, levelName, day, lessonName });
-    return chat ? chat.messages : [];
+    try {
+      if (!userId || !levelName || !day || !lessonName) {
+        console.warn('Missing parameters for chat history:', { userId, levelName, day, lessonName });
+        return [];
+      }
+      const chat = await this.lessonChatModel.findOne({ userId, levelName, day, lessonName });
+      return chat ? chat.messages : [];
+    } catch (error) {
+      console.error('Failed to fetch lesson review history from DB:', error);
+      return []; // Return empty instead of 500
+    }
   }
 
   async generateLessonReviewResponse(userId: string, params: { message: string; levelName: string; day: string; lessonName: string }) {
@@ -211,12 +220,22 @@ export class ChatService {
   }
 
   async generateSpeech(text: string) {
-    const response = await this.openai.audio.speech.create({
-      model: "tts-1",
-      voice: "nova", // nova is a friendly, natural voice
-      input: text,
-    });
+    try {
+      const apiKey = this.configService.get<string>('OPENAI_API_KEY');
+      if (!apiKey || apiKey.includes('dummy')) {
+        throw new Error('OpenAI API Key is missing or invalid');
+      }
 
-    return Buffer.from(await response.arrayBuffer());
+      const response = await this.openai.audio.speech.create({
+        model: "tts-1",
+        voice: "nova", // nova is a friendly, natural voice
+        input: text,
+      });
+
+      return Buffer.from(await response.arrayBuffer());
+    } catch (error) {
+      console.error('OpenAI TTS Error:', error);
+      throw error;
+    }
   }
 }

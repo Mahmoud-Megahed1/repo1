@@ -262,7 +262,7 @@ export default function AIReviewChat({
         } finally {
             setIsProcessing(false);
         }
-    }, [isProcessing, levelName, day, lessonName, isArabic, speak]);
+    }, [isProcessing, levelName, day, lessonName, isArabic, speak, messages]);
 
     // ─── Retry failed message ─────────────────────────
     const handleRetry = useCallback((failedIndex: number) => {
