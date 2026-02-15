@@ -1143,9 +1143,16 @@
       "description": "In case you encounter any technical problems, please contact the support team.",
       "cta": "Begin Your Journey"
     },
+    "aiReview": {
+      "title": "AI Review"
+    },
     "support": {
-      "note": "Important Note: If you encounter any technical problems, please contact the support team via support@englishom.com."
-    }
+      "note": "Important Note: If you encounter any technical problems, please contact the support team via support@englishom.com.",
+      "title": "Support"
+    },
+    "lessonCompleted": "Lesson Completed",
+    "nextDay": "Next Day {{day}}",
+    "dailySpeakingSuccess": "Well done! You have successfully completed today's training"
   },
   "ShareProgress": {
     "title": "My Learning Progress",

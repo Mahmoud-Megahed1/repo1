@@ -6,6 +6,8 @@ import {
   LogOut,
   Moon,
   Sun,
+  Bot,
+  MessageSquare,
 } from 'lucide-react';
 import { useTheme } from '@components/contexts/theme-context';
 import { Avatar, AvatarFallback, AvatarImage } from '@ui/avatar';
@@ -29,6 +31,8 @@ import LanguageSwitcher from './language-switcher';
 import useLocale from '@hooks/use-locale';
 import { Link } from '@shared/i18n/routing';
 import { Button } from '@ui/button';
+import { useAiChatStore } from '@hooks/use-ai-chat-store';
+import { useSupportChat } from '@hooks/use-support-chat';
 
 type Props = {
   user: {
@@ -43,8 +47,36 @@ export function NavUser({ user, onLogout }: Props) {
   const { isMobile } = useSidebar();
   const { t } = useTranslation();
   const locale = useLocale();
+  const { setIsOpen: setOpenAiChat } = useAiChatStore();
+  const { setIsOpen: setOpenSupportChat } = useSupportChat();
+
   return (
     <SidebarMenu>
+      <SidebarMenuItem className="mb-4 group-data-[state=collapsed]:hidden">
+        <div className="flex gap-2 px-2">
+          <Button
+            onClick={() => setOpenAiChat(true)}
+            className="flex-1 h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg text-white p-0 transition-transform active:scale-95 border-none"
+            title={t('Global.aiReview.title' as any)}
+          >
+            <Bot size={20} />
+            <span className="text-[10px] font-bold uppercase tracking-tighter">
+              {t('Global.aiReview.title' as any)}
+            </span>
+          </Button>
+          <Button
+            onClick={() => setOpenSupportChat(true)}
+            className="flex-1 h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 hover:opacity-90 shadow-lg text-white p-0 transition-transform active:scale-95 border-none"
+            title={t('Global.support.title' as any)}
+          >
+            <MessageSquare size={20} />
+            <span className="text-[10px] font-bold uppercase tracking-tighter">
+              {t('Global.support.title' as any)}
+            </span>
+          </Button>
+        </div>
+      </SidebarMenuItem>
+
       <SidebarMenuItem>
         <Button
           variant={'default'}
