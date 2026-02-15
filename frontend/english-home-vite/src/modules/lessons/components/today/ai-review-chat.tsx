@@ -57,6 +57,7 @@ export default function AIReviewChat({
     const [messages, setMessages] = useState<Message[]>([]);
     const [isProcessing, setIsProcessing] = useState(false);
     const [isListening, setIsListening] = useState(false);
+    const [interimTranscript, setInterimTranscript] = useState('');
     const [textInput, setTextInput] = useState('');
     const [inputMode, setInputMode] = useState<'voice' | 'text'>('voice');
 
@@ -115,7 +116,7 @@ export default function AIReviewChat({
                     const audioCtx = new AudioContextClass();
                     const source = audioCtx.createMediaElementSource(audio);
                     const gainNode = audioCtx.createGain();
-                    gainNode.gain.value = 1.5; // 50% boost
+                    gainNode.gain.value = 2.0; // 100% boost (double volume)
                     source.connect(gainNode);
                     gainNode.connect(audioCtx.destination);
                 }
@@ -315,50 +316,53 @@ export default function AIReviewChat({
 
         const recognition = new SpeechRecognitionClass();
         recognition.continuous = false;
-
-        // Ensure language is set. Default to ar-SA for Arabic, en-US for English.
+        recognition.interimResults = true; // Show results in real-time
+        recognition.maxAlternatives = 1;
         recognition.lang = speechLang || (isArabic ? 'ar-SA' : 'en-US');
 
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
-
         recognition.onresult = (event: any) => {
-            const transcript = event.results[0][0].transcript;
-            if (transcript.trim()) {
-                console.log("Speech detected:", transcript);
-                toast.success(`${isArabic ? 'تم التقاط:' : 'Detected:'} ${transcript}`);
-                handleSendMessage(transcript);
-            } else {
-                toast.info(isArabic ? 'لم يتم التعرف على الكلام' : 'Could not recognize speech');
+            let finalTranscript = '';
+            let interim = '';
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript;
+                } else {
+                    interim += event.results[i][0].transcript;
+                }
             }
-            setIsListening(false);
+
+            if (interim) {
+                setInterimTranscript(interim);
+            }
+
+            if (finalTranscript.trim()) {
+                console.log("Speech detected:", finalTranscript);
+                setInterimTranscript('');
+                handleSendMessage(finalTranscript);
+                recognition.stop();
+            }
         };
 
         recognition.onerror = (event: any) => {
             console.error("Speech recognition error", event.error);
             setIsListening(false);
+            setInterimTranscript('');
 
             if (event.error === 'network') {
                 toast.error(isArabic
-                    ? 'خطأ في الشبكة (أو المتصفح يحظر الخدمة). تم التحويل للكتابة تلقائياً.'
-                    : 'Network/Browser error. Switched to text mode automatically.');
-                setInputMode('text');
-            } else if (event.error === 'not-allowed') {
-                toast.error(isArabic
-                    ? 'تم رفض إذن الميكروفون. اسمح بالوصول من إعدادات المتصفح.'
-                    : 'Microphone permission denied. Allow access in browser settings.');
+                    ? 'فشل الاتصال بالميكروفون (Network Error). جرب الكتابة.'
+                    : 'Mic network error. Please try typing instead.');
             } else if (event.error === 'no-speech') {
-                toast.info(isArabic
-                    ? 'لم يتم اكتشاف كلام. حاول مرة أخرى.'
-                    : 'No speech detected. Try again.');
+                // Ignore no-speech if it's just silence
             } else if (event.error !== 'aborted') {
-                toast.error(`${isArabic ? 'خطأ في التعرف:' : 'Recognition error:'} ${event.error}`);
-                setInputMode('text');
+                toast.error(`${isArabic ? 'خطأ:' : 'Error:'} ${event.error}`);
             }
         };
 
         recognition.onend = () => {
             setIsListening(false);
+            setInterimTranscript('');
         };
 
         try {
@@ -504,6 +508,12 @@ export default function AIReviewChat({
 
                 {/* Input Area */}
                 <SheetFooter className="p-3 border-t bg-background/95 backdrop-blur-sm">
+                    {isListening && (
+                        <div className="absolute -top-16 left-0 right-0 p-3 bg-blue-50/90 border border-blue-200 rounded-lg text-sm text-blue-700 animate-pulse text-center mx-4 shadow-sm z-10">
+                            {interimTranscript || (isArabic ? 'أنا أسمعك الآن... تكلم' : 'Hearing you now... Speak')}
+                        </div>
+                    )}
+
                     <div className="flex items-center gap-2 w-full">
                         {/* Voice/Text toggle */}
                         {hasSpeechRecognition && (
