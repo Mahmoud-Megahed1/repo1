@@ -58,7 +58,7 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
   }, [currentIndex]);
   if (!currentItem) return null;
   return (
-    <div className="mx-auto w-full max-w-6xl" {...props}>
+    <div className="mx-auto w-full max-w-7xl" {...props}>
       <div className="mb-8">
         <h1 className="text-2xl font-bold">
           {t('Global.pictureVocabulary.title')}
