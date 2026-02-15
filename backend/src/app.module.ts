@@ -6,6 +6,7 @@ import { AdminModule } from './admin/admin.module';
 import { FileUploadModule } from './file-upload/file-upload.module';
 import { ConfigModule } from './common/config/config.module';
 import { DatabaseModule } from './common/database/database.module';
+import { MailModule } from './common/mail/mail.module';
 import { CommonModule } from './common/common.module';
 import { PaymentModule } from './payment/paymob.module';
 import { CronModule } from './cron/cron.module';
@@ -52,6 +53,7 @@ import { SubscriptionModule } from './subscription/subscription.module';
     ThemeModule,
     ChatModule,
     SubscriptionModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [
