@@ -42,7 +42,7 @@ export default function NavMain({
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>
                 {item.isCompleted && (
-                  <CircleCheck className="ml-auto size-4 text-green-500" />
+                  <CircleCheck className="ms-auto size-4 text-green-500" />
                 )}
               </Link>
             </SidebarMenuButton>

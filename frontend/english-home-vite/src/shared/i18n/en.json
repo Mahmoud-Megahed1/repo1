@@ -271,11 +271,11 @@
               "title": "20 Words Daily",
               "description": "To ensure continuity and effectiveness, you will learn 20 new words daily, meaning each level will be completed in 50 study days."
             },
-            "speaking": {
+            "pronunciation": {
               "title": "Daily Speaking Practice (25 seconds)",
               "description": "Every day, you will record your voice for 25 seconds. You will find pre-written sentences about yourself (like your name, where you live, your interests), tailored to your current vocabulary level. This daily exercise will force you to practice effective pronunciation and repetition."
             },
-            "speakingAbility": {
+            "speaking": {
               "title": "Building Continuous Speaking Ability",
               "description": "Over these 50 days, these sentences and words will accumulate in your active memory. By the last day of each level, you will find yourself able to speak about yourself, give an overview, or present your biography for 15 consecutive minutes, using the 1000 words you have mastered."
             },
@@ -688,9 +688,6 @@
     "forSixtyDays": "60 days",
     "expired": "Expired",
     "completed": "Completed",
-    "lessonCompleted": "Lesson Completed",
-    "nextDay": "Next Day {{day}}",
-    "dailySpeakingSuccess": "Excellent! You have successfully completed today's practice",
     "expiredOn": "Expired on",
     "expiresAt": "Expires at",
     "renew": "Renew",
@@ -753,6 +750,21 @@
         "description": "{{number}} practical applications"
       }
     },
+    "phrasalVerbs": {
+      "definitionCard": {
+        "title": "What are Phrasal Verbs?",
+        "description": "Understanding phrasal verbs"
+      },
+      "examplesCard": {
+        "title": "Examples",
+        "description": "See how the phrasal verb is used in real situations",
+        "exampleInSituation": "Example in a situation"
+      },
+      "useCasesCard": {
+        "title": "When to use?",
+        "description": "{{number}} practical applications"
+      }
+    },
     "dayAccessError": {
       "title": "You cannot access Day {{day}} of this level yet",
       "description": "You cannot access Day {{day}} of this level yet. Please complete the previous lessons to unlock it.",
@@ -804,7 +816,7 @@
       "WRITE": "Writing",
       "GRAMMAR": "Grammar",
       "PICTURES": "Pictures",
-      "TODAY": "Today's scene",
+      "TODAY": "Today's Scene",
       "Q_A": "Q&A",
       "SPEAK": "Speaking",
       "DAILY_TEST": "Daily Test",
@@ -1143,7 +1155,7 @@
     "daysToComplete": "days to complete the course",
     "days": "Days",
     "completed": "Completed",
-    "cta": "Join us in a vast world and develop your English with Englishom",
+    "cta": "Join us in a vast world and develop your English with Englishom.",
     "startLearning": "Start Learning",
     "ofDays": "Of {{totalDays}} days",
     "student": "Student",

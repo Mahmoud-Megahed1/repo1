@@ -671,6 +671,21 @@ export type TranslationType = {
         description: string;
       };
     };
+    phrasalVerbs: {
+      definitionCard: {
+        title: string;
+        description: string;
+      };
+      examplesCard: {
+        title: string;
+        description: string;
+        exampleInSituation: string;
+      };
+      useCasesCard: {
+        title: string;
+        description: string;
+      };
+    };
     dayAccessError: {
       title: string;
       description: string;

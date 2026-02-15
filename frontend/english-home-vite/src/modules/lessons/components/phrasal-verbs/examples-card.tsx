@@ -19,8 +19,8 @@ const ExamplesCard: FC<Props> = ({ examples }) => {
 
     return (
         <CustomAccordion
-            title={t('Global.idioms.examplesCard.title')}
-            description={t('Global.idioms.examplesCard.description')}
+            title={t('Global.phrasalVerbs.examplesCard.title')}
+            description={t('Global.phrasalVerbs.examplesCard.description')}
             icon={MessageCircle}
             variant="purple"
             className="mt-8 space-y-10"
@@ -96,7 +96,7 @@ const ExamplesCard: FC<Props> = ({ examples }) => {
 
             <div>
                 <div className="mb-3 text-sm font-semibold tracking-wider text-purple-600 dark:text-purple-400">
-                    {t('Global.idioms.examplesCard.exampleInSituation')}
+                    {t('Global.phrasalVerbs.examplesCard.exampleInSituation')}
                 </div>
                 <div
                     lang="en"

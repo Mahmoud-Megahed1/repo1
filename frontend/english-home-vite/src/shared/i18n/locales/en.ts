@@ -865,6 +865,21 @@ export default {
         description: '{{number}} practical applications',
       },
     },
+    phrasalVerbs: {
+      definitionCard: {
+        title: 'What are Phrasal Verbs?',
+        description: 'Understanding phrasal verbs',
+      },
+      examplesCard: {
+        title: 'Examples',
+        description: 'See how the phrasal verb is used in real situations',
+        exampleInSituation: 'Example in a situation',
+      },
+      useCasesCard: {
+        title: 'When to use?',
+        description: '{{number}} practical applications',
+      },
+    },
     dayAccessError: {
       title: 'You cannot access Day {{day}} of this level yet',
       description:

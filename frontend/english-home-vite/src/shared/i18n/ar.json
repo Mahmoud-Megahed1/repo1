@@ -688,9 +688,6 @@
     "forSixtyDays": " 60 يومًا",
     "expired": "منتهي الصلاحية",
     "completed": "مكتمل",
-    "lessonCompleted": "تم إكمال الدرس",
-    "nextDay": "اليوم التالي {{day}}",
-    "dailySpeakingSuccess": "أحسنت! لقد أنجزت تدريب اليوم بنجاح",
     "expiredOn": "انتهت الصلاحية في",
     "expiresAt": "تنتهي الصلاحية في",
     "renew": "تجديد",
@@ -746,6 +743,21 @@
       "examplesCard": {
         "title": "أمثلة",
         "description": "شاهد كيف يُستخدم التعبير الاصطلاحي في مواقف حقيقية",
+        "exampleInSituation": "مثال في موقف"
+      },
+      "useCasesCard": {
+        "title": "متى يُستخدم؟",
+        "description": "{{number}} تطبيق عملي"
+      }
+    },
+    "phrasalVerbs": {
+      "definitionCard": {
+        "title": "ما هي الأفعال المركبة؟",
+        "description": "فهم الأفعال المركبة"
+      },
+      "examplesCard": {
+        "title": "أمثلة",
+        "description": "شاهد كيف يُستخدم الفعل المركب في مواقف حقيقية",
         "exampleInSituation": "مثال في موقف"
       },
       "useCasesCard": {
@@ -1141,7 +1153,7 @@
     "currentProgress": "التقدم الحالي",
     "remainingDuration": "المدة المتبقية",
     "daysToComplete": "يوم لإكمال الدورة",
-    "days": "يوم",
+    "days": "روز",
     "completed": "مكتمل",
     "cta": "انضم إلينا في عالم واسع وطوّر لغتك الإنجليزية مع إنجلش هوم",
     "startLearning": "ابدأ التعلم",

@@ -17,8 +17,8 @@ const UseCasesCard: FC<Props> = ({ useCases }) => {
     return (
         <CustomAccordion
             className="mt-8"
-            title={t('Global.idioms.useCasesCard.title')}
-            description={t('Global.idioms.useCasesCard.description', {
+            title={t('Global.phrasalVerbs.useCasesCard.title')}
+            description={t('Global.phrasalVerbs.useCasesCard.description', {
                 number: localizedNumber(useCases.length, locale),
             })}
             icon={Lightbulb}

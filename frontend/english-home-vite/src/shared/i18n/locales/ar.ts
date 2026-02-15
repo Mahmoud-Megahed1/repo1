@@ -849,6 +849,21 @@ export default {
         description: '{{number}} تطبيق عملي',
       },
     },
+    phrasalVerbs: {
+      definitionCard: {
+        title: 'ما هي الأفعال المركبة؟',
+        description: 'فهم الأفعال المركبة',
+      },
+      examplesCard: {
+        title: 'أمثلة',
+        description: 'شاهد كيف يُستخدم الفعل المركب في مواقف حقيقية',
+        exampleInSituation: 'مثال في موقف',
+      },
+      useCasesCard: {
+        title: 'متى يُستخدم؟',
+        description: '{{number}} تطبيق عملي',
+      },
+    },
     dayAccessError: {
       title: 'لا يمكنك الوصول إلى اليوم {{day}} من هذا المستوى بعد',
       description:
