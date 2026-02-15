@@ -1,7 +1,6 @@
 import NextLessonButton from '@components/next-lesson-button';
 import useAudioPlayer from '@hooks/use-audio-player';
 import { useIsMobile } from '@hooks/use-mobile';
-import { cn } from '@lib/utils';
 import type { PictureLesson } from '@modules/lessons/types';
 import { Button } from '@ui/button';
 import { Card, CardContent, CardDescription, CardHeader } from '@ui/card';
@@ -53,7 +52,7 @@ const PictureCard: FC<Props> = ({
       <div className="relative flex-1 flex items-center justify-center overflow-hidden rounded-md bg-black/5 dark:bg-white/5 border border-border">
         <img
           src={pictureSrc}
-          className="h-auto w-full object-contain max-h-[350px] lg:max-h-[500px]"
+          className="h-auto w-full object-contain max-h-[280px] lg:max-h-[380px]"
           alt={wordEn}
         />
 
