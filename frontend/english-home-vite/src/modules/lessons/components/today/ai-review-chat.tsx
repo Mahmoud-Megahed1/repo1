@@ -105,7 +105,23 @@ export default function AIReviewChat({
             const blob = res.data;
             const url = URL.createObjectURL(blob);
             const audio = new Audio(url);
+            audio.volume = 1.0; // Ensure max standard volume
             audioRef.current = audio;
+
+            // Optional: Web Audio API Boost (Useful if OpenAI output is naturally quiet)
+            try {
+                const AudioContextClass = (window as any).AudioContext || (window as any).webkitAudioContext;
+                if (AudioContextClass) {
+                    const audioCtx = new AudioContextClass();
+                    const source = audioCtx.createMediaElementSource(audio);
+                    const gainNode = audioCtx.createGain();
+                    gainNode.gain.value = 1.5; // 50% boost
+                    source.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+                }
+            } catch (e) {
+                console.warn("Web Audio API boost failed, falling back to standard volume:", e);
+            }
 
             // Preload to ensure metadata is there
             audio.load();
