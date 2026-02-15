@@ -119,3 +119,39 @@ export const facebookAuth = () => {
 export const googleAuth = () => {
   window.open(import.meta.env.VITE_API_URL + '/api' + '/auth/google', '_self');
 };
+
+export const reactivate = ({
+  data,
+  config,
+}: {
+  data: { willCare: boolean; willCommit: boolean };
+  config?: AxiosRequestConfig;
+}) => {
+  return axiosClient.post<{ message: string }>(
+    '/subscription/reactivate',
+    data,
+    config
+  );
+};
+
+export const voluntaryPause = ({
+  data,
+  config,
+}: {
+  data: { durationDays: number };
+  config?: AxiosRequestConfig;
+}) => {
+  return axiosClient.post<{ message: string; endDate: string }>(
+    '/subscription/voluntary-pause',
+    data,
+    config
+  );
+};
+
+export const voluntaryResume = (config?: AxiosRequestConfig) => {
+  return axiosClient.post<{ message: string }>(
+    '/subscription/voluntary-resume',
+    {},
+    config
+  );
+};

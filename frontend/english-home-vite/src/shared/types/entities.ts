@@ -16,7 +16,14 @@ export type UserType = {
   isVerified: boolean;
   role: 'admin' | 'user';
   status: 'active' | 'blocked' | 'suspended';
+  isVoluntaryPaused?: boolean;
+  pauseStartedAt?: string;
+  pauseScheduledEndDate?: string;
+  voluntaryPauseAttempts?: number;
+  totalPausedDays?: number;
   lastActivity: string;
+  hasUsedInactivityGrace?: boolean;
+  suspensionReason?: string;
   createdAt: string;
   updatedAt: string;
 };

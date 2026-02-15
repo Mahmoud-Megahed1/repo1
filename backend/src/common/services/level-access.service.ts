@@ -15,17 +15,27 @@ export interface LevelAccessInfo {
 export class LevelAccessService {
   private readonly ACCESS_DAYS = 60;
 
-  constructor(private readonly orderRepo: OrderRepo) {}
+  constructor(private readonly orderRepo: OrderRepo) { }
 
   async getLatestAccessInfo(userId: string, levelName?: Level_Name): Promise<LevelAccessInfo | null> {
     const order = await this.orderRepo.findMostRecentOrder(userId, levelName);
     if (!order) return null;
 
     const purchaseDate = new Date(order.paymentDate || order.createdAt);
-    const expiresAt = new Date(purchaseDate.getTime() + this.ACCESS_DAYS * 24 * 60 * 60 * 1000);
+    const user = order.userId as any;
+
+    // Total paused days = finished pauses + (if currently paused, days since start)
+    let totalPausedDays = user.totalPausedDays || 0;
+    if (user.pauseStartedAt) {
+      const now = new Date();
+      const currentPauseDuration = Math.max(0, Math.floor((now.getTime() - new Date(user.pauseStartedAt).getTime()) / (1000 * 60 * 60 * 24)));
+      totalPausedDays += currentPauseDuration;
+    }
+
+    const expiresAt = new Date(purchaseDate.getTime() + (this.ACCESS_DAYS + totalPausedDays) * 24 * 60 * 60 * 1000);
     const now = new Date();
     const daysElapsed = Math.max(0, Math.floor((now.getTime() - purchaseDate.getTime()) / (1000 * 60 * 60 * 24)));
-    const daysLeft = Math.max(0, this.ACCESS_DAYS - daysElapsed);
+    const daysLeft = Math.max(0, (this.ACCESS_DAYS + totalPausedDays) - daysElapsed);
     const isExpired = daysLeft <= 0;
 
     return {

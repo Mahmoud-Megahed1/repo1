@@ -135,3 +135,17 @@ export const updateUserStatus = ({
 export const deleteUserCourse = (userId: string, levelName: LevelId) => {
   return client.delete(`/users/${userId}/courses/${levelName}`);
 };
+
+export const adminPauseUser = ({
+  userId,
+  durationDays,
+}: {
+  userId: string;
+  durationDays: number;
+}) => {
+  return client.post(`/subscription/admin/pause`, { userId, durationDays });
+};
+
+export const adminResumeUser = (userId: string) => {
+  return client.post(`/subscription/admin/resume`, { userId });
+};

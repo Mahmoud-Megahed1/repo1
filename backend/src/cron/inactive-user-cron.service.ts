@@ -14,7 +14,7 @@ export class InactiveUserCronService {
   private readonly logger = new Logger(InactiveUserCronService.name);
   private readonly emailTemplate: string;
   private readonly suspensionEmailTemplate: string;
-  
+
   private readonly BATCH_SIZE = 100;
   private readonly DB_BATCH_DELAY_MS = 2000; // 2 seconds between DB batches
   private readonly EMAIL_DELAY_MS = 100; // 100ms between emails
@@ -33,8 +33,8 @@ export class InactiveUserCronService {
 
   /**
    * 5 AM every day, Riyadh time
-   * Sends motivational emails to users inactive for 7+ days
-   * Suspends accounts inactive for 65+ days
+   * Sends motivational emails to users inactive for 5+ days
+   * Suspends accounts inactive for 15+ days
    */
   @Cron(CronExpression.EVERY_DAY_AT_5AM, {
     name: 'check-inactive-users',
@@ -44,7 +44,7 @@ export class InactiveUserCronService {
 
 
     // inverted check to exit early
-    if(!this.clusterHelper.isPrimary()) {
+    if (!this.clusterHelper.isPrimary()) {
       this.logger.log('Skipping check-inactive-users job on non-primary instance');
       return;
     }
@@ -55,8 +55,8 @@ export class InactiveUserCronService {
     try {
       // Calculate dates correctly
       const now = startTime;
-      const sixtyFiveDaysAgo = new Date(now.getTime() - 65 * 24 * 60 * 60 * 1000);
-      const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const fifteenDaysAgo = new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000);
+      const fiveDaysAgo = new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000);
 
       // Stats tracking
       const stats = {
@@ -74,10 +74,10 @@ export class InactiveUserCronService {
 
       while (hasMoreUsers) {
         stats.dbQueries++;
-        
+
         // Get batch of users
         const allInactiveUsers = await this.userRepo.find({
-          lastActivity: { $lt: sevenDaysAgo }, // Inactive for 7+ days
+          lastActivity: { $lt: fiveDaysAgo }, // Inactive for 5+ days
           role: { $ne: Role.ADMIN },
           isVerified: true,
           status: UserStatus.ACTIVE,
@@ -92,19 +92,19 @@ export class InactiveUserCronService {
           break;
         }
 
-        this.logger.log(`📊 Processing batch ${Math.floor(skip/this.BATCH_SIZE) + 1} (${users.length} users)`);
+        this.logger.log(`📊 Processing batch ${Math.floor(skip / this.BATCH_SIZE) + 1} (${users.length} users)`);
 
         // Process batch
         for (const user of users) {
           stats.totalProcessed++;
-          const result = await this.processSingleUser(user, now, sixtyFiveDaysAgo);
-          
+          const result = await this.processSingleUser(user, now, fifteenDaysAgo);
+
           // Update stats
           if (result.motivation?.success) stats.motivationSuccess++;
           if (result.motivation?.failure) stats.motivationFailure++;
           if (result.suspension?.success) stats.suspensionSuccess++;
           if (result.suspension?.failure) stats.suspensionFailure++;
-          
+
           // Rate limiting between emails
           if (result.sentEmail) {
             await this.delay(this.EMAIL_DELAY_MS);
@@ -112,7 +112,7 @@ export class InactiveUserCronService {
         }
 
         skip += this.BATCH_SIZE;
-        
+
         // Rate limiting between database batches
         if (hasMoreUsers) {
           await this.delay(this.DB_BATCH_DELAY_MS);
@@ -126,10 +126,10 @@ export class InactiveUserCronService {
       this.logger.log(`👥 Total users processed: ${stats.totalProcessed}`);
       this.logger.log(`📧 Motivation emails: ${stats.motivationSuccess} sent, ${stats.motivationFailure} failed`);
       this.logger.log(`⚠️ Suspensions: ${stats.suspensionSuccess} successful, ${stats.suspensionFailure} failed`);
-      
+
       if (stats.totalProcessed > 0) {
-        const successRate = ((stats.motivationSuccess + stats.suspensionSuccess) / 
-                           stats.totalProcessed * 100).toFixed(1);
+        const successRate = ((stats.motivationSuccess + stats.suspensionSuccess) /
+          stats.totalProcessed * 100).toFixed(1);
         this.logger.log(`🎯 Success rate: ${successRate}%`);
       }
 
@@ -143,9 +143,9 @@ export class InactiveUserCronService {
    * Process a single user
    */
   private async processSingleUser(
-    user: any, 
-    now: Date, 
-    sixtyFiveDaysAgo: Date
+    user: any,
+    now: Date,
+    fifteenDaysAgo: Date
   ): Promise<UserProcessingResult> {
     const userLastActivity = new Date(user.lastActivity);
     const diffInDays = Math.floor(
@@ -158,22 +158,29 @@ export class InactiveUserCronService {
       suspension: null
     };
 
-    // --- Suspension check (>= 65 days) ---
-    if (diffInDays >= 65) {
+    // --- Suspension check (>= 15 days) ---
+    if (diffInDays >= 15) {
       try {
+        const isFirstSuspension = !user.hasUsedInactivityGrace;
+
         await this.userRepo.findOneAndUpdate(
           { _id: user._id },
           {
             status: UserStatus.SUSPENDED,
             suspendedAt: now,
-            suspensionReason: EmailMessages.SuspensionReasonMessage,
+            suspensionReason: isFirstSuspension
+              ? 'إيقاف مؤقت (فرصة حماية الاشتراك للمرة الأولى)'
+              : EmailMessages.SuspensionReasonMessage,
+            pauseStartedAt: isFirstSuspension ? now : undefined,
+            // We set hasUsedInactivityGrace here to true so it only happens once
+            hasUsedInactivityGrace: true,
           },
         );
 
-        await this.sendSuspensionEmail(user);
+        await this.sendSuspensionEmail(user, isFirstSuspension);
         result.suspension = { success: true };
         result.sentEmail = true;
-        this.logger.debug(`⚠️ User suspended: ${user.email} (${diffInDays} days inactive)`);
+        this.logger.debug(`⚠️ User suspended: ${user.email} (${diffInDays} days inactive, First: ${isFirstSuspension})`);
       } catch (error) {
         result.suspension = { failure: true, error: error.message };
         this.logger.error(`❌ Failed to suspend ${user.email}: ${error.message}`);
@@ -181,66 +188,77 @@ export class InactiveUserCronService {
       return result;
     }
 
-    // --- Motivational email check (every 7 days) ---
-    if (diffInDays >= 7 && diffInDays % 7 === 0) {
+    // --- Dynamic alerts for Day 5 and Day 10 ---
+    if (diffInDays === 5 || diffInDays === 10) {
       try {
-        await this.sendMotivationalEmail(user);
+        await this.sendMotivationalEmail(user, diffInDays);
         result.motivation = { success: true };
         result.sentEmail = true;
-        this.logger.debug(`✉️ Motivational email sent to: ${user.email} (${diffInDays} days inactive)`);
+        this.logger.debug(`✉️ Day ${diffInDays} alert sent to: ${user.email}`);
       } catch (error) {
         result.motivation = { failure: true, error: error.message };
-        this.logger.error(`❌ Failed to send email to ${user.email}: ${error.message}`);
+        this.logger.error(`❌ Failed to send Day ${diffInDays} email to ${user.email}: ${error.message}`);
       }
     }
 
     return result;
   }
 
-  private async sendMotivationalEmail(user: any): Promise<void> {
-    let daysLeftText = 'some days';
-    
+  private async sendMotivationalEmail(user: any, absentDays: number): Promise<void> {
+    let daysLeftText = 'بعض الأيام';
+
     try {
       const info = await this.levelAccessService.getLatestAccessInfo(user._id.toString());
       if (info && info.daysLeft > 0) {
-        daysLeftText = `${info.daysLeft} days`;
+        daysLeftText = `${info.daysLeft} يوم`;
       }
     } catch (error) {
       this.logger.warn(`Could not get level access info for ${user.email}: ${error.message}`);
     }
 
+    const title = absentDays === 5
+      ? `لاحظنا انقطاعك 5 أيام`
+      : `لاحظنا انقطاعك 10 أيام`;
+
     const personalizedEmail = this.emailTemplate
-      .replaceAll('{{userName}}', user.firstName || 'there')
+      .replaceAll('{{dynamicTitle}}', title)
+      .replaceAll('{{userName}}', user.firstName || 'طالبنا العزيز')
       .replaceAll('{{daysLeft}}', daysLeftText)
+      .replaceAll('{{absentDays}}', absentDays.toString())
       .replaceAll(
         '{{loginUrl}}',
-        process.env.FRONTEND_URL || 'https://englishom.com/login',
+        'https://englishom.com/login',
       );
 
     await this.sendEmailWithRetry({
       to: user.email,
-      subject: EmailMessages.weMissYouMessage,
+      subject: `Englishom: ${title} .. اشتقنا لك!`,
       htmlContent: personalizedEmail,
     });
   }
 
-  private async sendSuspensionEmail(user: any): Promise<void> {
+  private async sendSuspensionEmail(user: any, isGrace: boolean): Promise<void> {
+    const title = isGrace
+      ? 'تم إيقاف الاشتراك مؤقتاً (فرصة حماية الاشتراك)'
+      : 'نأسف لاضطررنا لإيقاف الاشتراك بعد انقطاع 15 يوم';
+
     const suspensionEmail = this.suspensionEmailTemplate
-      .replaceAll('{{userName}}', user.firstName || 'there')
+      .replaceAll('{{dynamicTitle}}', title)
+      .replaceAll('{{userName}}', user.firstName || 'طالبنا العزيز')
       .replaceAll(
         '{{supportUrl}}',
-        process.env.FRONTEND_URL || 'https://englishom.com/contact',
+        'https://englishom.com/login', // Redirect to login which will show reactivation page
       );
 
     await this.sendEmailWithRetry({
       to: user.email,
-      subject: EmailMessages.AccountSuspendedMessage,
+      subject: `Englishom: ${title}`,
       htmlContent: suspensionEmail,
     });
   }
 
   private async sendEmailWithRetry(
-    mailOptions: any, 
+    mailOptions: any,
     retries = this.EMAIL_RETRY_COUNT
   ): Promise<void> {
     for (let attempt = 1; attempt <= retries; attempt++) {
@@ -260,97 +278,103 @@ export class InactiveUserCronService {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  
 
- 
+
+
+
   private getEmailTemplate(): string {
     return `
 <!DOCTYPE html>
-<html>
+<html dir="rtl" lang="ar">
 <head>
+    <meta charset="UTF-8">
     <style>
         .container {
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
+            text-align: right;
         }
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 30px 20px;
+            padding: 40px 20px;
             text-align: center;
             border-radius: 10px 10px 0 0;
         }
         .content {
-            background: #f8f9fa;
+            background: #ffffff;
             padding: 30px 20px;
-            border-radius: 0 0 10px 10px;
+            border-bottom: 1px solid #eee;
         }
         .emoji {
-            font-size: 24px;
+            font-size: 32px;
             margin-bottom: 10px;
         }
         .cta-button {
             display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 30px;
+            color: white !important;
+            padding: 15px 35px;
             text-decoration: none;
-            border-radius: 25px;
+            border-radius: 30px;
             font-weight: bold;
-            margin: 20px 0;
-            transition: transform 0.2s;
-        }
-        .cta-button:hover {
-            transform: translateY(-2px);
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
         }
         .footer {
+            background: #f8f9fa;
             text-align: center;
             color: #666;
             font-size: 14px;
-            margin-top: 20px;
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+        }
+        .highlight {
+            color: #764ba2;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="emoji">📚✨</div>
-            <h1>We Miss You at Englishom!</h1>
+            <div class="emoji">✨📚</div>
+            <h1>{{dynamicTitle}}</h1>
         </div>
         <div class="content">
-            <p>Hi {{userName}},</p>
+            <p>أهلاً <strong>{{userName}}</strong>،</p>
             
-            <p>We noticed you haven't been active on Englishom lately, and we wanted to reach out because your English learning journey is important to us! 🌟</p>
-            <p><strong>Heads up:</strong> You have {{daysLeft}} left in your current level access.</p>
+            <p>لقد لاحظنا انقطاعك عن الدراسة لمدة <span class="highlight">{{absentDays}} أيام</span>، ونريد تذكيرك بأن رحلتك في إتقان اللغة الإنجليزية لا زالت بانتظارك! 🌟</p>
+            <p><strong>تنبيه هيدز أب:</strong> متبقي لك <span class="highlight">{{daysLeft}}</span> في صلاحية الوصول الحالية لهذا المستوى.</p>
             
-            <p><strong>Don't let your progress slip away!</strong> Every day you practice English is a step closer to your goals. Whether you're preparing for exams, career advancement, or personal growth, consistency is key to success.</p>
+            <p><strong>لا تدع ما بنيته من تقدم يضيع!</strong> كل يوم تدريب هو خطوة حقيقية نحو أهدافك، سواء كانت للعمل، السفر، أو التطوير الشخصي. الالتزام هو سر النجاح.</p>
             
-            <p>Here's what's waiting for you when you return:</p>
-            <ul>
-                <li>🎯 Your personalized learning path</li>
-                <li>📈 Track your progress and achievements</li>
-                <li>🏆 Earn certificates as you complete levels</li>
-                <li>💪 Build confidence with daily practice</li>
+            <p>تذكر ما ينتظرك عند عودتك:</p>
+            <ul style="list-style-type: none; padding-right: 0;">
+                <li>🎯 خطة تعليمية مخصصة لك</li>
+                <li>� تتبع دقيق لمدى تطورك</li>
+                <li>🏆 شهادات معتمدة عند إتمام المستويات</li>
+                <li>💪 تدريبات صوتية وبناء ثقة حقيقية</li>
             </ul>
             
-            <p>Remember, even 10 minutes of practice can make a big difference. Your future self will thank you for not giving up!</p>
+            <p>حتى 10 دقائق من الممارسة يومياً تصنع فرقاً شاسعاً مع الوقت. مستشارك مستر محمود وفريق العمل بانتظار عودتك القوية! 🚀</p>
             
             <div style="text-align: center;">
-                <a href="{{loginUrl}}" class="cta-button">Continue Learning Now</a>
+                <a href="{{loginUrl}}" class="cta-button">أكمل رحلة التعلم الآن</a>
             </div>
             
-            <p>We believe in you and your ability to master English. Come back and let's continue this amazing journey together!</p>
+            <p>نحن نؤمن بقدرتك على الاحتراف. عد إلينا لنكمل هذه الرحلة الممتعة معاً!</p>
             
-            <p>Keep learning, keep growing! 🚀</p>
+            <p>استمر في التعلم.. استمر في النمو! ❤️</p>
             
-            <p>With encouragement,<br>
-            <strong>The Englishom Team</strong></p>
+            <p>مع كل التشجيع،<br>
+            <strong>عائلة Englishom</strong></p>
         </div>
         <div class="footer">
-            <p>© 2024 Englishom. Empowering English learners worldwide.</p>
+            <p>© ${new Date().getFullYear()} Englishom. جميع الحقوق محفوظة.</p>
         </div>
     </div>
 </body>
@@ -361,58 +385,60 @@ export class InactiveUserCronService {
   private getSuspensionEmailTemplate(): string {
     return `
 <!DOCTYPE html>
-<html>
+<html dir="rtl" lang="ar">
 <head>
+    <meta charset="UTF-8">
     <style>
         .container {
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
+            text-align: right;
         }
         .header {
             background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
             color: white;
-            padding: 30px 20px;
+            padding: 40px 20px;
             text-align: center;
             border-radius: 10px 10px 0 0;
         }
         .content {
-            background: #f8f9fa;
+            background: #ffffff;
             padding: 30px 20px;
-            border-radius: 0 0 10px 10px;
+            border-bottom: 1px solid #eee;
         }
         .emoji {
-            font-size: 24px;
+            font-size: 32px;
             margin-bottom: 10px;
         }
         .cta-button {
             display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 30px;
+            color: white !important;
+            padding: 15px 35px;
             text-decoration: none;
-            border-radius: 25px;
+            border-radius: 30px;
             font-weight: bold;
-            margin: 20px 0;
-            transition: transform 0.2s;
-        }
-        .cta-button:hover {
-            transform: translateY(-2px);
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
         }
         .warning-box {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 5px;
-            padding: 15px;
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            border-radius: 8px;
+            padding: 20px;
             margin: 20px 0;
+            color: #c53030;
         }
         .footer {
+            background: #f8f9fa;
             text-align: center;
             color: #666;
             font-size: 14px;
-            margin-top: 20px;
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
         }
     </style>
 </head>
@@ -420,45 +446,45 @@ export class InactiveUserCronService {
     <div class="container">
         <div class="header">
             <div class="emoji">⚠️🔒</div>
-            <h1>Account Suspended</h1>
+            <h1>{{dynamicTitle}}</h1>
         </div>
         <div class="content">
-            <p>Hi {{userName}},</p>
+            <p>أهلاً <strong>{{userName}}</strong>،</p>
             
             <div class="warning-box">
-                <strong>⚠️ Important Notice:</strong> Your Englishom account has been temporarily suspended due to extended inactivity (65+ days).
+                <strong>تنبيه هام:</strong> نود إبلاغك بأنه تم تعليق حسابك في Englishom مؤقتاً بسبب الانقطاع عن الدراسة لأكثر من 15 يوماً.
             </div>
             
-            <p>We understand that life gets busy, and learning schedules can change. Your account suspension is temporary and can be easily reactivated!</p>
+            <p>نحن نقدر ظروف الحياة وضيق الوقت، ولذلك قمنا بتعليق الحساب لحماية مجهودك وضمان عدم هدر أيام اشتراكك أثناء غيابك. حسابك آمن ويمكن تفعيله بسهولة!</p>
             
-            <h3>🔄 How to Reactivate Your Account:</h3>
-            <ul>
-                <li>📞 Contact our support team</li>
-                <li>💬 Use our live chat feature</li>
-                <li>📧 Send us an email explaining your situation</li>
-                <li>🌐 Visit our support center</li>
+            <h3>🔄 كيف تستعيد حسابك؟</h3>
+            <ul style="list-style-type: none; padding-right: 0;">
+                <li>📞 تواصل مع فريق الدعم الفني</li>
+                <li>💬 استخدم ميزة الدردشة المباشرة في الموقع</li>
+                <li>📧 أرسل لنا رسالة توضح رغبتك في العودة</li>
+                <li>🌐 قم بزيارة مركز الدعم والمساعدة</li>
             </ul>
             
-            <p><strong>Why was my account suspended?</strong></p>
-            <p>Accounts are automatically suspended after 65 days of inactivity to maintain platform security and optimize our learning resources. This helps us ensure that active learners have the best experience possible.</p>
+            <p><strong>لماذا تم تعليق الحساب؟</strong></p>
+            <p>يتم تعليق الحسابات تلقائياً بعد 15 يوماً من الانقطاع لحماية استقرار تعلمك ولضمان تواصلنا معك قبل استئناف الدراسة، مما يساعدنا في تقديم أفضل تجربة ممكنة.</p>
             
-            <p><strong>Your Progress is Safe! 🛡️</strong></p>
-            <p>Don't worry - all your progress, certificates, and course data are safely stored and will be restored once your account is reactivated.</p>
+            <p><strong>تقدمك في أمان تام! 🛡️</strong></p>
+            <p>لا تقلق، جميع بياناتك وشهاداتك ومستوياتك التي أتممتها محفوظة لدينا ولن تضيع، وستعود كما كانت فور تفعيل الحساب.</p>
             
             <div style="text-align: center;">
-                <a href="{{supportUrl}}" class="cta-button">Contact Support Now</a>
+                <a href="{{supportUrl}}" class="cta-button">تواصل مع الدعم الآن</a>
             </div>
             
-            <p>We're here to help you get back to your English learning journey. Our support team is ready to assist you with account reactivation.</p>
+            <p>نحن ننتظر عودتك بشوق لمواصلة رحلة التميز في اللغة الإنجليزية.</p>
             
-            <p>Thank you for your understanding! 🙏</p>
+            <p>شكراً لتفهمك! 🙏</p>
             
-            <p>Best regards,<br>
-            <strong>The Englishom Team</strong></p>
+            <p>مع أطيب التحيات،<br>
+            <strong>عائلة Englishom</strong></p>
         </div>
         <div class="footer">
-            <p>© 2024 Englishom. Supporting English learners worldwide.</p>
-            <p>If you believe this was sent in error, please contact our support team immediately.</p>
+            <p>© ${new Date().getFullYear()} Englishom. لدعم متعلمي الإنجليزية حول العالم.</p>
+            <p>هذه رسالة تلقائية، يرجى عدم الرد عليها مباشرة.</p>
         </div>
     </div>
 </body>

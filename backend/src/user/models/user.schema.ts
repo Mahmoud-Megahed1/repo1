@@ -32,6 +32,38 @@ export class User extends AbstractUser {
 
   @Prop({ type: String })
   activeSessionId?: string;
+
+  // --- Inactivity & Voluntary Pause System ---
+  @Prop({ type: Boolean, default: false })
+  hasUsedInactivityGrace: boolean; // One-time 15-day automatic pause preservation
+
+  @Prop({ type: Boolean, default: false })
+  isVoluntaryPaused: boolean;
+
+  @Prop({ type: Date })
+  pauseStartedAt?: Date;
+
+  @Prop({ type: Date })
+  pauseScheduledEndDate?: Date;
+
+  @Prop({ type: Number, default: 0 })
+  voluntaryPauseAttempts: number; // Max 2
+
+  @Prop({ type: Number, default: 0 })
+  totalPausedDays: number; // Max 20 total
+
+  @Prop({
+    type: [
+      {
+        start: { type: Date },
+        end: { type: Date },
+        reason: { type: String },
+        isVoluntary: { type: Boolean },
+      },
+    ],
+    default: [],
+  })
+  pauseHistory: any[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

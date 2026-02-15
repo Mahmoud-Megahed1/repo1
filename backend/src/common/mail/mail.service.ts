@@ -196,6 +196,75 @@ export class MailService {
     });
   }
 
+  async sendSubscriptionPauseEmail(to: string, name: string, endDate: Date): Promise<boolean> {
+    if (!this.enabled || !this.apiInstance) return false;
+
+    const formattedDate = endDate.toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const subject = 'تأكيد تجميد اشتراكك مؤقتاً - Englishom ❄️';
+    const htmlContent = `
+      <div dir="rtl" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #ffffff; text-align: right;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h1 style="color: #2c3e50; margin: 0;">تم تجميد اشتراكك بنجاح</h1>
+          <p style="font-size: 18px; color: #007bff; margin-top: 10px;">استراحة محارب.. ننتظر عودتك! ❄️</p>
+        </div>
+        
+        <div style="color: #555555; line-height: 1.8; font-size: 16px;">
+          <p>أهلاً <strong>${name}</strong>،</p>
+          <p>نؤكد لك أنه تم تجميد اشتراكك في Englishom بناءً على طلبك (أو بسبب ظروف الانقطاع لضمان الحماية). أيامك محفوظة ولن يتم احتسابها خلال هذه الفترة.</p>
+          
+          <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0; border-right: 4px solid #007bff;">
+            <p style="margin: 0;"><strong>تاريخ استئناف الاشتراك التلقائي:</strong></p>
+            <p style="margin: 5px 0; color: #007bff; font-weight: bold; font-size: 18px;">${formattedDate}</p>
+          </div>
+
+          <p>يمكنك العودة في أي وقت قبل هذا التاريخ والضغط على "استئناف اشتراكي" من لوحة التحكم لتبدأ من حيث توقفت فوراً.</p>
+          <p>تذكر أننا هنا دائماً لدعمك، فإذا كان سبب التوقف هو صعوبة فنية أو استفسار، لا تتردد في مراسلتنا.</p>
+
+          <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+          <div style="text-align: center; margin-top: 30px;">
+            <a href="https://englishom.com" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">الذهاب إلى لوحة التحكم</a>
+          </div>
+        </div>
+      </div>
+    `;
+
+    return this.sendCustomEmail({ to, subject, htmlContent });
+  }
+
+  async sendSubscriptionResumeEmail(to: string, name: string): Promise<boolean> {
+    if (!this.enabled || !this.apiInstance) return false;
+
+    const subject = 'أهلاً بعودتك! تم استئناف اشتراكك في Englishom 🚀';
+    const htmlContent = `
+      <div dir="rtl" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #ffffff; text-align: right;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h1 style="color: #2c3e50; margin: 0;">نشتاق لإبداعك!</h1>
+          <p style="font-size: 18px; color: #28a745; margin-top: 10px;">تم تفعيل حسابك من جديد بنجاح 🚀</p>
+        </div>
+        
+        <div style="color: #555555; line-height: 1.8; font-size: 16px;">
+          <p>أهلاً <strong>${name}</strong>،</p>
+          <p>يسعدنا جداً عودتك لمواصلة رحلتك في إتقان اللغة الإنجليزية. لقد تم استئناف اشتراكك بنجاح ويمكنك الآن الدخول إلى دروسك والبدء فوراً.</p>
+          
+          <div style="background-color: #e8f5e9; padding: 15px; border-radius: 8px; margin: 20px 0; border-right: 4px solid #28a745;">
+            <p style="margin: 0; color: #2e7d32; font-weight: bold;">"الاستمرارية هي سر النجاح.. واليوم هو بداية جديدة قوية!"</p>
+          </div>
+
+          <p>تذكر أننا معك، فإذا واجهت أي تحدي في دروسك، فريق الدعم والمدرسين بانتظارك.</p>
+
+          <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+          <div style="text-align: center; margin-top: 30px;">
+            <a href="https://englishom.com" style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">أكمل رحلة التعلم الآن</a>
+          </div>
+        </div>
+      </div>
+    `;
+
+    return this.sendCustomEmail({ to, subject, htmlContent });
+  }
+
   async sendCustomEmail(mailOptions: CustomEmailOptions): Promise<boolean> {
     if (!this.enabled || !this.apiInstance) {
       this.logger.warn(

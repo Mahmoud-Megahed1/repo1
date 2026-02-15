@@ -6,7 +6,7 @@ The Englishom application now includes an automated user suspension system that 
 
 ## 🎯 Purpose
 
-- **Automatic Suspension**: Suspend users who are inactive for 65+ days
+- **Automatic Suspension**: Suspend users who are inactive for 15+ days
 - **Account Security**: Maintain platform security by managing inactive accounts
 - **Admin Control**: Provide comprehensive user management capabilities for administrators
 - **User Communication**: Notify users about account status changes and reactivation procedures
@@ -17,8 +17,8 @@ The Englishom application now includes an automated user suspension system that 
 
 - **Daily Execution**: Runs every day at 9:00 AM (Asia/Riyadh timezone)
 - **Two-tier System**:
-  - **7+ days inactive**: Send motivational emails to encourage return
-  - **65+ days inactive**: Automatically suspend accounts
+  - **5+ days inactive**: Send motivational emails to encourage return
+  - **15+ days inactive**: Automatically suspend accounts
 
 ### 2. **User Status Types**
 

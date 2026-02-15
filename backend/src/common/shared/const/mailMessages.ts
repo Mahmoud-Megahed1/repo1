@@ -1,7 +1,7 @@
 
 export const EmailMessages = {
-    
-    SuspensionReasonMessage  : 'Account suspended due to inactivity (65+ days)' ,
-    AccountSuspendedMessage  : 'Your account has been suspended. Please contact support for assistance.' ,
-    weMissYouMessage : "We noticed you haven't logged into your Englishom account for a while. We miss you! Come back and continue your language learning journey with us.",
+
+    SuspensionReasonMessage: 'الحساب معلق بسبب الانقطاع (15+ يوم)',
+    AccountSuspendedMessage: 'تم تعليق حسابك. يرجى التواصل مع الدعم للمساعدة في استعادة الوصول.',
+    weMissYouMessage: 'اشتقنا لك في Englishom! لاحظنا غيابك منذ فترة، عد إلينا وواصل رحلة التعلم.',
 }

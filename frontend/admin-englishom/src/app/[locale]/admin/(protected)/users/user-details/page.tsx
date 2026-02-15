@@ -180,6 +180,69 @@ const UserDetails = () => {
           </div>
         </div>
       </section>
+
+      {/* Subscription Pause System Details */}
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="box flex flex-col gap-6 px-8 py-6">
+          <div className="flex items-center gap-2">
+            <Calendar className="text-blue-500" />
+            <h2 className="text-lg font-bold">Subscription Freeze Details</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-6">
+            <div className="flex flex-col gap-1">
+              <span className="text-sm text-muted-foreground">Freeze Status</span>
+              <div className="flex items-center gap-2">
+                <Badge variant={userDetails.isVoluntaryPaused ? "default" : "secondary"} className={cn(userDetails.isVoluntaryPaused && "bg-blue-600")}>
+                  {userDetails.isVoluntaryPaused ? "Currently Frozen" : "Active"}
+                </Badge>
+              </div>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-sm text-muted-foreground">Pause Balance</span>
+              <span className="font-bold text-lg">{20 - (userDetails.totalPausedDays || 0)} / 20 Days Left</span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-sm text-muted-foreground">Freeze Attempts</span>
+              <span className="font-bold text-lg">{userDetails.voluntaryPauseAttempts || 0} / 2 Attempts Used</span>
+            </div>
+            {userDetails.isVoluntaryPaused && (
+              <div className="flex flex-col gap-1">
+                <span className="text-sm text-muted-foreground">Scheduled Resume</span>
+                <span className="font-bold text-lg text-blue-600">
+                  {userDetails.pauseScheduledEndDate ? formatDate(userDetails.pauseScheduledEndDate) : "N/A"}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="box flex flex-col gap-4 px-8 py-6">
+          <h2 className="text-lg font-bold">Pause History</h2>
+          <ScrollArea className="h-[150px]">
+            {(userDetails.pauseHistory?.length ?? 0) > 0 ? (
+              <div className="space-y-3">
+                {userDetails.pauseHistory?.map((entry, idx) => (
+                  <div key={idx} className="flex items-start justify-between border-b border-muted pb-2 text-sm">
+                    <div className="flex flex-col">
+                      <span className="font-bold">{entry.reason || (entry.isVoluntary ? "Voluntary" : "System")}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {formatDate(entry.start)} - {formatDate(entry.end)}
+                      </span>
+                    </div>
+                    <Badge variant="outline" className="text-[10px]">
+                      {entry.isVoluntary ? "Manual" : "Auto"}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex h-full items-center justify-center text-sm text-muted-foreground italic">
+                No pause history available
+              </div>
+            )}
+          </ScrollArea>
+        </div>
+      </section>
       <section className="box flex flex-col gap-8 px-8 py-6">
         <div className="flex items-center justify-between">
           <h2 className="subheading">Courses</h2>

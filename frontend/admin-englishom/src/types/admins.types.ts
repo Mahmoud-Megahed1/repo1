@@ -64,6 +64,16 @@ export type User = {
   isVerified: boolean;
   role: string;
   status: 'active' | 'suspended' | 'blocked';
+  isVoluntaryPaused?: boolean;
+  totalPausedDays?: number;
+  voluntaryPauseAttempts?: number;
+  pauseScheduledEndDate?: string;
+  pauseHistory?: Array<{
+    start: string;
+    end: string;
+    reason: string;
+    isVoluntary: boolean;
+  }>;
   createdAt: string;
   updatedAt: string;
 };

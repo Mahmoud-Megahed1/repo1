@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { updateUserStatus } from '@/services/admins';
+import { adminPauseUser, adminResumeUser, updateUserStatus } from '@/services/admins';
 import { User } from '@/types/admins.types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -18,8 +18,12 @@ import {
   BadgeX,
   MoreHorizontalIcon,
   VerifiedIcon,
+  Snowflake,
+  Play,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { FC } from 'react';
+import { Badge } from '@/components/ui/badge';
 
 const UserRow: FC<User> = ({
   _id: id,
@@ -27,6 +31,7 @@ const UserRow: FC<User> = ({
   status,
   lastName,
   firstName,
+  isVoluntaryPaused,
 }) => {
   const isSuper = true;
   const queryClient = useQueryClient();
@@ -38,6 +43,24 @@ const UserRow: FC<User> = ({
     },
   });
 
+  const { mutate: pause, isPending: isPausing } = useMutation({
+    mutationKey: ['adminPauseUser'],
+    mutationFn: adminPauseUser,
+    onSuccess() {
+      toast.success('Account frozen successfully for 20 days');
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
+  });
+
+  const { mutate: resume, isPending: isResuming } = useMutation({
+    mutationKey: ['adminResumeUser'],
+    mutationFn: adminResumeUser,
+    onSuccess() {
+      toast.success('Account resumed successfully');
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
+  });
+
   return (
     <div className="flex w-full items-center gap-2 text-sm">
       <div className="grid h-14 w-full grid-cols-4 items-center gap-2 rounded-xl bg-white/50 px-3 py-2 dark:bg-background/20">
@@ -45,15 +68,22 @@ const UserRow: FC<User> = ({
           {firstName} {lastName}
         </span>
         <span>{lastActivity}</span>
-        <span
-          className={cn({
-            'text-teal-500': status === 'active',
-            'text-destructive': status === 'blocked',
-            'text-yellow-500': status === 'suspended',
-          })}
-        >
-          {status}
-        </span>
+        <div className="flex items-center gap-2">
+          <span
+            className={cn({
+              'text-teal-500': status === 'active',
+              'text-destructive': status === 'blocked',
+              'text-yellow-500': status === 'suspended',
+            })}
+          >
+            {status}
+          </span>
+          {isVoluntaryPaused && (
+            <Badge className="bg-blue-100 text-blue-600 hover:bg-blue-100 border-none px-2 py-0 h-5 text-[10px] font-bold">
+              FROZEN
+            </Badge>
+          )}
+        </div>
         <div className="flex items-center gap-3">
           <Button
             asChild
@@ -88,6 +118,29 @@ const UserRow: FC<User> = ({
                     hidden: status === 'active',
                   })}
                 />
+
+                {/* Freeze/Resume Subscription */}
+                {isVoluntaryPaused ? (
+                  <DropdownMenuItem
+                    onClick={() => resume(id)}
+                    disabled={isResuming}
+                    className="gap-2 text-blue-600 focus:text-blue-600"
+                  >
+                    <Play className="size-6" />
+                    Resume Subscription
+                  </DropdownMenuItem>
+                ) : (
+                  <DropdownMenuItem
+                    onClick={() => pause({ userId: id, durationDays: 20 })}
+                    disabled={isPausing}
+                    className="gap-2 text-indigo-600 focus:text-indigo-600"
+                  >
+                    <Snowflake className="size-6" />
+                    Freeze Account (20d)
+                  </DropdownMenuItem>
+                )}
+
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={() => {
                     mutate({ userId: id, status: 'suspended' });

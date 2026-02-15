@@ -9,6 +9,9 @@ import {
   resetPassword,
   verifyForgetPasswordOtp,
   verifyOtp,
+  reactivate,
+  voluntaryPause,
+  voluntaryResume,
 } from './services';
 import { toast } from 'sonner';
 
@@ -39,10 +42,16 @@ export function useLogin() {
     mutationFn: login,
     onSuccess(data) {
       const {
-        user: { isVerified },
+        user: { isVerified, status },
         access_token,
       } = data.data;
       localStorage.setItem('token', access_token);
+
+      if (status === 'suspended') {
+        navigate({ to: '/suspended', replace: true });
+        return;
+      }
+
       if (isVerified) {
         navigate({ to: '/app' });
       } else {
@@ -100,9 +109,47 @@ export function useResetPassword() {
   });
 }
 
-export function useResendOtp() {
+export const useResendOtp = () => {
   return useMutation({
     mutationKey: ['resendOtp'],
     mutationFn: resendOtp,
   });
-}
+};
+
+export const useReactivate = () => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['reactivate'],
+    mutationFn: (variables: { data: { willCare: boolean; willCommit: boolean } }) => reactivate(variables),
+    onSuccess() {
+      toast.success('تم تفعيل الحساب بنجاح، أهلاً بك من جديد!');
+      queryClient.invalidateQueries({ queryKey: ['getMe'] });
+      navigate({ to: '/app', replace: true });
+    },
+  });
+};
+
+export const useVoluntaryPause = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['voluntaryPause'],
+    mutationFn: voluntaryPause,
+    onSuccess(data) {
+      toast.success(data.data.message);
+      queryClient.invalidateQueries({ queryKey: ['getMe'] });
+    },
+  });
+};
+
+export const useVoluntaryResume = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['voluntaryResume'],
+    mutationFn: voluntaryResume,
+    onSuccess(data) {
+      toast.success(data.data.message);
+      queryClient.invalidateQueries({ queryKey: ['getMe'] });
+    },
+  });
+};

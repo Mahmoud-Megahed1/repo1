@@ -98,17 +98,6 @@ export class UserAuthService {
     }
 
     // Check account status
-    if (user.status === UserStatus.SUSPENDED) {
-      throw new UnauthorizedException({
-        message:
-          'Your account has been suspended. Please contact support to reactivate your account.',
-        statusCode: 401,
-        error: 'Account Suspended',
-        suspendedAt: user.suspendedAt,
-        reason: user.suspensionReason,
-      });
-    }
-
     if (user.status === UserStatus.BLOCKED) {
       throw new UnauthorizedException({
         message:
@@ -117,6 +106,8 @@ export class UserAuthService {
         error: 'Account Blocked',
       });
     }
+
+    // SUSPENDED users are allowed to login so they can reach the Reactivation Page
 
     const isValid = await bcrypt.compare(loginDto.password, user.password);
 
@@ -394,11 +385,9 @@ export class UserAuthService {
       return null;
     }
 
-    // Check account status
-    if (
-      user.status === UserStatus.SUSPENDED ||
-      user.status === UserStatus.BLOCKED
-    ) {
+    // Only block BLOCKED users from JWT validation. 
+    // SUSPENDED users need to pass validation to call the reactivation endpoint.
+    if (user.status === UserStatus.BLOCKED) {
       return null;
     }
 

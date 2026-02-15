@@ -248,6 +248,7 @@ export class OrderRepo extends AbstractRepo<Order> implements OrderService {
 
     return await this.orderModel
       .findOne(filter)
+      .populate('userId')
       .session(session || null)
       .sort({ createdAt: -1 });
   }
