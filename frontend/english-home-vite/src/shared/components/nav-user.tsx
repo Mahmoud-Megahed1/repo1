@@ -7,7 +7,7 @@ import {
   Moon,
   Sun,
   Bot,
-  MessageSquare,
+  MessageCircle,
 } from 'lucide-react';
 import { useTheme } from '@components/contexts/theme-context';
 import { Avatar, AvatarFallback, AvatarImage } from '@ui/avatar';
@@ -32,7 +32,7 @@ import useLocale from '@hooks/use-locale';
 import { Link } from '@shared/i18n/routing';
 import { Button } from '@ui/button';
 import { useAiChatStore } from '@hooks/use-ai-chat-store';
-import { useSupportChat } from '@hooks/use-support-chat';
+import { useChatStore } from '@hooks/use-chat-store';
 
 type Props = {
   user: {
@@ -48,7 +48,7 @@ export function NavUser({ user, onLogout }: Props) {
   const { t } = useTranslation();
   const locale = useLocale();
   const { setIsOpen: setOpenAiChat } = useAiChatStore();
-  const { setIsOpen: setOpenSupportChat } = useSupportChat();
+  const { setIsOpen: setOpenChat } = useChatStore();
 
   return (
     <SidebarMenu>
@@ -65,13 +65,13 @@ export function NavUser({ user, onLogout }: Props) {
             </span>
           </Button>
           <Button
-            onClick={() => setOpenSupportChat(true)}
-            className="flex-1 h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 hover:opacity-90 shadow-lg text-white p-0 transition-transform active:scale-95 border-none"
-            title={t('Global.support.title' as any)}
+            onClick={() => setOpenChat(true)}
+            className="flex-1 h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-[#EFBF04] via-[#f5d44a] to-[#d9ad04] hover:opacity-90 shadow-lg text-black p-0 transition-transform active:scale-95 border-none"
+            title={t('Global.chatbot.title' as any)}
           >
-            <MessageSquare size={20} />
+            <MessageCircle size={20} />
             <span className="text-[10px] font-bold uppercase tracking-tighter">
-              {t('Global.support.title' as any)}
+              {t('Global.chatbot.title' as any)}
             </span>
           </Button>
         </div>

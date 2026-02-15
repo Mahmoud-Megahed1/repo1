@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { MessageCircle, X, Send, Loader2, Minimize2, RefreshCw, Bot } from 'lucide-react';
+import { X, Send, Loader2, Minimize2, RefreshCw, Bot } from 'lucide-react';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { useChatStore } from '@hooks/use-chat-store';
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -71,7 +72,7 @@ function renderMarkdown(text: string): React.ReactNode {
 export const ChatWidget = () => {
     const { i18n } = useTranslation();
     const isArabic = i18n.language === 'ar';
-    const [isOpen, setIsOpen] = useState(false);
+    const { isOpen, setIsOpen } = useChatStore();
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -323,20 +324,11 @@ export const ChatWidget = () => {
                 </div>
             </div>
 
-            <button
+            {/* Removed the floating toggle button since it's now in the sidebar */}
+            {/* <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={cn(
-                    "h-14 w-14 rounded-full shadow-xl transition-all duration-300 flex items-center justify-center z-50 pointer-events-auto relative",
-                    "bg-[#EFBF04] hover:bg-[#d9ad04] text-black border-2 border-white dark:border-zinc-800 hover:scale-110",
-                    isOpen && "rotate-90 scale-0 opacity-0 absolute"
-                )}
-            >
-                <MessageCircle className="h-7 w-7" />
-                {/* Notification dot */}
-                {!isOpen && messages.length === 0 && (
-                    <span className="absolute -top-0.5 -end-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white dark:border-zinc-800 animate-pulse" />
-                )}
-            </button>
+                ...
+            </button> */}
 
             {/* Close Button */}
             <button
