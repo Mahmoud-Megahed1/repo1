@@ -49,7 +49,7 @@ const PictureCard: FC<Props> = ({
   return (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start w-full">
       {/* Image Section */}
-      <div className="relative flex-1 flex items-center justify-center overflow-hidden rounded-md bg-black/5 dark:bg-white/5 border border-border">
+      <div className="relative flex-1 flex items-center justify-center overflow-hidden">
         <img
           src={pictureSrc}
           className="h-auto w-full object-contain max-h-[280px] lg:max-h-[380px]"
