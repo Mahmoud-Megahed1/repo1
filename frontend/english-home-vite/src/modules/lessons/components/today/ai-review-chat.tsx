@@ -64,36 +64,40 @@ export default function AIReviewChat({
     const inputRef = useRef<HTMLInputElement>(null);
     const recognitionRef = useRef<any>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const ttsAbortControllerRef = useRef<AbortController | null>(null);
 
     // ─── TTS ─────────────────────────────────────────
     const speak = useCallback(async (text: string, index: number) => {
         try {
-            // Stop any current audio
+            // Stop any current audio and abort pending fetch
+            if (ttsAbortControllerRef.current) {
+                ttsAbortControllerRef.current.abort();
+            }
             if (audioRef.current) {
                 audioRef.current.pause();
                 audioRef.current = null;
             }
 
+            const cleanText = text
+                .replace(/[#*`_]/g, '') // Remove markdown symbols
+                .replace(/\n\s*\n/g, '. ') // Replace double newlines with pause
+                .trim();
+
+            if (!cleanText) return;
+
             setMessages(prev => prev.map((m, i) =>
                 i === index ? { ...m, isAudioPlaying: true } : { ...m, isAudioPlaying: false }
             ));
 
-            let baseUrl = import.meta.env.VITE_API_URL || 'https://api.englishom.com';
-            if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
-            if (!baseUrl.endsWith('/api')) baseUrl += '/api';
+            const controller = new AbortController();
+            ttsAbortControllerRef.current = controller;
 
-            const response = await fetch(`${baseUrl}/chat/tts`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({ text }),
+            const res = await axiosClient.post('/chat/tts', { text: cleanText }, {
+                responseType: 'blob',
+                signal: controller.signal
             });
 
-            if (!response.ok) throw new Error('TTS failed');
-
-            const blob = await response.blob();
+            const blob = res.data;
             const url = URL.createObjectURL(blob);
             const audio = new Audio(url);
             audioRef.current = audio;
@@ -115,20 +119,27 @@ export default function AIReviewChat({
             };
 
             await audio.play();
-        } catch (error) {
+        } catch (error: any) {
+            if (error.name === 'CanceledError' || error.name === 'AbortError') return;
             console.error('TTS Error:', error);
             setMessages(prev => prev.map((m, i) =>
                 i === index ? { ...m, isAudioPlaying: false } : m
             ));
+        } finally {
+            ttsAbortControllerRef.current = null;
         }
     }, []);
 
     const stopSpeaking = useCallback(() => {
+        if (ttsAbortControllerRef.current) {
+            ttsAbortControllerRef.current.abort();
+            ttsAbortControllerRef.current = null;
+        }
         if (audioRef.current) {
             audioRef.current.pause();
             audioRef.current = null;
-            setMessages(prev => prev.map(m => ({ ...m, isAudioPlaying: false })));
         }
+        setMessages(prev => prev.map(m => ({ ...m, isAudioPlaying: false })));
     }, []);
 
     // ─── Auto-scroll ──────────────────────────────────
@@ -272,7 +283,10 @@ export default function AIReviewChat({
         recognition.onresult = (event: any) => {
             const transcript = event.results[0][0].transcript;
             if (transcript.trim()) {
+                console.log("Speech detected:", transcript);
                 handleSendMessage(transcript);
+            } else {
+                toast.info(isArabic ? 'لم يتم التعرف على الكلام' : 'Could not recognize speech');
             }
             setIsListening(false);
         };

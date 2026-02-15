@@ -36,9 +36,14 @@ export class ChatController {
     return this.chatService.generateLessonReviewResponse(user._id.toString(), body);
   }
 
+  @UseGuards(UserJwtGuard)
   @Post('tts')
   @HttpCode(HttpStatus.OK)
-  async generateTTS(@Body() body: { text: string }, @Res() res: Response) {
+  async generateTTS(
+    @CurrentUser() user: User,
+    @Body() body: { text: string },
+    @Res() res: Response,
+  ) {
     const audioBuffer = await this.chatService.generateSpeech(body.text);
     res.set({
       'Content-Type': 'audio/mpeg',
