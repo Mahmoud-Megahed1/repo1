@@ -209,4 +209,14 @@ export class ChatService {
       };
     }
   }
+
+  async generateSpeech(text: string) {
+    const response = await this.openai.audio.speech.create({
+      model: "tts-1",
+      voice: "nova", // nova is a friendly, natural voice
+      input: text,
+    });
+
+    return Buffer.from(await response.arrayBuffer());
+  }
 }

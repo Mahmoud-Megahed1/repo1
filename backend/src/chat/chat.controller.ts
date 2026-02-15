@@ -1,4 +1,5 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, UseGuards, Get, Query } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, UseGuards, Get, Query, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { ChatService } from './chat.service';
 import { UserJwtGuard } from '../user-auth/guards/user-jwt.guard';
 import { CurrentUser } from '../user-auth/decorator/get-curr-user.decorator';
@@ -33,5 +34,16 @@ export class ChatController {
     @Body() body: { message: string; levelName: string; day: string; lessonName: string }
   ) {
     return this.chatService.generateLessonReviewResponse(user._id.toString(), body);
+  }
+
+  @Post('tts')
+  @HttpCode(HttpStatus.OK)
+  async generateTTS(@Body() body: { text: string }, @Res() res: Response) {
+    const audioBuffer = await this.chatService.generateSpeech(body.text);
+    res.set({
+      'Content-Type': 'audio/mpeg',
+      'Content-Length': audioBuffer.length,
+    });
+    res.send(audioBuffer);
   }
 }

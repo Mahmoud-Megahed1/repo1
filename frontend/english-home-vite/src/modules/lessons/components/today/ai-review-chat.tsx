@@ -63,60 +63,73 @@ export default function AIReviewChat({
     const scrollRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const recognitionRef = useRef<any>(null);
-
-    // Speech Synthesis
-    const [synth, setSynth] = useState<SpeechSynthesis | null>(null);
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            setSynth(window.speechSynthesis);
-        }
-    }, []);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
 
     // ─── TTS ─────────────────────────────────────────
-    const speak = useCallback((text: string, index: number) => {
-        if (!synth) return;
-        synth.cancel();
-        const cleanText = text
-            .replace(/[#*`_]/g, '') // Remove markdown symbols
-            .replace(/\n\s*\n/g, '. ') // Replace double newlines with pause
-            .trim();
+    const speak = useCallback(async (text: string, index: number) => {
+        try {
+            // Stop any current audio
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current = null;
+            }
 
-        const utterance = new SpeechSynthesisUtterance(cleanText);
-        utterance.lang = isArabic ? 'ar-SA' : 'en-US';
-        utterance.rate = 0.9;
-        utterance.pitch = 1.0;
-
-        // Try to find a natural voice
-        const voices = synth.getVoices();
-        const preferredVoice = voices.find(v =>
-            v.lang.startsWith(isArabic ? 'ar' : 'en') && v.name.toLowerCase().includes('natural')
-        ) || voices.find(v =>
-            v.lang.startsWith(isArabic ? 'ar' : 'en') && !v.localService
-        ) || voices.find(v =>
-            v.lang.startsWith(isArabic ? 'ar' : 'en')
-        );
-        if (preferredVoice) utterance.voice = preferredVoice;
-
-        utterance.onstart = () => {
             setMessages(prev => prev.map((m, i) =>
                 i === index ? { ...m, isAudioPlaying: true } : { ...m, isAudioPlaying: false }
             ));
-        };
-        utterance.onend = () => {
+
+            let baseUrl = import.meta.env.VITE_API_URL || 'https://api.englishom.com';
+            if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
+            if (!baseUrl.endsWith('/api')) baseUrl += '/api';
+
+            const response = await fetch(`${baseUrl}/chat/tts`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ text }),
+            });
+
+            if (!response.ok) throw new Error('TTS failed');
+
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            const audio = new Audio(url);
+            audioRef.current = audio;
+
+            audio.onended = () => {
+                setMessages(prev => prev.map((m, i) =>
+                    i === index ? { ...m, isAudioPlaying: false } : m
+                ));
+                audioRef.current = null;
+                URL.revokeObjectURL(url);
+            };
+
+            audio.onerror = () => {
+                setMessages(prev => prev.map((m, i) =>
+                    i === index ? { ...m, isAudioPlaying: false } : m
+                ));
+                audioRef.current = null;
+                URL.revokeObjectURL(url);
+            };
+
+            await audio.play();
+        } catch (error) {
+            console.error('TTS Error:', error);
             setMessages(prev => prev.map((m, i) =>
                 i === index ? { ...m, isAudioPlaying: false } : m
             ));
-        };
-        synth.speak(utterance);
-    }, [synth, isArabic]);
+        }
+    }, []);
 
     const stopSpeaking = useCallback(() => {
-        if (synth) {
-            synth.cancel();
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current = null;
             setMessages(prev => prev.map(m => ({ ...m, isAudioPlaying: false })));
         }
-    }, [synth]);
+    }, []);
 
     // ─── Auto-scroll ──────────────────────────────────
     useEffect(() => {
