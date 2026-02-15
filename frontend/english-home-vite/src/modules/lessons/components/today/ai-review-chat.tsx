@@ -46,7 +46,7 @@ export default function AIReviewChat({
     lessonName,
 }: Props) {
     const { t, i18n } = useTranslation();
-    const isArabic = i18n.language === 'ar';
+    const isArabic = i18n.language.startsWith('ar');
 
     const [speechLang, setSpeechLang] = useState<'ar-SA' | 'en-US'>(isArabic ? 'ar-SA' : 'en-US');
 
@@ -97,10 +97,18 @@ export default function AIReviewChat({
                 signal: controller.signal
             });
 
+            if (!res.data || res.data.size < 100) {
+                console.error("Invalid blob size:", res.data?.size);
+                throw new Error('Invalid audio data received');
+            }
+
             const blob = res.data;
             const url = URL.createObjectURL(blob);
             const audio = new Audio(url);
             audioRef.current = audio;
+
+            // Preload to ensure metadata is there
+            audio.load();
 
             audio.onended = () => {
                 setMessages(prev => prev.map((m, i) =>
@@ -110,7 +118,9 @@ export default function AIReviewChat({
                 URL.revokeObjectURL(url);
             };
 
-            audio.onerror = () => {
+            audio.onerror = (e) => {
+                console.error("Audio playback error:", e);
+                // toast.error(isArabic ? 'خطأ في تشغيل الصوت' : 'Audio playback error');
                 setMessages(prev => prev.map((m, i) =>
                     i === index ? { ...m, isAudioPlaying: false } : m
                 ));
@@ -118,17 +128,29 @@ export default function AIReviewChat({
                 URL.revokeObjectURL(url);
             };
 
-            await audio.play();
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.error("Autoplay/Play prevented:", error);
+                    // If blocked, we reset the playing state
+                    setMessages(prev => prev.map((m, i) =>
+                        i === index ? { ...m, isAudioPlaying: false } : m
+                    ));
+                    // Maybe prompt user to click? 
+                    toast.info(isArabic ? 'انقر على أيقونة الصوت للاستماع' : 'Click the volume icon to listen');
+                });
+            }
         } catch (error: any) {
             if (error.name === 'CanceledError' || error.name === 'AbortError') return;
             console.error('TTS Error:', error);
+            // toast.error(isArabic ? 'فشل تحميل الصوت' : 'Failed to load audio');
             setMessages(prev => prev.map((m, i) =>
                 i === index ? { ...m, isAudioPlaying: false } : m
             ));
         } finally {
             ttsAbortControllerRef.current = null;
         }
-    }, []);
+    }, [isArabic]);
 
     const stopSpeaking = useCallback(() => {
         if (ttsAbortControllerRef.current) {
@@ -204,6 +226,7 @@ export default function AIReviewChat({
         setIsProcessing(true);
 
         try {
+            console.log("Sending message to AI:", text.trim());
             const res = await axiosClient.post<{ reply: string }>('/chat/lesson-review', {
                 message: text.trim(),
                 levelName,
@@ -213,12 +236,12 @@ export default function AIReviewChat({
 
             const reply = res.data.reply;
             if (reply) {
-                setMessages(prev => {
-                    const updated = [...prev, { role: 'assistant' as const, content: reply, status: 'sent' as const }];
-                    // Auto-speak the new reply
-                    setTimeout(() => speak(reply, updated.length - 1), 100);
-                    return updated;
-                });
+                const newBotMsg: Message = { role: 'assistant', content: reply, status: 'sent' };
+                setMessages(prev => [...prev, newBotMsg]);
+
+                // Speak the reply. 
+                // Since we just added a message to 'prev', the index will be 'messages.length' (current state).
+                setTimeout(() => speak(reply, messages.length), 100);
             } else {
                 throw new Error('Empty reply from AI');
             }
@@ -276,7 +299,10 @@ export default function AIReviewChat({
 
         const recognition = new SpeechRecognitionClass();
         recognition.continuous = false;
-        recognition.lang = speechLang;
+
+        // Ensure language is set. Default to ar-SA for Arabic, en-US for English.
+        recognition.lang = speechLang || (isArabic ? 'ar-SA' : 'en-US');
+
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
 
@@ -284,6 +310,7 @@ export default function AIReviewChat({
             const transcript = event.results[0][0].transcript;
             if (transcript.trim()) {
                 console.log("Speech detected:", transcript);
+                toast.success(`${isArabic ? 'تم التقاط:' : 'Detected:'} ${transcript}`);
                 handleSendMessage(transcript);
             } else {
                 toast.info(isArabic ? 'لم يتم التعرف على الكلام' : 'Could not recognize speech');
@@ -309,9 +336,7 @@ export default function AIReviewChat({
                     ? 'لم يتم اكتشاف كلام. حاول مرة أخرى.'
                     : 'No speech detected. Try again.');
             } else if (event.error !== 'aborted') {
-                toast.error(isArabic
-                    ? 'خطأ في التعرف على الكلام. حاول الكتابة بدلاً من ذلك.'
-                    : 'Speech recognition error. Try typing instead.');
+                toast.error(`${isArabic ? 'خطأ في التعرف:' : 'Recognition error:'} ${event.error}`);
                 setInputMode('text');
             }
         };

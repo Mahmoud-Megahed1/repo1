@@ -44,11 +44,19 @@ export class ChatController {
     @Body() body: { text: string },
     @Res() res: Response,
   ) {
-    const audioBuffer = await this.chatService.generateSpeech(body.text);
-    res.set({
-      'Content-Type': 'audio/mpeg',
-      'Content-Length': audioBuffer.length,
-    });
-    res.send(audioBuffer);
+    try {
+      if (!body.text) {
+        return res.status(HttpStatus.BAD_REQUEST).send({ message: 'Text is required' });
+      }
+      const audioBuffer = await this.chatService.generateSpeech(body.text);
+      res.set({
+        'Content-Type': 'audio/mpeg',
+        'Content-Length': audioBuffer.length,
+      });
+      res.send(audioBuffer);
+    } catch (error) {
+      console.error('TTS Generation Error:', error);
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({ message: 'Failed to generate speech' });
+    }
   }
 }
