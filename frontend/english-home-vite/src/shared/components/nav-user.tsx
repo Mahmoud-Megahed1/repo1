@@ -47,33 +47,43 @@ export function NavUser({ user, onLogout }: Props) {
   const { isMobile } = useSidebar();
   const { t } = useTranslation();
   const locale = useLocale();
+  const { dynamicTheme } = useTheme();
   const { setIsOpen: setOpenAiChat } = useAiChatStore();
   const { setIsOpen: setOpenChat } = useChatStore();
+
+  const showAiReview = dynamicTheme?.showAIReviewChat !== false;
+  const showSupportChat = dynamicTheme?.showSupportChat !== false;
+
+  if (!showAiReview && !showSupportChat) return null;
 
   return (
     <SidebarMenu>
       <SidebarMenuItem className="mb-4 group-data-[state=collapsed]:hidden">
         <div className="flex gap-2 px-2">
-          <Button
-            onClick={() => setOpenAiChat(true)}
-            className="flex-1 h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg text-white p-0 transition-transform active:scale-95 border-none"
-            title={t('Global.aiReview.title' as any)}
-          >
-            <Bot size={20} />
-            <span className="text-[10px] font-bold uppercase tracking-tighter">
-              {t('Global.aiReview.title' as any)}
-            </span>
-          </Button>
-          <Button
-            onClick={() => setOpenChat(true)}
-            className="flex-1 h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-[#EFBF04] via-[#f5d44a] to-[#d9ad04] hover:opacity-90 shadow-lg text-black p-0 transition-transform active:scale-95 border-none"
-            title={t('Global.chatbot.title' as any)}
-          >
-            <MessageCircle size={20} />
-            <span className="text-[10px] font-bold uppercase tracking-tighter">
-              {t('Global.chatbot.title' as any)}
-            </span>
-          </Button>
+          {showAiReview && (
+            <Button
+              onClick={() => setOpenAiChat(true)}
+              className="flex-1 h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg text-white p-0 transition-transform active:scale-95 border-none"
+              title={t('Global.aiReview.title' as any)}
+            >
+              <Bot size={20} />
+              <span className="text-[10px] font-bold uppercase tracking-tighter">
+                {t('Global.aiReview.title' as any)}
+              </span>
+            </Button>
+          )}
+          {showSupportChat && (
+            <Button
+              onClick={() => setOpenChat(true)}
+              className="flex-1 h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-[#EFBF04] via-[#f5d44a] to-[#d9ad04] hover:opacity-90 shadow-lg text-black p-0 transition-transform active:scale-95 border-none"
+              title={t('Global.chatbot.title' as any)}
+            >
+              <MessageCircle size={20} />
+              <span className="text-[10px] font-bold uppercase tracking-tighter">
+                {t('Global.chatbot.title' as any)}
+              </span>
+            </Button>
+          )}
         </div>
       </SidebarMenuItem>
 
