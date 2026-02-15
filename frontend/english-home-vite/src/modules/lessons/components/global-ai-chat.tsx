@@ -13,9 +13,6 @@ export function GlobalAiChat({ }: Props) {
     const { dynamicTheme } = useTheme();
     const params = useParams({ strict: false });
 
-    // Only show if we have valid lesson context
-    if (!params.id || !params.day || !params.lessonName) return null;
-
     // Respect admin visibility toggle
     if (dynamicTheme?.showAIReviewChat === false) return null;
 
@@ -23,9 +20,9 @@ export function GlobalAiChat({ }: Props) {
         <AIReviewChat
             open={isOpen}
             onOpenChange={setIsOpen}
-            levelName={params.id as LevelId}
-            day={params.day as string}
-            lessonName={params.lessonName as LessonId}
+            levelName={params.id as LevelId || 'A1'}
+            day={params.day as string || '1'}
+            lessonName={params.lessonName as LessonId || 'vocabulary'}
         />
     );
 }

@@ -214,12 +214,12 @@ export const ChatWidget = () => {
     };
 
     return createPortal(
-        <div className="fixed bottom-36 end-6 z-[100] flex flex-col items-end gap-2 font-cairo pointer-events-none" dir={isArabic ? 'rtl' : 'ltr'}>
+        <div className="fixed bottom-10 sm:bottom-36 end-4 sm:end-6 z-[100] flex flex-col items-end gap-2 font-cairo pointer-events-none" dir={isArabic ? 'rtl' : 'ltr'}>
             {/* Chat Window */}
             <div
                 className={cn(
-                    "w-[360px] sm:w-[400px] bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl shadow-2xl transition-all duration-300 overflow-hidden flex flex-col pointer-events-auto",
-                    isOpen ? "opacity-100 scale-100 translate-y-0 h-[520px]" : "opacity-0 scale-95 translate-y-4 h-0 pointer-events-none"
+                    "w-[calc(100vw-32px)] sm:w-[400px] bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl shadow-2xl transition-all duration-300 overflow-hidden flex flex-col pointer-events-auto",
+                    isOpen ? "opacity-100 scale-100 translate-y-0 h-[500px] sm:h-[520px]" : "opacity-0 scale-95 translate-y-4 h-0 pointer-events-none"
                 )}
             >
                 {/* Header */}

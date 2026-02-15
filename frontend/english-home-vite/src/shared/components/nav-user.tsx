@@ -59,14 +59,14 @@ export function NavUser({ user, onLogout }: Props) {
   return (
     <SidebarMenu>
       <SidebarMenuItem className="mb-4 group-data-[state=collapsed]:hidden">
-        <div className="flex gap-2 px-2">
+        <div className="grid grid-cols-2 gap-2 px-2">
           {showAiReview && (
             <Button
               onClick={() => {
                 setOpenAiChat(true);
                 if (isMobile) setOpenMobile(false);
               }}
-              className="flex-1 h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg text-white p-0 transition-transform active:scale-95 border-none"
+              className="h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg text-white p-0 transition-transform active:scale-95 border-none w-full"
               title={t('Global.aiReview.title' as any)}
             >
               <Bot size={20} />
@@ -81,7 +81,7 @@ export function NavUser({ user, onLogout }: Props) {
                 setOpenChat(true);
                 if (isMobile) setOpenMobile(false);
               }}
-              className="flex-1 h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-[#EFBF04] via-[#f5d44a] to-[#d9ad04] hover:opacity-90 shadow-lg text-black p-0 transition-transform active:scale-95 border-none"
+              className="h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-[#EFBF04] via-[#f5d44a] to-[#d9ad04] hover:opacity-90 shadow-lg text-black p-0 transition-transform active:scale-95 border-none w-full"
               title={t('Global.chatbot.title' as any)}
             >
               <MessageCircle size={20} />
