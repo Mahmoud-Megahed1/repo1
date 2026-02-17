@@ -449,15 +449,6 @@ export default function AIReviewChat({
                             {t('Global.aiReview.description', 'Chat with AI to review what you learned.')}
                         </SheetDescription>
                     </div>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-white hover:bg-white/20 rounded-full h-8 w-8 z-50 cursor-pointer"
-                        onClick={() => onOpenChange(false)}
-                    >
-                        <XIcon className="w-5 h-5" />
-                        <span className="sr-only">Close</span>
-                    </Button>
                 </SheetHeader>
 
                 {/* Messages Area */}
@@ -489,7 +480,7 @@ export default function AIReviewChat({
                                         : "bg-muted rounded-tl-sm",
                                     m.status === 'error' && "border-2 border-destructive/30 bg-destructive/5"
                                 )}>
-                                    <p className="whitespace-pre-wrap">{m.content}</p>
+                                    <p className="whitespace-pre-wrap text-start [unicode-bidi:plaintext]" dir="auto">{m.content}</p>
 
                                     {/* Error retry button */}
                                     {m.status === 'error' && (

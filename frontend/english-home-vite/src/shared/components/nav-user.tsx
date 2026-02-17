@@ -7,6 +7,7 @@ import {
   Moon,
   Sun,
   MessageCircle,
+  Bot,
 } from 'lucide-react';
 import { useTheme } from '@components/contexts/theme-context';
 import { Avatar, AvatarFallback, AvatarImage } from '@ui/avatar';
@@ -31,6 +32,7 @@ import useLocale from '@hooks/use-locale';
 import { Link } from '@shared/i18n/routing';
 import { Button } from '@ui/button';
 import { useChatStore } from '@hooks/use-chat-store';
+import { useAiChatStore } from '@hooks/use-ai-chat-store';
 
 type Props = {
   user: {
@@ -47,8 +49,9 @@ export function NavUser({ user, onLogout }: Props) {
   const locale = useLocale();
   const { dynamicTheme } = useTheme();
   const { setIsOpen: setOpenChat } = useChatStore();
+  const { setIsOpen: setOpenAiChat } = useAiChatStore();
 
-  const showAiReview = dynamicTheme?.showAIReviewChat !== false;
+  const showAiReview = true; // Always show as per user request
   const showSupportChat = dynamicTheme?.showSupportChat !== false;
 
   if (!showAiReview && !showSupportChat) return null;
@@ -70,6 +73,22 @@ export function NavUser({ user, onLogout }: Props) {
               <MessageCircle size={20} />
               <span className="text-[10px] font-bold uppercase tracking-tighter">
                 {t('Global.chatbot.title' as any)}
+              </span>
+            </Button>
+          )}
+
+          {showAiReview && (
+            <Button
+              onClick={() => {
+                setOpenAiChat(true);
+                if (isMobile) setOpenMobile(false);
+              }}
+              className="h-14 mt-2 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg text-white p-0 transition-transform active:scale-95 border-none w-full"
+              title={t('Global.aiReview.title' as any)}
+            >
+              <Bot size={20} />
+              <span className="text-[10px] font-bold uppercase tracking-tighter">
+                {t('Global.aiReview.title' as any, { defaultValue: 'AI Review' })}
               </span>
             </Button>
           )}

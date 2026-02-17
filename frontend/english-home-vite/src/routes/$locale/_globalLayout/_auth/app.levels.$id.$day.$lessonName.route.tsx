@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Outlet, useParams } from '@tanstack/react-router';
 import BookLoader from '@ui/book-loader';
 import { CheckCircle2 } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import ScrollArrows from '@components/scroll-arrows';
 import { GlobalAiChat } from '@modules/lessons/components/global-ai-chat';
@@ -91,10 +91,16 @@ function RouteComponent() {
 
   // Auto-trigger AI Chat when all 10 tasks are done
   useEffect(() => {
-    if (areAllTasksCompleted && !isAiChatOpen && dynamicTheme?.showAIReviewChat !== false) {
+    if (!areAllTasksCompleted || dynamicTheme?.showAIReviewChat === false) return;
+
+    const storageKey = `ai-review-opened-${levelId}-${day}-${lessonName}`;
+    const hasOpened = sessionStorage.getItem(storageKey);
+
+    if (!hasOpened) {
       setOpenAiChat(true);
+      sessionStorage.setItem(storageKey, 'true');
     }
-  }, [areAllTasksCompleted, setOpenAiChat, isAiChatOpen, dynamicTheme?.showAIReviewChat]);
+  }, [areAllTasksCompleted, setOpenAiChat, dynamicTheme?.showAIReviewChat, levelId, day, lessonName]);
 
   return (
     <LevelGuard levelId={levelId as LevelId}>
