@@ -480,7 +480,7 @@ export default function AIReviewChat({
                                         : "bg-muted rounded-tl-sm",
                                     m.status === 'error' && "border-2 border-destructive/30 bg-destructive/5"
                                 )}>
-                                    <p className="whitespace-pre-wrap text-start [unicode-bidi:plaintext]" dir="auto">{m.content}</p>
+                                    <p className="whitespace-pre-wrap text-start" dir="auto" style={{ unicodeBidi: 'plaintext' }}>{m.content}</p>
 
                                     {/* Error retry button */}
                                     {m.status === 'error' && (

@@ -211,11 +211,20 @@ export class ChatService {
 
       return { reply };
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Lesson Review AI Error:', error);
-      // Return a friendly error message instead of crashing
+
+      let friendlyMessage = 'I\'m sorry, I\'m having trouble responding right now. Please try again in a moment.';
+
+      // Handle known OpenAI errors
+      if (error?.status === 429 || error?.code === 'insufficient_quota') {
+        friendlyMessage = 'I\'m currently experiencing high traffic. Please try again in a minute.';
+      } else if (error?.status === 401) {
+        friendlyMessage = 'My configuration settings need an update (API Key Issue).';
+      }
+
       return {
-        reply: 'I\'m sorry, I\'m having trouble responding right now. Please try again in a moment. If the issue persists, please contact support.'
+        reply: `${friendlyMessage} (Debug: ${error?.message || 'Unknown'})`
       };
     }
   }
