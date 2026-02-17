@@ -162,9 +162,20 @@ export class ChatService {
         languageInstruction = "Mix languages naturally. Explain in Arabic, practice in English.";
       }
 
+      let knowledgeBaseHeader = "";
+      if (theme && theme.aiKnowledgeContext) {
+        knowledgeBaseHeader = `
+        ## OFFICIAL KNOWLEDGE BASE & CURRICULUM:
+        The following text contains the core training data and answering guidelines. You MUST refer to this content when answering user questions or explaining concepts.
+        ${theme.aiKnowledgeContext}
+        `;
+      }
+
       let systemPromptWithContext = `${SYSTEM_PROMPT}
 
       ${languageInstruction}
+
+      ${knowledgeBaseHeader}
 
       CURRENT LESSON CONTEXT:
       The user has just completed the following lesson. Use this content to guide the review.
@@ -186,10 +197,6 @@ export class ChatService {
 
       ${aiInstructions}
       `;
-
-      if (theme && theme.aiKnowledgeContext) {
-        systemPromptWithContext += `\n\nADDITIONAL KNOWLEDGE BASE:\n${theme.aiKnowledgeContext}`;
-      }
 
       const messages: any[] = [
         { role: 'system', content: systemPromptWithContext },
