@@ -276,4 +276,3 @@ export class ChatService {
     return data;
   }
 }
-}
