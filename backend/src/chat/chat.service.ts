@@ -136,10 +136,11 @@ export class ChatService {
       let aiInstructions = "";
 
       if (lessonData && lessonData.data && lessonData.data.length > 0) {
-        const lesson = lessonData.data[0];
-        lessonContextString = JSON.stringify(lesson);
-        if (lesson.aiInstructions) {
-          aiInstructions = `\n\nSPECIAL INSTRUCTIONS FOR AI:\n${lesson.aiInstructions}`;
+        const rawLesson = lessonData.data[0];
+        const sanitizedLesson = this.sanitizePayload(rawLesson);
+        lessonContextString = JSON.stringify(sanitizedLesson);
+        if (rawLesson.aiInstructions) {
+          aiInstructions = `\n\nSPECIAL INSTRUCTIONS FOR AI:\n${rawLesson.aiInstructions}`;
         }
       }
 
@@ -247,5 +248,32 @@ export class ChatService {
       console.error('OpenAI TTS Error:', error);
       throw error;
     }
+    private sanitizePayload(data: any, depth = 0): any {
+    if (depth > 5) return '[Max Depth Reached]';
+    if (!data) return data;
+
+    if (Array.isArray(data)) {
+      // Limit array size to prevent huge lists
+      return data.slice(0, 30).map(item => this.sanitizePayload(item, depth + 1));
+    }
+
+    if (typeof data === 'object') {
+      const cleanObj: any = {};
+      const sensitiveKeys = ['soundSrc', 'pictureSrc', 'questionSrc', 'answerSrc', 'id', '_id', '__v', 'metadata', 'createdAt', 'updatedAt'];
+
+      for (const [key, value] of Object.entries(data)) {
+        if (sensitiveKeys.includes(key)) continue;
+        // Truncate very long strings (likely base64 or garbage)
+        if (typeof value === 'string' && value.length > 2000) {
+          cleanObj[key] = value.substring(0, 500) + '...[Truncated]';
+        } else {
+          cleanObj[key] = this.sanitizePayload(value, depth + 1);
+        }
+      }
+      return cleanObj;
+    }
+
+    return data;
   }
+}
 }
