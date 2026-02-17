@@ -17,6 +17,8 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import ScrollArrows from '@components/scroll-arrows';
 import { GlobalAiChat } from '@modules/lessons/components/global-ai-chat';
+import { useAiChatStore } from '@hooks/use-ai-chat-store';
+import { useTheme } from '@components/contexts/theme-context';
 
 export const Route = createFileRoute(
   '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName'
@@ -26,6 +28,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { t } = useTranslation();
+  const { dynamicTheme } = useTheme();
   const { id: levelId, day, lessonName } = useParams({ from: Route.id });
   const { isEmpty, isFetching } = useLessonContext();
   const { levelsDetails } = useAuth();
@@ -78,10 +81,20 @@ function RouteComponent() {
         />
       </LevelGuard>
     );
-  // Calculate if all prerequisite tasks are completed (excluding DAILY_TEST and TODAY itself)
+  const { setIsOpen: setOpenAiChat, isOpen: isAiChatOpen } = useAiChatStore();
+
+  // Calculate if all prerequisite tasks are completed (excluding DAILY_TEST)
+  // This covers the 10 tasks: READ, WRITE, LISTEN, GRAMMAR, PICTURES, TODAY, Q_A, SPEAK, PHRASAL_VERBS, IDIOMS
   const areAllTasksCompleted = LESSONS_IDS
-    .filter(id => id !== 'DAILY_TEST' && id !== 'TODAY')
+    .filter(id => id !== 'DAILY_TEST')
     .every(id => completedTasks?.data?.includes(id));
+
+  // Auto-trigger AI Chat when all 10 tasks are done
+  useEffect(() => {
+    if (areAllTasksCompleted && !isAiChatOpen && dynamicTheme?.showAIReviewChat !== false) {
+      setOpenAiChat(true);
+    }
+  }, [areAllTasksCompleted, setOpenAiChat, isAiChatOpen, dynamicTheme?.showAIReviewChat]);
 
   return (
     <LevelGuard levelId={levelId as LevelId}>

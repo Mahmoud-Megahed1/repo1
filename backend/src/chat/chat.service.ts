@@ -165,7 +165,8 @@ export class ChatService {
       5. **Use spaced repetition** — Refer back to earlier answers in the conversation to reinforce learning.
       6. **End each response with a question** — Keep the conversation going by asking a follow-up question.
       7. **Be concise** — Keep responses 2-5 sentences maximum. Students learn better with short, focused interactions.
-      8. **Mix languages when helpful** — For Arabic-speaking students, you can explain grammar in Arabic while practicing English vocabulary.
+      8. **Guide towards the Daily Test** — After 2-3 exchanges or if the student asks what to do next, encourage them to proceed to the "Daily Test" to finalize their day and transition to the next level/day.
+      9. **Mix languages when helpful** — For Arabic-speaking students, you can explain grammar in Arabic while practicing English vocabulary.
 
       LESSON DATA:
       ${lessonContextString}

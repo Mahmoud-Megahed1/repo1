@@ -6,7 +6,6 @@ import {
   LogOut,
   Moon,
   Sun,
-  Bot,
   MessageCircle,
 } from 'lucide-react';
 import { useTheme } from '@components/contexts/theme-context';
@@ -31,7 +30,6 @@ import LanguageSwitcher from './language-switcher';
 import useLocale from '@hooks/use-locale';
 import { Link } from '@shared/i18n/routing';
 import { Button } from '@ui/button';
-import { useAiChatStore } from '@hooks/use-ai-chat-store';
 import { useChatStore } from '@hooks/use-chat-store';
 
 type Props = {
@@ -48,7 +46,6 @@ export function NavUser({ user, onLogout }: Props) {
   const { t } = useTranslation();
   const locale = useLocale();
   const { dynamicTheme } = useTheme();
-  const { setIsOpen: setOpenAiChat } = useAiChatStore();
   const { setIsOpen: setOpenChat } = useChatStore();
 
   const showAiReview = dynamicTheme?.showAIReviewChat !== false;
@@ -59,22 +56,8 @@ export function NavUser({ user, onLogout }: Props) {
   return (
     <SidebarMenu>
       <SidebarMenuItem className="mb-4 group-data-[state=collapsed]:hidden">
-        <div className="grid grid-cols-2 gap-2 px-2">
-          {showAiReview && (
-            <Button
-              onClick={() => {
-                setOpenAiChat(true);
-                if (isMobile) setOpenMobile(false);
-              }}
-              className="h-14 flex flex-col items-center justify-center gap-1 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg text-white p-0 transition-transform active:scale-95 border-none w-full"
-              title={t('Global.aiReview.title' as any)}
-            >
-              <Bot size={20} />
-              <span className="text-[10px] font-bold uppercase tracking-tighter">
-                {t('Global.aiReview.title' as any)}
-              </span>
-            </Button>
-          )}
+        <div className="px-2">
+
           {showSupportChat && (
             <Button
               onClick={() => {

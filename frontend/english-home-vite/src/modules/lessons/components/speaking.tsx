@@ -6,7 +6,7 @@ import useLocale from '@hooks/use-locale';
 import useRecorder from '@hooks/use-recorder';
 import { cn, localizedNumber } from '@lib/utils';
 import { useCompareAudio, useGetSentenceAudios, useMarkTaskAsCompleted } from '@modules/lessons/mutations';
-import type { LevelId, LessonId } from '@shared/types/entities';
+import type { LevelId } from '@shared/types/entities';
 import { useParams } from '@tanstack/react-router';
 import { Button } from '@ui/button';
 import {
@@ -16,15 +16,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@ui/card';
-import { Mic, CheckCircle2, RotateCcw, Bot } from 'lucide-react';
+import { Mic, CheckCircle2, RotateCcw } from 'lucide-react';
 import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Loading from '../../../shared/components/analyzing-skeleton';
 import { SpeakingFeedback } from '../../../shared/components/speaking-feedback';
 import type { SpeakingResult, SpeakLesson } from '../types';
-import { useAiChatStore } from '@hooks/use-ai-chat-store';
-import { useTheme } from '@components/contexts/theme-context';
+
 
 type UserRecord = {
   sentence: string;
@@ -37,8 +36,7 @@ type Props = {
 };
 const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
   const { t } = useTranslation();
-  const { dynamicTheme } = useTheme();
-  const { id: levelName, day, lessonName } = useParams({
+  const { id: levelName, day } = useParams({
     from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
   });
   const { mutate, isPending } = useCompareAudio({
@@ -59,7 +57,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
     prev,
   } = useItemsPagination(sentences);
 
-  const { setIsOpen } = useAiChatStore();
+
 
   const [usersRecords, setUsersRecords] = useState<UserRecord[]>(
     sentences.map((sentence) => ({
@@ -259,16 +257,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
         </ul>
 
         <div className="flex gap-2">
-          {allPassed && dynamicTheme?.showAIReviewChat !== false && (
-            <Button
-              variant="default"
-              className="bg-indigo-600 hover:bg-indigo-700 text-white animate-in fade-in"
-              onClick={() => setIsOpen(true)}
-            >
-              <Bot className="w-4 h-4 me-2" />
-              {t('Global.reviewWithAI', 'Review with AI')}
-            </Button>
-          )}
+
 
           {isLast ? (
             <NextLessonButton lessonName="TODAY" className="px-8" />
