@@ -53,8 +53,8 @@ const CheckStatus = ({ children }: { children: React.ReactNode }) => {
   if (status === 'suspended' || user?.isVoluntaryPaused)
     return (
       <SuspendedAccountPage
-        userEmail={user?.email}
-        suspensionDate={new Date(user!.lastActivity).toLocaleDateString()}
+        userName={user?.firstName}
+        suspensionReason={user?.suspensionReason}
       />
     );
   return <>{children}</>;

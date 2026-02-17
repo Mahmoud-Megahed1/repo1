@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Outlet, useParams } from '@tanstack/react-router';
 import BookLoader from '@ui/book-loader';
 import { CheckCircle2 } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import ScrollArrows from '@components/scroll-arrows';
 import { GlobalAiChat } from '@modules/lessons/components/global-ai-chat';
@@ -81,7 +81,7 @@ function RouteComponent() {
         />
       </LevelGuard>
     );
-  const { setIsOpen: setOpenAiChat, isOpen: isAiChatOpen } = useAiChatStore();
+  const { setIsOpen: setOpenAiChat } = useAiChatStore();
 
   // Calculate if all prerequisite tasks are completed (excluding DAILY_TEST)
   // This covers the 10 tasks: READ, WRITE, LISTEN, GRAMMAR, PICTURES, TODAY, Q_A, SPEAK, PHRASAL_VERBS, IDIOMS
