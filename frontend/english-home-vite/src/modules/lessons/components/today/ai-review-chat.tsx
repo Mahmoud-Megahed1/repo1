@@ -10,7 +10,7 @@ import {
 import { ScrollArea } from '@ui/scroll-area';
 import { cn } from '@lib/utils';
 import axiosClient from '@lib/axios-client';
-import { Mic, Bot, User, StopCircle, Volume2, Send, RefreshCw, Loader2, Keyboard } from 'lucide-react';
+import { Mic, Bot, User, StopCircle, Volume2, Send, RefreshCw, Loader2, Keyboard, XIcon } from 'lucide-react';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -249,8 +249,7 @@ export default function AIReviewChat({
         } else {
             stopSpeaking();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [open, levelName, day, lessonName, isArabic]);
+    }, [open, levelName, day, lessonName, isArabic, stopSpeaking]);
 
     // ─── Send Message ─────────────────────────────────
     const handleSendMessage = useCallback(async (text: string) => {
@@ -427,16 +426,27 @@ export default function AIReviewChat({
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetContent side="bottom" className="h-[85vh] sm:h-[650px] sm:max-w-lg mx-auto rounded-t-2xl sm:rounded-xl p-0 flex flex-col overflow-hidden">
                 {/* Header */}
-                <SheetHeader className="px-5 py-4 border-b bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
-                    <SheetTitle className="flex items-center gap-2 text-white">
-                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                            <Bot className="w-5 h-5" />
-                        </div>
-                        {t('Global.aiReview.title', 'AI Lesson Review')}
-                    </SheetTitle>
-                    <SheetDescription className="text-white/80">
-                        {t('Global.aiReview.description', 'Chat with AI to review what you learned.')}
-                    </SheetDescription>
+                <SheetHeader className="px-5 py-4 border-b bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white flex flex-row items-center justify-between space-y-0">
+                    <div>
+                        <SheetTitle className="flex items-center gap-2 text-white">
+                            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                                <Bot className="w-5 h-5" />
+                            </div>
+                            {t('Global.aiReview.title', 'AI Lesson Review')}
+                        </SheetTitle>
+                        <SheetDescription className="text-white/80">
+                            {t('Global.aiReview.description', 'Chat with AI to review what you learned.')}
+                        </SheetDescription>
+                    </div>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-white hover:bg-white/20 rounded-full h-8 w-8"
+                        onClick={() => onOpenChange(false)}
+                    >
+                        <XIcon className="w-5 h-5" />
+                        <span className="sr-only">Close</span>
+                    </Button>
                 </SheetHeader>
 
                 {/* Messages Area */}
