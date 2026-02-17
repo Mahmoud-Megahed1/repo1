@@ -67,8 +67,13 @@ export default function AIReviewChat({
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const ttsAbortControllerRef = useRef<AbortController | null>(null);
 
+    const latestSpeechId = useRef<number>(0);
+
     // ─── TTS ─────────────────────────────────────────
     const speak = useCallback(async (text: string, index: number) => {
+        const currentId = Date.now();
+        latestSpeechId.current = currentId;
+
         try {
             // Stop any current audio and abort pending fetch
             if (typeof window !== 'undefined' && window.speechSynthesis) {
@@ -101,6 +106,9 @@ export default function AIReviewChat({
                 responseType: 'blob',
                 signal: controller.signal
             });
+
+            // Guard: If another speech started while we were fetching, abort this one.
+            if (latestSpeechId.current !== currentId) return;
 
             if (!res.data || res.data.size < 100) {
                 console.error("Invalid blob size:", res.data?.size);
@@ -169,7 +177,9 @@ export default function AIReviewChat({
                 i === index ? { ...m, isAudioPlaying: false } : m
             ));
         } finally {
-            ttsAbortControllerRef.current = null;
+            if (ttsAbortControllerRef.current?.signal.aborted) {
+                ttsAbortControllerRef.current = null;
+            }
         }
     }, [isArabic]);
 

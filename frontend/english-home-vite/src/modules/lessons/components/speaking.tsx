@@ -225,6 +225,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
                       newData[currentIndex].results = undefined;
                       return newData;
                     });
+                    resetMutation(); // Also reset on button click
                   }}
                 >
                   <RotateCcw className="mr-2 h-4 w-4" />

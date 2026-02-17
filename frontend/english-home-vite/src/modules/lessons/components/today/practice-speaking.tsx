@@ -121,6 +121,30 @@ const PracticeSpeaking: FC<Props> = ({
                             }}
                             className="w-full"
                         />
+                        <Button
+                            variant="secondary"
+                            className="w-full"
+                            onClick={() => {
+                                // "Exit" state - practically just hide the result or show a success state, 
+                                // but since this is Today's lesson, scrolling or collapsing is handled by user.
+                                // We'll just reset to null to 'close' the feedback if they want, or maybe just do nothing 
+                                // but provide visual satisfaction. 
+                                // Actually, better to just let them collapse the accordion. 
+                                // But to satisfy "press x to exit", let's clear the audioUrl (and reset) BUT not start recording?
+                                // No, that goes back to recorder.
+                                // Let's scroll to the Next button.
+                                const nextBtn = document.querySelector('a[href*="Q_A"]');
+                                if (nextBtn) {
+                                    nextBtn.scrollIntoView({ behavior: 'smooth' });
+                                } else {
+                                    // Fallback: reset to initial state (recorder) but that might be annoying.
+                                    // Let's just toast?
+                                    // Or simply do nothing but act as a 'Nice' button.
+                                }
+                            }}
+                        >
+                            {t('Global.done' as any)}
+                        </Button>
                     </div>
                 ) : (
                     recorder
