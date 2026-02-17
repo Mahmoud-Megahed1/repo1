@@ -331,6 +331,7 @@ export default function AIReviewChat({
 
     // ─── Speech Recognition ──────────────────────────
     const hasSpeechRecognition = !!getSpeechRecognition();
+    const transcriptAccumulator = useRef('');
 
     const startListening = useCallback(() => {
         const SpeechRecognitionClass = getSpeechRecognition();
@@ -342,11 +343,17 @@ export default function AIReviewChat({
             return;
         }
 
+        // Ensure previous instance is stopped
+        if (recognitionRef.current) {
+            recognitionRef.current.abort();
+        }
+
         stopSpeaking();
+        transcriptAccumulator.current = '';
 
         const recognition = new SpeechRecognitionClass();
         recognition.continuous = false;
-        recognition.interimResults = true; // Show results in real-time
+        recognition.interimResults = true;
         recognition.maxAlternatives = 1;
         recognition.lang = speechLang || (isArabic ? 'ar-SA' : 'en-US');
 
@@ -363,11 +370,13 @@ export default function AIReviewChat({
             }
 
             if (interim) {
+                transcriptAccumulator.current = interim;
                 setInterimTranscript(interim);
             }
 
             if (finalTranscript.trim()) {
-                console.log("Speech detected:", finalTranscript);
+                console.log("Speech detected (Final):", finalTranscript);
+                transcriptAccumulator.current = ''; // Clear accumulator as we are sending authoritative result
                 setInterimTranscript('');
                 handleSendMessage(finalTranscript);
                 recognition.stop();
@@ -376,27 +385,26 @@ export default function AIReviewChat({
 
         recognition.onerror = (event: any) => {
             console.error("Speech recognition error", event.error);
-
-            // Handle transient network errors
-            if (event.error === 'network') {
-                console.warn("Speech network error - keep trying...");
-                // Don't kill the listening state immediately, wait for onend to reset or retry
-                return;
-            }
-
-            setIsListening(false);
-            setInterimTranscript('');
-
+            if (event.error === 'network') return;
             if (event.error === 'no-speech') {
-                // Silent timeout
+                // Ignore silent timeouts
             } else if (event.error !== 'aborted') {
-                toast.error(`${isArabic ? 'خطأ:' : 'Error:'} ${event.error}`);
+                toast.error(`${isArabic ? 'خطأ في الميكروفون:' : 'Mic Error:'} ${event.error}`);
             }
         };
 
         recognition.onend = () => {
             setIsListening(false);
             setInterimTranscript('');
+
+            // Fallback: If we have captured text but the engine never sent an 'isFinal' event, send it now.
+            // This handles cases where the user clicks stop or the engine times out with valid interim text.
+            if (transcriptAccumulator.current.trim()) {
+                console.log("Speech detected (Fallback):", transcriptAccumulator.current);
+                handleSendMessage(transcriptAccumulator.current);
+                transcriptAccumulator.current = '';
+            }
+            recognitionRef.current = null;
         };
 
         try {
@@ -410,10 +418,11 @@ export default function AIReviewChat({
 
     const stopListening = useCallback(() => {
         if (recognitionRef.current) {
-            recognitionRef.current.abort();
-            recognitionRef.current = null;
+            // Use stop() instead of abort() to try and capture the last chunk of audio
+            recognitionRef.current.stop();
+        } else {
+            setIsListening(false);
         }
-        setIsListening(false);
     }, []);
 
     // ─── Keyboard handler ─────────────────────────────
