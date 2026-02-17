@@ -248,13 +248,13 @@ export class ChatService {
       console.error('OpenAI TTS Error:', error);
       throw error;
     }
-    private sanitizePayload(data: any, depth = 0): any {
-    if (depth > 5) return '[Max Depth Reached]';
+  private sanitizePayload(data: any, depth = 0): any {
+    if (depth > 10) return '[Max Depth Reached]';
     if (!data) return data;
 
     if (Array.isArray(data)) {
-      // Limit array size to prevent huge lists
-      return data.slice(0, 30).map(item => this.sanitizePayload(item, depth + 1));
+      // Limit array size
+      return data.slice(0, 50).map(item => this.sanitizePayload(item, depth + 1));
     }
 
     if (typeof data === 'object') {
@@ -263,9 +263,15 @@ export class ChatService {
 
       for (const [key, value] of Object.entries(data)) {
         if (sensitiveKeys.includes(key)) continue;
-        // Truncate very long strings (likely base64 or garbage)
-        if (typeof value === 'string' && value.length > 2000) {
-          cleanObj[key] = value.substring(0, 500) + '...[Truncated]';
+
+        if (typeof value === 'string') {
+          // Aggressively truncate ANY string > 1000 chars to avoid token limits
+          // This catches base64 strings in unexpected fields
+          if (value.length > 1000) {
+            cleanObj[key] = value.substring(0, 200) + '...[Truncated Long String]';
+          } else {
+            cleanObj[key] = value;
+          }
         } else {
           cleanObj[key] = this.sanitizePayload(value, depth + 1);
         }
