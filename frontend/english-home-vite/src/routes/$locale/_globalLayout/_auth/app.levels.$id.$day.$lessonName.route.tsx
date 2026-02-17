@@ -7,7 +7,7 @@ import { useLessonContext, withLessonProvider } from '@modules/lessons/context';
 import DayAccessError from '@modules/levels/components/day-access-error';
 import LevelGuard from '@modules/levels/components/level-guard';
 import { getCompletedTasks } from '@modules/levels/services';
-import { LESSONS_SIDEBAR_DEFAULT_ITEMS } from '@shared/constants';
+import { LESSONS_SIDEBAR_DEFAULT_ITEMS, LESSONS_IDS } from '@shared/constants';
 import type { LevelId } from '@shared/types/entities';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Outlet, useParams } from '@tanstack/react-router';
@@ -78,6 +78,11 @@ function RouteComponent() {
         />
       </LevelGuard>
     );
+  // Calculate if all prerequisite tasks are completed (excluding DAILY_TEST and TODAY itself)
+  const areAllTasksCompleted = LESSONS_IDS
+    .filter(id => id !== 'DAILY_TEST' && id !== 'TODAY')
+    .every(id => completedTasks?.data?.includes(id));
+
   return (
     <LevelGuard levelId={levelId as LevelId}>
       {isFetching ? (
@@ -101,7 +106,7 @@ function RouteComponent() {
         </div>
       )}
       <ScrollArrows />
-      <GlobalAiChat isLessonCompleted={completedTasks?.data?.includes(lessonName)} />
+      <GlobalAiChat isLessonCompleted={areAllTasksCompleted} />
     </LevelGuard>
   );
 }

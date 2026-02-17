@@ -71,11 +71,15 @@ export default function AIReviewChat({
     const speak = useCallback(async (text: string, index: number) => {
         try {
             // Stop any current audio and abort pending fetch
+            if (typeof window !== 'undefined' && window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
             if (ttsAbortControllerRef.current) {
                 ttsAbortControllerRef.current.abort();
             }
             if (audioRef.current) {
                 audioRef.current.pause();
+                audioRef.current.currentTime = 0;
                 audioRef.current = null;
             }
 
@@ -170,12 +174,16 @@ export default function AIReviewChat({
     }, [isArabic]);
 
     const stopSpeaking = useCallback(() => {
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
         if (ttsAbortControllerRef.current) {
             ttsAbortControllerRef.current.abort();
             ttsAbortControllerRef.current = null;
         }
         if (audioRef.current) {
             audioRef.current.pause();
+            audioRef.current.currentTime = 0;
             audioRef.current = null;
         }
         setMessages(prev => prev.map(m => ({ ...m, isAudioPlaying: false })));
@@ -211,8 +219,9 @@ export default function AIReviewChat({
                         setMessages(historyMessages);
                     } else {
                         const greeting = isArabic
-                            ? "مرحباً! 🎉 أحسنت على إكمال الدرس. أنا مُعلّمك الذكي وسأراجع معك ما تعلمته حول ( " + (lessonName.replace(/_/g, ' ')) + " ). يمكنك الكتابة أو استخدام الميكروفون للتحدث معي.\n\nاضغط على زر الميكروفون بالأسفل للتحدث، أو استخدم لوحة المفاتيح."
-                            : "Hello! 🎉 Great job completing the lesson! I'm your AI tutor and I'll help you review " + (lessonName.replace(/_/g, ' ')) + ". You can type or use the microphone to talk to me.\n\nTap the microphone below to speak, or use the keyboard.";
+                            ? "أحسنت يا بطل! 🎉 لقد أتممت مهام اليوم بنجاح. أنا مُعلّمك الذكي وسأراجع معك ما تعلمته قبل الانتقال للاختبار اليومي. هل أنت مستعد؟"
+                            : "Great job, Champion! 🎉 You have completed today's tasks successfully. I am your AI tutor, and I will review what you learned before you take the Daily Quiz. Are you ready?";
+
                         const initialMsg: Message = { role: 'assistant', content: greeting, status: 'sent' };
                         setMessages([initialMsg]);
                         speak(greeting, 0);
@@ -220,8 +229,8 @@ export default function AIReviewChat({
                 } catch (error) {
                     console.error("Failed to fetch chat history", error);
                     const greeting = isArabic
-                        ? "مرحباً! أنا هنا لمراجعة الدرس معك. اضغط على الميكروفون للتحدث أو اكتب رسالتك."
-                        : "Hello! I'm here to review the lesson with you. Tap the microphone or type your message.";
+                        ? "أحسنت! دعنا نراجع الدرس معاً قبل الاختبار."
+                        : "Great job! Let's review the lesson before the quiz.";
                     setMessages([{ role: 'assistant', content: greeting, status: 'sent' }]);
                 }
             };

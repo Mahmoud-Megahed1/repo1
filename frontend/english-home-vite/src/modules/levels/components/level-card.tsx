@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePayment } from '../mutations';
+import { usePayment, useTamaraPayment } from '../mutations';
 type ComponentVariant = Record<
   'coming-soon' | 'locked' | 'unlocked' | 'expired',
   {
@@ -127,13 +127,14 @@ const useComponentVariant = ({
   isCompleted?: boolean;
 }) => {
   const { mutate, isPending } = usePayment(levelId);
+  const { mutate: mutateTamara, isPending: isTamaraPending } = useTamaraPayment(levelId);
   const { t } = useTranslation();
 
   const daysLeft = expiresAt
     ? Math.ceil(
-        (new Date(expiresAt).getTime() - new Date().getTime()) /
-          (1000 * 60 * 60 * 24)
-      )
+      (new Date(expiresAt).getTime() - new Date().getTime()) /
+      (1000 * 60 * 60 * 24)
+    )
     : 0;
 
   const variants: ComponentVariant = {
@@ -171,14 +172,27 @@ const useComponentVariant = ({
         </p>
       ),
       cta: (
-        <Button
-          className="w-full"
-          onClick={() => mutate()}
-          disabled={isPending}
-        >
-          {isPending ? t('Global.processing') : t('Global.unlock')}
-          <KeyRound />
-        </Button>
+        <div className="flex flex-col gap-2 w-full">
+          <Button
+            className="w-full"
+            onClick={() => mutate()}
+            disabled={isPending || isTamaraPending}
+          >
+            {isPending ? t('Global.processing') : t('Global.unlock')}
+            <KeyRound />
+          </Button>
+          <Button
+            className="w-full bg-[#f4f27d] text-black hover:bg-[#e0de55]"
+            onClick={() => {
+              sessionStorage.setItem('tamaraPendingLevelId', levelId);
+              mutateTamara();
+            }}
+            disabled={isPending || isTamaraPending}
+          >
+            {isTamaraPending ? t('Global.processing') : t('Global.payWithTamara' as any)}
+            {/* You might want to add a Tamara icon here */}
+          </Button>
+        </div>
       ),
     },
     unlocked: {
@@ -249,15 +263,27 @@ const useComponentVariant = ({
         </div>
       ),
       cta: (
-        <Button
-          variant={'destructive'}
-          onClick={() => mutate()}
-          disabled={isPending}
-          className="w-full"
-        >
-          {isPending ? t('Global.processing') : t('Global.renewSubscription')}
-          <RefreshCw className="rtl:rotate-180" />
-        </Button>
+        <div className="flex flex-col gap-2 w-full">
+          <Button
+            variant={'destructive'}
+            onClick={() => mutate()}
+            disabled={isPending || isTamaraPending}
+            className="w-full"
+          >
+            {isPending ? t('Global.processing') : t('Global.renewSubscription')}
+            <RefreshCw className="rtl:rotate-180" />
+          </Button>
+          <Button
+            className="w-full bg-[#f4f27d] text-black hover:bg-[#e0de55]"
+            onClick={() => {
+              sessionStorage.setItem('tamaraPendingLevelId', levelId);
+              mutateTamara();
+            }}
+            disabled={isPending || isTamaraPending}
+          >
+            {isTamaraPending ? t('Global.processing') : t('Global.payWithTamara' as any)}
+          </Button>
+        </div>
       ),
     },
   };

@@ -8,13 +8,14 @@ type Props = {
     isLessonCompleted?: boolean;
 };
 
-export function GlobalAiChat({ }: Props) {
+export function GlobalAiChat({ isLessonCompleted }: Props) {
     const { isOpen, setIsOpen } = useAiChatStore();
     const { dynamicTheme } = useTheme();
     const params = useParams({ strict: false });
 
-    // Respect admin visibility toggle
+    // Respect admin visibility toggle AND prerequisite completion
     if (dynamicTheme?.showAIReviewChat === false) return null;
+    if (!isLessonCompleted) return null; // Hide if tasks are not done
 
     return (
         <AIReviewChat

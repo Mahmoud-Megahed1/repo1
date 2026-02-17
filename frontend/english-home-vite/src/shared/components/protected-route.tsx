@@ -50,7 +50,7 @@ const CheckStatus = ({ children }: { children: React.ReactNode }) => {
         blockDate={new Date(user!.lastActivity).toLocaleDateString()}
       />
     );
-  if (status === 'suspended')
+  if (status === 'suspended' || user?.isVoluntaryPaused)
     return (
       <SuspendedAccountPage
         userEmail={user?.email}

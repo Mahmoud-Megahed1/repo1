@@ -9,6 +9,9 @@ export class User extends AbstractUser {
   @Prop({ enum: Strategy, default: Strategy.LOCAL, required: true })
   strategy: Strategy;
 
+  @Prop({ type: String })
+  phone: string;
+
   @Prop({ type: Boolean, default: false })
   isVerified: boolean;
 
