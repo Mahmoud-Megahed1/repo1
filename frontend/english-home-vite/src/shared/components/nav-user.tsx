@@ -51,7 +51,7 @@ export function NavUser({ user, onLogout }: Props) {
   const { setIsOpen: setOpenChat } = useChatStore();
   const { setIsOpen: setOpenAiChat } = useAiChatStore();
 
-  const showAiReview = true; // Always show as per user request
+  const showAiReview = dynamicTheme?.showAIReviewChat !== false;
   const showSupportChat = dynamicTheme?.showSupportChat !== false;
 
   if (!showAiReview && !showSupportChat) return null;
