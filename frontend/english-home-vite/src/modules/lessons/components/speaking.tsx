@@ -205,8 +205,10 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
                     setUsersRecords((prev) => {
                       const newData = [...prev];
                       newData[currentIndex].recordUrl = null;
+                      newData[currentIndex].results = undefined;
                       return newData;
                     });
+                    resetMutation(); // Clear the mutation state
                   }}
                   recordUrl={currentRecord.recordUrl}
                   className="mt-4 w-full"
@@ -220,6 +222,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
                     setUsersRecords((prev) => {
                       const newData = [...prev];
                       newData[currentIndex].recordUrl = null;
+                      newData[currentIndex].results = undefined;
                       return newData;
                     });
                   }}
