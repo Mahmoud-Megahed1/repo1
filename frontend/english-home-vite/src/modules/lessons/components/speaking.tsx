@@ -39,7 +39,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
   const { id: levelName, day } = useParams({
     from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
   });
-  const { mutate, isPending } = useCompareAudio({
+  const { mutate, isPending, reset: resetMutation } = useCompareAudio({
     levelName: levelName as LevelId,
     day: +day,
     lessonName: 'SPEAK', // Force 'SPEAK' (or rely on prop, but explicit is safer for granular logic)

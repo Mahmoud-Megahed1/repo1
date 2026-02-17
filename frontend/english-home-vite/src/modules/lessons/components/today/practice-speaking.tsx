@@ -32,30 +32,35 @@ const PracticeSpeaking: FC<Props> = ({
     const [audioUrl, setAudioUrl] = useState<string | null | undefined>(
         defaultResult?.url
     );
+    const [isReset, setIsReset] = useState(false);
     const {
         mutate: compareMutate,
         data,
         isPending,
+        reset: resetMutation,
     } = useCompareAudio({
         levelName: levelId,
         day: +day,
         lessonName: 'TODAY', // Force 'TODAY' to ensure backend saves as today_audio.wav
     });
 
-    // Initialize data from defaultResult if available
-    const resultData = data?.data || (defaultResult?.metadata ? {
-        ...defaultResult.metadata,
-        isPassed: defaultResult.metadata.isPassed === 'true' || defaultResult.metadata.isPassed === true,
-        similarityPercentage: +defaultResult.metadata.similarityPercentage
-    } : undefined);
+    // Initialize data from defaultResult if available, honoring manual resets
+    const resultData = useMemo(() => {
+        if (isReset) return data?.data;
+        return data?.data || (defaultResult?.metadata ? {
+            ...defaultResult.metadata,
+            isPassed: defaultResult.metadata.isPassed === 'true' || defaultResult.metadata.isPassed === true,
+            similarityPercentage: +defaultResult.metadata.similarityPercentage
+        } : undefined);
+    }, [data?.data, defaultResult?.metadata, isReset]);
 
     const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
 
     useEffect(() => {
-        if (!audioUrl && defaultResult?.url) {
+        if (!isReset && !audioUrl && defaultResult?.url) {
             setAudioUrl(defaultResult.url);
         }
-    }, [defaultResult, audioUrl]);
+    }, [defaultResult, audioUrl, isReset]);
 
     useEffect(() => {
         if (resultData?.isPassed) {
@@ -80,6 +85,7 @@ const PracticeSpeaking: FC<Props> = ({
                     compareMutate({ audio: file, sentenceText });
                     const objectUrl = URL.createObjectURL(file);
                     setAudioUrl(objectUrl);
+                    setIsReset(true); // Treat new recording as a reset of default state
                 }}
             />
         ),
@@ -110,6 +116,8 @@ const PracticeSpeaking: FC<Props> = ({
                             recordUrl={audioUrl}
                             onReset={() => {
                                 setAudioUrl(null);
+                                setIsReset(true);
+                                resetMutation();
                             }}
                             className="w-full"
                         />
@@ -185,9 +193,7 @@ const Recorder: FC<RecorderProps> = ({
                         </>
                     )}
                 </Button>
-                <p className="text-secondary-foreground mt-2 text-center text-lg">
-                    {t('Global.dailySpeakingSuccess' as any)}
-                </p>                <span className="text-muted-foreground inline-block text-sm">
+                <span className="text-muted-foreground inline-block text-sm">
                     <span
                         className="bg-destructive me-2 inline-block size-2 animate-pulse rounded-full"
                         hidden={!isRecording}
