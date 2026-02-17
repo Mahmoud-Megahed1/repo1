@@ -248,6 +248,7 @@ export class ChatService {
       console.error('OpenAI TTS Error:', error);
       throw error;
     }
+  }
   private sanitizePayload(data: any, depth = 0): any {
     if (depth > 10) return '[Max Depth Reached]';
     if (!data) return data;
