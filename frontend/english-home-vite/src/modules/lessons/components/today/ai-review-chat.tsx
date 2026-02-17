@@ -38,6 +38,12 @@ function getSpeechRecognition(): any {
     return w.SpeechRecognition || w.webkitSpeechRecognition || null;
 }
 
+declare global {
+    interface Window {
+        globalAudioPlayer: HTMLAudioElement | null;
+    }
+}
+
 export default function AIReviewChat({
     open,
     onOpenChange,
@@ -64,9 +70,9 @@ export default function AIReviewChat({
     const scrollRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const recognitionRef = useRef<any>(null);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
-    const ttsAbortControllerRef = useRef<AbortController | null>(null);
 
+    // Combined Ref for AbortController is still useful for canceling fetches
+    const ttsAbortControllerRef = useRef<AbortController | null>(null);
     const latestSpeechId = useRef<number>(0);
 
     // ─── TTS ─────────────────────────────────────────
@@ -76,16 +82,17 @@ export default function AIReviewChat({
 
         try {
             // Stop any current audio and abort pending fetch
+            if (window.globalAudioPlayer) {
+                window.globalAudioPlayer.pause();
+                window.globalAudioPlayer.currentTime = 0;
+                window.globalAudioPlayer = null;
+            }
+
             if (typeof window !== 'undefined' && window.speechSynthesis) {
                 window.speechSynthesis.cancel();
             }
             if (ttsAbortControllerRef.current) {
                 ttsAbortControllerRef.current.abort();
-            }
-            if (audioRef.current) {
-                audioRef.current.pause();
-                audioRef.current.currentTime = 0;
-                audioRef.current = null;
             }
 
             const cleanText = text
@@ -118,17 +125,19 @@ export default function AIReviewChat({
             const blob = res.data;
             const url = URL.createObjectURL(blob);
             const audio = new Audio(url);
-            audio.volume = 1.0; // Ensure max standard volume
-            audioRef.current = audio;
+            audio.volume = 1.0;
 
-            // Optional: Web Audio API Boost (Useful if OpenAI output is naturally quiet)
+            // Assign to global singleton (attached to window for safety across HMR)
+            window.globalAudioPlayer = audio;
+
+            // Optional: Web Audio API Boost
             try {
                 const AudioContextClass = (window as any).AudioContext || (window as any).webkitAudioContext;
                 if (AudioContextClass) {
                     const audioCtx = new AudioContextClass();
                     const source = audioCtx.createMediaElementSource(audio);
                     const gainNode = audioCtx.createGain();
-                    gainNode.gain.value = 3.0; // 200% boost (3x volume)
+                    gainNode.gain.value = 3.0;
                     source.connect(gainNode);
                     gainNode.connect(audioCtx.destination);
                 }
@@ -136,24 +145,26 @@ export default function AIReviewChat({
                 console.warn("Audio boost failed, using default:", err);
             }
 
-            // Preload to ensure metadata is there
             audio.load();
 
             audio.onended = () => {
                 setMessages(prev => prev.map((m, i) =>
                     i === index ? { ...m, isAudioPlaying: false } : m
                 ));
-                audioRef.current = null;
+                if (window.globalAudioPlayer === audio) {
+                    window.globalAudioPlayer = null;
+                }
                 URL.revokeObjectURL(url);
             };
 
             audio.onerror = (e) => {
                 console.error("Audio playback error:", e);
-                // toast.error(isArabic ? 'خطأ في تشغيل الصوت' : 'Audio playback error');
                 setMessages(prev => prev.map((m, i) =>
                     i === index ? { ...m, isAudioPlaying: false } : m
                 ));
-                audioRef.current = null;
+                if (window.globalAudioPlayer === audio) {
+                    window.globalAudioPlayer = null;
+                }
                 URL.revokeObjectURL(url);
             };
 
@@ -161,18 +172,18 @@ export default function AIReviewChat({
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
                     console.error("Autoplay/Play prevented:", error);
-                    // If blocked, we reset the playing state
                     setMessages(prev => prev.map((m, i) =>
                         i === index ? { ...m, isAudioPlaying: false } : m
                     ));
-                    // Maybe prompt user to click? 
+                    if (window.globalAudioPlayer === audio) {
+                        window.globalAudioPlayer = null;
+                    }
                     toast.info(isArabic ? 'انقر على أيقونة الصوت للاستماع' : 'Click the volume icon to listen');
                 });
             }
         } catch (error: any) {
             if (error.name === 'CanceledError' || error.name === 'AbortError') return;
             console.error('TTS Error:', error);
-            // toast.error(isArabic ? 'فشل تحميل الصوت' : 'Failed to load audio');
             setMessages(prev => prev.map((m, i) =>
                 i === index ? { ...m, isAudioPlaying: false } : m
             ));
@@ -191,10 +202,10 @@ export default function AIReviewChat({
             ttsAbortControllerRef.current.abort();
             ttsAbortControllerRef.current = null;
         }
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current.currentTime = 0;
-            audioRef.current = null;
+        if (window.globalAudioPlayer) {
+            window.globalAudioPlayer.pause();
+            window.globalAudioPlayer.currentTime = 0;
+            window.globalAudioPlayer = null;
         }
         setMessages(prev => prev.map(m => ({ ...m, isAudioPlaying: false })));
     }, []);
@@ -441,7 +452,7 @@ export default function AIReviewChat({
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="text-white hover:bg-white/20 rounded-full h-8 w-8"
+                        className="text-white hover:bg-white/20 rounded-full h-8 w-8 z-50 cursor-pointer"
                         onClick={() => onOpenChange(false)}
                     >
                         <XIcon className="w-5 h-5" />
