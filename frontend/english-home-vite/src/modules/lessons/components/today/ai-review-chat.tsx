@@ -10,7 +10,7 @@ import {
 import { ScrollArea } from '@ui/scroll-area';
 import { cn } from '@lib/utils';
 import axiosClient from '@lib/axios-client';
-import { Mic, Bot, User, StopCircle, Volume2, Send, RefreshCw, Loader2, Keyboard, XIcon } from 'lucide-react';
+import { Mic, Bot, User, StopCircle, Volume2, Send, RefreshCw, Loader2, Keyboard } from 'lucide-react';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -277,7 +277,8 @@ export default function AIReviewChat({
                 message: text.trim(),
                 levelName,
                 day,
-                lessonName
+                lessonName,
+                language: speechLang
             });
 
             const reply = res.data.reply;
@@ -308,7 +309,7 @@ export default function AIReviewChat({
         } finally {
             setIsProcessing(false);
         }
-    }, [isProcessing, levelName, day, lessonName, isArabic, speak, messages]);
+    }, [isProcessing, levelName, day, lessonName, isArabic, speak, messages, speechLang]);
 
     // ─── Retry failed message ─────────────────────────
     const handleRetry = useCallback((failedIndex: number) => {

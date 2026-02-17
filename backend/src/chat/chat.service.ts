@@ -112,7 +112,7 @@ export class ChatService {
     }
   }
 
-  async generateLessonReviewResponse(userId: string, params: { message: string; levelName: string; day: string; lessonName: string }) {
+  async generateLessonReviewResponse(userId: string, params: { message: string; levelName: string; day: string; lessonName: string; language?: string }) {
     // 0. Check Theme Settings
     const theme = await this.themeService.findCurrentTheme();
     if (theme && theme.showAIReviewChat === false) {
@@ -153,7 +153,18 @@ export class ChatService {
       }));
 
       // 3. Build Prompt
+      let languageInstruction = "";
+      if (params.language === 'en-US') {
+        languageInstruction = "LANGUAGE MODE: ENGLISH. Speak ONLY in British English. Act as a native British tutor.";
+      } else if (params.language === 'ar-SA') {
+        languageInstruction = "LANGUAGE MODE: ARABIC. Speak primarily in Arabic (Saudi dialect/friendly tone). Use English only for specific vocabulary terms.";
+      } else {
+        languageInstruction = "Mix languages naturally. Explain in Arabic, practice in English.";
+      }
+
       let systemPromptWithContext = `${SYSTEM_PROMPT}
+
+      ${languageInstruction}
 
       CURRENT LESSON CONTEXT:
       The user has just completed the following lesson. Use this content to guide the review.
@@ -165,9 +176,10 @@ export class ChatService {
       4. **Correct gently** — If the student makes a mistake, correct it kindly with the right answer and a brief explanation.
       5. **Use spaced repetition** — Refer back to earlier answers in the conversation to reinforce learning.
       6. **End each response with a question** — Keep the conversation going by asking a follow-up question.
-      7. **Be concise** — Keep responses 2-5 sentences maximum. Students learn better with short, focused interactions.
-      8. **Guide towards the Daily Test** — After 2-3 exchanges or if the student asks what to do next, encourage them to proceed to the "Daily Test" to finalize their day and transition to the next level/day.
-      9. **Mix languages when helpful** — For Arabic-speaking students, you can explain grammar in Arabic while practicing English vocabulary.
+      7. **Response Length** — Provide COMPREHENSIVE responses (3-5 sentences) to effectively review the content. Do not be brief.
+      8. **Guide towards the Daily Test** — After 3-4 exchanges, encourage them to proceed to the "Daily Test".
+      9. **Tone** — If speaking English, use a native British accent/vocabulary. If speaking Arabic, use a friendly Saudi-style tone.
+      10. **Audio Optimization** — Avoid lists, bullets, or complex markdown. Speak conversationally.
 
       LESSON DATA:
       ${lessonContextString}
@@ -239,7 +251,7 @@ export class ChatService {
 
       const response = await this.openai.audio.speech.create({
         model: "tts-1",
-        voice: "nova", // nova is a friendly, natural voice
+        voice: "fable", // fable has a British-leaning accent
         input: text,
       });
 
