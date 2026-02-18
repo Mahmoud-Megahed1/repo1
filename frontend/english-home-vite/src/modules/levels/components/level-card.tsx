@@ -182,15 +182,17 @@ const useComponentVariant = ({
             <KeyRound />
           </Button>
           <Button
-            className="w-full bg-[#f4f27d] text-black hover:bg-[#e0de55]"
+            className="w-full bg-[#f4f27d] text-black hover:bg-[#e0de55] relative overflow-hidden"
             onClick={() => {
               sessionStorage.setItem('tamaraPendingLevelId', levelId);
               mutateTamara();
             }}
             disabled={isPending || isTamaraPending}
           >
-            {isTamaraPending ? t('Global.processing') : t('Global.payWithTamara' as any)}
-            {/* You might want to add a Tamara icon here */}
+            <div className="flex flex-col items-center leading-none py-1">
+               <span className="font-bold">{isTamaraPending ? t('Global.processing') : t('Global.payWithTamara' as any)}</span>
+               <span className="text-[10px] opacity-80 mt-0.5">{t('Global.splitIn3' as any, { defaultValue: 'Split in 3 payments (0% interest)' })}</span>
+            </div>
           </Button>
         </div>
       ),
@@ -274,14 +276,17 @@ const useComponentVariant = ({
             <RefreshCw className="rtl:rotate-180" />
           </Button>
           <Button
-            className="w-full bg-[#f4f27d] text-black hover:bg-[#e0de55]"
+            className="w-full bg-[#f4f27d] text-black hover:bg-[#e0de55] relative overflow-hidden"
             onClick={() => {
               sessionStorage.setItem('tamaraPendingLevelId', levelId);
               mutateTamara();
             }}
             disabled={isPending || isTamaraPending}
           >
-            {isTamaraPending ? t('Global.processing') : t('Global.payWithTamara' as any)}
+            <div className="flex flex-col items-center leading-none py-1">
+               <span className="font-bold">{isTamaraPending ? t('Global.processing') : t('Global.payWithTamara' as any)}</span>
+               <span className="text-[10px] opacity-80 mt-0.5">{t('Global.splitIn3' as any, { defaultValue: 'Split in 3 payments (0% interest)' })}</span>
+            </div>
           </Button>
         </div>
       ),
