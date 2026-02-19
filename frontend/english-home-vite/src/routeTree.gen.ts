@@ -14,8 +14,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as LocaleGlobalLayoutRouteImport } from './routes/$locale/_globalLayout'
 import { Route as LocaleGlobalLayoutIndexRouteImport } from './routes/$locale/_globalLayout/index'
+import { Route as PaymentTamaraSuccessRouteImport } from './routes/payment.tamara.success'
+import { Route as PaymentTamaraFailureRouteImport } from './routes/payment.tamara.failure'
 import { Route as LocaleGlobalLayoutUserGuideRouteImport } from './routes/$locale/_globalLayout/user-guide'
 import { Route as LocaleGlobalLayoutTermsAndConditionsRouteImport } from './routes/$locale/_globalLayout/terms-and-conditions'
+import { Route as LocaleGlobalLayoutSuspendedRouteImport } from './routes/$locale/_globalLayout/suspended'
 import { Route as LocaleGlobalLayoutSignupRouteImport } from './routes/$locale/_globalLayout/signup'
 import { Route as LocaleGlobalLayoutShareProgressRouteImport } from './routes/$locale/_globalLayout/share-progress'
 import { Route as LocaleGlobalLayoutPrivacyPolicyRouteImport } from './routes/$locale/_globalLayout/privacy-policy'
@@ -58,6 +61,16 @@ const LocaleGlobalLayoutIndexRoute = LocaleGlobalLayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LocaleGlobalLayoutRoute,
 } as any)
+const PaymentTamaraSuccessRoute = PaymentTamaraSuccessRouteImport.update({
+  id: '/payment/tamara/success',
+  path: '/payment/tamara/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentTamaraFailureRoute = PaymentTamaraFailureRouteImport.update({
+  id: '/payment/tamara/failure',
+  path: '/payment/tamara/failure',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LocaleGlobalLayoutUserGuideRoute =
   LocaleGlobalLayoutUserGuideRouteImport.update({
     id: '/user-guide',
@@ -68,6 +81,12 @@ const LocaleGlobalLayoutTermsAndConditionsRoute =
   LocaleGlobalLayoutTermsAndConditionsRouteImport.update({
     id: '/terms-and-conditions',
     path: '/terms-and-conditions',
+    getParentRoute: () => LocaleGlobalLayoutRoute,
+  } as any)
+const LocaleGlobalLayoutSuspendedRoute =
+  LocaleGlobalLayoutSuspendedRouteImport.update({
+    id: '/suspended',
+    path: '/suspended',
     getParentRoute: () => LocaleGlobalLayoutRoute,
   } as any)
 const LocaleGlobalLayoutSignupRoute =
@@ -177,8 +196,11 @@ export interface FileRoutesByFullPath {
   '/$locale/privacy-policy': typeof LocaleGlobalLayoutPrivacyPolicyRoute
   '/$locale/share-progress': typeof LocaleGlobalLayoutShareProgressRoute
   '/$locale/signup': typeof LocaleGlobalLayoutSignupRoute
+  '/$locale/suspended': typeof LocaleGlobalLayoutSuspendedRoute
   '/$locale/terms-and-conditions': typeof LocaleGlobalLayoutTermsAndConditionsRoute
   '/$locale/user-guide': typeof LocaleGlobalLayoutUserGuideRoute
+  '/payment/tamara/failure': typeof PaymentTamaraFailureRoute
+  '/payment/tamara/success': typeof PaymentTamaraSuccessRoute
   '/$locale/': typeof LocaleGlobalLayoutIndexRoute
   '/$locale/app': typeof LocaleGlobalLayoutAuthAppRouteRouteWithChildren
   '/$locale/verify-email': typeof LocaleGlobalLayoutAuthVerifyEmailRoute
@@ -201,8 +223,11 @@ export interface FileRoutesByTo {
   '/$locale/privacy-policy': typeof LocaleGlobalLayoutPrivacyPolicyRoute
   '/$locale/share-progress': typeof LocaleGlobalLayoutShareProgressRoute
   '/$locale/signup': typeof LocaleGlobalLayoutSignupRoute
+  '/$locale/suspended': typeof LocaleGlobalLayoutSuspendedRoute
   '/$locale/terms-and-conditions': typeof LocaleGlobalLayoutTermsAndConditionsRoute
   '/$locale/user-guide': typeof LocaleGlobalLayoutUserGuideRoute
+  '/payment/tamara/failure': typeof PaymentTamaraFailureRoute
+  '/payment/tamara/success': typeof PaymentTamaraSuccessRoute
   '/$locale/verify-email': typeof LocaleGlobalLayoutAuthVerifyEmailRoute
   '/$locale/app/account': typeof LocaleGlobalLayoutAuthAppAccountRoute
   '/$locale/app': typeof LocaleGlobalLayoutAuthAppIndexRoute
@@ -224,8 +249,11 @@ export interface FileRoutesById {
   '/$locale/_globalLayout/privacy-policy': typeof LocaleGlobalLayoutPrivacyPolicyRoute
   '/$locale/_globalLayout/share-progress': typeof LocaleGlobalLayoutShareProgressRoute
   '/$locale/_globalLayout/signup': typeof LocaleGlobalLayoutSignupRoute
+  '/$locale/_globalLayout/suspended': typeof LocaleGlobalLayoutSuspendedRoute
   '/$locale/_globalLayout/terms-and-conditions': typeof LocaleGlobalLayoutTermsAndConditionsRoute
   '/$locale/_globalLayout/user-guide': typeof LocaleGlobalLayoutUserGuideRoute
+  '/payment/tamara/failure': typeof PaymentTamaraFailureRoute
+  '/payment/tamara/success': typeof PaymentTamaraSuccessRoute
   '/$locale/_globalLayout/': typeof LocaleGlobalLayoutIndexRoute
   '/$locale/_globalLayout/_auth/app': typeof LocaleGlobalLayoutAuthAppRouteRouteWithChildren
   '/$locale/_globalLayout/_auth/verify-email': typeof LocaleGlobalLayoutAuthVerifyEmailRoute
@@ -250,8 +278,11 @@ export interface FileRouteTypes {
     | '/$locale/privacy-policy'
     | '/$locale/share-progress'
     | '/$locale/signup'
+    | '/$locale/suspended'
     | '/$locale/terms-and-conditions'
     | '/$locale/user-guide'
+    | '/payment/tamara/failure'
+    | '/payment/tamara/success'
     | '/$locale/'
     | '/$locale/app'
     | '/$locale/verify-email'
@@ -274,8 +305,11 @@ export interface FileRouteTypes {
     | '/$locale/privacy-policy'
     | '/$locale/share-progress'
     | '/$locale/signup'
+    | '/$locale/suspended'
     | '/$locale/terms-and-conditions'
     | '/$locale/user-guide'
+    | '/payment/tamara/failure'
+    | '/payment/tamara/success'
     | '/$locale/verify-email'
     | '/$locale/app/account'
     | '/$locale/app'
@@ -296,8 +330,11 @@ export interface FileRouteTypes {
     | '/$locale/_globalLayout/privacy-policy'
     | '/$locale/_globalLayout/share-progress'
     | '/$locale/_globalLayout/signup'
+    | '/$locale/_globalLayout/suspended'
     | '/$locale/_globalLayout/terms-and-conditions'
     | '/$locale/_globalLayout/user-guide'
+    | '/payment/tamara/failure'
+    | '/payment/tamara/success'
     | '/$locale/_globalLayout/'
     | '/$locale/_globalLayout/_auth/app'
     | '/$locale/_globalLayout/_auth/verify-email'
@@ -314,6 +351,8 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   LocaleGlobalLayoutRoute: typeof LocaleGlobalLayoutRouteWithChildren
   AuthCallbackRoute: typeof AuthCallbackRoute
+  PaymentTamaraFailureRoute: typeof PaymentTamaraFailureRoute
+  PaymentTamaraSuccessRoute: typeof PaymentTamaraSuccessRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -353,6 +392,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleGlobalLayoutIndexRouteImport
       parentRoute: typeof LocaleGlobalLayoutRoute
     }
+    '/payment/tamara/success': {
+      id: '/payment/tamara/success'
+      path: '/payment/tamara/success'
+      fullPath: '/payment/tamara/success'
+      preLoaderRoute: typeof PaymentTamaraSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payment/tamara/failure': {
+      id: '/payment/tamara/failure'
+      path: '/payment/tamara/failure'
+      fullPath: '/payment/tamara/failure'
+      preLoaderRoute: typeof PaymentTamaraFailureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$locale/_globalLayout/user-guide': {
       id: '/$locale/_globalLayout/user-guide'
       path: '/user-guide'
@@ -365,6 +418,13 @@ declare module '@tanstack/react-router' {
       path: '/terms-and-conditions'
       fullPath: '/$locale/terms-and-conditions'
       preLoaderRoute: typeof LocaleGlobalLayoutTermsAndConditionsRouteImport
+      parentRoute: typeof LocaleGlobalLayoutRoute
+    }
+    '/$locale/_globalLayout/suspended': {
+      id: '/$locale/_globalLayout/suspended'
+      path: '/suspended'
+      fullPath: '/$locale/suspended'
+      preLoaderRoute: typeof LocaleGlobalLayoutSuspendedRouteImport
       parentRoute: typeof LocaleGlobalLayoutRoute
     }
     '/$locale/_globalLayout/signup': {
@@ -550,6 +610,7 @@ interface LocaleGlobalLayoutRouteChildren {
   LocaleGlobalLayoutPrivacyPolicyRoute: typeof LocaleGlobalLayoutPrivacyPolicyRoute
   LocaleGlobalLayoutShareProgressRoute: typeof LocaleGlobalLayoutShareProgressRoute
   LocaleGlobalLayoutSignupRoute: typeof LocaleGlobalLayoutSignupRoute
+  LocaleGlobalLayoutSuspendedRoute: typeof LocaleGlobalLayoutSuspendedRoute
   LocaleGlobalLayoutTermsAndConditionsRoute: typeof LocaleGlobalLayoutTermsAndConditionsRoute
   LocaleGlobalLayoutUserGuideRoute: typeof LocaleGlobalLayoutUserGuideRoute
   LocaleGlobalLayoutIndexRoute: typeof LocaleGlobalLayoutIndexRoute
@@ -564,6 +625,7 @@ const LocaleGlobalLayoutRouteChildren: LocaleGlobalLayoutRouteChildren = {
   LocaleGlobalLayoutPrivacyPolicyRoute: LocaleGlobalLayoutPrivacyPolicyRoute,
   LocaleGlobalLayoutShareProgressRoute: LocaleGlobalLayoutShareProgressRoute,
   LocaleGlobalLayoutSignupRoute: LocaleGlobalLayoutSignupRoute,
+  LocaleGlobalLayoutSuspendedRoute: LocaleGlobalLayoutSuspendedRoute,
   LocaleGlobalLayoutTermsAndConditionsRoute:
     LocaleGlobalLayoutTermsAndConditionsRoute,
   LocaleGlobalLayoutUserGuideRoute: LocaleGlobalLayoutUserGuideRoute,
@@ -578,6 +640,8 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   LocaleGlobalLayoutRoute: LocaleGlobalLayoutRouteWithChildren,
   AuthCallbackRoute: AuthCallbackRoute,
+  PaymentTamaraFailureRoute: PaymentTamaraFailureRoute,
+  PaymentTamaraSuccessRoute: PaymentTamaraSuccessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

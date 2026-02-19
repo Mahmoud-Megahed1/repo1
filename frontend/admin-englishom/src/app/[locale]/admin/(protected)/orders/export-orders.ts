@@ -2,39 +2,40 @@ import { LEVELS_LABELS } from '@/constants';
 import { formatDate } from '@/lib/utils';
 import { Order } from '@/types/orders.types';
 import { LevelId } from '@/types/user.types';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
-export function exportOrdersToExcel(orders: Order[], filename?: string) {
-  const excelData = orders.map((order) => ({
-    'User Name': `${order.user.firstName} ${order.user.lastName}`,
-    Email: order.user.email,
-    Level: LEVELS_LABELS[order.levelName as LevelId] || order.levelName,
-    Amount: `$${order.amount.toFixed(2)}`,
-    Status: order.paymentStatus,
-    'Payment ID': order.paymentId,
-    'Payment Date': formatDate(order.paymentDate),
-    'Created At': formatDate(order.createdAt),
-  }));
+export async function exportOrdersToExcel(orders: Order[], filename?: string) {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Orders');
 
-  const workbook = XLSX.utils.book_new();
-  const worksheet = XLSX.utils.json_to_sheet(excelData);
-
-  const columnWidths = [
-    { wch: 25 },
-    { wch: 30 },
-    { wch: 10 },
-    { wch: 12 },
-    { wch: 12 },
-    { wch: 25 },
-    { wch: 20 },
-    { wch: 20 },
+  worksheet.columns = [
+    { header: 'User Name', key: 'userName', width: 25 },
+    { header: 'Email', key: 'email', width: 30 },
+    { header: 'Level', key: 'level', width: 15 },
+    { header: 'Amount', key: 'amount', width: 12 },
+    { header: 'Status', key: 'status', width: 15 },
+    { header: 'Payment ID', key: 'paymentId', width: 25 },
+    { header: 'Payment Date', key: 'paymentDate', width: 20 },
+    { header: 'Created At', key: 'createdAt', width: 20 },
   ];
-  worksheet['!cols'] = columnWidths;
 
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Orders');
+  orders.forEach((order) => {
+    worksheet.addRow({
+      userName: `${order.user.firstName} ${order.user.lastName}`,
+      email: order.user.email,
+      level: LEVELS_LABELS[order.levelName as LevelId] || order.levelName,
+      amount: `$${order.amount.toFixed(2)}`,
+      status: order.paymentStatus,
+      paymentId: order.paymentId,
+      paymentDate: formatDate(order.paymentDate),
+      createdAt: formatDate(order.createdAt),
+    });
+  });
 
+  const buffer = await workbook.xlsx.writeBuffer();
   const date = new Date().toISOString().split('T')[0];
   const defaultFilename = `orders_${date}.xlsx`;
 
-  XLSX.writeFile(workbook, filename || defaultFilename);
+  saveAs(new Blob([buffer]), filename || defaultFilename);
 }
