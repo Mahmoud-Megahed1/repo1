@@ -6,6 +6,8 @@ import { Button } from '@ui/button';
 import { KeyRound } from 'lucide-react';
 import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import useLocale from '@hooks/use-locale';
+import { useLocalizedLevelById } from '../queries';
 import { usePayment, useTamaraPayment } from '../mutations';
 
 const LevelGuard = ({
@@ -35,6 +37,9 @@ const LockedLevel: FC<LockedLevelProps> = ({
 }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const locale = useLocale();
+  const { level } = useLocalizedLevelById(levelId, locale);
+
   const userData = {
     city: user?.country || 'Riyadh',
     country: user?.country || 'Saudi Arabia',
@@ -85,7 +90,7 @@ const LockedLevel: FC<LockedLevelProps> = ({
           {!isTamaraPending ? (
             <tamara-widget
               type="tamara-summary"
-              amount="1089"
+              amount={(level?.price || '1089').toString()}
               inline-type="2"
               onClick={() => tamaraPay()}
               className="cursor-pointer"
