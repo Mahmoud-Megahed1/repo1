@@ -215,6 +215,11 @@ export function LandingFooter() {
                 alt="Mastercard"
                 className="h-5 object-contain"
               />
+              <img
+                src="/images/svgs/tamara.svg"
+                alt="Tamara"
+                className="h-5 object-contain"
+              />
             </div>
             <img
               src="/images/maroof_new.jpg"

@@ -16,6 +16,7 @@ export type UserType = {
   isVerified: boolean;
   role: 'admin' | 'user';
   status: 'active' | 'blocked' | 'suspended';
+  phone?: string;
   isVoluntaryPaused?: boolean;
   pauseStartedAt?: string;
   pauseScheduledEndDate?: string;
