@@ -183,7 +183,7 @@ export class TamaraService {
                 return data.checkout_url;
             } catch (error) {
                 this.logger.error('Failed to create Tamara session', error);
-                throw new InternalServerErrorException('Tamara Checkout Error');
+                throw new InternalServerErrorException(error.message || 'Tamara Checkout Error');
             }
         });
     }
