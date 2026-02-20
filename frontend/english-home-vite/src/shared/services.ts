@@ -1,6 +1,10 @@
 import axiosClient from '@lib/axios-client';
-import type { AxiosRequestConfig } from 'axios';
-import type { LevelDetails, UserType } from './types/entities';
+import type { UserType, LevelDetails } from './types/entities';
+
+type GetMeResponse = {
+  user: UserType;
+  levelsDetails: Array<LevelDetails>;
+};
 
 export const getMe = async () => {
   return await axiosClient.get<GetMeResponse>('/users/me');

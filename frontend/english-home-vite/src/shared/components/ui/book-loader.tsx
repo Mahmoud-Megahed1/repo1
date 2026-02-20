@@ -1,5 +1,5 @@
 import { cn } from '@lib/utils';
-import { FC } from 'react';
+import type { FC } from 'react';
 
 const BookLoader: FC<{ className?: string }> = ({ className }) => {
   return (

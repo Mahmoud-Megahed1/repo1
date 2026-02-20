@@ -45,4 +45,5 @@ const Idioms: FC<Props> = ({ lesson }) => {
   );
 };
 
+export type { IdiomLesson };
 export default Idioms;

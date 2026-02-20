@@ -20,7 +20,7 @@ interface Props {
 }
 
 const FreezeSubscriptionModal: React.FC<Props> = ({ isOpen, onClose }) => {
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
     const isAr = i18n.language === 'ar';
     const { user } = useAuth();
     const [duration, setDuration] = useState([5]);

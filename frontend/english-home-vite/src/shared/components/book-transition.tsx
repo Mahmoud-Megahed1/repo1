@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocation } from '@tanstack/react-router';
-import { ReactNode, forwardRef } from 'react';
+import { type ReactNode, forwardRef } from 'react';
 
 type BookTransitionProps = {
   children: ReactNode;
@@ -8,7 +8,7 @@ type BookTransitionProps = {
 
 // Use forwardRef to ensure compatible typings if passed to other motion components or refs
 export const BookTransition = forwardRef<HTMLDivElement, BookTransitionProps>(
-  ({ children }, ref) => {
+  ({ children }, _ref) => {
     const location = useLocation();
 
     return (

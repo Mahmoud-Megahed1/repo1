@@ -23,7 +23,7 @@ const UseCasesCard: FC<Props> = ({ useCases }) => {
       variant="amber"
     >
       <ul className="space-y-4">
-        {useCases.map((useCase, index) => (
+        {useCases.map((useCase: string, index: number) => (
           <li
             key={index}
             className="bg-accent/50 text-accent-foreground/80 flex items-start gap-4 rounded-xl p-4"

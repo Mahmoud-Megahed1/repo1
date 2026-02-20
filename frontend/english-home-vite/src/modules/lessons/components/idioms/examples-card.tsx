@@ -11,7 +11,7 @@ type Props = Pick<IdiomLesson, 'examples'>;
 const ExamplesCard: FC<Props> = ({ examples }) => {
   const { t } = useTranslation();
   const { currentItem, next, prev, hasNextItems, hasPrevItems, currentIndex } =
-    useItemsPagination(examples);
+    useItemsPagination<IdiomLesson['examples'][number]>(examples);
 
   if (!currentItem) return null;
   return (
