@@ -218,7 +218,7 @@ export function LandingFooter() {
               <img
                 src="/images/svgs/Tamara1.svg"
                 alt="Tamara"
-                className="h-14 object-contain"
+                className="h-24 object-contain"
               />
             </div>
             <img
