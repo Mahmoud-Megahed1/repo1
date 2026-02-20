@@ -21,14 +21,19 @@ export class SubscriptionService {
 
         const user = await this.userRepo.findOne({ _id: userId });
         if (!user) throw new NotFoundException('المستخدم غير موجود');
-        if (user.status !== UserStatus.SUSPENDED) {
+
+        // If account is already active AND not frozen, then return
+        if (user.status === UserStatus.ACTIVE && !user.isVoluntaryPaused) {
             return { message: 'الحساب نشط بالفعل', status: user.status };
         }
 
         const updates: any = {
             status: UserStatus.ACTIVE,
+            isVoluntaryPaused: false,
             hasUsedInactivityGrace: true,
             lastActivity: this.timeService.createDate(),
+            pauseStartedAt: null,
+            pauseScheduledEndDate: null,
         };
 
         // If this was a grace suspension, we need to add the duration to totalPausedDays
@@ -40,11 +45,10 @@ export class SubscriptionService {
                 pauseHistory: {
                     start: user.pauseStartedAt,
                     end: now,
-                    reason: 'Reactivation from Inactivity Grace',
-                    isVoluntary: false,
+                    reason: user.isVoluntaryPaused ? 'Reactivation from Manual Freeze' : 'Reactivation from Inactivity Grace',
+                    isVoluntary: user.isVoluntaryPaused,
                 },
             };
-            updates.pauseStartedAt = null; // Clear it
         }
 
         await this.userRepo.findOneAndUpdate({ _id: userId }, updates);

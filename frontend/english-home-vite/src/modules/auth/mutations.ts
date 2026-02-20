@@ -122,9 +122,9 @@ export const useReactivate = () => {
   return useMutation({
     mutationKey: ['reactivate'],
     mutationFn: (variables: { data: { willCare: boolean; willCommit: boolean } }) => reactivate(variables),
-    onSuccess() {
+    async onSuccess() {
       toast.success('تم تفعيل الحساب بنجاح، أهلاً بك من جديد!');
-      queryClient.invalidateQueries({ queryKey: ['getMe'] });
+      await queryClient.refetchQueries({ queryKey: ['getMe'] });
       navigate({ to: '/app', replace: true });
     },
   });

@@ -64,29 +64,17 @@ const SuspendedAccountPage: React.FC<Props> = ({
               {isAr ? `نفتقد وجودك معنا يا ${userName}!` : `We miss you, ${userName}!`}
             </h1>
             <p className="text-blue-100 text-lg relative z-10">
-              {isAr ? 'حسابك في انتظار عودتك لإكمال رحلة النجاح' : 'Your account is waiting for your return to continue your success journey'}
+              {isAr ? 'أنجازك في انتظار عودتك لإكمال رحلة النجاح' : 'Your achievement is waiting for your return to complete the success journey'}
             </p>
           </div>
 
           {/* Content */}
           <div className="px-10 py-10">
-            {/* Encouraging Message from Mr. Mahmoud */}
             <div className="mb-10 text-center">
-              <div className="flex items-center justify-center mb-4">
-                <span className="h-px w-12 bg-gray-200"></span>
-                <span className="mx-4 text-sm font-medium text-blue-600 uppercase tracking-wider">رسالة من مستر محمود</span>
-                <span className="h-px w-12 bg-gray-200"></span>
-              </div>
-              <div className="relative inline-block mb-6 group cursor-pointer">
-                <div className="w-24 h-24 rounded-full border-4 border-blue-50 overflow-hidden shadow-md">
-                  <img src="/mahmoud-avatar.png" alt="Mr. Mahmoud" className="w-full h-full object-cover" />
-                </div>
-                <div className="absolute -bottom-1 -right-1 bg-green-500 w-6 h-6 rounded-full border-4 border-white"></div>
-              </div>
               <blockquote className="text-xl font-medium text-gray-800 leading-relaxed italic">
                 {isAr
-                  ? `"العلم لا يُنال براحة الجسم يا ${userName}، والالتزام هو الجسر بين أهدافك وإنجازاتك. نحن هنا لندعمك، فاستعن بالله ولا تعجز."`
-                  : `"Knowledge is not attained by resting the body, ${userName}, and commitment is the bridge between your goals and your achievements. We are here to support you, so seek help from Allah and do not fail."`
+                  ? `"جدد طاقتك، توكل على الله، ونحن معك خطوة بخطوة."`
+                  : `"Renew your energy, trust in Allah, and we are with you step by step."`
                 }
               </blockquote>
             </div>
@@ -105,11 +93,15 @@ const SuspendedAccountPage: React.FC<Props> = ({
                     {isAr ? `سبب الإيقاف: ${suspensionReason}` : `Suspension Reason: ${suspensionReason}`}
                   </p>
                 )}
-                <p>
+                <p className="whitespace-pre-line">
                   {isFirstSuspension
                     ? (isAr
-                      ? 'لقد قمنا بحفظ أيام اشتراكك هذه المرة كفرصة حماية لك. عند العودة الآن، ستجد أيامك كاملة، ولكن يرجى العلم أنه في حال الانقطاع مرة أخرى، سيستمر عداد الاشتراك في العمل ولن يتم إيقافه.'
-                      : 'We have saved your subscription days this time as a protection grace for you. Upon returning now, you will find your days complete. However, please be aware that in the event of another interruption, the subscription counter will continue to run and will not be stopped.')
+                      ? `رصيد أيامك في أمان..
+بادرنا بحفظ أيام اشتراكك تقديراً لظروف غيابك، وستجدها كاملة بانتظارك. 
+نود تنبيهك أن ميزة 'الإيقاف المؤقت' تُمنح لمرة واحدة، لذا استغل هذه الفرصة واستأنف رحلتك التعليمية.`
+                      : `Your subscription balance is safe..
+We have saved your subscription days out of appreciation for your absence, and you will find them complete waiting for you.
+We would like to remind you that the 'Pause' feature is granted only once, so take this opportunity and resume your educational journey.`)
                     : (isAr
                       ? 'تم إيقاف الدخول لحسابك بسبب الانقطاع المتكرر. يرجى التفعيل للعودة لدروسك.'
                       : 'Access to your account has been stopped due to repeated interruptions. Please reactivate to return to your lessons.')
@@ -137,7 +129,7 @@ const SuspendedAccountPage: React.FC<Props> = ({
                     className="mt-1 h-6 w-6 rounded-lg data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
                   />
                   <div className="flex-1">
-                    <p className="font-bold text-gray-900 mb-1">{isAr ? 'سأهتم' : 'I will care'}</p>
+                    <p className="font-bold text-gray-900 mb-1">{isAr ? 'سأمنح دراستي الأولوية التي تستحقها' : 'I will give my studies the priority they deserve'}</p>
                     <p className="text-sm text-gray-600">{isAr ? 'أعدكم بأنني سأولي دراستي الاهتمام الكافي ولن أهمل دروسي اليومية.' : 'I promise that I will give my studies sufficient attention and will not neglect my daily lessons.'}</p>
                   </div>
                 </label>
@@ -193,7 +185,7 @@ const SuspendedAccountPage: React.FC<Props> = ({
           </p>
           <div className="flex flex-col items-center gap-4">
             <a
-              href="https://wa.me/201021430030"
+              href="https://wa.me/qr/NLKCDGU2XBMEE1"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700 transition-colors bg-blue-50 px-6 py-3 rounded-2xl border border-blue-100"
