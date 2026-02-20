@@ -1,13 +1,11 @@
-/* eslint-disable no-unused-vars */
-/// <reference types="vite/client" />
-
+import type React from 'react';
 import 'i18next';
-
 import type { TFunction } from 'i18next';
 import { router } from './main';
 import type { TranslationType } from '@shared/i18n/translation.type';
 import type { AxiosError } from 'axios';
 import type { QueryClient } from '@tanstack/query-core';
+
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router;
@@ -45,9 +43,6 @@ declare module '@tanstack/react-query' {
     defaultError: AxiosError<{ message: string }>;
   }
 }
-import type React from 'react';
-
-import type React from 'react';
 
 declare global {
   namespace JSX {
@@ -60,6 +55,15 @@ declare global {
         amount?: string;
         'inline-type'?: string;
       };
+    }
+  }
+}
+
+// Ensure it's also available in React namespace for some TS versions
+declare namespace React {
+  namespace JSX {
+    interface IntrinsicElements {
+      'tamara-widget': any;
     }
   }
 }
