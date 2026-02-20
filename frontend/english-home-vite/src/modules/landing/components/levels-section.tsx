@@ -70,14 +70,12 @@ export function LevelsSection() {
                   <CardDescription className="text-base">
                     {description}
                   </CardDescription>
-                  {!isAvailable && (
-                    <div className="mt-4 flex items-baseline gap-2">
-                      <span className="text-primary flex items-center gap-2 text-3xl font-bold">
-                        <RiyalSymbol className="size-4" />
-                        {localizedNumber(price, locale)}
-                      </span>
-                    </div>
-                  )}
+                  <div className="mt-4 flex items-baseline gap-2">
+                    <span className="text-primary flex items-center gap-1 text-3xl font-bold">
+                      <RiyalSymbol className="size-4" />
+                      {localizedNumber(price, locale)}
+                    </span>
+                  </div>
                 </CardHeader>
                 <CardContent className="flex h-full flex-col">
                   <ul className="mb-6 space-y-3">

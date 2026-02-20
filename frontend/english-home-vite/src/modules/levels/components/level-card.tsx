@@ -141,6 +141,20 @@ const useComponentVariant = ({
     'coming-soon': {
       iconBg: 'amber',
       labelVariant: 'amber-gradient',
+      content: (
+        <p className="flex items-center">
+          <span className="text-muted-foreground pe-2 text-sm">
+            {t('Global.price')}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <span lang="en" className="inline-flex items-center gap-1">
+              <RiyalSymbol className="size-4" />
+              <b>{price}</b>
+            </span>
+            / {t('Global.forSixtyDays')}
+          </span>
+        </p>
+      ),
       cta: (
         <Button
           className={cn(
@@ -190,8 +204,8 @@ const useComponentVariant = ({
             disabled={isPending || isTamaraPending}
           >
             <div className="flex flex-col items-center leading-none py-1">
-               <span className="font-bold">{isTamaraPending ? t('Global.processing') : t('Global.payWithTamara' as any)}</span>
-               <span className="text-[10px] opacity-80 mt-0.5">{t('Global.splitIn3' as any, { defaultValue: 'Split in 3 payments (0% interest)' })}</span>
+              <span className="font-bold">{isTamaraPending ? t('Global.processing') : t('Global.payWithTamara' as any)}</span>
+              <span className="text-[10px] opacity-80 mt-0.5">{t('Global.splitIn3' as any, { defaultValue: 'Split in 3 payments (0% interest)' })}</span>
             </div>
           </Button>
         </div>
@@ -284,8 +298,8 @@ const useComponentVariant = ({
             disabled={isPending || isTamaraPending}
           >
             <div className="flex flex-col items-center leading-none py-1">
-               <span className="font-bold">{isTamaraPending ? t('Global.processing') : t('Global.payWithTamara' as any)}</span>
-               <span className="text-[10px] opacity-80 mt-0.5">{t('Global.splitIn3' as any, { defaultValue: 'Split in 3 payments (0% interest)' })}</span>
+              <span className="font-bold">{isTamaraPending ? t('Global.processing') : t('Global.payWithTamara' as any)}</span>
+              <span className="text-[10px] opacity-80 mt-0.5">{t('Global.splitIn3' as any, { defaultValue: 'Split in 3 payments (0% interest)' })}</span>
             </div>
           </Button>
         </div>
