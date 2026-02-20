@@ -201,11 +201,6 @@ export function LandingFooter() {
                 className="h-5 object-contain"
               />
               <img
-                src="/images/svgs/tabby.svg"
-                alt="Tabby"
-                className="h-5 object-contain"
-              />
-              <img
                 src="/images/svgs/apple-pay.svg"
                 alt="Apple Pay"
                 className="h-5 object-contain"
