@@ -28,25 +28,27 @@ export class SubscriptionService {
         }
 
         const updates: any = {
-            status: UserStatus.ACTIVE,
-            isVoluntaryPaused: false,
-            hasUsedInactivityGrace: true,
-            lastActivity: this.timeService.createDate(),
-            pauseStartedAt: null,
-            pauseScheduledEndDate: null,
+            $set: {
+                status: UserStatus.ACTIVE,
+                isVoluntaryPaused: false,
+                hasUsedInactivityGrace: true,
+                lastActivity: this.timeService.createDate(),
+                pauseStartedAt: null,
+                pauseScheduledEndDate: null,
+            }
         };
 
-        // If this was a grace suspension, we need to add the duration to totalPausedDays
+        // If this was a grace suspension/freeze, we need to add the duration to totalPausedDays
         if (user.pauseStartedAt) {
             const now = this.timeService.createDate();
             const pausedDays = Math.ceil((now.getTime() - new Date(user.pauseStartedAt).getTime()) / (1000 * 60 * 60 * 24));
-            updates.totalPausedDays = (user.totalPausedDays || 0) + pausedDays;
+            updates.$set.totalPausedDays = (user.totalPausedDays || 0) + pausedDays;
             updates.$push = {
                 pauseHistory: {
                     start: user.pauseStartedAt,
                     end: now,
                     reason: user.isVoluntaryPaused ? 'Reactivation from Manual Freeze' : 'Reactivation from Inactivity Grace',
-                    isVoluntary: user.isVoluntaryPaused,
+                    isVoluntary: !!user.isVoluntaryPaused,
                 },
             };
         }
