@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
 import { UserRepo } from '../user/repo/user.repo';
 import { SubscriptionService } from '../subscription/subscription.service';
-import { Role, UserStatus, Strategy } from '../common/shared';
+import { Role, UserStatus } from '../common/shared';
 import * as bcrypt from 'bcrypt';
 import { Logger } from '@nestjs/common';
 
@@ -30,7 +30,7 @@ async function createFrozenUser() {
                 isVerified: true,
                 role: Role.USER,
                 status: UserStatus.ACTIVE,
-                strategy: Strategy.LOCAL,
+                strategy: 'local',
                 country: 'Egypt',
                 lastActivity: new Date(),
             } as any);
