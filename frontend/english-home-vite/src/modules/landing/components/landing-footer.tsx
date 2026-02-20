@@ -198,27 +198,27 @@ export function LandingFooter() {
               <img
                 src="/images/svgs/mada.svg"
                 alt="Mada"
-                className="h-5 object-contain"
+                className="h-8 object-contain"
               />
               <img
                 src="/images/svgs/apple-pay.svg"
                 alt="Apple Pay"
-                className="h-5 object-contain"
+                className="h-8 object-contain"
               />
               <img
                 src="/images/svgs/visa.svg"
                 alt="Visa"
-                className="h-5 object-contain"
+                className="h-10 object-contain"
               />
               <img
                 src="/images/svgs/mastercard.svg"
                 alt="Mastercard"
-                className="h-5 object-contain"
+                className="h-8 object-contain"
               />
               <img
                 src="/images/svgs/Tamara1.svg"
                 alt="Tamara"
-                className="h-16 object-contain"
+                className="h-8 object-contain"
               />
             </div>
             <img
