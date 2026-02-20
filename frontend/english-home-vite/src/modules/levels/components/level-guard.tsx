@@ -80,24 +80,22 @@ const LockedLevel: FC<LockedLevelProps> = ({
         </Button>
 
         {/* Tamara Button */}
-        <Button
-          onClick={() => tamaraPay()}
-          disabled={isPayPending || isTamaraPending}
-          variant="secondary"
-          className="h-auto w-full flex-col items-center justify-center gap-1 border-2 border-primary/10 bg-zinc-50 py-3 hover:bg-zinc-100 dark:bg-zinc-900"
-        >
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-bold">اشتر عبر تمارا</span>
-            <img
-              src="/images/svgs/tamara.svg"
-              alt="Tamara"
-              className="h-4 object-contain"
-            />
-          </div>
-          <span className="text-muted-foreground text-xs">
-            قسمها على ٤ دفعات بقيمة ٢٧٢.٢٥ ر.س بدون فوائد
-          </span>
-        </Button>
+        {/* Tamara Widget */}
+        <div className="w-full">
+          {!isTamaraPending ? (
+            <tamara-widget
+              type="tamara-summary"
+              amount="1089"
+              inline-type="2"
+              onClick={() => tamaraPay()}
+              className="cursor-pointer"
+            ></tamara-widget>
+          ) : (
+            <Button disabled className="w-full">
+              {t('Global.processing')}...
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
