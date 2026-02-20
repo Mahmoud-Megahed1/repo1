@@ -45,6 +45,10 @@ declare module '@tanstack/react-query' {
     defaultError: AxiosError<{ message: string }>;
   }
 }
+import type React from 'react';
+
+import type React from 'react';
+
 declare global {
   namespace JSX {
     interface IntrinsicElements {
