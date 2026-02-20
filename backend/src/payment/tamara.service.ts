@@ -142,12 +142,14 @@ export class TamaraService {
                     success: `${this.configService.get('FRONTEND_URL')}/payment/tamara/success?orderId=${orderRefId}`,
                     failure: `${this.configService.get('FRONTEND_URL')}/payment/tamara/failure`,
                     cancel: `${this.configService.get('FRONTEND_URL')}/payment/tamara/cancel`,
-                    notification: `${this.configService.get('BACKEND_URL')}/payment/tamara/webhook`,
+                    notification: `${this.configService.get('BASE_URL')}/payment/tamara/webhook`,
                 },
                 payment_type: 'PAY_BY_INSTALMENTS',
             };
 
             try {
+                this.logger.debug(`Tamara Checkout Payload: ${JSON.stringify(payload, null, 2)}`);
+
                 const response = await fetch(`${this.TAMARA_API_URL}/checkout/create-checkout-session`, {
                     method: 'POST',
                     headers: {

@@ -216,7 +216,7 @@ export function LandingFooter() {
                 className="h-5 object-contain"
               />
               <img
-                src="/images/svgs/tamara.jpg"
+                src="/images/svgs/tamara_logo_v2.jpg"
                 alt="Tamara"
                 className="h-14 w-auto object-contain"
               />
