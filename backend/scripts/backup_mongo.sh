@@ -6,9 +6,11 @@
 # ===================================================
 
 # Configuration
-BACKUP_DIR="/var/www/englishom/backups/mongodb"
+BACKUP_DIR="/var/www/repo1/backups/mongodb"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 DB_NAME="englishom"
+# Authentication (extracted from backend/.env)
+AUTH_URI="mongodb://admin:l9u4Yr76xYtTjYm9@127.0.0.1:27017/englishom?authSource=admin"
 RETENTION_DAYS=7
 RCLONE_REMOTE="Englishom_Backups_2026"  # Name of rclone remote for Google Drive
 CLOUD_FOLDER="englishom_backups"
@@ -20,7 +22,7 @@ mkdir -p "$BACKUP_DIR"
 echo "==========================================="
 echo "Starting backup for $DB_NAME at $TIMESTAMP..."
 echo "==========================================="
-mongodump --db "$DB_NAME" --out "$BACKUP_DIR/$TIMESTAMP"
+mongodump --uri="$AUTH_URI" --out "$BACKUP_DIR/$TIMESTAMP"
 
 # Compress backup
 cd "$BACKUP_DIR"
