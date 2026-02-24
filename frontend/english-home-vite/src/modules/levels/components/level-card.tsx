@@ -268,14 +268,21 @@ const useComponentVariant = ({
               {t('Global.expiredOn')} {formatDate(expiresAt)}
             </span>
           </p>
-          <span className="text-foreground inline-flex items-center gap-1">
-            <b>{t('Global.renew')}:</b>
-            <span lang="en" className="inline-flex items-center gap-1">
-              <RiyalSymbol className="size-4" />
-              <b>{price}</b>
-            </span>
-            / {t('Global.forSixtyDays')}
-          </span>
+          <div className="flex flex-col gap-2 pt-1">
+            <p className="flex items-center">
+              <span className="text-muted-foreground pe-2 text-sm">
+                <b>{t('Global.renew')}:</b>
+              </span>
+              <span className="inline-flex items-center gap-1 font-bold">
+                <RiyalSymbol className="size-4" />
+                {price}
+              </span>
+            </p>
+            <p className="flex items-center gap-1.5 text-sm font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2 py-0.5 rounded-full border border-green-200 dark:border-green-800">
+              <Clock size={14} />
+              {t('Global.forSixtyDays')}
+            </p>
+          </div>
         </div>
       ),
       cta: (
