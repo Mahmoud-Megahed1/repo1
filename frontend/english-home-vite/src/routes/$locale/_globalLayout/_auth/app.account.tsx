@@ -202,26 +202,26 @@ function RouteComponent() {
 
 type Props =
   | {
-      variants?: 'completed';
-      title: string;
-      levelId: LevelId;
-      name: string;
-      expiresAt: string;
-    }
+    variants?: 'completed';
+    title: string;
+    levelId: LevelId;
+    name: string;
+    expiresAt: string;
+  }
   | {
-      variants?: 'inProgress';
-      title: string;
-      currentDay: string | number;
-      levelId: LevelId;
-      progress: number;
-      expiresAt: string;
-    }
+    variants?: 'inProgress';
+    title: string;
+    currentDay: string | number;
+    levelId: LevelId;
+    progress: number;
+    expiresAt: string;
+  }
   | {
-      variants?: 'expired';
-      title: string;
-      levelId: LevelId;
-      expiresAt: string;
-    };
+    variants?: 'expired';
+    title: string;
+    levelId: LevelId;
+    expiresAt: string;
+  };
 const LevelCard: FC<Props> = (props = { variants: 'inProgress' } as Props) => {
   const Icon =
     props.variants === 'expired'
@@ -274,10 +274,10 @@ const LevelCard: FC<Props> = (props = { variants: 'inProgress' } as Props) => {
               t('Global.completedSuccessfully')}
             {props.variants === 'inProgress' &&
               localizedNumber(+props.currentDay, locale) +
-                ' / ' +
-                localizedNumber(50, locale) +
-                ' ' +
-                t('Global.daysCompleted')}
+              ' / ' +
+              localizedNumber(50, locale) +
+              ' ' +
+              t('Global.daysCompleted')}
             {props.variants === 'expired' && t('Global.expired')}
           </p>
         </div>

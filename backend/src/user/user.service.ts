@@ -635,4 +635,162 @@ export class UserService {
 
     return { hasPurchase: true, levels };
   }
+
+  /**
+   * Generate a comprehensive Student Report Dashboard data.
+   * Aggregates all user statistics: skills, arsenal, journey, and AI prediction.
+   */
+  async getStudentReport(userId: string) {
+    const user = await this.userRepo.findOne({ _id: userId });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // Get purchased courses
+    const completedOrders = await this.orderRepo.findUserCompletedOrders(userId);
+    const purchasedLevelNames = [...new Set(completedOrders.map(o => o.levelName))];
+
+    // Get certificates
+    const certificates = await this.certificateRepo.find({
+      userId: new Types.ObjectId(userId),
+    });
+    const completedLevels = certificates.map(c => c.level_name);
+
+    // Get aggregated report data from repo
+    const reportData = await this.userRepo.getReportData(userId);
+
+    // Find current level (highest purchased level that user is actively working on)
+    const levelOrder = ['LEVEL_A1', 'LEVEL_A2', 'LEVEL_B1', 'LEVEL_B2', 'LEVEL_C1', 'LEVEL_C2'];
+    const levelTitles: Record<string, string> = {
+      'LEVEL_A1': 'A1 Knight',
+      'LEVEL_A2': 'A2 Explorer',
+      'LEVEL_B1': 'B1 Scholar',
+      'LEVEL_B2': 'B2 Master',
+      'LEVEL_C1': 'C1 Champion',
+      'LEVEL_C2': 'C2 Legend',
+    };
+
+    let currentLevelName = purchasedLevelNames.length > 0
+      ? purchasedLevelNames.sort((a, b) => levelOrder.indexOf(b) - levelOrder.indexOf(a))[0]
+      : null;
+
+    // Get current day for the active level
+    let currentDay = 1;
+    if (currentLevelName) {
+      try {
+        const progress = await this.userRepo.userProgress(userId, currentLevelName as unknown as Level_Name);
+        currentDay = progress !== null ? Math.min(progress + 1, 50) : 1;
+      } catch { currentDay = 1; }
+    }
+
+    // Get access info for active level
+    let activeSince: Date | null = null;
+    if (currentLevelName) {
+      const accessInfo = await this.levelAccessService.getLatestAccessInfo(userId, currentLevelName as unknown as Level_Name);
+      activeSince = accessInfo?.purchaseDate || null;
+    }
+
+    // Calculate total completed days across ALL levels
+    const totalCompletedDays = Object.values(reportData.levelProgress)
+      .reduce((sum, lp) => sum + lp.completedDays, 0);
+
+    // Calculate quiz stats from daily test results
+    let totalQuizzes = 0;
+    let totalCorrectAnswers = 0;
+    let totalQuizQuestions = 0;
+    for (const lp of Object.values(reportData.levelProgress)) {
+      for (const result of lp.testResults) {
+        totalQuizzes++;
+        if (result && typeof result === 'object') {
+          if (typeof result.score === 'number') {
+            totalCorrectAnswers += result.score;
+          }
+          if (typeof result.total === 'number') {
+            totalQuizQuestions += result.total;
+          } else {
+            totalQuizQuestions += 10; // Default 10 questions per quiz
+          }
+        }
+      }
+    }
+
+    // Estimate word count from completed days (approx 20 vocab per day)
+    const estimatedMasteredWords = totalCompletedDays * 20;
+
+    // Estimate fluency from quiz average and speaking practice
+    const speakingTasks = reportData.tasksByType['SPEAK'] || 0;
+    const quizAvg = totalQuizQuestions > 0
+      ? Math.round((totalCorrectAnswers / totalQuizQuestions) * 100)
+      : 0;
+    const fluencyPercent = Math.min(100, Math.round(
+      (quizAvg * 0.5) + (Math.min(speakingTasks, 100) * 0.3) + (Math.min(totalCompletedDays, 50) * 0.4)
+    ));
+
+    // AI Prediction — estimate days to reach next level
+    let nextLevel: string | null = null;
+    let estimatedDaysToNext = 0;
+    if (currentLevelName) {
+      const currentIdx = levelOrder.indexOf(currentLevelName);
+      if (currentIdx < levelOrder.length - 1 && !completedLevels.includes(currentLevelName as Level_Name)) {
+        nextLevel = levelOrder[currentIdx + 1].replace('LEVEL_', '');
+        const daysRemaining = 50 - (currentDay - 1);
+        // Estimate based on current pace
+        const daysActive = reportData.totalActiveDays || 1;
+        const pace = totalCompletedDays / daysActive; // days completed per active day
+        estimatedDaysToNext = pace > 0 ? Math.ceil(daysRemaining / pace) : daysRemaining;
+      } else if (completedLevels.includes(currentLevelName as Level_Name)) {
+        const currentIdx2 = levelOrder.indexOf(currentLevelName);
+        if (currentIdx2 < levelOrder.length - 1) {
+          nextLevel = levelOrder[currentIdx2 + 1].replace('LEVEL_', '');
+          estimatedDaysToNext = 50; // Fresh start
+        }
+      }
+    }
+
+    return {
+      user: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        createdAt: (user as any).createdAt,
+      },
+      currentLevel: currentLevelName ? {
+        name: currentLevelName,
+        title: levelTitles[currentLevelName] || currentLevelName,
+        currentDay,
+        isCompleted: completedLevels.includes(currentLevelName as Level_Name),
+      } : null,
+      skills: {
+        reading: { tasksCompleted: reportData.tasksByType['READ'] || 0 },
+        writing: { tasksCompleted: reportData.tasksByType['WRITE'] || 0 },
+        listening: { tasksCompleted: reportData.tasksByType['LISTEN'] || 0 },
+        speaking: { tasksCompleted: reportData.tasksByType['SPEAK'] || 0 },
+        grammar: { tasksCompleted: reportData.tasksByType['GRAMMAR'] || 0 },
+      },
+      arsenal: {
+        masteredWords: estimatedMasteredWords,
+        grammarRules: reportData.tasksByType['GRAMMAR'] || 0,
+        idioms: reportData.tasksByType['IDIOMS'] || 0,
+        phrasalVerbs: reportData.tasksByType['PHRASAL_VERBS'] || 0,
+        fluencyPercent,
+      },
+      quizzes: {
+        completed: totalQuizzes,
+        averageScore: quizAvg,
+        correctAnswers: totalCorrectAnswers,
+      },
+      journey: {
+        activeSince,
+        currentStreak: reportData.currentStreak,
+        totalActiveDays: reportData.totalActiveDays,
+        totalCompletedDays,
+      },
+      aiPrediction: nextLevel ? {
+        nextLevel,
+        estimatedDays: estimatedDaysToNext,
+      } : null,
+      purchasedLevels: purchasedLevelNames,
+      completedLevels,
+    };
+  }
 }

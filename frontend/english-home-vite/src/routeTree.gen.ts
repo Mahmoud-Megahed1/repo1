@@ -30,6 +30,7 @@ import { Route as LocaleGlobalLayoutAuthRouteImport } from './routes/$locale/_gl
 import { Route as LocaleGlobalLayoutAuthVerifyEmailRouteImport } from './routes/$locale/_globalLayout/_auth/verify-email'
 import { Route as LocaleGlobalLayoutAuthAppRouteRouteImport } from './routes/$locale/_globalLayout/_auth/app.route'
 import { Route as LocaleGlobalLayoutAuthAppIndexRouteImport } from './routes/$locale/_globalLayout/_auth/app.index'
+import { Route as LocaleGlobalLayoutAuthAppReportRouteImport } from './routes/$locale/_globalLayout/_auth/app.report'
 import { Route as LocaleGlobalLayoutAuthAppAccountRouteImport } from './routes/$locale/_globalLayout/_auth/app.account'
 import { Route as LocaleGlobalLayoutAuthAppLevelsIndexRouteImport } from './routes/$locale/_globalLayout/_auth/app.levels.index'
 import { Route as LocaleGlobalLayoutAuthAppLevelsIdIndexRouteImport } from './routes/$locale/_globalLayout/_auth/app.levels.$id.index'
@@ -152,6 +153,12 @@ const LocaleGlobalLayoutAuthAppIndexRoute =
     path: '/',
     getParentRoute: () => LocaleGlobalLayoutAuthAppRouteRoute,
   } as any)
+const LocaleGlobalLayoutAuthAppReportRoute =
+  LocaleGlobalLayoutAuthAppReportRouteImport.update({
+    id: '/report',
+    path: '/report',
+    getParentRoute: () => LocaleGlobalLayoutAuthAppRouteRoute,
+  } as any)
 const LocaleGlobalLayoutAuthAppAccountRoute =
   LocaleGlobalLayoutAuthAppAccountRouteImport.update({
     id: '/account',
@@ -205,6 +212,7 @@ export interface FileRoutesByFullPath {
   '/$locale/app': typeof LocaleGlobalLayoutAuthAppRouteRouteWithChildren
   '/$locale/verify-email': typeof LocaleGlobalLayoutAuthVerifyEmailRoute
   '/$locale/app/account': typeof LocaleGlobalLayoutAuthAppAccountRoute
+  '/$locale/app/report': typeof LocaleGlobalLayoutAuthAppReportRoute
   '/$locale/app/': typeof LocaleGlobalLayoutAuthAppIndexRoute
   '/$locale/app/levels/': typeof LocaleGlobalLayoutAuthAppLevelsIndexRoute
   '/$locale/app/levels/$id/': typeof LocaleGlobalLayoutAuthAppLevelsIdIndexRoute
@@ -230,6 +238,7 @@ export interface FileRoutesByTo {
   '/payment/tamara/success': typeof PaymentTamaraSuccessRoute
   '/$locale/verify-email': typeof LocaleGlobalLayoutAuthVerifyEmailRoute
   '/$locale/app/account': typeof LocaleGlobalLayoutAuthAppAccountRoute
+  '/$locale/app/report': typeof LocaleGlobalLayoutAuthAppReportRoute
   '/$locale/app': typeof LocaleGlobalLayoutAuthAppIndexRoute
   '/$locale/app/levels': typeof LocaleGlobalLayoutAuthAppLevelsIndexRoute
   '/$locale/app/levels/$id': typeof LocaleGlobalLayoutAuthAppLevelsIdIndexRoute
@@ -258,6 +267,7 @@ export interface FileRoutesById {
   '/$locale/_globalLayout/_auth/app': typeof LocaleGlobalLayoutAuthAppRouteRouteWithChildren
   '/$locale/_globalLayout/_auth/verify-email': typeof LocaleGlobalLayoutAuthVerifyEmailRoute
   '/$locale/_globalLayout/_auth/app/account': typeof LocaleGlobalLayoutAuthAppAccountRoute
+  '/$locale/_globalLayout/_auth/app/report': typeof LocaleGlobalLayoutAuthAppReportRoute
   '/$locale/_globalLayout/_auth/app/': typeof LocaleGlobalLayoutAuthAppIndexRoute
   '/$locale/_globalLayout/_auth/app/levels/': typeof LocaleGlobalLayoutAuthAppLevelsIndexRoute
   '/$locale/_globalLayout/_auth/app/levels/$id/': typeof LocaleGlobalLayoutAuthAppLevelsIdIndexRoute
@@ -287,6 +297,7 @@ export interface FileRouteTypes {
     | '/$locale/app'
     | '/$locale/verify-email'
     | '/$locale/app/account'
+    | '/$locale/app/report'
     | '/$locale/app/'
     | '/$locale/app/levels/'
     | '/$locale/app/levels/$id/'
@@ -312,6 +323,7 @@ export interface FileRouteTypes {
     | '/payment/tamara/success'
     | '/$locale/verify-email'
     | '/$locale/app/account'
+    | '/$locale/app/report'
     | '/$locale/app'
     | '/$locale/app/levels'
     | '/$locale/app/levels/$id'
@@ -339,6 +351,7 @@ export interface FileRouteTypes {
     | '/$locale/_globalLayout/_auth/app'
     | '/$locale/_globalLayout/_auth/verify-email'
     | '/$locale/_globalLayout/_auth/app/account'
+    | '/$locale/_globalLayout/_auth/app/report'
     | '/$locale/_globalLayout/_auth/app/'
     | '/$locale/_globalLayout/_auth/app/levels/'
     | '/$locale/_globalLayout/_auth/app/levels/$id/'
@@ -504,6 +517,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleGlobalLayoutAuthAppIndexRouteImport
       parentRoute: typeof LocaleGlobalLayoutAuthAppRouteRoute
     }
+    '/$locale/_globalLayout/_auth/app/report': {
+      id: '/$locale/_globalLayout/_auth/app/report'
+      path: '/report'
+      fullPath: '/$locale/app/report'
+      preLoaderRoute: typeof LocaleGlobalLayoutAuthAppReportRouteImport
+      parentRoute: typeof LocaleGlobalLayoutAuthAppRouteRoute
+    }
     '/$locale/_globalLayout/_auth/app/account': {
       id: '/$locale/_globalLayout/_auth/app/account'
       path: '/account'
@@ -559,6 +579,7 @@ const LocaleGlobalLayoutAuthAppLevelsIdDayLessonNameRouteRouteWithChildren =
 
 interface LocaleGlobalLayoutAuthAppRouteRouteChildren {
   LocaleGlobalLayoutAuthAppAccountRoute: typeof LocaleGlobalLayoutAuthAppAccountRoute
+  LocaleGlobalLayoutAuthAppReportRoute: typeof LocaleGlobalLayoutAuthAppReportRoute
   LocaleGlobalLayoutAuthAppIndexRoute: typeof LocaleGlobalLayoutAuthAppIndexRoute
   LocaleGlobalLayoutAuthAppLevelsIndexRoute: typeof LocaleGlobalLayoutAuthAppLevelsIndexRoute
   LocaleGlobalLayoutAuthAppLevelsIdIndexRoute: typeof LocaleGlobalLayoutAuthAppLevelsIdIndexRoute
@@ -569,6 +590,7 @@ const LocaleGlobalLayoutAuthAppRouteRouteChildren: LocaleGlobalLayoutAuthAppRout
   {
     LocaleGlobalLayoutAuthAppAccountRoute:
       LocaleGlobalLayoutAuthAppAccountRoute,
+    LocaleGlobalLayoutAuthAppReportRoute: LocaleGlobalLayoutAuthAppReportRoute,
     LocaleGlobalLayoutAuthAppIndexRoute: LocaleGlobalLayoutAuthAppIndexRoute,
     LocaleGlobalLayoutAuthAppLevelsIndexRoute:
       LocaleGlobalLayoutAuthAppLevelsIndexRoute,

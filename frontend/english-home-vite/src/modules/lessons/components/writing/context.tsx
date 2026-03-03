@@ -287,8 +287,8 @@ export const WritingResult = () => {
   );
 };
 
-export const WritingControls = () => {
-  const { goNext, goPrev, hasNext, hasPrev, currentIndex, total } =
+export const WritingControls = ({ nextLessonButton }: { nextLessonButton?: ReactNode }) => {
+  const { goNext, goPrev, hasNext, hasPrev, currentIndex, total, isLastItem } =
     useWriting();
   const { t } = useTranslation();
   return (
@@ -308,9 +308,13 @@ export const WritingControls = () => {
             />
           ))}
       </ul>
-      <Button variant="outline" onClick={goNext} disabled={!hasNext}>
-        {t('Global.next')}
-      </Button>
+      {isLastItem && nextLessonButton ? (
+        nextLessonButton
+      ) : (
+        <Button variant="outline" onClick={goNext} disabled={!hasNext}>
+          {t('Global.next')}
+        </Button>
+      )}
     </div>
   );
 };

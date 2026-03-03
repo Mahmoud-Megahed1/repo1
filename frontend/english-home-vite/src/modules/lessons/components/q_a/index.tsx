@@ -83,9 +83,12 @@ const Q_A: FC<Props> = ({ lesson, className, ...props }) => {
           lesson={lesson}
           onIndexChange={setCurrentIndex}
           defaultIndex={questionIndex}
+          nextLessonButton={
+            <NextLessonButton lessonName="GRAMMAR" onClick={handleComplete} />
+          }
         />
       )}
-      {(showAll || currentIndex === lesson.length - 1) && (
+      {showAll && (
         <NextLessonButton lessonName="GRAMMAR" className="mt-8" onClick={handleComplete} />
       )}
     </div>

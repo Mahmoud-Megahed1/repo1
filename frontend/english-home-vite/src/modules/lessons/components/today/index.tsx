@@ -34,7 +34,8 @@ const Today: FC<Props> = ({
     levelId,
   });
   return (
-    <div className="mx-auto flex max-w-5xl flex-col space-y-8">
+    <div className="mx-auto max-w-6xl space-y-6">
+      {/* Title card - spans full width */}
       <Card lang="ar" className="gap-2">
         <CardHeader>
           <CardTitle className="text-xl md:text-2xl">{title}</CardTitle>
@@ -45,36 +46,45 @@ const Today: FC<Props> = ({
           </CardDescription>
         </CardContent>
       </Card>
-      <InstructionsCard instructions={instructions} />
 
-      <Card className="gap-2">
-        <CardHeader className="flex items-center gap-4">
-          <div className="to-primary dark:to-secondary rounded-xl bg-gradient-to-br from-[#96796e] p-3 shadow-lg">
-            <AudioLines className="h-6 w-6 text-white" />
-          </div>
-          <CardTitle className="text-xl font-bold md:text-2xl">
-            {t('Global.todayLesson.lessonAudio')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AudioPlayback
-            audioSrc={soundSrc}
-            className="dark:border-input/60 dark:border"
+      {/* 2-column grid on desktop/iPad */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
+        {/* Left Column: Instructions + Audio */}
+        <div className="space-y-6">
+          <InstructionsCard instructions={instructions} />
+
+          <Card className="gap-2">
+            <CardHeader className="flex items-center gap-4">
+              <div className="to-primary dark:to-secondary rounded-xl bg-gradient-to-br from-[#96796e] p-3 shadow-lg">
+                <AudioLines className="h-6 w-6 text-white" />
+              </div>
+              <CardTitle className="text-xl font-bold md:text-2xl">
+                {t('Global.todayLesson.lessonAudio')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AudioPlayback
+                audioSrc={soundSrc}
+                className="dark:border-input/60 dark:border"
+              />
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right Column: Sentences + Practice Speaking + Next */}
+        <div className="space-y-6">
+          <SentencesCard sentences={sentences} />
+          <PracticeSpeaking
+            day={day}
+            lessonName={lessonName}
+            levelId={levelId}
+            defaultResult={data?.data}
+            isLoading={isFetching}
+            sentenceText={sentences.join(' ')}
           />
-        </CardContent>
-      </Card>
-
-      <SentencesCard sentences={sentences} />
-      <PracticeSpeaking
-        day={day}
-        lessonName={lessonName}
-        levelId={levelId}
-        defaultResult={data?.data}
-        isLoading={isFetching}
-        sentenceText={sentences.join(' ')}
-      />
-
-      <NextLessonButton lessonName="Q_A" />
+          <NextLessonButton lessonName="Q_A" />
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import useItemsPagination from '@hooks/use-items-pagination';
 import type { QuestionAnswerLesson } from '@modules/lessons/types';
-import { useEffect } from 'react';
+import { cn } from '@lib/utils';
+import { useEffect, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import QuestionAnswerCard from './question-answer-card';
 import { Button } from '@ui/button';
@@ -9,13 +10,15 @@ const QuestionAnswerWithPagination = ({
   lesson,
   onIndexChange,
   defaultIndex = 0,
+  nextLessonButton,
 }: {
   lesson: QuestionAnswerLesson[];
   // eslint-disable-next-line no-unused-vars
   onIndexChange?: (index: number) => void;
   defaultIndex?: number;
+  nextLessonButton?: ReactNode;
 }) => {
-  const { next, prev, currentItem, currentIndex, hasNextItems, hasPrevItems } =
+  const { next, prev, currentItem, currentIndex, hasNextItems, hasPrevItems, isLast } =
     useItemsPagination(lesson, defaultIndex);
   const { t } = useTranslation();
   useEffect(() => {
@@ -29,13 +32,29 @@ const QuestionAnswerWithPagination = ({
         index={currentIndex + 1}
         {...currentItem}
       />
-      <div className="mt-8 flex justify-between gap-2">
+      <div className="mt-6 flex items-center justify-between gap-2">
         <Button onClick={prev} variant={'outline'} disabled={!hasPrevItems}>
           {t('Global.prev')}
         </Button>
-        <Button onClick={next} variant={'outline'} disabled={!hasNextItems}>
-          {t('Global.next')}
-        </Button>
+        <ul className="flex items-center gap-1">
+          {Array(lesson.length)
+            .fill(0)
+            .map((_, i) => (
+              <li
+                key={i}
+                className={cn('bg-accent size-2 rounded-full', {
+                  'bg-primary scale-105': i === currentIndex,
+                })}
+              />
+            ))}
+        </ul>
+        {isLast && nextLessonButton ? (
+          nextLessonButton
+        ) : (
+          <Button onClick={next} variant={'outline'} disabled={!hasNextItems}>
+            {t('Global.next')}
+          </Button>
+        )}
       </div>
     </div>
   );

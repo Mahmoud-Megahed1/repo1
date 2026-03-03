@@ -326,6 +326,125 @@ export class UserRepo extends AbstractRepo<User> {
     );
   }
 
+  /**
+   * Aggregates all student data for the report dashboard.
+   * Returns completed days per level, task stats (by type), and daily test results.
+   */
+  async getReportData(userId: string) {
+    const userIdObjectId = toObjectId(userId);
+
+    // 1. Get ALL completed progress (days) with populated day info
+    const allProgress = await this.userProgressModel
+      .find({ userId: userIdObjectId, completed: true })
+      .populate({ path: 'dayId', select: 'dayNumber levelName' })
+      .select('dayId dailyTestResult completedAt')
+      .lean();
+
+    // 2. Group by level
+    const levelProgress: Record<string, { completedDays: number; testResults: any[]; firstCompletedAt?: Date; lastCompletedAt?: Date }> = {};
+    for (const p of allProgress) {
+      if (!p.dayId) continue;
+      const lvl = (p.dayId as any).levelName;
+      if (!levelProgress[lvl]) {
+        levelProgress[lvl] = { completedDays: 0, testResults: [], firstCompletedAt: undefined, lastCompletedAt: undefined };
+      }
+      levelProgress[lvl].completedDays++;
+      if (p.dailyTestResult) {
+        levelProgress[lvl].testResults.push(p.dailyTestResult);
+      }
+      const dt = p.completedAt ? new Date(p.completedAt) : undefined;
+      if (dt) {
+        if (!levelProgress[lvl].firstCompletedAt || dt < levelProgress[lvl].firstCompletedAt) {
+          levelProgress[lvl].firstCompletedAt = dt;
+        }
+        if (!levelProgress[lvl].lastCompletedAt || dt > levelProgress[lvl].lastCompletedAt) {
+          levelProgress[lvl].lastCompletedAt = dt;
+        }
+      }
+    }
+
+    // 3. Get ALL completed tasks with scores and task names
+    const allTasks = await this.userTaskModel
+      .find({ userId: userIdObjectId, completed: true })
+      .populate({ path: 'taskId', select: 'name dayId' })
+      .select('taskId score completedAt submission')
+      .lean();
+
+    // 4. Count tasks by type (READ, WRITE, SPEAK, LISTEN, etc.)
+    const tasksByType: Record<string, number> = {};
+    let totalScore = 0;
+    let scoreCount = 0;
+    for (const t of allTasks) {
+      if (!t.taskId) continue;
+      const taskName: string = (t.taskId as any).name || '';
+      // Detect task type from name (tasks use lesson type names)
+      const upperName = taskName.toUpperCase();
+      if (upperName.includes('READ') || upperName.includes('READING')) {
+        tasksByType['READ'] = (tasksByType['READ'] || 0) + 1;
+      } else if (upperName.includes('WRITE') || upperName.includes('WRITING')) {
+        tasksByType['WRITE'] = (tasksByType['WRITE'] || 0) + 1;
+      } else if (upperName.includes('SPEAK') || upperName.includes('SPEAKING')) {
+        tasksByType['SPEAK'] = (tasksByType['SPEAK'] || 0) + 1;
+      } else if (upperName.includes('LISTEN') || upperName.includes('LISTENING')) {
+        tasksByType['LISTEN'] = (tasksByType['LISTEN'] || 0) + 1;
+      } else if (upperName.includes('GRAMMAR')) {
+        tasksByType['GRAMMAR'] = (tasksByType['GRAMMAR'] || 0) + 1;
+      } else if (upperName.includes('IDIOM')) {
+        tasksByType['IDIOMS'] = (tasksByType['IDIOMS'] || 0) + 1;
+      } else if (upperName.includes('PHRASAL')) {
+        tasksByType['PHRASAL_VERBS'] = (tasksByType['PHRASAL_VERBS'] || 0) + 1;
+      } else {
+        // Count as general speaking tasks (sentence recordings)
+        tasksByType['SPEAK'] = (tasksByType['SPEAK'] || 0) + 1;
+      }
+      if (typeof t.score === 'number') {
+        totalScore += t.score;
+        scoreCount++;
+      }
+    }
+
+    // 5. Calculate streak from completion dates
+    const allDates = allProgress
+      .filter(p => p.completedAt)
+      .map(p => {
+        const d = new Date(p.completedAt);
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      });
+    const uniqueDates = [...new Set(allDates)].sort().reverse();
+
+    let currentStreak = 0;
+    const today = new Date();
+    let checkDate = new Date(today);
+    for (const dateStr of uniqueDates) {
+      const checkStr = `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`;
+      if (dateStr === checkStr) {
+        currentStreak++;
+        checkDate.setDate(checkDate.getDate() - 1);
+      } else if (currentStreak === 0) {
+        // Allow yesterday as the check starting point
+        checkDate.setDate(checkDate.getDate() - 1);
+        const yesterdayStr = `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`;
+        if (dateStr === yesterdayStr) {
+          currentStreak++;
+          checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+          break;
+        }
+      } else {
+        break;
+      }
+    }
+
+    return {
+      levelProgress,
+      totalCompletedTasks: allTasks.length,
+      tasksByType,
+      averageScore: scoreCount > 0 ? Math.round(totalScore / scoreCount) : 0,
+      totalActiveDays: uniqueDates.length,
+      currentStreak,
+    };
+  }
+
   async deleteTasks(
     userId: string | Types.ObjectId,
     levelName: string,

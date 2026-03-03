@@ -39,22 +39,30 @@ const Reading: FC<Props> = ({
   return (
     <div
       className={cn(
-        'mx-auto flex size-full max-w-2xl flex-col gap-8',
+        'mx-auto flex size-full max-w-6xl flex-col gap-4',
+        'lg:flex-row lg:items-start lg:gap-4',
         className
       )}
       {...props}
     >
-      <ReadingCard title={t('Global.sidebarItems.READ')} content={transcript} />
-      <div className="space-y-2">
-        <h3 className="text-lg font-bold md:text-xl">
-          {t('Global.sidebarItems.LISTEN')}
-        </h3>
-        <AudioPlayback
-          audioSrc={soundSrc}
-          title={t('Global.sidebarItems.LISTEN')}
-        />
+      {/* Left: Reading Content - expands to use available space */}
+      <div className="flex-1 min-w-0">
+        <ReadingCard title={t('Global.sidebarItems.READ')} content={transcript} />
       </div>
-      <NextLessonButton lessonName="PICTURES" onClick={handleComplete} />
+
+      {/* Right: Audio + Navigation - sticky sidebar on desktop */}
+      <div className="w-full space-y-4 lg:w-80 lg:shrink-0 lg:sticky lg:top-24">
+        <div className="space-y-2">
+          <h3 className="text-lg font-bold md:text-xl">
+            {t('Global.sidebarItems.LISTEN')}
+          </h3>
+          <AudioPlayback
+            audioSrc={soundSrc}
+            title={t('Global.sidebarItems.LISTEN')}
+          />
+        </div>
+        <NextLessonButton lessonName="PICTURES" onClick={handleComplete} />
+      </div>
     </div>
   );
 };

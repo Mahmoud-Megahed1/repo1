@@ -1,6 +1,8 @@
 import { AudioPlayback } from '@components/audio-playback';
 import NextLessonButton from '@components/next-lesson-button';
 import RichTextViewer from '@components/rich-text-viewer';
+import useItemsPagination from '@hooks/use-items-pagination';
+import { cn } from '@lib/utils';
 import { useParams } from '@tanstack/react-router';
 import { Button } from '@ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@ui/card';
@@ -23,6 +25,17 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
   });
   const { mutateAsync: markTaskCompletedAsync } = useMarkTaskAsCompleted();
 
+  // Paginate definitions instead of a long scrolling list
+  const {
+    currentItem: currentDefinition,
+    hasNextItems,
+    hasPrevItems,
+    currentIndex,
+    next,
+    prev,
+    isLast,
+  } = useItemsPagination(lesson.definitions);
+
   const handleComplete = async () => {
     if (levelId && day) {
       await markTaskCompletedAsync({
@@ -37,7 +50,8 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
   };
 
   return (
-    <div className="mx-auto flex size-full max-w-2xl flex-col gap-4" {...props}>
+    <div className="mx-auto flex size-full max-w-3xl flex-col gap-4" {...props}>
+      {/* Audio Player Section */}
       <div>
         <div className="mb-2 flex flex-wrap items-center justify-between gap-4">
           <h4 className="mb-2 flex items-center gap-2 text-xl font-bold">
@@ -72,26 +86,51 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
           </CardContent>
         </Card>
       )}
-      <div className="flex flex-col gap-8">
-        <div className="mt-8 space-y-2">
-          <h4 className="flex items-center gap-2 text-xl font-bold">
-            <span className="size-2 rounded-full bg-green-600" />
-            {t('Global.definitions')}
-          </h4>
-          <ul lang="en" className="font-inter space-y-4">
-            {lesson.definitions.map(({ definition, word, soundSrc }, index) => (
-              <li key={index}>
-                <DefinitionCard
-                  word={word}
-                  definition={definition}
-                  soundSrc={soundSrc}
-                  index={index + 1}
+
+      {/* Definitions Section — Paginated */}
+      <div className="space-y-4">
+        <h4 className="flex items-center gap-2 text-xl font-bold">
+          <span className="size-2 rounded-full bg-green-600" />
+          {t('Global.definitions')}
+        </h4>
+
+        {/* Current Definition Card */}
+        {currentDefinition && (
+          <div lang="en" className="font-inter">
+            <DefinitionCard
+              word={currentDefinition.word}
+              definition={currentDefinition.definition}
+              soundSrc={currentDefinition.soundSrc}
+              index={currentIndex + 1}
+            />
+          </div>
+        )}
+
+        {/* Pagination Controls — Arrow buttons + dots */}
+        <div className="flex items-center justify-between">
+          <Button variant="outline" onClick={prev} disabled={!hasPrevItems}>
+            {t('Global.prev')}
+          </Button>
+          <ul className="flex items-center gap-1">
+            {Array(lesson.definitions.length)
+              .fill(0)
+              .map((_, i) => (
+                <li
+                  key={i}
+                  className={cn('bg-accent size-2 rounded-full', {
+                    'bg-primary scale-105': i === currentIndex,
+                  })}
                 />
-              </li>
-            ))}
+              ))}
           </ul>
+          {isLast ? (
+            <NextLessonButton lessonName="WRITE" onClick={handleComplete} />
+          ) : (
+            <Button variant="outline" onClick={next} disabled={!hasNextItems}>
+              {t('Global.next')}
+            </Button>
+          )}
         </div>
-        <NextLessonButton lessonName="WRITE" onClick={handleComplete} />
       </div>
     </div>
   );
