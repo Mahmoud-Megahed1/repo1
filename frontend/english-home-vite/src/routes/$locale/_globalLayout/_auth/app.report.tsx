@@ -146,18 +146,18 @@ function ReportPage() {
                             </div>
 
                             {/* Left Skills (Cyan) */}
-                            <div className="absolute start-4 top-10 flex flex-col gap-10">
+                            <div className="absolute start-4 top-10 flex flex-col gap-12">
                                 <div>
-                                    <h3 className="text-cyan-400 font-bold mb-3 ms-2">{t.speaking}</h3>
-                                    <div className="space-y-3 relative z-10">
+                                    <h3 className="text-cyan-400 font-black text-2xl tracking-widest uppercase mb-4 ms-2 drop-shadow-md">{t.listening}</h3>
+                                    <div className="space-y-4 relative z-10">
                                         <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Audio Mastered" />
                                         <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label={t.speaking} />
                                         <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Words Written" />
                                     </div>
                                 </div>
                                 <div className="mt-4">
-                                    <h3 className="text-cyan-400 font-bold mb-3 ms-2">{t.reading}</h3>
-                                    <div className="space-y-3 relative z-10">
+                                    <h3 className="text-cyan-400 font-black text-2xl tracking-widest uppercase mb-4 ms-2 drop-shadow-md">{t.reading}</h3>
+                                    <div className="space-y-4 relative z-10">
                                         <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Visual Associations" />
                                         <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Words Read" />
                                     </div>
@@ -165,17 +165,17 @@ function ReportPage() {
                             </div>
 
                             {/* Right Skills (Gold) */}
-                            <div className="absolute end-4 top-10 flex flex-col gap-10 items-end text-end">
+                            <div className="absolute end-4 top-10 flex flex-col gap-12 items-end text-end">
                                 <div>
-                                    <h3 className="text-amber-400 font-bold mb-3 me-2">{t.grammar}</h3>
-                                    <div className="space-y-3 relative z-10">
+                                    <h3 className="text-amber-400 font-black text-2xl tracking-widest uppercase mb-4 me-2 drop-shadow-md">{t.writing}</h3>
+                                    <div className="space-y-4 relative z-10">
                                         <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Visual Learning" isRight />
                                         <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Words Written" isRight />
                                     </div>
                                 </div>
                                 <div className="mt-4">
-                                    <h3 className="text-amber-400 font-bold mb-3 me-2">{t.speaking}</h3>
-                                    <div className="space-y-3 relative z-10">
+                                    <h3 className="text-amber-400 font-black text-2xl tracking-widest uppercase mb-4 me-2 drop-shadow-md">{t.speaking}</h3>
+                                    <div className="space-y-4 relative z-10">
                                         <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Visual Associations" isRight />
                                         <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Words Written" isRight />
                                     </div>
@@ -228,37 +228,38 @@ function ReportPage() {
                             </p>
 
                             {/* 2x2 Stats Grid exactly like mockup */}
-                            <div className="grid grid-cols-2 gap-x-4 gap-y-3">
-                                <div className="flex items-start gap-2">
-                                    <Map className="w-4 h-4 text-zinc-500 mt-0.5" />
-                                    <div className="flex flex-col">
-                                        <span className="text-[10px] text-zinc-400 font-bold tracking-widest">{t.grammarRulesUnlocked}</span>
-                                        <span className="text-lg font-black text-zinc-100">{report.arsenal.grammarRules}</span>
+                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 mt-8">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div className="flex items-start gap-2">
+                                        <Map className="w-4 h-4 text-zinc-500 mt-0.5" />
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] text-zinc-400 font-bold tracking-widest leading-tight uppercase">GRAMMAR RULES<br />UNLOCKED</span>
+                                        </div>
                                     </div>
+                                    <span className="text-xl font-black text-zinc-100">{report.arsenal.grammarRules}</span>
                                 </div>
-                                <div className="flex items-start justify-between">
+                                <div className="flex items-start justify-between gap-3">
                                     <div className="flex items-start gap-2">
                                         <CheckCircle2 className="w-4 h-4 text-zinc-500 mt-0.5" />
                                         <div className="flex flex-col">
-                                            <span className="text-[10px] text-zinc-400 font-bold tracking-widest">{t.quizzesCompleted}</span>
-                                            <span className="text-[9px] text-zinc-600 font-bold tracking-widest mt-0.5 uppercase">Completed: {report.quizzes.averageScore}%</span>
+                                            <span className="text-[10px] text-zinc-400 font-bold tracking-widest leading-tight uppercase">{t.quizzesCompleted}<br />COMPLETED: {report.quizzes.averageScore}%</span>
                                         </div>
                                     </div>
-                                    <span className="text-lg font-black text-zinc-100">{report.quizzes.completed}</span>
+                                    <span className="text-xl font-black text-zinc-100">{report.quizzes.completed}</span>
                                 </div>
-                                <div className="flex items-start gap-2">
-                                    <CheckSquare className="w-4 h-4 text-zinc-500 mt-0.5" />
-                                    <div className="flex flex-col">
-                                        <span className="text-[10px] text-zinc-400 font-bold tracking-widest">{t.correctAnswers}</span>
-                                        <span className="text-sm font-black text-zinc-100">{report.quizzes.correctAnswers}</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-start justify-between">
+                                <div className="flex items-start justify-between gap-3 pt-2">
                                     <div className="flex items-start gap-2">
                                         <CheckSquare className="w-4 h-4 text-zinc-500 mt-0.5" />
-                                        <span className="text-[10px] text-zinc-400 font-bold tracking-widest mt-0.5">{t.currentStreak}</span>
+                                        <span className="text-[10px] text-zinc-400 font-bold tracking-widest leading-tight mt-0.5 uppercase">{t.correctAnswers}</span>
                                     </div>
-                                    <span className="text-sm font-black text-zinc-100">{report.journey.currentStreak} {t.days}</span>
+                                    <span className="text-lg font-black text-zinc-100">{report.quizzes.correctAnswers}</span>
+                                </div>
+                                <div className="flex items-start justify-between gap-3 pt-2">
+                                    <div className="flex items-start gap-2">
+                                        <CheckSquare className="w-4 h-4 text-zinc-500 mt-0.5" />
+                                        <span className="text-[10px] text-zinc-400 font-bold tracking-widest leading-tight mt-0.5 uppercase">{t.currentStreak}</span>
+                                    </div>
+                                    <span className="text-lg font-black text-zinc-100">{report.journey.currentStreak} {t.days}</span>
                                 </div>
                             </div>
                         </div>
@@ -266,49 +267,33 @@ function ReportPage() {
                     </div>
                 </div>
 
-                {/* ════ ROW 2: Journey Timeline ════ */}
-                <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-4">
-                    {/* Left: Journey Timeline Pill */}
-                    <div className="flex items-center gap-3 px-6 py-3 rounded-2xl border border-zinc-700/50 bg-[#14171d]">
-                        <CalendarDays className="w-5 h-5 text-zinc-400" />
-                        <span className="text-lg font-bold text-white tracking-wide">{t.journeyTimeline}</span>
-                    </div>
+                {/* ════ ROW 2: Knowledge Fortress & Journey Timeline ════ */}
+                <div className="flex flex-col items-center w-full mt-6 mb-6 relative">
+                    <h2 className="text-2xl font-black tracking-widest uppercase text-white mb-6 drop-shadow-md">{t.knowledgeFortress}</h2>
 
-                    {/* Right: Active Pill */}
-                    <div className="flex items-center gap-6 px-6 py-3 rounded-2xl border border-zinc-700/50 bg-[#14171d] justify-between">
-                        <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-zinc-400" />
-                            <span className="text-xs font-bold text-zinc-300 tracking-widest uppercase">
-                                {t.active} {report.journey.activeSince ? new Date(report.journey.activeSince).toLocaleDateString(isAr ? 'ar' : 'en', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}
-                            </span>
+                    <div className="flex w-full items-center gap-6 relative z-10 px-2 lg:px-6">
+                        {/* Left: Journey Timeline Pill */}
+                        <div className="flex items-center gap-4 px-8 py-4 rounded-2xl border border-zinc-700/50 bg-[#14171d] min-w-[320px] shadow-lg">
+                            <CalendarDays className="w-6 h-6 text-zinc-400" />
+                            <span className="text-xl font-bold text-white tracking-wide">{t.journeyTimeline}</span>
                         </div>
-                        <span className="text-xs font-bold text-zinc-300 tracking-widest uppercase">{t.activeStreak}&nbsp;&nbsp;&nbsp;<span className="text-white">{report.journey.currentStreak} {t.days}</span></span>
-                    </div>
-                </div>
 
-                {/* ════ Knowledge Fortress + Shield ════ */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h2 className="text-xl font-black tracking-[0.2em] uppercase text-zinc-200 mb-3">{t.knowledgeFortress}</h2>
-                        <div className="flex flex-wrap gap-2">
-                            {['LEVEL_A1', 'LEVEL_A2', 'LEVEL_B1', 'LEVEL_B2', 'LEVEL_C1', 'LEVEL_C2'].map((level) => {
-                                const isCompleted = report.completedLevels.includes(level);
-                                const isCurrent = report.currentLevel?.name === level;
-                                const isPurchased = report.purchasedLevels.includes(level);
-                                const label = level.replace('LEVEL_', '');
-                                return (
-                                    <div key={level} className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all ${isCompleted ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400'
-                                            : isCurrent ? 'border-amber-500/50 bg-amber-500/10 text-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.2)]'
-                                                : isPurchased ? 'border-cyan-500/30 bg-cyan-500/5 text-cyan-400'
-                                                    : 'border-zinc-700/30 bg-zinc-800/30 text-zinc-600'
-                                        }`}>{label}</div>
-                                );
-                            })}
+                        {/* Middle: Active Pill */}
+                        <div className="flex items-center gap-8 px-8 py-4 rounded-2xl border border-zinc-700/50 bg-[#14171d] flex-1 justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+                            <div className="flex items-center gap-3">
+                                <Clock className="w-5 h-5 text-zinc-400" />
+                                <span className="text-sm font-bold text-zinc-300 tracking-widest uppercase">
+                                    {t.active} {report.journey.activeSince ? new Date(report.journey.activeSince).toLocaleDateString(isAr ? 'ar' : 'en', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}
+                                </span>
+                            </div>
+                            <span className="text-sm font-bold text-zinc-400 tracking-widest uppercase">{t.activeStreak}&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white text-lg">{report.journey.currentStreak} {t.days}</span></span>
                         </div>
                     </div>
-                    <div className="flex flex-col items-center gap-2">
-                        <img src="/images/report/shield.png" alt="Level Shield" className="w-[100px] drop-shadow-[0_10px_15px_rgba(0,0,0,0.6)] select-none" />
-                        <span className="text-[11px] font-black text-zinc-400 uppercase tracking-widest bg-zinc-800/60 px-3 py-1 rounded-full border border-zinc-700/50">
+
+                    {/* Right Shield */}
+                    <div className="absolute end-4 -top-8 z-20 flex flex-col items-center">
+                        <img src="/images/report/shield.png" alt="Level Shield" className="w-[120px] drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)] select-none" />
+                        <span className="text-[11px] font-black text-amber-500 uppercase tracking-widest mt-3 drop-shadow-md">
                             {levelTitle}
                         </span>
                     </div>
