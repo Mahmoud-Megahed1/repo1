@@ -208,7 +208,7 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
               <img
                 src={question}
                 alt="Question"
-                className="mx-auto max-h-60 rounded-md object-contain"
+                className="mx-auto max-h-80 w-full rounded-md object-contain"
               />
             )}
 

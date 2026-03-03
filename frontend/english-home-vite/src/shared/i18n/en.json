@@ -694,6 +694,19 @@
       "title": "Support"
     },
     "lessonCompleted": "Lesson Completed",
+    "lessonInstructions": {
+      "READ": "Read the text and learn new vocabulary",
+      "PICTURES": "Look at the pictures and learn new vocabulary",
+      "LISTEN": "Listen to the conversation and learn definitions",
+      "WRITE": "Write the sentence you hear",
+      "SPEAK": "Listen, then record your voice and compare",
+      "TODAY": "Learn today's scene and practice pronunciation",
+      "Q_A": "Read the question and listen to the answer",
+      "GRAMMAR": "Learn the grammar rule and apply it",
+      "PHRASAL_VERBS": "Learn phrasal verbs and their usage",
+      "IDIOMS": "Learn idioms and their meanings",
+      "DAILY_TEST": "Answer the questions to test what you learned today"
+    },
     "nextDay": "Next Day {{day}}",
     "dailySpeakingSuccess": "Well done! You have successfully completed today's training",
     "loading": "Loading",

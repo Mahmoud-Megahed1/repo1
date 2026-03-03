@@ -115,12 +115,19 @@ function RouteComponent() {
         <ComingSoon />
       ) : (
         <div key={lessonName} className="py-8 space-y-6">
-          {completedTasks?.data?.includes(lessonName) && (
-            <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-3 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
-              <CheckCircle2 className="w-6 h-6" />
-              <span>{t('Global.lessonCompleted' as any)}</span>
+          {/* Yellow instruction bar + green completion badge */}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="bg-amber-100 dark:bg-amber-900/40 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-100 px-5 py-2.5 rounded-xl font-semibold flex-1 flex items-center gap-2 text-sm md:text-base">
+              <span className="text-amber-500 text-lg">💡</span>
+              <span>{t(`Global.lessonInstructions.${lessonName}` as any)}</span>
             </div>
-          )}
+            {completedTasks?.data?.includes(lessonName) && (
+              <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-4 py-2.5 rounded-xl font-bold flex items-center gap-2 text-sm shrink-0 animate-in fade-in duration-500">
+                <CheckCircle2 className="w-5 h-5" />
+                <span>{t('Global.lessonCompleted' as any)}</span>
+              </div>
+            )}
+          </div>
           <Outlet />
         </div>
       )}
