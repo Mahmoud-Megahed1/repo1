@@ -21,7 +21,7 @@ import { useMarkDayAsCompleted, useMarkTaskAsCompleted, useGetDayStatus } from '
 import type { LevelId } from '@shared/types/entities';
 import { useParams } from '@tanstack/react-router';
 import { Link } from '@shared/i18n/routing';
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { ChevronLeftIcon } from 'lucide-react';
 
 const PASS_SCORE = 70;
 
@@ -324,32 +324,12 @@ const DailyTest: FC<DailyTestProps> = ({ lesson, day, levelId }) => {
           )}>
             {/* Left Column: Image for Image-type questions */}
             {type === 'image' && (
-              <div className="relative group lg:w-[45%] xl:w-[50%] shrink-0 flex items-center justify-center bg-black/5 dark:bg-white/5 p-4 border-b lg:border-b-0 lg:border-e border-border min-h-[300px] lg:min-h-0">
+              <div className="relative group lg:w-[45%] xl:w-[50%] shrink-0 flex items-center justify-center bg-black/5 dark:bg-white/5 p-0 border-b lg:border-b-0 lg:border-e border-border min-h-[300px] lg:min-h-0 overflow-hidden">
                 <img
                   src={question}
                   alt="Daily Test Question"
-                  className="w-full h-full max-h-[320px] lg:max-h-[500px] rounded-lg object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+                  className="w-full h-full max-h-[320px] lg:max-h-[700px] rounded-none lg:rounded-s-lg object-contain transition-transform duration-300 group-hover:scale-[1.02]"
                 />
-
-                {/* Overlaid Navigation Arrows */}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/20 text-white backdrop-blur-md transition-all hover:bg-black/40 hover:scale-110 disabled:opacity-0"
-                  onClick={prev}
-                  disabled={!hasPrevItems}
-                >
-                  <ChevronLeftIcon className="h-6 w-6" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/20 text-white backdrop-blur-md transition-all hover:bg-black/40 hover:scale-110 disabled:opacity-0"
-                  onClick={next}
-                  disabled={!hasNextItems}
-                >
-                  <ChevronRightIcon className="h-6 w-6" />
-                </Button>
               </div>
             )}
 
