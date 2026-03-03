@@ -21,275 +21,15 @@ import { useMarkDayAsCompleted, useMarkTaskAsCompleted, useGetDayStatus } from '
 import type { LevelId } from '@shared/types/entities';
 import { useParams } from '@tanstack/react-router';
 import { Link } from '@shared/i18n/routing';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
 const PASS_SCORE = 70;
-type Props = {
-  lesson: DailyTestLesson[];
-  day: number | string;
-  levelId: LevelId;
-};
+
 type QuestionState = {
   selectedAnswer?: string;
   isSubmitted?: boolean;
   isCorrect?: boolean;
 } & DailyTestLesson;
-const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
-  const { t } = useTranslation();
-  const { mutate, isSuccess, reset: resetMutation } = useMarkDayAsCompleted();
-  // Fetch existing status
-  const { data: dayStatus } = useGetDayStatus({
-    levelName: levelId as LevelId,
-    day: +day,
-  });
-
-  useEffect(() => {
-    if (dayStatus?.data?.dailyTestResult?.isPassed) {
-      const savedResult = dayStatus.data.dailyTestResult;
-      setQuestionsStates(savedResult.questions);
-      setTestStatus('completed');
-    }
-  }, [dayStatus]);
-  const [testStatus, setTestStatus] = useState<
-    'idle' | 'completed' | 'reviewed'
-  >('idle');
-  const [questionsStates, setQuestionsStates] =
-    useState<QuestionState[]>(lesson);
-  const {
-    currentIndex,
-    currentItem,
-    next,
-    prev,
-    hasNextItems,
-    hasPrevItems,
-    reset,
-  } = useItemsPagination(questionsStates);
-
-  const onSelectValue = useCallback(
-    (value: string) => {
-      setQuestionsStates((prev) => {
-        prev[currentIndex].selectedAnswer = value;
-        return [...prev];
-      });
-    },
-    [currentIndex]
-  );
-
-  const onSubmit = useCallback(() => {
-    setQuestionsStates((prev) => {
-      const isCorrect = prev[currentIndex].answers?.some(
-        (ans) => ans.text === prev[currentIndex].selectedAnswer && ans.isCorrect
-      );
-      prev[currentIndex].isSubmitted = true;
-      prev[currentIndex].isCorrect = isCorrect;
-      return [...prev];
-    });
-  }, [currentIndex]);
-
-  const getResult = useMemo(() => {
-    const correctAnswers = questionsStates.filter((q) => q.isCorrect).length;
-    return {
-      correctAnswers,
-      totalQuestions: questionsStates.length,
-      incorrectAnswers: questionsStates.length - correctAnswers,
-      score: Math.round((correctAnswers / questionsStates.length) * 100),
-      isPassed:
-        Math.round((correctAnswers / questionsStates.length) * 100) >=
-        PASS_SCORE,
-    };
-  }, [questionsStates]);
-
-  const resetTest = useCallback(() => {
-    reset();
-    resetMutation();
-    setTestStatus('idle');
-    setQuestionsStates((prev) =>
-      prev.map((q) => ({
-        ...q,
-        isSubmitted: false,
-        isCorrect: false,
-        selectedAnswer: undefined,
-      }))
-    );
-  }, [reset, resetMutation]);
-
-
-
-  useEffect(() => {
-    setTestStatus((prev) => {
-      // If already completed/reviewed (from hydration), don't revert to idle/completed loop
-      if (prev === 'completed' || prev === 'reviewed') return prev;
-      if (questionsStates.every((q) => q.isSubmitted)) return 'completed';
-      return prev;
-    });
-  }, [questionsStates]);
-
-  const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
-
-  useEffect(() => {
-    if (testStatus === 'completed' && getResult.isPassed && !isSuccess) {
-      mutate({
-        levelName: levelId as LevelId,
-        day: +day,
-        dailyTestResult: {
-          score: getResult.score,
-          questions: questionsStates,
-          isPassed: getResult.isPassed
-        }
-      });
-      // Also mark the task as completed for sidebar checkmark
-      markTaskCompleted({
-        levelName: levelId as LevelId,
-        day: +day,
-        taskName: 'DAILY_TEST',
-        submission: { completed: true },
-        score: getResult.score,
-        feedback: 'Daily Test Passed',
-      });
-    }
-  }, [testStatus, getResult, mutate, isSuccess, levelId, day, questionsStates, markTaskCompleted]);
-
-  if (!currentItem) return null;
-
-  const { question, answers, type } = currentItem;
-  return (
-    <div className="mx-auto flex max-w-4xl flex-col space-y-3">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        {testStatus !== 'completed' && (
-          <TestProgress
-            currentIndex={currentIndex}
-            total={questionsStates.length}
-          />
-        )}
-        {testStatus === 'reviewed' && (
-          <Button
-            variant={'outline'}
-            onClick={() => {
-              setTestStatus('completed');
-            }}
-          >
-            {t('Global.dailyTest.showResults')}
-          </Button>
-        )}
-      </div>
-      {testStatus === 'completed' ? (
-        <ResultCard
-          {...getResult}
-          onReset={resetTest}
-          onReview={() => {
-            reset();
-            setTestStatus('reviewed');
-          }}
-          isPassed={getResult.isPassed}
-        />
-      ) : (
-        <Card>
-          <CardHeader lang="en" className="flex items-center gap-2">
-            <div className="dark:to-secondary to-primary flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#96796e] p-3 text-xl font-bold text-white shadow-lg">
-              {currentIndex + 1}
-            </div>
-            <CardTitle
-              lang={type === 'text' ? 'en' : undefined}
-              className="text-lg font-bold"
-            >
-              {type === 'text' && question}
-              {type === 'audio' && t('Global.dailyTest.listenToAudio')}
-              {type === 'image' && t('Global.dailyTest.lookAtImage')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {type === 'audio' && (
-              <AudioPlayback
-                key={question}
-                audioSrc={question}
-                className="border-input/50 w-full border"
-              />
-            )}
-            {type === 'image' && (
-              <img
-                src={question}
-                alt="Question"
-                className="mx-auto max-h-[400px] w-full rounded-lg object-contain"
-              />
-            )}
-
-            <RadioGroup
-              lang="en"
-              className="mt-4"
-              key={currentIndex}
-              disabled={currentItem.isSubmitted}
-              defaultValue={currentItem.selectedAnswer}
-              onValueChange={onSelectValue}
-            >
-              {answers && answers.map(({ text, isCorrect }, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <RadioGroupItem
-                    value={text}
-                    id={`answer-${index}`}
-                    className="peer border-blue-400 text-blue-500 focus-visible:border-none focus-visible:ring-blue-500 disabled:opacity-100 [&_svg]:fill-blue-500"
-                  />
-                  <Label
-                    htmlFor={`answer-${index}`}
-                    className={cn(
-                      'bg-accent/50 w-full cursor-pointer rounded-md p-3 peer-disabled:opacity-100',
-                      {
-                        'peer-data-[state=checked]:border-blue-200 peer-data-[state=checked]:bg-blue-100 peer-data-[state=checked]:text-blue-800 peer-data-[state=checked]:dark:border-blue-800 peer-data-[state=checked]:dark:bg-blue-950 peer-data-[state=checked]:dark:text-blue-300':
-                          !currentItem.isSubmitted,
-                        'peer-data-[state=checked]:border-green-200 peer-data-[state=checked]:bg-green-100 peer-data-[state=checked]:text-green-800 peer-data-[state=checked]:dark:border-green-800 peer-data-[state=checked]:dark:bg-green-950 peer-data-[state=checked]:dark:text-green-300':
-                          currentItem.isCorrect && isCorrect,
-                        'peer-data-[state=checked]:border-red-200 peer-data-[state=checked]:bg-red-100 peer-data-[state=checked]:text-red-800 peer-data-[state=checked]:dark:border-red-800 peer-data-[state=checked]:dark:bg-red-950 peer-data-[state=checked]:dark:text-red-300':
-                          currentItem.isSubmitted &&
-                          !currentItem.isCorrect &&
-                          !isCorrect,
-                        'border-green-200 bg-green-100 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-300':
-                          currentItem.isSubmitted &&
-                          !currentItem.isCorrect &&
-                          isCorrect,
-                      }
-                    )}
-                  >
-                    {text}
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
-            <div className="mt-4 flex justify-between gap-2">
-              <Button
-                onClick={prev}
-                variant={'outline'}
-                disabled={!hasPrevItems}
-              >
-                {t('Global.prev')}
-              </Button>
-              {currentItem.isSubmitted ? (
-                <Button
-                  onClick={next}
-                  variant={'outline'}
-                  disabled={!hasNextItems}
-                >
-                  {t('Global.next')}
-                </Button>
-              ) : (
-                <Button
-                  onClick={onSubmit}
-                  disabled={!currentItem.selectedAnswer}
-                >
-                  {currentIndex === questionsStates.length - 1
-                    ? t('Global.dailyTest.finish')
-                    : t('Global.dailyTest.submitAnswer')}
-                </Button>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-      {testStatus === 'reviewed' && (
-        <Button className="mx-auto" onClick={resetTest}>
-          {t('Global.reset')}
-        </Button>
-      )}
-    </div>
-  );
-};
 
 const TestProgress = ({
   currentIndex,
@@ -411,11 +151,322 @@ const ResultCard = ({
         <Button className="w-2xs mx-auto mt-4 text-base" size={'lg'} asChild>
           <Link
             to="/app/levels/$id/$day/$lessonName"
-            params={{ id, day: String(+day + 1), lessonName: 'READ' }}
+            params={{ id: id as any, day: String(+day + 1), lessonName: 'READ' }}
           >
             {t('Global.nextDay' as any, { day: +day + 1 })}
           </Link>
         </Button>
+      )}
+    </div>
+  );
+};
+
+type DailyTestProps = {
+  lesson: DailyTestLesson[];
+  day: number | string;
+  levelId: LevelId;
+};
+
+const DailyTest: FC<DailyTestProps> = ({ lesson, day, levelId }) => {
+  const { t } = useTranslation();
+  const { mutate, isSuccess, reset: resetMutation } = useMarkDayAsCompleted();
+
+  const { data: dayStatus } = useGetDayStatus({
+    levelName: levelId as LevelId,
+    day: +day,
+  });
+
+  const [testStatus, setTestStatus] = useState<
+    'idle' | 'completed' | 'reviewed'
+  >('idle');
+  const [questionsStates, setQuestionsStates] =
+    useState<QuestionState[]>(lesson);
+
+  useEffect(() => {
+    if (dayStatus?.data?.dailyTestResult?.isPassed) {
+      const savedResult = dayStatus.data.dailyTestResult;
+      setQuestionsStates(savedResult.questions);
+      setTestStatus('completed');
+    }
+  }, [dayStatus]);
+
+  const {
+    currentIndex,
+    currentItem,
+    next,
+    prev,
+    hasNextItems,
+    hasPrevItems,
+    reset,
+  } = useItemsPagination(questionsStates);
+
+  const onSelectValue = useCallback(
+    (value: string) => {
+      setQuestionsStates((prev) => {
+        prev[currentIndex].selectedAnswer = value;
+        return [...prev];
+      });
+    },
+    [currentIndex]
+  );
+
+  const onSubmit = useCallback(() => {
+    setQuestionsStates((prev) => {
+      const isCorrect = prev[currentIndex].answers?.some(
+        (ans) => ans.text === prev[currentIndex].selectedAnswer && ans.isCorrect
+      );
+      prev[currentIndex].isSubmitted = true;
+      prev[currentIndex].isCorrect = isCorrect;
+      return [...prev];
+    });
+  }, [currentIndex]);
+
+  const getResult = useMemo(() => {
+    const correctAnswers = questionsStates.filter((q) => q.isCorrect).length;
+    return {
+      correctAnswers,
+      totalQuestions: questionsStates.length,
+      incorrectAnswers: questionsStates.length - correctAnswers,
+      score: Math.round((correctAnswers / questionsStates.length) * 100),
+      isPassed:
+        Math.round((correctAnswers / questionsStates.length) * 100) >=
+        PASS_SCORE,
+    };
+  }, [questionsStates]);
+
+  const resetTest = useCallback(() => {
+    reset();
+    resetMutation();
+    setTestStatus('idle');
+    setQuestionsStates((prev) =>
+      prev.map((q) => ({
+        ...q,
+        isSubmitted: false,
+        isCorrect: false,
+        selectedAnswer: undefined,
+      }))
+    );
+  }, [reset, resetMutation]);
+
+  useEffect(() => {
+    setTestStatus((prev) => {
+      if (prev === 'completed' || prev === 'reviewed') return prev;
+      if (questionsStates.every((q) => q.isSubmitted)) return 'completed';
+      return prev;
+    });
+  }, [questionsStates]);
+
+  const { mutate: markTaskCompleted } = useMarkTaskAsCompleted();
+
+  useEffect(() => {
+    if (testStatus === 'completed' && getResult.isPassed && !isSuccess) {
+      mutate({
+        levelName: levelId as LevelId,
+        day: +day,
+        dailyTestResult: {
+          score: getResult.score,
+          questions: questionsStates,
+          isPassed: getResult.isPassed
+        }
+      });
+      markTaskCompleted({
+        levelName: levelId as LevelId,
+        day: +day,
+        taskName: 'DAILY_TEST',
+        submission: { completed: true },
+        score: getResult.score,
+        feedback: 'Daily Test Passed',
+      });
+    }
+  }, [testStatus, getResult, mutate, isSuccess, levelId, day, questionsStates, markTaskCompleted]);
+
+  if (!currentItem) return null;
+
+  const { question, answers, type } = currentItem;
+
+  return (
+    <div className="mx-auto flex max-w-5xl flex-col space-y-3">
+      <div className="flex flex-wrap items-center justify-between gap-4 px-1">
+        {testStatus !== 'completed' && (
+          <TestProgress
+            currentIndex={currentIndex}
+            total={questionsStates.length}
+          />
+        )}
+        {testStatus === 'reviewed' && (
+          <Button
+            variant={'outline'}
+            size="sm"
+            onClick={() => {
+              setTestStatus('completed');
+            }}
+          >
+            {t('Global.dailyTest.showResults')}
+          </Button>
+        )}
+      </div>
+
+      {testStatus === 'completed' ? (
+        <ResultCard
+          {...getResult}
+          onReset={resetTest}
+          onReview={() => {
+            reset();
+            setTestStatus('reviewed');
+          }}
+          isPassed={getResult.isPassed}
+        />
+      ) : (
+        <Card className="overflow-hidden border-border shadow-card">
+          <div className={cn(
+            'flex flex-col',
+            type === 'image' && 'lg:flex-row lg:items-stretch'
+          )}>
+            {/* Left Column: Image for Image-type questions */}
+            {type === 'image' && (
+              <div className="relative group lg:w-[45%] xl:w-[50%] shrink-0 flex items-center justify-center bg-black/5 dark:bg-white/5 p-4 border-b lg:border-b-0 lg:border-e border-border min-h-[300px] lg:min-h-0">
+                <img
+                  src={question}
+                  alt="Daily Test Question"
+                  className="w-full h-full max-h-[320px] lg:max-h-[500px] rounded-lg object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+                />
+
+                {/* Overlaid Navigation Arrows */}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/20 text-white backdrop-blur-md transition-all hover:bg-black/40 hover:scale-110 disabled:opacity-0"
+                  onClick={prev}
+                  disabled={!hasPrevItems}
+                >
+                  <ChevronLeftIcon className="h-6 w-6" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/20 text-white backdrop-blur-md transition-all hover:bg-black/40 hover:scale-110 disabled:opacity-0"
+                  onClick={next}
+                  disabled={!hasNextItems}
+                >
+                  <ChevronRightIcon className="h-6 w-6" />
+                </Button>
+              </div>
+            )}
+
+            {/* Right Column: Content + Options */}
+            <div className={cn(
+              'flex flex-col p-4',
+              type === 'image' ? 'flex-1' : 'w-full max-w-3xl mx-auto'
+            )}>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#96796e] text-lg font-bold text-white shadow-md">
+                  {currentIndex + 1}
+                </div>
+                <h3 className="text-xl font-bold text-foreground">
+                  {type === 'text' && question}
+                  {type === 'audio' && t('Global.dailyTest.listenToAudio')}
+                  {type === 'image' && t('Global.dailyTest.lookAtImage')}
+                </h3>
+              </div>
+
+              <div className="flex-1">
+                {type === 'audio' && (
+                  <div className="mb-6">
+                    <AudioPlayback
+                      key={question}
+                      audioSrc={question}
+                      className="w-full"
+                    />
+                  </div>
+                )}
+
+                <RadioGroup
+                  lang="en"
+                  key={currentIndex}
+                  disabled={currentItem.isSubmitted}
+                  defaultValue={currentItem.selectedAnswer}
+                  onValueChange={onSelectValue}
+                  className="grid gap-3"
+                >
+                  {answers && answers.map(({ text, isCorrect }, index) => (
+                    <div key={index} className="relative">
+                      <RadioGroupItem
+                        value={text}
+                        id={`answer-${index}`}
+                        className="peer sr-only"
+                      />
+                      <Label
+                        htmlFor={`answer-${index}`}
+                        className={cn(
+                          'flex w-full cursor-pointer items-center rounded-xl border-2 border-transparent bg-accent/30 p-4 text-base font-medium transition-all hover:bg-accent/50',
+                          'peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 peer-data-[state=checked]:text-primary',
+                          currentItem.isSubmitted && {
+                            'border-green-500 bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-400': isCorrect,
+                            'border-destructive bg-destructive/5 text-destructive': currentItem.selectedAnswer === text && !isCorrect,
+                            'opacity-50': currentItem.selectedAnswer !== text && !isCorrect
+                          }
+                        )}
+                      >
+                        <div className={cn(
+                          'mr-3 flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-current',
+                          'peer-data-[state=checked]:bg-primary peer-data-[state=checked]:border-primary'
+                        )}>
+                          {currentItem.selectedAnswer === text && (
+                            <div className="size-2 rounded-full bg-white" />
+                          )}
+                        </div>
+                        {text}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+              </div>
+
+              {/* Navigation Controls at bottom of right column */}
+              <div className="mt-8 flex items-center justify-between pt-4 border-t border-border">
+                <Button
+                  onClick={prev}
+                  variant="ghost"
+                  disabled={!hasPrevItems}
+                  className="gap-2"
+                >
+                  <ChevronLeftIcon className="h-4 w-4" />
+                  {t('Global.prev')}
+                </Button>
+
+                {currentItem.isSubmitted ? (
+                  <Button
+                    onClick={next}
+                    variant="default"
+                    disabled={!hasNextItems}
+                    className="min-w-[120px]"
+                  >
+                    {t('Global.next')}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={onSubmit}
+                    disabled={!currentItem.selectedAnswer}
+                    variant="default"
+                    className="min-w-[150px] bg-primary hover:bg-primary/90"
+                  >
+                    {currentIndex === questionsStates.length - 1
+                      ? t('Global.dailyTest.finish')
+                      : t('Global.dailyTest.submitAnswer')}
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {testStatus === 'reviewed' && (
+        <div className="flex justify-center mt-4">
+          <Button variant="outline" onClick={resetTest} className="gap-2">
+            {t('Global.reset')}
+          </Button>
+        </div>
       )}
     </div>
   );
