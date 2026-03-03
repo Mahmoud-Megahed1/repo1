@@ -927,6 +927,7 @@ export default {
     sidebarItems: {
       home: 'Home',
       levels: 'Levels',
+      report: 'My Report',
       READ: 'Reading',
       LISTEN: 'Listening',
       WRITE: 'Writing',

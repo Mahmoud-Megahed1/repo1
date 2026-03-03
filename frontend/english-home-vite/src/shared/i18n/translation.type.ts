@@ -724,6 +724,7 @@ export type TranslationType = {
     sidebarItems: {
       home: string;
       levels: string;
+      report: string;
     } & Record<LessonId, string>;
     level: string;
     definition: string;

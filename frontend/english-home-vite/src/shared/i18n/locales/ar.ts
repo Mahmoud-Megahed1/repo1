@@ -911,6 +911,7 @@ export default {
     sidebarItems: {
       home: 'الرئيسية',
       levels: 'المستويات',
+      report: 'تقريري',
       READ: 'القراءة',
       LISTEN: 'الاستماع',
       WRITE: 'الكتابة',

@@ -4,6 +4,18 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useBreadcrumbStore } from '@hooks/use-breadcrumb-store';
+import {
+    Brain,
+    Swords,
+    CalendarDays,
+    Sparkles,
+    BookOpen,
+    MessageSquareQuote,
+    GitMerge,
+    CheckCircle,
+    Target,
+    BarChart3
+} from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────
 interface StudentReport {
@@ -192,8 +204,8 @@ function ShieldBadge({ title }: { title: string }) {
 }
 
 // ─── Stat Card ───────────────────────────────────────────────────────────
-function StatCard({ icon, label, value, accent = false }: {
-    icon: string;
+function StatCard({ icon: Icon, label, value, accent = false }: {
+    icon: any;
     label: string;
     value: string | number;
     accent?: boolean;
@@ -207,23 +219,12 @@ function StatCard({ icon, label, value, accent = false }: {
             }
       transition-all duration-300 hover:border-amber-500/50 hover:bg-zinc-800/80
     `}>
-            <span className="text-xl">{icon}</span>
-            <div className="flex-1 min-w-0">
-                <p className="text-xs text-zinc-400 truncate">{label}</p>
-                <p className={`text-lg font-bold ${accent ? 'text-amber-400' : 'text-zinc-100'}`}>{value}</p>
+            <div className={`p-2 rounded-lg ${accent ? 'bg-amber-500/10 text-amber-500' : 'bg-zinc-800 text-zinc-400'}`}>
+                <Icon className="w-5 h-5" />
             </div>
-        </div>
-    );
-}
-
-// ─── Skill Node ──────────────────────────────────────────────────────────
-function SkillNode({ label, count, side }: { label: string; count: number; side: 'left' | 'right' }) {
-    return (
-        <div className={`flex items-center gap-2 ${side === 'right' ? 'flex-row-reverse' : ''}`}>
-            <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_rgba(6,182,212,0.5)]" />
-            <div className={`text-xs ${side === 'right' ? 'text-right' : 'text-left'}`}>
-                <span className="font-bold text-zinc-100 text-sm">{label}</span>
-                <span className="block text-zinc-500">{count} tasks</span>
+            <div className="flex-1 min-w-0">
+                <p className="text-[11px] text-zinc-400 uppercase tracking-widest truncate">{label}</p>
+                <p className={`text-lg font-black ${accent ? 'text-amber-400' : 'text-zinc-100'}`}>{value}</p>
             </div>
         </div>
     );
@@ -271,227 +272,192 @@ function ReportPage() {
     const levelTitle = report.currentLevel?.title || 'Beginner';
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 text-zinc-100 py-6 px-4">
-            <div className="max-w-5xl mx-auto space-y-6">
+        <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-black text-zinc-100 py-8 px-4 font-sans">
+            <div className="max-w-7xl mx-auto space-y-8">
 
                 {/* ══════════ HEADER ══════════ */}
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">
+                        <h1 className="text-3xl md:text-5xl font-black tracking-tight bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-600 bg-clip-text text-transparent">
                             Student Report
                         </h1>
-                        <p className="text-zinc-500 text-sm mt-1">
-                            {report.user.firstName} {report.user.lastName}
+                        <p className="text-zinc-400 text-sm md:text-base mt-2 font-medium tracking-wide">
+                            {report.user.firstName} {report.user.lastName} • <span className="text-amber-500">{levelTitle}</span>
                         </p>
                     </div>
-                    <ShieldBadge title={levelTitle} />
                 </div>
 
-                {/* ══════════ SECTION 1: LINGUISTIC FOOTPRINT ══════════ */}
-                <section className="rounded-2xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-sm p-5 md:p-8 relative overflow-hidden">
-                    {/* Decorative glow */}
-                    <div className="absolute -top-20 -left-20 w-60 h-60 bg-cyan-500/5 rounded-full blur-3xl" />
-                    <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-amber-500/5 rounded-full blur-3xl" />
+                {/* ══════════ MAIN GRID ══════════ */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-                    <h2 className="text-lg font-bold text-center mb-6 tracking-wider uppercase text-zinc-300">
-                        🧠 Your Linguistic Footprint
-                    </h2>
+                    {/* LEFT COLUMN: Linguistic Footprint */}
+                    <div className="lg:col-span-5 flex flex-col gap-8">
+                        <section className="flex-1 rounded-3xl border border-zinc-800/60 bg-zinc-900/40 backdrop-blur-xl p-8 relative overflow-hidden flex flex-col">
+                            {/* Decorative Background Glows */}
+                            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(14,165,233,0.05)_0%,transparent_70%)] pointer-events-none" />
+                            <div className="absolute -top-32 -left-32 w-64 h-64 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
+                            <div className="absolute -bottom-32 -right-32 w-64 h-64 bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
 
-                    <div className="grid grid-cols-[1fr_auto_1fr] gap-4 md:gap-8 items-center relative">
-                        {/* Left Skills */}
-                        <div className="flex flex-col gap-5">
-                            <SkillNode label="Speaking" count={report.skills.speaking.tasksCompleted} side="left" />
-                            <SkillNode label="Listening" count={report.skills.listening.tasksCompleted} side="left" />
-                        </div>
+                            <h2 className="text-2xl font-bold text-center mb-10 tracking-[0.2em] uppercase text-zinc-200 drop-shadow-sm flex items-center justify-center gap-3">
+                                <Brain className="w-6 h-6 text-cyan-400" />
+                                Linguistic Footprint
+                            </h2>
 
-                        {/* Brain Center */}
-                        <div className="relative">
-                            <BrainSvg />
-                        </div>
-
-                        {/* Right Skills */}
-                        <div className="flex flex-col gap-5">
-                            <SkillNode label="Reading" count={report.skills.reading.tasksCompleted} side="right" />
-                            <SkillNode label="Writing" count={report.skills.writing.tasksCompleted} side="right" />
-                        </div>
-                    </div>
-
-                    {/* Grammar label below */}
-                    <div className="flex justify-center mt-4">
-                        <div className="flex items-center gap-2 bg-zinc-800/60 rounded-full px-4 py-2 border border-zinc-700/50">
-                            <span className="text-amber-400 font-bold text-sm">Grammar</span>
-                            <span className="text-zinc-400 text-xs">{report.skills.grammar.tasksCompleted} rules</span>
-                        </div>
-                    </div>
-                </section>
-
-                {/* ══════════ SECTION 2: LINGUISTIC ARSENAL ══════════ */}
-                <section className="rounded-2xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-sm p-5 md:p-8">
-                    <h2 className="text-lg font-bold mb-6 tracking-wider uppercase text-zinc-300">
-                        ⚔️ Linguistic Arsenal
-                    </h2>
-
-                    <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 items-start">
-                        {/* Progress Rings */}
-                        <div className="flex flex-wrap justify-center gap-8">
-                            <div className="relative">
-                                <ProgressRing
-                                    percent={Math.min(100, (report.arsenal.masteredWords / 1000) * 100)}
-                                    color="#d97706"
-                                    label="Mastered Words"
-                                    value={report.arsenal.masteredWords}
-                                    size={130}
-                                    strokeWidth={10}
-                                />
-                            </div>
-                            <div className="relative">
-                                <ProgressRing
-                                    percent={report.arsenal.fluencyPercent}
-                                    color="#06b6d4"
-                                    label="Fluency"
-                                    value={`${report.arsenal.fluencyPercent}%`}
-                                    size={130}
-                                    strokeWidth={10}
-                                />
-                            </div>
-                        </div>
-
-                        {/* Arsenal Stats Grid */}
-                        <div className="grid grid-cols-2 gap-3">
-                            <StatCard icon="📖" label="Grammar Rules" value={report.arsenal.grammarRules} accent />
-                            <StatCard icon="💬" label="Idioms" value={report.arsenal.idioms} />
-                            <StatCard icon="🔗" label="Phrasal Verbs" value={report.arsenal.phrasalVerbs} />
-                            <StatCard icon="✅" label="Quizzes Done" value={report.quizzes.completed} accent />
-                            <StatCard icon="🎯" label="Correct Answers" value={report.quizzes.correctAnswers} />
-                            <StatCard icon="📊" label="Average Score" value={`${report.quizzes.averageScore}%`} />
-                        </div>
-                    </div>
-                </section>
-
-                {/* ══════════ SECTION 3: JOURNEY TIMELINE ══════════ */}
-                <section className="rounded-2xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-sm p-5 md:p-8">
-                    <h2 className="text-lg font-bold mb-6 tracking-wider uppercase text-zinc-300">
-                        📅 Journey Timeline
-                    </h2>
-
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="rounded-xl bg-zinc-800/60 border border-zinc-700/50 p-4 text-center">
-                            <p className="text-2xl font-bold text-cyan-400">{report.journey.currentStreak}</p>
-                            <p className="text-xs text-zinc-400 mt-1">Current Streak</p>
-                            <p className="text-[10px] text-zinc-500">days</p>
-                        </div>
-                        <div className="rounded-xl bg-zinc-800/60 border border-zinc-700/50 p-4 text-center">
-                            <p className="text-2xl font-bold text-amber-400">{report.journey.totalActiveDays}</p>
-                            <p className="text-xs text-zinc-400 mt-1">Active Days</p>
-                            <p className="text-[10px] text-zinc-500">total</p>
-                        </div>
-                        <div className="rounded-xl bg-zinc-800/60 border border-zinc-700/50 p-4 text-center">
-                            <p className="text-2xl font-bold text-emerald-400">{report.journey.totalCompletedDays}</p>
-                            <p className="text-xs text-zinc-400 mt-1">Days Completed</p>
-                            <p className="text-[10px] text-zinc-500">across all levels</p>
-                        </div>
-                        <div className="rounded-xl bg-zinc-800/60 border border-zinc-700/50 p-4 text-center">
-                            <p className="text-2xl font-bold text-purple-400">
-                                {report.journey.activeSince
-                                    ? new Date(report.journey.activeSince).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
-                                    : '—'}
-                            </p>
-                            <p className="text-xs text-zinc-400 mt-1">Member Since</p>
-                            <p className="text-[10px] text-zinc-500">active</p>
-                        </div>
-                    </div>
-
-                    {/* Visual timeline bar */}
-                    <div className="mt-6 relative">
-                        <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
-                            <div
-                                className="h-full bg-gradient-to-r from-cyan-500 via-amber-500 to-emerald-500 rounded-full transition-all duration-1000"
-                                style={{ width: `${Math.min(100, (report.journey.totalCompletedDays / 50) * 100)}%` }}
-                            />
-                        </div>
-                        <div className="flex justify-between mt-2 text-[10px] text-zinc-500">
-                            <span>Day 1</span>
-                            <span>Day 25</span>
-                            <span>Day 50</span>
-                        </div>
-                    </div>
-                </section>
-
-                {/* ══════════ SECTION 4: KNOWLEDGE FORTRESS ══════════ */}
-                <section className="rounded-2xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-sm p-5 md:p-8">
-                    <h2 className="text-lg font-bold mb-6 tracking-wider uppercase text-zinc-300">
-                        🛡️ Knowledge Fortress
-                    </h2>
-
-                    <div className="flex flex-wrap gap-3 justify-center">
-                        {['LEVEL_A1', 'LEVEL_A2', 'LEVEL_B1', 'LEVEL_B2', 'LEVEL_C1', 'LEVEL_C2'].map((level) => {
-                            const isPurchased = report.purchasedLevels.includes(level);
-                            const isCompleted = report.completedLevels.includes(level);
-                            const isCurrent = report.currentLevel?.name === level;
-                            const label = level.replace('LEVEL_', '');
-
-                            return (
-                                <div
-                                    key={level}
-                                    className={`
-                    flex flex-col items-center gap-1 rounded-xl border-2 px-5 py-3 min-w-[70px] transition-all duration-300
-                    ${isCompleted
-                                            ? 'border-emerald-500 bg-emerald-500/10 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
-                                            : isCurrent
-                                                ? 'border-amber-500 bg-amber-500/10 shadow-[0_0_12px_rgba(217,119,6,0.2)] scale-105'
-                                                : isPurchased
-                                                    ? 'border-cyan-500/50 bg-cyan-500/5'
-                                                    : 'border-zinc-700/30 bg-zinc-800/30 opacity-40'
-                                        }
-                  `}
-                                >
-                                    <span className={`text-lg font-bold ${isCompleted ? 'text-emerald-400' : isCurrent ? 'text-amber-400' : 'text-zinc-500'
-                                        }`}>
-                                        {label}
-                                    </span>
-                                    <span className="text-[10px] text-zinc-500">
-                                        {isCompleted ? '✅ Done' : isCurrent ? '🔥 Active' : isPurchased ? '📦 Owned' : '🔒 Locked'}
-                                    </span>
+                            <div className="relative flex-1 flex flex-col items-center justify-center min-h-[400px]">
+                                {/* Central Brain Graphic */}
+                                <div className="absolute inset-0 flex items-center justify-center scale-125 z-0">
+                                    <BrainSvg />
                                 </div>
-                            );
-                        })}
+
+                                {/* The 4 Skills Nodes around the Brain */}
+                                <div className="absolute inset-0 z-10">
+                                    {/* Top Left: Reading */}
+                                    <div className="absolute top-[10%] left-[5%] text-left">
+                                        <h3 className="text-2xl font-black text-cyan-400 tracking-wider drop-shadow-lg">READING</h3>
+                                        <p className="text-xs text-zinc-400 font-medium mt-1 uppercase tracking-widest">{report.skills.reading.tasksCompleted} Tasks</p>
+                                    </div>
+
+                                    {/* Top Right: Writing */}
+                                    <div className="absolute top-[10%] right-[5%] text-right">
+                                        <h3 className="text-2xl font-black text-amber-400 tracking-wider drop-shadow-lg">WRITING</h3>
+                                        <p className="text-xs text-zinc-400 font-medium mt-1 uppercase tracking-widest">{report.skills.writing.tasksCompleted} Tasks</p>
+                                    </div>
+
+                                    {/* Bottom Left: Listening */}
+                                    <div className="absolute bottom-[10%] left-[5%] text-left">
+                                        <h3 className="text-2xl font-black text-cyan-400 tracking-wider drop-shadow-lg">LISTENING</h3>
+                                        <p className="text-xs text-zinc-400 font-medium mt-1 uppercase tracking-widest">{report.skills.listening.tasksCompleted} Tasks</p>
+                                    </div>
+
+                                    {/* Bottom Right: Speaking */}
+                                    <div className="absolute bottom-[10%] right-[5%] text-right">
+                                        <h3 className="text-2xl font-black text-amber-400 tracking-wider drop-shadow-lg">SPEAKING</h3>
+                                        <p className="text-xs text-zinc-400 font-medium mt-1 uppercase tracking-widest">{report.skills.speaking.tasksCompleted} Tasks</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
 
-                    {report.currentLevel && (
-                        <div className="mt-4 text-center">
-                            <p className="text-sm text-zinc-400">
-                                Currently on <span className="text-amber-400 font-bold">Day {report.currentLevel.currentDay}</span> of{' '}
-                                <span className="font-medium text-zinc-300">{report.currentLevel.title}</span>
-                            </p>
-                        </div>
-                    )}
-                </section>
+                    {/* RIGHT COLUMN: Arsenal, Timeline, Prediction */}
+                    <div className="lg:col-span-7 flex flex-col gap-8">
 
-                {/* ══════════ SECTION 5: AI PREDICTION ══════════ */}
-                {report.aiPrediction && (
-                    <section className="rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-500/5 via-zinc-900 to-cyan-500/5 backdrop-blur-sm p-5 md:p-6">
-                        <div className="flex items-start gap-4">
-                            <div className="text-3xl">🤖</div>
-                            <div>
-                                <h3 className="text-sm font-bold text-purple-400 uppercase tracking-wider mb-1">AI Prediction</h3>
-                                <p className="text-zinc-300">
-                                    Based on your progress, you're projected to reach{' '}
-                                    <span className="font-bold text-amber-400">{report.aiPrediction.nextLevel}</span>{' '}
-                                    level in approximately{' '}
-                                    <span className="font-bold text-cyan-400">{report.aiPrediction.estimatedDays} days</span>!
-                                </p>
-                                <p className="text-xs text-zinc-500 mt-2">
-                                    Keep your streak going to achieve this faster! 🚀
-                                </p>
+                        {/* ══════════ LINGUISTIC ARSENAL ══════════ */}
+                        <section className="rounded-3xl border border-zinc-800/60 bg-zinc-900/40 backdrop-blur-xl p-8 relative overflow-hidden">
+                            <h2 className="text-xl font-bold mb-8 tracking-[0.15em] uppercase text-zinc-300 flex items-center gap-3">
+                                <Swords className="text-amber-500 w-6 h-6" /> Linguistic Arsenal
+                            </h2>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                {/* Left Side: Rings */}
+                                <div className="flex flex-col sm:flex-row justify-around items-center gap-6">
+                                    <ProgressRing
+                                        percent={Math.min(100, (report.arsenal.masteredWords / 1000) * 100)}
+                                        color="#fbbf24"
+                                        label="Mastered Words"
+                                        value={report.arsenal.masteredWords}
+                                        size={140}
+                                        strokeWidth={12}
+                                    />
+                                    <ProgressRing
+                                        percent={report.arsenal.fluencyPercent}
+                                        color="#22d3ee"
+                                        label="Fluency Level"
+                                        value={`${report.arsenal.fluencyPercent}%`}
+                                        size={140}
+                                        strokeWidth={12}
+                                    />
+                                </div>
+
+                                {/* Right Side: Stat Grid */}
+                                <div className="grid grid-cols-1 gap-4 flex-1">
+                                    <StatCard icon={BookOpen} label="Grammar Rules" value={report.arsenal.grammarRules} accent />
+                                    <StatCard icon={MessageSquareQuote} label="Idioms" value={report.arsenal.idioms} />
+                                    <StatCard icon={GitMerge} label="Phrasal Verbs" value={report.arsenal.phrasalVerbs} />
+                                    <StatCard icon={CheckCircle} label="Quizzes Done" value={report.quizzes.completed} accent />
+                                    <StatCard icon={Target} label="Correct Answers" value={report.quizzes.correctAnswers} />
+                                    <StatCard icon={BarChart3} label="Average Score" value={`${report.quizzes.averageScore}%`} />
+                                </div>
                             </div>
+                        </section>
+
+                        {/* ══════════ TIMELINE & PROGRESS ══════════ */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                            {/* Journey Timeline */}
+                            <section className="rounded-3xl border border-zinc-800/60 bg-zinc-900/40 backdrop-blur-xl p-8 relative overflow-hidden flex flex-col justify-center">
+                                <div className="flex items-center justify-between mb-8">
+                                    <h2 className="text-lg font-bold tracking-[0.1em] uppercase text-zinc-300 flex items-center gap-2">
+                                        <CalendarDays className="text-emerald-400 w-5 h-5" /> Journey Timeline
+                                    </h2>
+                                    <div className="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
+                                        Active
+                                    </div>
+                                </div>
+
+                                <div className="space-y-6">
+                                    <div className="flex justify-between items-end border-b border-zinc-800 pb-4">
+                                        <div>
+                                            <p className="text-xs text-zinc-500 uppercase tracking-widest mb-1">Active Streak</p>
+                                            <p className="text-3xl font-black text-amber-400">{report.journey.currentStreak} Days</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-xs text-zinc-500 uppercase tracking-widest mb-1">Total Days</p>
+                                            <p className="text-xl font-bold text-zinc-300">{report.journey.totalActiveDays}</p>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-xs text-zinc-500 uppercase tracking-widest mb-2 flex justify-between">
+                                            <span>Level Progress</span>
+                                            <span className="text-cyan-400">{report.journey.totalCompletedDays} / 50</span>
+                                        </p>
+                                        <div className="h-2.5 bg-zinc-800/80 rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-1000 ease-out"
+                                                style={{ width: `${Math.min(100, (report.journey.totalCompletedDays / 50) * 100)}%` }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* Shield Badge & Prediction */}
+                            <section className="rounded-3xl border border-zinc-800/60 bg-zinc-900/40 backdrop-blur-xl p-8 relative overflow-hidden flex flex-col items-center justify-center text-center">
+                                <div className="mb-6 scale-125">
+                                    <ShieldBadge title={levelTitle} />
+                                </div>
+
+                                {report.aiPrediction ? (
+                                    <div className="mt-4 p-4 rounded-2xl bg-gradient-to-br from-purple-500/10 to-indigo-500/10 border border-purple-500/20 w-full relative overflow-hidden">
+                                        <div className="absolute -right-4 -bottom-4 opacity-10">
+                                            <Sparkles className="w-24 h-24 text-purple-400" />
+                                        </div>
+                                        <div className="flex flex-col gap-1 relative z-10">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Sparkles className="w-4 h-4 text-purple-400" />
+                                                <p className="text-xs text-purple-300 uppercase tracking-widest font-bold">AI Prediction</p>
+                                            </div>
+                                            <p className="text-sm text-zinc-300 leading-relaxed text-left">
+                                                Trending towards <span className="text-amber-400 font-bold">{report.aiPrediction.nextLevel}</span> in <span className="text-cyan-400 font-bold">{report.aiPrediction.estimatedDays} days</span>. Keep going!
+                                            </p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="mt-4 p-4 rounded-2xl bg-zinc-800/30 border border-zinc-700/30 w-full">
+                                        <p className="text-sm text-zinc-400">Keep practicing to unlock AI predictions.</p>
+                                    </div>
+                                )}
+                            </section>
+
                         </div>
-                    </section>
-                )}
+                    </div>
+                </div>
 
                 {/* ══════════ FOOTER ══════════ */}
-                <div className="text-center py-4">
-                    <p className="text-xs text-zinc-600">
-                        Report generated on {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                <div className="text-center pt-8 pb-4 opacity-50">
+                    <p className="text-xs font-medium tracking-widest uppercase">
+                        Report generated • {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                     </p>
                 </div>
             </div>

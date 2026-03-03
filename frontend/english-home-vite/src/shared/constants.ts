@@ -13,6 +13,7 @@ import {
   PencilLine,
   Search,
   Speech,
+  PieChart
 } from 'lucide-react';
 import type { LevelId, SidebarItem } from './types/entities';
 
@@ -37,6 +38,12 @@ export const MAIN_SIDEBAR_ITEMS = (): Array<SidebarItem> => [
     url: '/app/levels',
     icon: Library,
     id: 'Levels',
+  },
+  {
+    title: i18next.t('Global.sidebarItems.report'),
+    url: '/app/report',
+    icon: PieChart,
+    id: 'Report',
   },
 ];
 
@@ -136,7 +143,7 @@ export const LESSONS_IDS = [
   'IDIOMS',
 ] as const;
 
-export const SIDEBAR_ITEMS_IDS = ['Home', 'Levels', ...LESSONS_IDS] as const;
+export const SIDEBAR_ITEMS_IDS = ['Home', 'Levels', 'Report', ...LESSONS_IDS] as const;
 
 export const CONTACT_INFO = {
   support: 'support@englishom.com',

@@ -63,6 +63,12 @@ export class UserController {
     return await this.userService.getUserDetails(user._id.toString());
   }
 
+  @UseGuards(UserJwtGuard)
+  @Get('report')
+  async getStudentReport(@CurrentUser('_id') userId: string) {
+    return await this.userService.getStudentReport(userId);
+  }
+
   @Post()
   async create(@Body() createUserDto: CreateUserDto, @Req() req: Request) {
     this.ipService.getRealIp(req);
@@ -244,11 +250,6 @@ export class UserController {
     return await this.userService.deleteUserCourse(userId, levelName, admin._id.toString());
   }
 
-  @UseGuards(UserJwtGuard)
-  @Get('report')
-  async getStudentReport(@CurrentUser('_id') userId: string) {
-    return await this.userService.getStudentReport(userId);
-  }
 
   @UseGuards(AdminJwtGuard)
   @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER)

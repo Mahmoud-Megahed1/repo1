@@ -61,11 +61,11 @@ const Reading: FC<Props> = ({
       <div className="flex w-full flex-col gap-3 lg:w-[45%] xl:w-[42%] lg:shrink-0">
         {/* Image */}
         {imageSrc && (
-          <div className="flex-1 min-h-0 flex items-center justify-center overflow-hidden rounded-xl bg-black/5 dark:bg-white/5">
+          <div className="flex-1 min-h-0 flex items-center justify-center overflow-hidden rounded-xl">
             <img
               src={imageSrc}
               alt="Reading illustration"
-              className="h-full w-full object-contain max-h-[250px] lg:max-h-full rounded-xl"
+              className="h-full w-full object-cover rounded-xl"
             />
           </div>
         )}
