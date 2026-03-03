@@ -2,12 +2,14 @@ import { AudioPlayback } from '@components/audio-playback';
 import NextLessonButton from '@components/next-lesson-button';
 import { cn } from '@lib/utils';
 import { useParams } from '@tanstack/react-router';
-import { type ComponentProps, type FC } from 'react';
+import { useMemo, type ComponentProps, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { type LevelId } from '../../types';
 import { useMarkTaskAsCompleted } from '../../mutations';
 import type { ReadLesson } from '../../types';
-import { ReadingCard } from './reading-card';
+import RichTextViewer from '@components/rich-text-viewer';
+import { BookOpen } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@ui/card';
 
 type Props = {
   lesson: ReadLesson;
@@ -36,20 +38,41 @@ const Reading: FC<Props> = ({
     }
   };
 
+  // Extract image from transcript and separate text content
+  const { imageSrc, textContent } = useMemo(() => {
+    const imgMatch = transcript.match(/<img[^>]+src=["']([^"']+)["'][^>]*>/i);
+    const imgSrc = imgMatch ? imgMatch[1] : null;
+    // Remove the img tag from transcript to get pure text
+    const text = transcript.replace(/<img[^>]*>/gi, '').trim();
+    return { imageSrc: imgSrc, textContent: text };
+  }, [transcript]);
+
   return (
     <div
       className={cn(
-        'mx-auto flex size-full max-w-7xl flex-col gap-4',
-        'lg:flex-row lg:items-start lg:gap-6',
-        'lg:h-[calc(100vh-12rem)]',
+        'mx-auto flex size-full max-w-7xl flex-col gap-3',
+        'lg:flex-row lg:items-stretch lg:gap-4',
+        'lg:h-[calc(100vh-13rem)]',
         className
       )}
       {...props}
     >
-      {/* Left: Audio + Navigation - sticky sidebar on desktop */}
-      <div className="w-full space-y-4 lg:w-72 xl:w-80 lg:shrink-0 lg:sticky lg:top-24">
-        <div className="space-y-2">
-          <h3 className="text-lg font-bold md:text-xl">
+      {/* Left Column: Image + Audio + Next Button */}
+      <div className="flex w-full flex-col gap-3 lg:w-[45%] xl:w-[42%] lg:shrink-0">
+        {/* Image */}
+        {imageSrc && (
+          <div className="flex-1 min-h-0 flex items-center justify-center overflow-hidden rounded-xl bg-black/5 dark:bg-white/5">
+            <img
+              src={imageSrc}
+              alt="Reading illustration"
+              className="h-full w-full object-contain max-h-[250px] lg:max-h-full rounded-xl"
+            />
+          </div>
+        )}
+
+        {/* Audio Player */}
+        <div className="space-y-1">
+          <h3 className="text-base font-bold">
             {t('Global.sidebarItems.LISTEN')}
           </h3>
           <AudioPlayback
@@ -57,16 +80,29 @@ const Reading: FC<Props> = ({
             title={t('Global.sidebarItems.LISTEN')}
           />
         </div>
+
+        {/* Next Lesson Button */}
         <NextLessonButton lessonName="PICTURES" onClick={handleComplete} />
       </div>
 
-      {/* Right: Reading Content - scrollable on desktop to avoid page scroll */}
-      <div className="flex-1 min-w-0 lg:overflow-y-auto lg:h-full lg:pe-2">
-        <ReadingCard title={t('Global.sidebarItems.READ')} content={transcript} />
-      </div>
+      {/* Right Column: Text Content - scrollable */}
+      <Card className="flex-1 min-w-0 flex flex-col lg:overflow-hidden border-border shadow-card">
+        <CardHeader className="flex items-center gap-2 shrink-0 pb-2">
+          <BookOpen className="h-5 w-5" />
+          <CardTitle className="text-xl font-semibold">
+            {t('Global.sidebarItems.READ')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex-1 min-h-0 lg:overflow-y-auto lg:pe-2">
+          <div className="bg-accent/30 w-full rounded-lg p-3">
+            <RichTextViewer lang="en">{textContent}</RichTextViewer>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
 
 export default Reading;
+
 

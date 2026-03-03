@@ -152,7 +152,7 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
 
   const { question, answers, type } = currentItem;
   return (
-    <div className="mx-auto flex max-w-2xl flex-col space-y-4">
+    <div className="mx-auto flex max-w-4xl flex-col space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-4">
         {testStatus !== 'completed' && (
           <TestProgress
@@ -208,7 +208,7 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
               <img
                 src={question}
                 alt="Question"
-                className="mx-auto max-h-80 w-full rounded-md object-contain"
+                className="mx-auto max-h-[400px] w-full rounded-lg object-contain"
               />
             )}
 
@@ -252,7 +252,7 @@ const DailyTest: FC<Props> = ({ lesson, day, levelId }) => {
                 </div>
               ))}
             </RadioGroup>
-            <div className="mt-8 flex justify-between gap-2">
+            <div className="mt-4 flex justify-between gap-2">
               <Button
                 onClick={prev}
                 variant={'outline'}
