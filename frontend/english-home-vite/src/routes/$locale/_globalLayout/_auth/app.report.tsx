@@ -148,17 +148,18 @@ function ReportPage() {
                             {/* Left Skills (Cyan) */}
                             <div className="absolute start-4 top-10 flex flex-col gap-10">
                                 <div>
-                                    <h3 className="text-cyan-400 font-bold mb-3 ms-2">{t.listening}</h3>
+                                    <h3 className="text-cyan-400 font-bold mb-3 ms-2">{t.speaking}</h3>
                                     <div className="space-y-3 relative z-10">
                                         <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Audio Mastered" />
-                                        <SubSkillNode icon={<BookOpen className="w-3 h-3 opacity-0" />} label={t.speaking} />
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label={t.speaking} />
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Words Written" />
                                     </div>
                                 </div>
-                                <div className="mt-8">
-                                    <h3 className="text-cyan-400 font-bold mb-3 ms-2 mt-4">{t.reading}</h3>
+                                <div className="mt-4">
+                                    <h3 className="text-cyan-400 font-bold mb-3 ms-2">{t.reading}</h3>
                                     <div className="space-y-3 relative z-10">
-                                        <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Words Written" />
-                                        <SubSkillNode icon={<BookOpen className="w-3 h-3 opacity-0" />} label="Visual Associations" />
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Visual Associations" />
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Words Read" />
                                     </div>
                                 </div>
                             </div>
@@ -169,14 +170,14 @@ function ReportPage() {
                                     <h3 className="text-amber-400 font-bold mb-3 me-2">{t.grammar}</h3>
                                     <div className="space-y-3 relative z-10">
                                         <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Visual Learning" isRight />
-                                        <SubSkillNode icon={<BookOpen className="w-3 h-3 opacity-0" />} label={t.writing} isRight />
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Words Written" isRight />
                                     </div>
                                 </div>
-                                <div className="mt-8">
-                                    <h3 className="text-amber-400 font-bold mb-3 me-2 mt-4">{t.speaking}</h3>
+                                <div className="mt-4">
+                                    <h3 className="text-amber-400 font-bold mb-3 me-2">{t.speaking}</h3>
                                     <div className="space-y-3 relative z-10">
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Visual Associations" isRight />
                                         <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Words Written" isRight />
-                                        <SubSkillNode icon={<BookOpen className="w-3 h-3 opacity-0" />} label="Visual Associations" isRight />
                                     </div>
                                 </div>
                             </div>
@@ -188,7 +189,7 @@ function ReportPage() {
 
                         {/* Top layout: Coin + Label + Title */}
                         <div className="flex gap-6 relative z-10">
-                            <GoldCoin value={report.arsenal.masteredWords || 150} label={t.masteredWords} />
+                            <GoldCoin value={report.arsenal.masteredWords} label={t.masteredWords} />
 
                             <div className="flex-1 pt-2">
                                 <h1 className="text-2xl font-black text-white tracking-widest mb-4">Linguistic Arsenal</h1>
@@ -197,11 +198,11 @@ function ReportPage() {
                                     <BookOpen className="w-4 h-4 text-zinc-400" />
                                     <span className="text-[11px] font-bold tracking-widest text-zinc-300 uppercase">{t.idiomsPhrasal}</span>
                                     <Plus className="w-5 h-5 text-purple-500 ms-2" />
-                                    <span className="text-xl font-black text-white">{report.arsenal.idioms + report.arsenal.phrasalVerbs || 15}</span>
+                                    <span className="text-xl font-black text-white">{report.arsenal.idioms + report.arsenal.phrasalVerbs}</span>
                                 </div>
 
                                 <p className="text-[10px] text-zinc-500 font-bold tracking-[0.2em] mt-3 ms-2">
-                                    {t.voiceTraining}: {report.skills.speaking.tasksCompleted || 3} {t.hours}
+                                    {t.voiceTraining}: {report.skills.speaking.tasksCompleted} {t.hours}
                                 </p>
                             </div>
                         </div>
@@ -211,15 +212,15 @@ function ReportPage() {
                             <div className="flex items-center justify-between text-[11px] font-bold tracking-widest uppercase mb-2">
                                 <span className="text-zinc-400">{t.wordsMastered}</span>
                                 <span className="text-[#00d084] flex items-center gap-2">
-                                    {report.arsenal.fluencyPercent || 60}% <span className="text-zinc-500">{t.fluency} 3 {t.hours}</span> <Mic className="w-3 h-3 text-zinc-500" />
+                                    {report.arsenal.fluencyPercent}% <span className="text-zinc-500">{t.fluency} {report.skills.listening.tasksCompleted} {t.hours}</span> <Mic className="w-3 h-3 text-zinc-500" />
                                 </span>
                             </div>
 
                             <div className="h-2 bg-[#1a1f26] rounded-full overflow-hidden mb-2">
-                                <div className="h-full bg-[#00d084] rounded-full" style={{ width: `${report.arsenal.fluencyPercent || 60}%` }} />
+                                <div className="h-full bg-[#00d084] rounded-full transition-all duration-1000" style={{ width: `${report.arsenal.fluencyPercent}%` }} />
                             </div>
                             <div className="flex justify-end mb-2">
-                                <span className="text-[#00d084] font-black">{report.arsenal.fluencyPercent || 60}%</span>
+                                <span className="text-[#00d084] font-black">{report.arsenal.fluencyPercent}%</span>
                             </div>
 
                             <p className="text-[9px] text-zinc-600 font-bold tracking-[0.15em] mb-6 uppercase">
@@ -232,7 +233,7 @@ function ReportPage() {
                                     <Map className="w-4 h-4 text-zinc-500 mt-0.5" />
                                     <div className="flex flex-col">
                                         <span className="text-[10px] text-zinc-400 font-bold tracking-widest">{t.grammarRulesUnlocked}</span>
-                                        <span className="text-lg font-black text-zinc-100">{report.arsenal.grammarRules || 8}</span>
+                                        <span className="text-lg font-black text-zinc-100">{report.arsenal.grammarRules}</span>
                                     </div>
                                 </div>
                                 <div className="flex items-start justify-between">
@@ -243,13 +244,13 @@ function ReportPage() {
                                             <span className="text-[9px] text-zinc-600 font-bold tracking-widest mt-0.5 uppercase">Completed: {report.quizzes.averageScore}%</span>
                                         </div>
                                     </div>
-                                    <span className="text-lg font-black text-zinc-100">{report.quizzes.completed || 12}</span>
+                                    <span className="text-lg font-black text-zinc-100">{report.quizzes.completed}</span>
                                 </div>
                                 <div className="flex items-start gap-2">
                                     <CheckSquare className="w-4 h-4 text-zinc-500 mt-0.5" />
                                     <div className="flex flex-col">
                                         <span className="text-[10px] text-zinc-400 font-bold tracking-widest">{t.correctAnswers}</span>
-                                        <span className="text-sm font-black text-zinc-100">{report.quizzes.correctAnswers || 0}</span>
+                                        <span className="text-sm font-black text-zinc-100">{report.quizzes.correctAnswers}</span>
                                     </div>
                                 </div>
                                 <div className="flex items-start justify-between">
@@ -257,7 +258,7 @@ function ReportPage() {
                                         <CheckSquare className="w-4 h-4 text-zinc-500 mt-0.5" />
                                         <span className="text-[10px] text-zinc-400 font-bold tracking-widest mt-0.5">{t.currentStreak}</span>
                                     </div>
-                                    <span className="text-sm font-black text-zinc-100">{report.journey.currentStreak || 7} {t.days}</span>
+                                    <span className="text-sm font-black text-zinc-100">{report.journey.currentStreak} {t.days}</span>
                                 </div>
                             </div>
                         </div>
@@ -265,29 +266,49 @@ function ReportPage() {
                     </div>
                 </div>
 
-                {/* ════ ROW 2: Journey Timeline & Knowledge Fortress ════ */}
-                <div className="flex items-center justify-between px-2 gap-6 relative">
+                {/* ════ ROW 2: Journey Timeline ════ */}
+                <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-4">
                     {/* Left: Journey Timeline Pill */}
-                    <div className="flex items-center gap-3 px-6 py-3 rounded-2xl border border-zinc-700/50 bg-[#14171d] min-w-[300px]">
+                    <div className="flex items-center gap-3 px-6 py-3 rounded-2xl border border-zinc-700/50 bg-[#14171d]">
                         <CalendarDays className="w-5 h-5 text-zinc-400" />
                         <span className="text-lg font-bold text-white tracking-wide">{t.journeyTimeline}</span>
                     </div>
 
-                    {/* Middle: Active Pill */}
-                    <div className="flex items-center gap-6 px-6 py-3 rounded-2xl border border-zinc-700/50 bg-[#14171d] flex-1 justify-between shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+                    {/* Right: Active Pill */}
+                    <div className="flex items-center gap-6 px-6 py-3 rounded-2xl border border-zinc-700/50 bg-[#14171d] justify-between">
                         <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4 text-zinc-400" />
                             <span className="text-xs font-bold text-zinc-300 tracking-widest uppercase">
-                                {t.active} {report.journey.activeSince ? new Date(report.journey.activeSince).toLocaleDateString(isAr ? 'ar' : 'en', { month: 'short', day: 'numeric', year: 'numeric' }) : 'JAN 19, 2024'}
+                                {t.active} {report.journey.activeSince ? new Date(report.journey.activeSince).toLocaleDateString(isAr ? 'ar' : 'en', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}
                             </span>
                         </div>
-                        <span className="text-xs font-bold text-zinc-300 tracking-widest uppercase">{t.activeStreak} &nbsp;&nbsp;&nbsp; <span className="text-white">{report.journey.currentStreak} {t.days}</span></span>
+                        <span className="text-xs font-bold text-zinc-300 tracking-widest uppercase">{t.activeStreak}&nbsp;&nbsp;&nbsp;<span className="text-white">{report.journey.currentStreak} {t.days}</span></span>
                     </div>
+                </div>
 
-                    {/* Right text inside, Shield floats above */}
-                    <div className="absolute end-10 -top-16 z-20 flex flex-col items-center">
-                        <img src="/images/report/shield.png" alt="Level Shield" className="w-[110px] drop-shadow-[0_10px_15px_rgba(0,0,0,0.8)] select-none" />
-                        <span className="text-[11px] font-black text-[#8890a5] mt-2 uppercase tracking-widest bg-zinc-800/60 px-3 py-1 rounded-full border border-zinc-700/50 backdrop-blur-sm">
+                {/* ════ Knowledge Fortress + Shield ════ */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h2 className="text-xl font-black tracking-[0.2em] uppercase text-zinc-200 mb-3">{t.knowledgeFortress}</h2>
+                        <div className="flex flex-wrap gap-2">
+                            {['LEVEL_A1', 'LEVEL_A2', 'LEVEL_B1', 'LEVEL_B2', 'LEVEL_C1', 'LEVEL_C2'].map((level) => {
+                                const isCompleted = report.completedLevels.includes(level);
+                                const isCurrent = report.currentLevel?.name === level;
+                                const isPurchased = report.purchasedLevels.includes(level);
+                                const label = level.replace('LEVEL_', '');
+                                return (
+                                    <div key={level} className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all ${isCompleted ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400'
+                                            : isCurrent ? 'border-amber-500/50 bg-amber-500/10 text-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.2)]'
+                                                : isPurchased ? 'border-cyan-500/30 bg-cyan-500/5 text-cyan-400'
+                                                    : 'border-zinc-700/30 bg-zinc-800/30 text-zinc-600'
+                                        }`}>{label}</div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                    <div className="flex flex-col items-center gap-2">
+                        <img src="/images/report/shield.png" alt="Level Shield" className="w-[100px] drop-shadow-[0_10px_15px_rgba(0,0,0,0.6)] select-none" />
+                        <span className="text-[11px] font-black text-zinc-400 uppercase tracking-widest bg-zinc-800/60 px-3 py-1 rounded-full border border-zinc-700/50">
                             {levelTitle}
                         </span>
                     </div>
@@ -305,7 +326,7 @@ function ReportPage() {
                                 <div className="relative w-36 h-36">
                                     <svg className="w-full h-full transform -rotate-90">
                                         <circle cx="72" cy="72" r="64" fill="none" stroke="#1f2937" strokeWidth="8" />
-                                        <circle cx="72" cy="72" r="64" fill="none" stroke="#22d3ee" strokeWidth="8" strokeLinecap="round" strokeDasharray="402" strokeDashoffset={402 - (402 * 0.7)} />
+                                        <circle cx="72" cy="72" r="64" fill="none" stroke="#22d3ee" strokeWidth="8" strokeLinecap="round" strokeDasharray="402" strokeDashoffset={402 - (402 * (report.arsenal.fluencyPercent / 100))} style={{ transition: 'stroke-dashoffset 1.5s ease' }} />
                                     </svg>
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <BookOpen className="w-12 h-12 text-zinc-300" strokeWidth={1} />
@@ -313,7 +334,7 @@ function ReportPage() {
                                 </div>
                                 <div className="text-center">
                                     <p className="text-[13px] text-zinc-300">{t.voiceTraining}:</p>
-                                    <p className="text-[13px] text-zinc-300">3 {t.hours}</p>
+                                    <p className="text-[13px] text-zinc-300">{report.skills.speaking.tasksCompleted} {t.hours}</p>
                                 </div>
                             </div>
 
@@ -322,15 +343,16 @@ function ReportPage() {
                                 <div className="relative w-36 h-36">
                                     <svg className="w-full h-full transform -rotate-90">
                                         <circle cx="72" cy="72" r="64" fill="none" stroke="#1f2937" strokeWidth="8" />
-                                        <circle cx="72" cy="72" r="64" fill="none" stroke="#fbbf24" strokeWidth="8" strokeLinecap="round" strokeDasharray="402" strokeDashoffset={402 - (402 * 0.9)} />
+                                        <circle cx="72" cy="72" r="64" fill="none" stroke="#fbbf24" strokeWidth="8" strokeLinecap="round" strokeDasharray="402" strokeDashoffset={402 - (402 * Math.min(1, report.arsenal.masteredWords / 500))} style={{ transition: 'stroke-dashoffset 1.5s ease' }} />
                                     </svg>
                                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                        <span className="text-3xl font-bold text-amber-100">{report.arsenal.masteredWords || 150}</span>
+                                        <span className="text-3xl font-bold text-amber-100">{report.arsenal.masteredWords}</span>
                                         <span className="text-[10px] text-zinc-400 mt-0.5 leading-tight text-center px-4">{t.masteredWords}</span>
                                     </div>
                                 </div>
                                 <div className="text-center">
                                     <p className="text-[13px] text-zinc-300">{t.readingSpeed}:</p>
+                                    <p className="text-[13px] text-zinc-300">+{(report.skills.reading.tasksCompleted * 0.1).toFixed(1)}x</p>
                                 </div>
                             </div>
                         </div>
@@ -340,28 +362,28 @@ function ReportPage() {
                             {/* Box 1 */}
                             <div className="rounded-2xl border border-zinc-700/40 bg-[#161a23] p-5 flex items-center gap-4 shadow-lg">
                                 <MessageSquareQuote className="w-6 h-6 text-zinc-400" />
-                                <span className="text-[15px] font-medium text-zinc-300">{t.idioms}: {report.arsenal.idioms || 45}</span>
+                                <span className="text-[15px] font-medium text-zinc-300">{t.idioms}: {report.arsenal.idioms}</span>
                                 <div className="ms-auto w-4 h-0.5 bg-cyan-400 rounded" />
                             </div>
                             {/* Box 2 */}
                             <div className="rounded-2xl border border-zinc-700/40 bg-[#161a23] p-5 flex items-center gap-4 shadow-lg relative">
                                 <Link2 className="w-6 h-6 text-zinc-400" />
-                                <span className="text-[15px] font-medium text-zinc-300">{t.phrasalVerbs}: {report.arsenal.phrasalVerbs || 60}</span>
+                                <span className="text-[15px] font-medium text-zinc-300">{t.phrasalVerbs}: {report.arsenal.phrasalVerbs}</span>
                                 <div className="absolute top-0 end-8 w-8 h-1 bg-cyan-400 rounded-b-md" />
                             </div>
                             {/* Box 3 */}
                             <div className="rounded-2xl border border-zinc-700/40 bg-[#161a23] p-5 shadow-lg flex flex-col justify-center">
                                 <div className="flex items-end gap-3 mb-3">
-                                    <span className="text-3xl font-light text-zinc-300 leading-none">20</span>
-                                    <span className="text-sm font-medium text-zinc-400 mb-0.5">{t.readingSpeed}:<br />+1.5x</span>
+                                    <span className="text-3xl font-light text-zinc-300 leading-none">{report.skills.reading.tasksCompleted}</span>
+                                    <span className="text-sm font-medium text-zinc-400 mb-0.5">{t.readingSpeed}:<br />+{(report.skills.reading.tasksCompleted * 0.1).toFixed(1)}x</span>
                                 </div>
-                                <p className="text-xs font-semibold text-zinc-400">{t.quizzesCompleted}<br />7 {t.days}!</p>
+                                <p className="text-xs font-semibold text-zinc-400">{t.quizzesCompleted}<br />{report.quizzes.completed} {t.days}!</p>
                             </div>
                             {/* Box 4 */}
                             <div className="rounded-2xl border border-zinc-700/40 bg-[#161a23] p-5 shadow-lg flex flex-col justify-center relative">
                                 <div className="flex items-end gap-3 mb-3">
-                                    <span className="text-3xl font-light text-zinc-300 leading-none">{report.arsenal.grammarRules || 12}</span>
-                                    <span className="text-sm font-medium text-zinc-400 mb-0.5">{t.grammarRules}:<br />(95% {t.accuracy})</span>
+                                    <span className="text-3xl font-light text-zinc-300 leading-none">{report.arsenal.grammarRules}</span>
+                                    <span className="text-sm font-medium text-zinc-400 mb-0.5">{t.grammarRules}:<br />({report.quizzes.averageScore}% {t.accuracy})</span>
                                 </div>
                                 <p className="text-xs font-semibold text-zinc-400">{t.currentStreak}:</p>
                                 <div className="absolute right-0 top-1/2 -translate-y-1/2 w-0.5 h-16 bg-amber-400/50 blur-[1px]" />
@@ -375,7 +397,11 @@ function ReportPage() {
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     <Bot className="w-8 h-8 text-[#5c85ff]" strokeWidth={1.5} />
                     <p className="text-[13px] text-zinc-300 z-10 font-medium">
-                        {t.aiPrediction} {isAr ? 'بناءً على تقدمك، من المتوقع أن تصل إلى المستوى' : 'Based your progress, youre projected to reach'} <span className="font-bold">{report.aiPrediction?.nextLevel || 'A2'}</span> {isAr ? 'في 45 يوماً!' : 'level in 45 days!'}
+                        {report.aiPrediction ? (
+                            <>{t.aiPrediction} {isAr ? 'بناءً على تقدمك، من المتوقع أن تصل إلى المستوى' : 'Based on your progress, you\'re projected to reach'} <span className="font-bold">{report.aiPrediction.nextLevel}</span> {isAr ? `في ${report.aiPrediction.estimatedDays} يوماً!` : `level in ${report.aiPrediction.estimatedDays} days!`}</>
+                        ) : (
+                            <>{t.aiPrediction} {isAr ? 'واصل التدريب لفتح توقعات الذكاء الاصطناعي.' : 'Keep practicing to unlock AI-powered predictions!'}</>
+                        )}
                     </p>
                     <div className="ms-auto w-4 h-4 rounded-sm bg-white/80 rotate-45 mr-2 opacity-50" />
                 </div>
