@@ -1,5 +1,6 @@
 import { AudioPlayback } from '@components/audio-playback';
 import NextLessonButton from '@components/next-lesson-button';
+import LessonProgress from '@components/lesson-progress';
 import RichTextViewer from '@components/rich-text-viewer';
 import useItemsPagination from '@hooks/use-items-pagination';
 import { cn } from '@lib/utils';
@@ -86,6 +87,9 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
           </CardContent>
         </Card>
       )}
+
+      {/* Progress Bar */}
+      <LessonProgress currentIndex={currentIndex} total={lesson.definitions.length} />
 
       {/* Definitions Section — Paginated */}
       <div className="space-y-4">

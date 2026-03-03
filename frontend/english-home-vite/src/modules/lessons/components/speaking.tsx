@@ -5,6 +5,7 @@ import useItemsPagination from '@hooks/use-items-pagination';
 import useLocale from '@hooks/use-locale';
 import useRecorder from '@hooks/use-recorder';
 import { cn, localizedNumber } from '@lib/utils';
+import LessonProgress from '@components/lesson-progress';
 import { useCompareAudio, useGetSentenceAudios, useMarkTaskAsCompleted } from '@modules/lessons/mutations';
 import type { LevelId } from '@shared/types/entities';
 import { useParams } from '@tanstack/react-router';
@@ -150,6 +151,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
   const currentRecord = usersRecords[currentIndex];
   return (
     <div className="mx-auto flex max-w-2xl flex-col space-y-4">
+      <LessonProgress currentIndex={currentIndex} total={sentences.length} />
       <Card>
         <CardHeader className="w-full">
           <div className="flex items-center gap-4">

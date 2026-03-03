@@ -47,12 +47,12 @@ const PictureCard: FC<Props> = ({
   }, [isMobile]);
 
   return (
-    <div className="flex flex-col gap-4 lg:flex-row lg:items-start w-full">
+    <div className="flex flex-col gap-2 lg:flex-row lg:items-start w-full">
       {/* Image Section */}
       <div className="relative flex-1 flex items-center justify-center overflow-hidden">
         <img
           src={pictureSrc}
-          className="h-auto w-full object-contain max-h-[280px] lg:max-h-[380px]"
+          className="h-auto w-full object-contain max-h-[300px] lg:max-h-[480px] rounded-lg"
           alt={wordEn}
         />
 
@@ -77,7 +77,7 @@ const PictureCard: FC<Props> = ({
       </div>
 
       {/* Content Section */}
-      <div className="flex flex-col gap-4 lg:w-[320px] xl:w-[380px] shrink-0">
+      <div className="flex flex-col gap-2 lg:w-[300px] xl:w-[360px] shrink-0">
         <Card className="shadow-none border-border">
           <CardHeader className="space-y-4 pb-4">
             <div className="flex items-center justify-between gap-2">
@@ -141,7 +141,7 @@ const PictureCard: FC<Props> = ({
             </div>
 
             {showExamples && (
-              <ul lang="en" className="space-y-2 mt-2 max-h-[120px] lg:max-h-[180px] overflow-y-auto pr-2 custom-scrollbar">
+              <ul lang="en" className="space-y-2 mt-2 max-h-[100px] lg:max-h-[140px] overflow-y-auto pr-2 custom-scrollbar">
                 {examples.map((example, index) => (
                   <li
                     key={index}

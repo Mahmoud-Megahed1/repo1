@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from '@ui/card';
 import { Progress } from '@ui/progress';
+import LessonProgress from '@components/lesson-progress';
 import {
   createContext,
   use,
@@ -292,29 +293,32 @@ export const WritingControls = ({ nextLessonButton }: { nextLessonButton?: React
     useWriting();
   const { t } = useTranslation();
   return (
-    <div className="flex items-center justify-between">
-      <Button variant="outline" onClick={goPrev} disabled={!hasPrev}>
-        {t('Global.prev')}
-      </Button>
-      <ul className="flex items-center gap-1">
-        {Array(total)
-          .fill(0)
-          .map((_, i) => (
-            <li
-              key={i}
-              className={cn('bg-accent size-2 rounded-full', {
-                'bg-primary scale-105': i === currentIndex,
-              })}
-            />
-          ))}
-      </ul>
-      {isLastItem && nextLessonButton ? (
-        nextLessonButton
-      ) : (
-        <Button variant="outline" onClick={goNext} disabled={!hasNext}>
-          {t('Global.next')}
+    <div className="space-y-4">
+      <LessonProgress currentIndex={currentIndex} total={total} />
+      <div className="flex items-center justify-between">
+        <Button variant="outline" onClick={goPrev} disabled={!hasPrev}>
+          {t('Global.prev')}
         </Button>
-      )}
+        <ul className="flex items-center gap-1">
+          {Array(total)
+            .fill(0)
+            .map((_, i) => (
+              <li
+                key={i}
+                className={cn('bg-accent size-2 rounded-full', {
+                  'bg-primary scale-105': i === currentIndex,
+                })}
+              />
+            ))}
+        </ul>
+        {isLastItem && nextLessonButton ? (
+          nextLessonButton
+        ) : (
+          <Button variant="outline" onClick={goNext} disabled={!hasNext}>
+            {t('Global.next')}
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

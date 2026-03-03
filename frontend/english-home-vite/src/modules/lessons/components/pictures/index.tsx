@@ -1,4 +1,5 @@
 import useItemsPagination from '@hooks/use-items-pagination';
+import LessonProgress from '@components/lesson-progress';
 import { useEffect, type ComponentProps, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PictureLesson } from '../../types';
@@ -59,7 +60,7 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
   if (!currentItem) return null;
   return (
     <div className="mx-auto w-full max-w-7xl" {...props}>
-      <div className="mb-8">
+      <div className="mb-2">
         <h1 className="text-2xl font-bold">
           {t('Global.pictureVocabulary.title')}
         </h1>
@@ -67,6 +68,7 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
           {t('Global.pictureVocabulary.description')}
         </p>
       </div>
+      <LessonProgress currentIndex={currentIndex} total={lesson.length} />
       <div className="flex w-full flex-col gap-4 md:flex-row md:items-start">
         <PictureCard
           key={currentIndex}

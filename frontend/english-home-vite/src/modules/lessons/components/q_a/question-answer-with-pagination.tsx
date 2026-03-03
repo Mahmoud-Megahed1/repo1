@@ -5,6 +5,7 @@ import { useEffect, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import QuestionAnswerCard from './question-answer-card';
 import { Button } from '@ui/button';
+import LessonProgress from '@components/lesson-progress';
 
 const QuestionAnswerWithPagination = ({
   lesson,
@@ -27,6 +28,7 @@ const QuestionAnswerWithPagination = ({
   if (!currentItem) return null;
   return (
     <div>
+      <LessonProgress currentIndex={currentIndex} total={lesson.length} />
       <QuestionAnswerCard
         key={currentIndex}
         index={currentIndex + 1}

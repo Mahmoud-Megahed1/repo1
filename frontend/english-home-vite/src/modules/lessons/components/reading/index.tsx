@@ -39,19 +39,15 @@ const Reading: FC<Props> = ({
   return (
     <div
       className={cn(
-        'mx-auto flex size-full max-w-6xl flex-col gap-4',
-        'lg:flex-row lg:items-start lg:gap-4',
+        'mx-auto flex size-full max-w-7xl flex-col gap-4',
+        'lg:flex-row lg:items-start lg:gap-6',
+        'lg:h-[calc(100vh-12rem)]',
         className
       )}
       {...props}
     >
-      {/* Left: Reading Content - expands to use available space */}
-      <div className="flex-1 min-w-0">
-        <ReadingCard title={t('Global.sidebarItems.READ')} content={transcript} />
-      </div>
-
-      {/* Right: Audio + Navigation - sticky sidebar on desktop */}
-      <div className="w-full space-y-4 lg:w-80 lg:shrink-0 lg:sticky lg:top-24">
+      {/* Left: Audio + Navigation - sticky sidebar on desktop */}
+      <div className="w-full space-y-4 lg:w-72 xl:w-80 lg:shrink-0 lg:sticky lg:top-24">
         <div className="space-y-2">
           <h3 className="text-lg font-bold md:text-xl">
             {t('Global.sidebarItems.LISTEN')}
@@ -63,8 +59,14 @@ const Reading: FC<Props> = ({
         </div>
         <NextLessonButton lessonName="PICTURES" onClick={handleComplete} />
       </div>
+
+      {/* Right: Reading Content - scrollable on desktop to avoid page scroll */}
+      <div className="flex-1 min-w-0 lg:overflow-y-auto lg:h-full lg:pe-2">
+        <ReadingCard title={t('Global.sidebarItems.READ')} content={transcript} />
+      </div>
     </div>
   );
 };
 
 export default Reading;
+
