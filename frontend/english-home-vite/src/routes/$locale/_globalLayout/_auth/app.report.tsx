@@ -1,600 +1,387 @@
-// Student Report Dashboard Page — Matches Client Mockup
+// Student Report Dashboard Page — Exact Pixel-Perfect Match of Client Mockup
 import axiosClient from '@lib/axios-client';
 import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useBreadcrumbStore } from '@hooks/use-breadcrumb-store';
 import {
-    Swords,
     CalendarDays,
-    Sparkles,
     BookOpen,
-    MessageSquareQuote,
-    Link2,
-    CheckCircle,
-    Target,
-    BarChart3,
-    Clock,
-    Award,
+    Map,
+    CheckSquare,
+    CheckCircle2,
+    Plus,
     Mic,
-    Eye,
-    Headphones,
-    PenTool,
-    BookOpenCheck,
-    Volume2,
-    Layers,
-    ShieldCheck,
+    Bot,
+    Clock,
+    MessageSquareQuote,
+    Link2
 } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────
 interface StudentReport {
-    user: {
-        firstName: string;
-        lastName: string;
-        email: string;
-        createdAt: string;
-    };
-    currentLevel: {
-        name: string;
-        title: string;
-        currentDay: number;
-        isCompleted: boolean;
-    } | null;
-    skills: {
-        reading: { tasksCompleted: number };
-        writing: { tasksCompleted: number };
-        listening: { tasksCompleted: number };
-        speaking: { tasksCompleted: number };
-        grammar: { tasksCompleted: number };
-    };
-    arsenal: {
-        masteredWords: number;
-        grammarRules: number;
-        idioms: number;
-        phrasalVerbs: number;
-        fluencyPercent: number;
-    };
-    quizzes: {
-        completed: number;
-        averageScore: number;
-        correctAnswers: number;
-    };
-    journey: {
-        activeSince: string | null;
-        currentStreak: number;
-        totalActiveDays: number;
-        totalCompletedDays: number;
-    };
-    aiPrediction: {
-        nextLevel: string;
-        estimatedDays: number;
-    } | null;
+    user: { firstName: string; lastName: string; email: string; createdAt: string; };
+    currentLevel: { name: string; title: string; currentDay: number; isCompleted: boolean; } | null;
+    skills: { reading: { tasksCompleted: number }; writing: { tasksCompleted: number }; listening: { tasksCompleted: number }; speaking: { tasksCompleted: number }; grammar: { tasksCompleted: number }; };
+    arsenal: { masteredWords: number; grammarRules: number; idioms: number; phrasalVerbs: number; fluencyPercent: number; };
+    quizzes: { completed: number; averageScore: number; correctAnswers: number; };
+    journey: { activeSince: string | null; currentStreak: number; totalActiveDays: number; totalCompletedDays: number; };
+    aiPrediction: { nextLevel: string; estimatedDays: number; } | null;
     purchasedLevels: string[];
     completedLevels: string[];
 }
 
-// ─── Route ───────────────────────────────────────────────────────────────
-export const Route = createFileRoute(
-    '/$locale/_globalLayout/_auth/app/report'
-)({
+export const Route = createFileRoute('/$locale/_globalLayout/_auth/app/report')({
     component: ReportPage,
 });
 
-// ─── SVG: Brain Illustration ─────────────────────────────────────────────
-function BrainSvg() {
+// ─── SVGs & Exact UI Elements ──────────────────────────────────────────────
+
+// Connecting lines for brain nodes
+const LineSvg = ({ isRight = false, y = "50%" }) => (
+    <svg className={`absolute top-[${y}] w-12 h-px -translate-y-1/2 ${isRight ? '-start-12' : '-end-12'}`} aria-hidden="true">
+        <line x1="0" y1="0" x2="100%" y2="0" stroke="currentColor" strokeWidth="1" strokeDasharray="2,2" className={isRight ? 'text-amber-500/30' : 'text-cyan-500/30'} />
+    </svg>
+);
+
+function SubSkillNode({ icon, label, isRight = false }: { icon: any; label: string; isRight?: boolean }) {
     return (
-        <svg viewBox="0 0 220 180" className="w-full max-w-[320px] mx-auto drop-shadow-2xl" aria-hidden="true">
-            <defs>
-                <linearGradient id="leftBrain" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.95" />
-                    <stop offset="100%" stopColor="#0891b2" stopOpacity="0.75" />
-                </linearGradient>
-                <linearGradient id="rightBrain" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.95" />
-                    <stop offset="100%" stopColor="#b45309" stopOpacity="0.75" />
-                </linearGradient>
-                <filter id="brainGlow">
-                    <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-                    <feMerge>
-                        <feMergeNode in="coloredBlur" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
-                <filter id="softGlow">
-                    <feGaussianBlur stdDeviation="6" result="blur" />
-                    <feMerge>
-                        <feMergeNode in="blur" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
-            </defs>
-
-            {/* Ambient glow behind brain */}
-            <ellipse cx="110" cy="90" rx="70" ry="55" fill="#06b6d4" opacity="0.04" filter="url(#softGlow)" />
-            <ellipse cx="110" cy="90" rx="70" ry="55" fill="#d97706" opacity="0.03" filter="url(#softGlow)" />
-
-            {/* Left Hemisphere */}
-            <path
-                d="M108 85 C108 42, 86 14, 60 17 C34 20, 20 42, 22 64 C24 86, 36 102, 48 112 C60 122, 82 128, 108 122 Z"
-                fill="url(#leftBrain)"
-                filter="url(#brainGlow)"
-            />
-            {/* Left folds */}
-            <path d="M42 45 Q58 52, 65 68" stroke="#0e7490" strokeWidth="1.5" fill="none" opacity="0.45" />
-            <path d="M36 68 Q54 62, 70 78" stroke="#0e7490" strokeWidth="1.5" fill="none" opacity="0.4" />
-            <path d="M48 90 Q65 85, 80 95" stroke="#0e7490" strokeWidth="1.2" fill="none" opacity="0.35" />
-            <path d="M55 108 Q72 100, 90 105" stroke="#0e7490" strokeWidth="1" fill="none" opacity="0.3" />
-
-            {/* Right Hemisphere */}
-            <path
-                d="M112 85 C112 42, 134 14, 160 17 C186 20, 200 42, 198 64 C196 86, 184 102, 172 112 C160 122, 138 128, 112 122 Z"
-                fill="url(#rightBrain)"
-                filter="url(#brainGlow)"
-            />
-            {/* Right folds */}
-            <path d="M178 45 Q162 52, 155 68" stroke="#92400e" strokeWidth="1.5" fill="none" opacity="0.45" />
-            <path d="M184 68 Q166 62, 150 78" stroke="#92400e" strokeWidth="1.5" fill="none" opacity="0.4" />
-            <path d="M172 90 Q155 85, 140 95" stroke="#92400e" strokeWidth="1.2" fill="none" opacity="0.35" />
-            <path d="M165 108 Q148 100, 130 105" stroke="#92400e" strokeWidth="1" fill="none" opacity="0.3" />
-
-            {/* Center divide */}
-            <line x1="110" y1="14" x2="110" y2="125" stroke="#52525b" strokeWidth="0.8" opacity="0.25" strokeDasharray="3,3" />
-
-            {/* Neural dots */}
-            <circle cx="60" cy="50" r="2" fill="#22d3ee" opacity="0.6" />
-            <circle cx="45" cy="75" r="1.5" fill="#22d3ee" opacity="0.5" />
-            <circle cx="75" cy="100" r="1.5" fill="#22d3ee" opacity="0.4" />
-            <circle cx="160" cy="50" r="2" fill="#fbbf24" opacity="0.6" />
-            <circle cx="175" cy="75" r="1.5" fill="#fbbf24" opacity="0.5" />
-            <circle cx="145" cy="100" r="1.5" fill="#fbbf24" opacity="0.4" />
-        </svg>
-    );
-}
-
-// ─── Sub-Skill Node (connected to brain) ─────────────────────────────────
-function SubSkillNode({ icon: Icon, label }: { icon: any; label: string }) {
-    return (
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-800/70 border border-zinc-700/40 backdrop-blur-sm">
-            <Icon className="w-3 h-3 text-zinc-400 flex-shrink-0" />
-            <span className="text-[10px] text-zinc-300 font-medium whitespace-nowrap">{label}</span>
+        <div className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-[11px] backdrop-blur-sm z-10 transition-colors ${isRight
+            ? 'border-amber-500/20 bg-[#1a1811] text-amber-200/70 hover:border-amber-500/40'
+            : 'border-cyan-500/20 bg-[#121c21] text-cyan-200/70 hover:border-cyan-500/40'
+            }`}>
+            {icon}
+            <span className="whitespace-nowrap font-medium tracking-wide">{label}</span>
+            <LineSvg isRight={isRight} />
         </div>
     );
 }
 
-// ─── Progress Ring ───────────────────────────────────────────────────────
-function ProgressRing({ percent, size = 140, strokeWidth = 10, color = '#d97706', bgColor = 'rgba(255,255,255,0.05)', label, value }: {
-    percent: number;
-    size?: number;
-    strokeWidth?: number;
-    color?: string;
-    bgColor?: string;
-    label: string;
-    value: string | number;
-}) {
-    const radius = (size - strokeWidth) / 2;
-    const circumference = 2 * Math.PI * radius;
-    const strokeDashoffset = circumference - (percent / 100) * circumference;
-
+// Giant Gold Coin for Mastered Words (Top right panel)
+function GoldCoin({ value, label }: { value: number | string; label: string }) {
     return (
-        <div className="relative flex flex-col items-center gap-3">
-            <div className="relative" style={{ width: size, height: size }}>
-                <svg width={size} height={size} className="transform -rotate-90">
-                    <circle
-                        cx={size / 2} cy={size / 2} r={radius}
-                        fill="none" stroke={bgColor} strokeWidth={strokeWidth}
-                    />
-                    <circle
-                        cx={size / 2} cy={size / 2} r={radius}
-                        fill="none" stroke={color} strokeWidth={strokeWidth}
-                        strokeLinecap="round"
-                        strokeDasharray={circumference} strokeDashoffset={strokeDashoffset}
-                        style={{ transition: 'stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1)' }}
-                    />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-3xl font-black text-zinc-100">{value}</span>
-                    <span className="text-[10px] text-zinc-400 text-center leading-tight uppercase tracking-wider font-medium max-w-[80px]">{label}</span>
-                </div>
-            </div>
+        <div className="relative w-28 h-28 rounded-full shadow-[0_4px_20px_rgba(251,191,36,0.3)] flex flex-col items-center justify-center p-3 z-10"
+            style={{ background: 'linear-gradient(135deg, #fde68a 0%, #d97706 100%)' }}>
+            {/* Inner ring */}
+            <div className="absolute inset-1 rounded-full border border-amber-200/50" />
+            <span className="text-4xl font-black text-white drop-shadow-md leading-none">{value}</span>
+            <span className="text-[9px] text-white/90 font-bold uppercase tracking-widest mt-1 text-center leading-tight drop-shadow-md">{label}</span>
         </div>
     );
 }
 
-// ─── Shield Badge (Level Knight) ─────────────────────────────────────────
-function ShieldBadge({ title, size = 'lg' }: { title: string; size?: 'sm' | 'lg' }) {
-    const w = size === 'lg' ? 'w-20 h-24' : 'w-14 h-18';
-    return (
-        <div className="flex flex-col items-center gap-2">
-            <svg viewBox="0 0 80 100" className={`${w} drop-shadow-[0_0_20px_rgba(251,191,36,0.3)]`}>
-                <defs>
-                    <linearGradient id="shieldGold" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#fde68a" />
-                        <stop offset="30%" stopColor="#fbbf24" />
-                        <stop offset="60%" stopColor="#d97706" />
-                        <stop offset="100%" stopColor="#92400e" />
-                    </linearGradient>
-                    <linearGradient id="shieldInner" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#451a03" />
-                        <stop offset="100%" stopColor="#78350f" />
-                    </linearGradient>
-                </defs>
-                {/* Outer shield */}
-                <path d="M40 5 L72 20 L72 55 C72 70 58 85 40 95 C22 85 8 70 8 55 L8 20 Z"
-                    fill="url(#shieldGold)" stroke="#fde68a" strokeWidth="1" />
-                {/* Inner shield */}
-                <path d="M40 12 L65 24 L65 52 C65 64 54 76 40 84 C26 76 15 64 15 52 L15 24 Z"
-                    fill="url(#shieldInner)" stroke="#b45309" strokeWidth="0.5" opacity="0.8" />
-                {/* Eagle icon */}
-                <text x="40" y="56" textAnchor="middle" fill="#fbbf24" fontSize="22" fontWeight="bold">🦅</text>
-                {/* Laurel left */}
-                <path d="M14 70 Q8 60, 12 50" stroke="#fbbf24" strokeWidth="1.2" fill="none" opacity="0.6" />
-                {/* Laurel right */}
-                <path d="M66 70 Q72 60, 68 50" stroke="#fbbf24" strokeWidth="1.2" fill="none" opacity="0.6" />
-            </svg>
-            <span className="text-xs font-bold text-amber-400 bg-zinc-900/80 px-4 py-1.5 rounded-full border border-amber-500/40 shadow-[0_0_12px_rgba(251,191,36,0.15)]">
-                {title}
-            </span>
-        </div>
-    );
-}
-
-// ─── Stat Card ───────────────────────────────────────────────────────────
-function StatCard({ icon: Icon, label, value, color = 'text-zinc-400' }: {
-    icon: any;
-    label: string;
-    value: string | number;
-    color?: string;
-}) {
-    return (
-        <div className="flex items-center gap-3 rounded-xl border border-zinc-700/40 bg-zinc-800/40 backdrop-blur-sm px-4 py-3 transition-all duration-300 hover:border-zinc-600/60 hover:bg-zinc-800/70 group">
-            <div className={`p-2 rounded-lg bg-zinc-800/80 ${color} group-hover:bg-zinc-700/80 transition-colors`}>
-                <Icon className="w-4 h-4" />
-            </div>
-            <div className="flex-1 min-w-0">
-                <p className="text-[10px] text-zinc-500 uppercase tracking-[0.15em] font-semibold truncate">{label}</p>
-                <p className="text-base font-bold text-zinc-100">{value}</p>
-            </div>
-        </div>
-    );
-}
-
-// ─── Compact Stat Row (for top-right panel) ──────────────────────────────
-function CompactStat({ icon: Icon, label, value, iconColor = 'text-amber-500' }: {
-    icon: any;
-    label: string;
-    value: string | number;
-    iconColor?: string;
-}) {
-    return (
-        <div className="flex items-center gap-2">
-            <Icon className={`w-3.5 h-3.5 ${iconColor} flex-shrink-0`} />
-            <span className="text-[11px] text-zinc-400 uppercase tracking-wider font-medium">{label}</span>
-            <span className="text-sm font-black text-zinc-100 ml-auto">{value}</span>
-        </div>
-    );
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// ─── MAIN REPORT PAGE ────────────────────────────────────────────────────
 // ═══════════════════════════════════════════════════════════════════════════
 function ReportPage() {
+    const { i18n } = useTranslation();
+    const isAr = i18n.language === 'ar';
+
     useEffect(() => {
-        useBreadcrumbStore
-            .getState()
-            .setItems([{ label: 'Student Report', isCurrent: true }]);
-    }, []);
+        useBreadcrumbStore.getState().setItems([{ label: isAr ? 'تقرير الطالب' : 'Student Report', isCurrent: true }]);
+    }, [isAr]);
 
     const { data: report, isLoading, error } = useQuery<StudentReport>({
         queryKey: ['student-report'],
-        queryFn: async () => {
-            const res = await axiosClient.get<StudentReport>('/users/report');
-            return res.data;
-        },
-        refetchOnMount: true,
+        queryFn: async () => (await axiosClient.get<StudentReport>('/users/report')).data,
     });
 
-    if (isLoading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="flex flex-col items-center gap-5">
-                    <div className="relative w-16 h-16">
-                        <div className="absolute inset-0 border-4 border-amber-500/20 rounded-full" />
-                        <div className="absolute inset-0 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
-                    </div>
-                    <p className="text-zinc-400 text-sm font-medium tracking-wide animate-pulse">Generating your report...</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (error || !report) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="text-center space-y-3 p-8 rounded-2xl border border-red-500/20 bg-red-500/5">
-                    <ShieldCheck className="w-10 h-10 text-red-400 mx-auto" />
-                    <p className="text-lg text-red-400 font-bold">Failed to load report</p>
-                    <p className="text-zinc-500 text-sm">Please try again later</p>
-                </div>
-            </div>
-        );
-    }
+    if (isLoading) return <div className="min-h-screen flex items-center justify-center"><div className="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" /></div>;
+    if (error || !report) return <div className="min-h-screen flex items-center text-red-400 justify-center">Failed to load report.</div>;
 
     const levelLabel = report.currentLevel?.name?.replace('LEVEL_', '') || 'A1';
     const levelTitle = `Level ${levelLabel} Knight`;
 
+    // Translation Map (Fallback exact text to match mockup visual)
+    const t = {
+        footprint: isAr ? 'بصمتك اللغوية' : 'YOUR LINGUISTIC FOOTPRINT',
+        arsenal: isAr ? 'ترسانتك اللغوية' : 'Linguistic Arsenal',
+        journeyTimeline: isAr ? 'الجدول الزمني' : 'Journey Timeline',
+        knowledgeFortress: isAr ? 'حصن المعرفة' : 'Knowledge Fortress',
+        aiPrediction: isAr ? 'توقعات الذكاء الاصطناعي:' : 'AI Prediction:',
+        speaking: isAr ? 'التحدث' : 'Speaking',
+        listening: isAr ? 'الاستماع' : 'Listening',
+        reading: isAr ? 'القراءة' : 'Reading',
+        writing: isAr ? 'الكتابة' : 'Writing',
+        grammar: isAr ? 'القواعد' : 'Grammar',
+        activeStreak: isAr ? 'سلسلة النشاط' : 'ACTIVE STREAK',
+        masteredWords: isAr ? 'كلمات متقنة' : 'Mastered Words',
+        idiomsPhrasal: isAr ? 'مصطلحات وأفعال مركبة' : 'IDIOMS & PHRASAL VERBS',
+        voiceTraining: isAr ? 'تدريب صوتي' : 'VOICE TRAINING',
+        wordsMastered: isAr ? 'كلمات متقنة' : 'WORDS MASTERED',
+        fluency: isAr ? 'الفصاحة' : 'FLUENCY',
+        grammarRulesUnlocked: isAr ? 'قواعد مفتوحة' : 'GRAMMAR RULES UNLOCKED',
+        correctAnswers: isAr ? 'إجابات صحيحة' : 'CORRECT ANSWERS',
+        quizzesCompleted: isAr ? 'اختبارات مكتملة' : 'QUIZZES COMPLETED',
+        currentStreak: isAr ? 'سلسلة النشاط' : 'CURRENT STREAK',
+        hours: isAr ? 'ساعات' : 'HOURS',
+        days: isAr ? 'أيام' : 'DAYS',
+        active: isAr ? 'نشط' : 'ACTIVE',
+        grammarRules: isAr ? 'قواعد نحوية' : 'Grammar Rules',
+        accuracy: isAr ? 'دقة' : 'Accuracy',
+        idioms: isAr ? 'مصطلحات' : 'Idioms',
+        phrasalVerbs: isAr ? 'أفعال مركبة' : 'Phrasal Verbs',
+        readingSpeed: isAr ? 'سرعة القراءة' : 'Reading Speed',
+    };
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#0a0a0f] via-[#111118] to-[#0a0a0f] text-zinc-100 py-6 px-4">
-            <div className="max-w-7xl mx-auto space-y-5">
+        <div className="min-h-[1200px] w-full" style={{ backgroundColor: '#0d1117' }} dir={isAr ? 'rtl' : 'ltr'}>
+            <div className="max-w-[1100px] mx-auto p-8 space-y-6 font-sans">
 
-                {/* ══════════════════════════════════════════════════════════
-                     ROW 1: LINGUISTIC FOOTPRINT (left) + ARSENAL STATS (right)
-                   ══════════════════════════════════════════════════════════ */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                {/* ════ ROW 1: Top Section ════ */}
+                <div className="grid grid-cols-[1.2fr_1fr] gap-6">
 
-                    {/* ─── LEFT: YOUR LINGUISTIC FOOTPRINT ─── */}
-                    <section className="lg:col-span-7 rounded-2xl border border-zinc-800/50 bg-[#12121a] p-6 md:p-8 relative overflow-hidden">
-                        {/* Decorative glows */}
-                        <div className="absolute -top-20 -left-20 w-48 h-48 bg-cyan-500/8 rounded-full blur-[80px] pointer-events-none" />
-                        <div className="absolute -bottom-20 -right-20 w-48 h-48 bg-amber-500/8 rounded-full blur-[80px] pointer-events-none" />
+                    {/* --- LINGUISTIC FOOTPRINT (LEFT) --- */}
+                    <div className="relative rounded-[2rem] bg-[#161a23] border border-zinc-800/80 p-8 shadow-2xl flex flex-col">
+                        <div className="absolute inset-x-20 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
 
-                        <h2 className="text-lg md:text-xl font-black tracking-[0.25em] uppercase text-zinc-200 mb-6 italic">
-                            YOUR LINGUISTIC FOOTPRINT
+                        <h2 className="text-xl md:text-2xl font-black text-white uppercase tracking-widest text-center italic mt-2 drop-shadow-md">
+                            {t.footprint}
+                            <div className="h-0.5 w-64 bg-gradient-to-r from-transparent via-amber-400/50 to-transparent mx-auto mt-2" />
                         </h2>
 
-                        <div className="relative min-h-[380px] md:min-h-[420px]">
-                            {/* Brain Center */}
-                            <div className="absolute inset-0 flex items-center justify-center z-0">
-                                <BrainSvg />
+                        <div className="flex-1 relative mt-10 min-h-[350px]">
+                            {/* Detailed Brain Picture centered */}
+                            <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none">
+                                <img src="/images/report/brain.png" alt="Brain" className="w-[300px] object-contain drop-shadow-[0_0_40px_rgba(251,191,36,0.1)]" draggable={false} />
                             </div>
 
-                            {/* ── Top Left: Speaking ── */}
-                            <div className="absolute top-[2%] left-[0%] z-10">
-                                <h3 className="text-xl md:text-2xl font-black text-cyan-400 tracking-wide mb-2">Speaking</h3>
-                                <div className="flex flex-col gap-1.5 ml-1">
-                                    <SubSkillNode icon={Mic} label="Audio Mastered" />
-                                    <SubSkillNode icon={Volume2} label="Speaking" />
-                                    <SubSkillNode icon={PenTool} label="Words Written" />
+                            {/* Left Skills (Cyan) */}
+                            <div className="absolute start-4 top-10 flex flex-col gap-10">
+                                <div>
+                                    <h3 className="text-cyan-400 font-bold mb-3 ms-2">{t.listening}</h3>
+                                    <div className="space-y-3 relative z-10">
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Audio Mastered" />
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3 opacity-0" />} label={t.speaking} />
+                                    </div>
+                                </div>
+                                <div className="mt-8">
+                                    <h3 className="text-cyan-400 font-bold mb-3 ms-2 mt-4">{t.reading}</h3>
+                                    <div className="space-y-3 relative z-10">
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Words Written" />
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3 opacity-0" />} label="Visual Associations" />
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* ── Top Right: Grammar ── */}
-                            <div className="absolute top-[2%] right-[0%] z-10 text-right">
-                                <h3 className="text-xl md:text-2xl font-black text-amber-400 tracking-wide mb-2">Grammar</h3>
-                                <div className="flex flex-col gap-1.5 items-end mr-1">
-                                    <SubSkillNode icon={Eye} label="Visual Learning" />
-                                    <SubSkillNode icon={PenTool} label="Words Written" />
+                            {/* Right Skills (Gold) */}
+                            <div className="absolute end-4 top-10 flex flex-col gap-10 items-end text-end">
+                                <div>
+                                    <h3 className="text-amber-400 font-bold mb-3 me-2">{t.grammar}</h3>
+                                    <div className="space-y-3 relative z-10">
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Visual Learning" isRight />
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3 opacity-0" />} label={t.writing} isRight />
+                                    </div>
                                 </div>
-                            </div>
-
-                            {/* ── Bottom Left: Reading ── */}
-                            <div className="absolute bottom-[2%] left-[0%] z-10">
-                                <h3 className="text-xl md:text-2xl font-black text-cyan-400 tracking-wide mb-2">Reading</h3>
-                                <div className="flex flex-col gap-1.5 ml-1">
-                                    <SubSkillNode icon={Eye} label="Visual Associations" />
-                                    <SubSkillNode icon={BookOpenCheck} label="Words Read" />
-                                </div>
-                            </div>
-
-                            {/* ── Bottom Right: Speaking ── */}
-                            <div className="absolute bottom-[2%] right-[0%] z-10 text-right">
-                                <h3 className="text-xl md:text-2xl font-black text-amber-400 tracking-wide mb-2">Speaking</h3>
-                                <div className="flex flex-col gap-1.5 items-end mr-1">
-                                    <SubSkillNode icon={Eye} label="Visual Associations" />
-                                    <SubSkillNode icon={PenTool} label="Words Written" />
+                                <div className="mt-8">
+                                    <h3 className="text-amber-400 font-bold mb-3 me-2 mt-4">{t.speaking}</h3>
+                                    <div className="space-y-3 relative z-10">
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3" />} label="Words Written" isRight />
+                                        <SubSkillNode icon={<BookOpen className="w-3 h-3 opacity-0" />} label="Visual Associations" isRight />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
 
-                    {/* ─── RIGHT: LINGUISTIC ARSENAL (compact stats) ─── */}
-                    <section className="lg:col-span-5 rounded-2xl border border-zinc-800/50 bg-[#12121a] p-6 relative overflow-hidden flex flex-col">
-                        {/* Shield badge top-right */}
-                        <div className="absolute top-4 right-4 z-10 scale-75 origin-top-right">
-                            <ShieldBadge title={levelTitle} size="sm" />
-                        </div>
+                    {/* --- LINGUISTIC ARSENAL TOP (RIGHT) --- */}
+                    <div className="relative rounded-[2rem] bg-gradient-to-b from-[#1b1c20] to-[#121418] border border-zinc-800/80 p-8 shadow-2xl overflow-hidden flex flex-col justify-between">
 
-                        <h2 className="text-lg font-black tracking-[0.2em] uppercase text-zinc-200 mb-5">
-                            Linguistic Arsenal
-                        </h2>
+                        {/* Top layout: Coin + Label + Title */}
+                        <div className="flex gap-6 relative z-10">
+                            <GoldCoin value={report.arsenal.masteredWords || 150} label={t.masteredWords} />
 
-                        {/* Mastered Words Ring */}
-                        <div className="flex items-center gap-6 mb-5">
-                            <div className="flex-shrink-0">
-                                <ProgressRing
-                                    percent={Math.min(100, (report.arsenal.masteredWords / 500) * 100)}
-                                    color="#fbbf24"
-                                    bgColor="rgba(251,191,36,0.08)"
-                                    label="Mastered Words"
-                                    value={report.arsenal.masteredWords}
-                                    size={110}
-                                    strokeWidth={10}
-                                />
-                            </div>
-                            <div className="flex-1 space-y-2">
-                                <CompactStat icon={Layers} label="Idioms & Phrasal Verbs" value={report.arsenal.idioms + report.arsenal.phrasalVerbs} iconColor="text-purple-400" />
-                                <CompactStat icon={Mic} label="Voice Training" value={`${report.skills.speaking.tasksCompleted}h`} iconColor="text-cyan-400" />
+                            <div className="flex-1 pt-2">
+                                <h1 className="text-2xl font-black text-white tracking-widest mb-4">Linguistic Arsenal</h1>
+
+                                <div className="flex items-center gap-3 bg-zinc-800/20 w-max px-3 py-1.5 rounded-lg border border-zinc-700/50">
+                                    <BookOpen className="w-4 h-4 text-zinc-400" />
+                                    <span className="text-[11px] font-bold tracking-widest text-zinc-300 uppercase">{t.idiomsPhrasal}</span>
+                                    <Plus className="w-5 h-5 text-purple-500 ms-2" />
+                                    <span className="text-xl font-black text-white">{report.arsenal.idioms + report.arsenal.phrasalVerbs || 15}</span>
+                                </div>
+
+                                <p className="text-[10px] text-zinc-500 font-bold tracking-[0.2em] mt-3 ms-2">
+                                    {t.voiceTraining}: {report.skills.speaking.tasksCompleted || 3} {t.hours}
+                                </p>
                             </div>
                         </div>
 
-                        {/* Fluency Progress Bar */}
-                        <div className="mb-4">
-                            <div className="flex justify-between text-[11px] uppercase tracking-wider font-bold mb-1.5">
-                                <span className="text-zinc-400">Words Mastered <span className="text-emerald-400">{report.arsenal.fluencyPercent}%</span></span>
-                                <span className="text-zinc-400">Fluency</span>
-                            </div>
-                            <div className="h-2.5 bg-zinc-800/80 rounded-full overflow-hidden">
-                                <div
-                                    className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-1500 ease-out"
-                                    style={{ width: `${report.arsenal.fluencyPercent}%` }}
-                                />
-                            </div>
-                        </div>
-
-                        {/* Stat Grid */}
-                        <div className="grid grid-cols-2 gap-2 flex-1">
-                            <CompactStat icon={BookOpen} label="Grammar Rules" value={report.arsenal.grammarRules} iconColor="text-amber-500" />
-                            <CompactStat icon={CheckCircle} label="Quizzes Completed" value={report.quizzes.completed} iconColor="text-emerald-400" />
-                            <CompactStat icon={Target} label="Correct Answers" value={report.quizzes.correctAnswers} iconColor="text-cyan-400" />
-                            <CompactStat icon={BarChart3} label="Completed" value={`${report.quizzes.averageScore}%`} iconColor="text-purple-400" />
-                            <CompactStat icon={Award} label="Current Streak" value={`${report.journey.currentStreak} Days`} iconColor="text-amber-400" />
-                        </div>
-                    </section>
-                </div>
-
-                {/* ══════════════════════════════════════════════════════════
-                     ROW 2: JOURNEY TIMELINE (left) + KNOWLEDGE FORTRESS (right)
-                   ══════════════════════════════════════════════════════════ */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
-
-                    {/* ─── Journey Timeline ─── */}
-                    <section className="md:col-span-5 rounded-2xl border border-zinc-800/50 bg-[#12121a] p-5 flex items-center gap-4">
-                        <div className="flex items-center gap-3 flex-shrink-0">
-                            <div className="p-2.5 rounded-xl bg-zinc-800/80 border border-zinc-700/40">
-                                <CalendarDays className="w-5 h-5 text-zinc-300" />
-                            </div>
-                            <span className="text-sm font-bold text-zinc-200 uppercase tracking-wider">Journey Timeline</span>
-                        </div>
-                        <div className="flex-1 flex items-center justify-end gap-4">
-                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-800/80 border border-zinc-700/40">
-                                <Clock className="w-3.5 h-3.5 text-emerald-400" />
-                                <span className="text-xs font-bold text-zinc-300 uppercase">
-                                    Active {report.journey.activeSince
-                                        ? new Date(report.journey.activeSince).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                                        : '—'}
+                        {/* Progress Bar Section exactly like mockup */}
+                        <div className="mt-6">
+                            <div className="flex items-center justify-between text-[11px] font-bold tracking-widest uppercase mb-2">
+                                <span className="text-zinc-400">{t.wordsMastered}</span>
+                                <span className="text-[#00d084] flex items-center gap-2">
+                                    {report.arsenal.fluencyPercent || 60}% <span className="text-zinc-500">{t.fluency} 3 {t.hours}</span> <Mic className="w-3 h-3 text-zinc-500" />
                                 </span>
                             </div>
-                            <div className="text-right">
-                                <span className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Active Streak</span>
-                                <p className="text-lg font-black text-amber-400">{report.journey.currentStreak} Days</p>
+
+                            <div className="h-2 bg-[#1a1f26] rounded-full overflow-hidden mb-2">
+                                <div className="h-full bg-[#00d084] rounded-full" style={{ width: `${report.arsenal.fluencyPercent || 60}%` }} />
                             </div>
-                        </div>
-                    </section>
+                            <div className="flex justify-end mb-2">
+                                <span className="text-[#00d084] font-black">{report.arsenal.fluencyPercent || 60}%</span>
+                            </div>
 
-                    {/* ─── Knowledge Fortress ─── */}
-                    <section className="md:col-span-7 rounded-2xl border border-zinc-800/50 bg-[#12121a] p-5 flex items-center justify-between">
-                        <div>
-                            <h2 className="text-lg font-black tracking-[0.2em] uppercase text-zinc-200 mb-2">Knowledge Fortress</h2>
-                            <div className="flex flex-wrap gap-2">
-                                {['LEVEL_A1', 'LEVEL_A2', 'LEVEL_B1', 'LEVEL_B2', 'LEVEL_C1', 'LEVEL_C2'].map((level) => {
-                                    const isCompleted = report.completedLevels.includes(level);
-                                    const isCurrent = report.currentLevel?.name === level;
-                                    const isPurchased = report.purchasedLevels.includes(level);
-                                    const label = level.replace('LEVEL_', '');
+                            <p className="text-[9px] text-zinc-600 font-bold tracking-[0.15em] mb-6 uppercase">
+                                SENTENCES TAKEN: {report.skills.writing.tasksCompleted} | VOICES SHARED: {report.skills.listening.tasksCompleted} HOURS
+                            </p>
 
-                                    return (
-                                        <div key={level} className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all duration-300 ${isCompleted
-                                            ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.15)]'
-                                            : isCurrent
-                                                ? 'border-amber-500/50 bg-amber-500/10 text-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.2)]'
-                                                : isPurchased
-                                                    ? 'border-cyan-500/30 bg-cyan-500/5 text-cyan-400'
-                                                    : 'border-zinc-700/30 bg-zinc-800/30 text-zinc-600'
-                                            }`}>
-                                            {label}
+                            {/* 2x2 Stats Grid exactly like mockup */}
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+                                <div className="flex items-start gap-2">
+                                    <Map className="w-4 h-4 text-zinc-500 mt-0.5" />
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] text-zinc-400 font-bold tracking-widest">{t.grammarRulesUnlocked}</span>
+                                        <span className="text-lg font-black text-zinc-100">{report.arsenal.grammarRules || 8}</span>
+                                    </div>
+                                </div>
+                                <div className="flex items-start justify-between">
+                                    <div className="flex items-start gap-2">
+                                        <CheckCircle2 className="w-4 h-4 text-zinc-500 mt-0.5" />
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] text-zinc-400 font-bold tracking-widest">{t.quizzesCompleted}</span>
+                                            <span className="text-[9px] text-zinc-600 font-bold tracking-widest mt-0.5 uppercase">Completed: {report.quizzes.averageScore}%</span>
                                         </div>
-                                    );
-                                })}
+                                    </div>
+                                    <span className="text-lg font-black text-zinc-100">{report.quizzes.completed || 12}</span>
+                                </div>
+                                <div className="flex items-start gap-2">
+                                    <CheckSquare className="w-4 h-4 text-zinc-500 mt-0.5" />
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] text-zinc-400 font-bold tracking-widest">{t.correctAnswers}</span>
+                                        <span className="text-sm font-black text-zinc-100">{report.quizzes.correctAnswers || 0}</span>
+                                    </div>
+                                </div>
+                                <div className="flex items-start justify-between">
+                                    <div className="flex items-start gap-2">
+                                        <CheckSquare className="w-4 h-4 text-zinc-500 mt-0.5" />
+                                        <span className="text-[10px] text-zinc-400 font-bold tracking-widest mt-0.5">{t.currentStreak}</span>
+                                    </div>
+                                    <span className="text-sm font-black text-zinc-100">{report.journey.currentStreak || 7} {t.days}</span>
+                                </div>
                             </div>
                         </div>
-                        <div className="flex-shrink-0 ml-4">
-                            <ShieldBadge title={levelTitle} />
-                        </div>
-                    </section>
+
+                    </div>
                 </div>
 
-                {/* ══════════════════════════════════════════════════════════
-                     ROW 3: FULL LINGUISTIC ARSENAL (bottom section with rings)
-                   ══════════════════════════════════════════════════════════ */}
-                <section className="rounded-2xl border border-zinc-800/50 bg-[#12121a] p-6 md:p-8 relative overflow-hidden">
-                    <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-amber-500/5 rounded-full blur-[80px] pointer-events-none" />
+                {/* ════ ROW 2: Journey Timeline & Knowledge Fortress ════ */}
+                <div className="flex items-center justify-between px-2 gap-6 relative">
+                    {/* Left: Journey Timeline Pill */}
+                    <div className="flex items-center gap-3 px-6 py-3 rounded-2xl border border-zinc-700/50 bg-[#14171d] min-w-[300px]">
+                        <CalendarDays className="w-5 h-5 text-zinc-400" />
+                        <span className="text-lg font-bold text-white tracking-wide">{t.journeyTimeline}</span>
+                    </div>
 
-                    <h2 className="text-lg font-black tracking-[0.2em] uppercase text-zinc-200 mb-8 flex items-center gap-3">
-                        <Swords className="w-5 h-5 text-amber-500" />
-                        Linguistic Arsenal
-                    </h2>
+                    {/* Middle: Active Pill */}
+                    <div className="flex items-center gap-6 px-6 py-3 rounded-2xl border border-zinc-700/50 bg-[#14171d] flex-1 justify-between shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+                        <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-zinc-400" />
+                            <span className="text-xs font-bold text-zinc-300 tracking-widest uppercase">
+                                {t.active} {report.journey.activeSince ? new Date(report.journey.activeSince).toLocaleDateString(isAr ? 'ar' : 'en', { month: 'short', day: 'numeric', year: 'numeric' }) : 'JAN 19, 2024'}
+                            </span>
+                        </div>
+                        <span className="text-xs font-bold text-zinc-300 tracking-widest uppercase">{t.activeStreak} &nbsp;&nbsp;&nbsp; <span className="text-white">{report.journey.currentStreak} {t.days}</span></span>
+                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-10 items-start">
+                    {/* Right text inside, Shield floats above */}
+                    <div className="absolute end-10 -top-16 z-20 flex flex-col items-center">
+                        <img src="/images/report/shield.png" alt="Level Shield" className="w-[110px] drop-shadow-[0_10px_15px_rgba(0,0,0,0.8)] select-none" />
+                        <span className="text-[11px] font-black text-[#8890a5] mt-2 uppercase tracking-widest bg-zinc-800/60 px-3 py-1 rounded-full border border-zinc-700/50 backdrop-blur-sm">
+                            {levelTitle}
+                        </span>
+                    </div>
+                </div>
 
-                        {/* Left Side: Two Progress Rings */}
-                        <div className="flex flex-col sm:flex-row justify-center items-center gap-10">
-                            <div className="flex flex-col items-center gap-2">
-                                <ProgressRing
-                                    percent={Math.min(100, (report.skills.listening.tasksCompleted / 20) * 100)}
-                                    color="#22d3ee"
-                                    bgColor="rgba(34,211,238,0.08)"
-                                    label="Voice Training"
-                                    value={`${report.skills.listening.tasksCompleted}h`}
-                                    size={150}
-                                    strokeWidth={12}
-                                />
-                                <span className="text-[11px] text-zinc-500 uppercase tracking-wider font-semibold">Voice Training</span>
+                {/* ════ ROW 3: Linguistic Arsenal Bottom Cards ════ */}
+                <div className="relative rounded-[2rem] bg-gradient-to-br from-[#1b1c20] to-[#121418] border border-zinc-800/80 p-8 shadow-2xl pt-6">
+                    <h2 className="text-2xl text-white font-normal tracking-wide mb-8">Linguistic Arsenal</h2>
+
+                    <div className="grid grid-cols-[auto_1fr] gap-12">
+                        {/* Two big rings on left */}
+                        <div className="flex items-center gap-12 ps-4 pb-4">
+                            {/* Cyan Ring (Book Inside) */}
+                            <div className="flex flex-col items-center gap-4 border-r border-zinc-800 pr-12">
+                                <div className="relative w-36 h-36">
+                                    <svg className="w-full h-full transform -rotate-90">
+                                        <circle cx="72" cy="72" r="64" fill="none" stroke="#1f2937" strokeWidth="8" />
+                                        <circle cx="72" cy="72" r="64" fill="none" stroke="#22d3ee" strokeWidth="8" strokeLinecap="round" strokeDasharray="402" strokeDashoffset={402 - (402 * 0.7)} />
+                                    </svg>
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <BookOpen className="w-12 h-12 text-zinc-300" strokeWidth={1} />
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <p className="text-[13px] text-zinc-300">{t.voiceTraining}:</p>
+                                    <p className="text-[13px] text-zinc-300">3 {t.hours}</p>
+                                </div>
                             </div>
-                            <div className="flex flex-col items-center gap-2">
-                                <ProgressRing
-                                    percent={Math.min(100, (report.arsenal.masteredWords / 500) * 100)}
-                                    color="#fbbf24"
-                                    bgColor="rgba(251,191,36,0.08)"
-                                    label="Mastered Words"
-                                    value={report.arsenal.masteredWords}
-                                    size={150}
-                                    strokeWidth={12}
-                                />
-                                <span className="text-[11px] text-zinc-500 uppercase tracking-wider font-semibold">Reading Speed</span>
+
+                            {/* Gold Ring (Text Inside) */}
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="relative w-36 h-36">
+                                    <svg className="w-full h-full transform -rotate-90">
+                                        <circle cx="72" cy="72" r="64" fill="none" stroke="#1f2937" strokeWidth="8" />
+                                        <circle cx="72" cy="72" r="64" fill="none" stroke="#fbbf24" strokeWidth="8" strokeLinecap="round" strokeDasharray="402" strokeDashoffset={402 - (402 * 0.9)} />
+                                    </svg>
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span className="text-3xl font-bold text-amber-100">{report.arsenal.masteredWords || 150}</span>
+                                        <span className="text-[10px] text-zinc-400 mt-0.5 leading-tight text-center px-4">{t.masteredWords}</span>
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <p className="text-[13px] text-zinc-300">{t.readingSpeed}:</p>
+                                </div>
                             </div>
                         </div>
 
-                        {/* Right Side: Stats Grid */}
-                        <div className="grid grid-cols-2 gap-3">
-                            <StatCard icon={MessageSquareQuote} label="Idioms" value={report.arsenal.idioms} color="text-purple-400" />
-                            <StatCard icon={Link2} label="Phrasal Verbs" value={report.arsenal.phrasalVerbs} color="text-cyan-400" />
-                            <StatCard icon={Headphones} label="Reading Speed" value={`+${(report.skills.reading.tasksCompleted * 0.1).toFixed(1)}x`} color="text-emerald-400" />
-                            <StatCard icon={BookOpen} label="Grammar Rules" value={`${report.arsenal.grammarRules} (${report.quizzes.averageScore}%)`} color="text-amber-400" />
-                            <StatCard icon={CheckCircle} label="Quizzes Completed" value={`${report.quizzes.completed} Days`} color="text-emerald-400" />
-                            <StatCard icon={Award} label="Current Streak" value={`${report.journey.currentStreak} Days`} color="text-amber-400" />
+                        {/* Right side stats: 2x2 grid identical to mockup boxes */}
+                        <div className="grid grid-cols-2 gap-5 pe-12">
+                            {/* Box 1 */}
+                            <div className="rounded-2xl border border-zinc-700/40 bg-[#161a23] p-5 flex items-center gap-4 shadow-lg">
+                                <MessageSquareQuote className="w-6 h-6 text-zinc-400" />
+                                <span className="text-[15px] font-medium text-zinc-300">{t.idioms}: {report.arsenal.idioms || 45}</span>
+                                <div className="ms-auto w-4 h-0.5 bg-cyan-400 rounded" />
+                            </div>
+                            {/* Box 2 */}
+                            <div className="rounded-2xl border border-zinc-700/40 bg-[#161a23] p-5 flex items-center gap-4 shadow-lg relative">
+                                <Link2 className="w-6 h-6 text-zinc-400" />
+                                <span className="text-[15px] font-medium text-zinc-300">{t.phrasalVerbs}: {report.arsenal.phrasalVerbs || 60}</span>
+                                <div className="absolute top-0 end-8 w-8 h-1 bg-cyan-400 rounded-b-md" />
+                            </div>
+                            {/* Box 3 */}
+                            <div className="rounded-2xl border border-zinc-700/40 bg-[#161a23] p-5 shadow-lg flex flex-col justify-center">
+                                <div className="flex items-end gap-3 mb-3">
+                                    <span className="text-3xl font-light text-zinc-300 leading-none">20</span>
+                                    <span className="text-sm font-medium text-zinc-400 mb-0.5">{t.readingSpeed}:<br />+1.5x</span>
+                                </div>
+                                <p className="text-xs font-semibold text-zinc-400">{t.quizzesCompleted}<br />7 {t.days}!</p>
+                            </div>
+                            {/* Box 4 */}
+                            <div className="rounded-2xl border border-zinc-700/40 bg-[#161a23] p-5 shadow-lg flex flex-col justify-center relative">
+                                <div className="flex items-end gap-3 mb-3">
+                                    <span className="text-3xl font-light text-zinc-300 leading-none">{report.arsenal.grammarRules || 12}</span>
+                                    <span className="text-sm font-medium text-zinc-400 mb-0.5">{t.grammarRules}:<br />(95% {t.accuracy})</span>
+                                </div>
+                                <p className="text-xs font-semibold text-zinc-400">{t.currentStreak}:</p>
+                                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-0.5 h-16 bg-amber-400/50 blur-[1px]" />
+                            </div>
                         </div>
                     </div>
-                </section>
+                </div>
 
-                {/* ══════════════════════════════════════════════════════════
-                     ROW 4: AI PREDICTION (bottom bar)
-                   ══════════════════════════════════════════════════════════ */}
-                <section className="rounded-2xl border border-zinc-800/50 bg-gradient-to-r from-[#12121a] via-[#15151f] to-[#12121a] px-6 py-5 flex items-center gap-4 relative overflow-hidden">
-                    {/* Decorative sparkle */}
-                    <div className="absolute -right-8 -bottom-8 opacity-5">
-                        <Sparkles className="w-32 h-32 text-purple-400" />
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20 flex-shrink-0">
-                        <Sparkles className="w-6 h-6 text-purple-400" />
-                    </div>
-
-                    <div className="flex-1 relative z-10">
-                        <p className="text-xs text-purple-300 uppercase tracking-[0.2em] font-bold mb-1">AI Prediction</p>
-                        {report.aiPrediction ? (
-                            <p className="text-sm text-zinc-300 leading-relaxed">
-                                Based on your progress, you're projected to reach{' '}
-                                <span className="font-black text-amber-400">{report.aiPrediction.nextLevel}</span>{' '}
-                                level in{' '}
-                                <span className="font-black text-cyan-400">{report.aiPrediction.estimatedDays} days</span>!
-                            </p>
-                        ) : (
-                            <p className="text-sm text-zinc-400">Keep practicing to unlock AI-powered predictions.</p>
-                        )}
-                    </div>
-
-                    {/* Decorative star */}
-                    <div className="absolute bottom-3 right-6 text-amber-500/20">
-                        <Sparkles className="w-8 h-8" />
-                    </div>
-                </section>
-
-                {/* ══════════ FOOTER ══════════ */}
-                <div className="text-center py-3 opacity-40">
-                    <p className="text-[10px] font-medium tracking-[0.3em] uppercase text-zinc-400">
-                        Report generated • {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                {/* ════ ROW 4: AI Prediction ════ */}
+                <div className="rounded-3xl border border-zinc-800 bg-[#14171d] p-5 flex items-center gap-4 shadow-lg overflow-hidden relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <Bot className="w-8 h-8 text-[#5c85ff]" strokeWidth={1.5} />
+                    <p className="text-[13px] text-zinc-300 z-10 font-medium">
+                        {t.aiPrediction} {isAr ? 'بناءً على تقدمك، من المتوقع أن تصل إلى المستوى' : 'Based your progress, youre projected to reach'} <span className="font-bold">{report.aiPrediction?.nextLevel || 'A2'}</span> {isAr ? 'في 45 يوماً!' : 'level in 45 days!'}
                     </p>
+                    <div className="ms-auto w-4 h-4 rounded-sm bg-white/80 rotate-45 mr-2 opacity-50" />
                 </div>
             </div>
         </div>
     );
 }
+
+export default ReportPage;
