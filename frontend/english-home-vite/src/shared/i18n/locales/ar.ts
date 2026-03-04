@@ -836,8 +836,8 @@ export default {
     },
     idioms: {
       definitionCard: {
-        title: 'ما هي التعابير الاصطلاحية؟',
-        description: 'فهم اللغة المجازية',
+        title: 'التعابير الاصطلاحية',
+        description: 'مفاهيم لغوية متقدمة',
       },
       examplesCard: {
         title: 'أمثلة',
@@ -851,8 +851,8 @@ export default {
     },
     phrasalVerbs: {
       definitionCard: {
-        title: 'ما هي الأفعال المركبة؟',
-        description: 'فهم الأفعال المركبة',
+        title: 'الأفعال المركبة',
+        description: 'مفهومها وطريقة صياغته',
       },
       examplesCard: {
         title: 'أمثلة',
