@@ -683,6 +683,32 @@
   },
   "Global": {
     "englishom": "Englishom",
+    "aiReview": {
+      "title": "AI Review"
+    },
+    "chatbot": {
+      "title": "Smart Assistant"
+    },
+    "support": {
+      "note": "Important Note: If you face any technical issues, please contact the support team via support@englishom.com.",
+      "title": "Technical Support"
+    },
+    "lessonCompleted": "Lesson Completed",
+    "lessonInstructions": {
+      "READ": "Read the text and learn new vocabulary",
+      "PICTURES": "Look at the pictures and learn new vocabulary",
+      "LISTEN": "Listen to the conversation and learn the definitions",
+      "WRITE": "Write the sentence you hear",
+      "SPEAK": "Listen, record your voice, and compare pronunciation",
+      "TODAY": "Learn today's scene and practice pronunciation",
+      "Q_A": "Read the question and listen to the answer",
+      "GRAMMAR": "Learn the grammar rule and apply it",
+      "PHRASAL_VERBS": "Learn phrasal verbs and their usage",
+      "IDIOMS": "Learn idioms and their meanings",
+      "DAILY_TEST": "Answer the questions to test what you learned today"
+    },
+    "nextDay": "Next Day {{day}}",
+    "dailySpeakingSuccess": "Well done! You have successfully completed today's practice",
     "loading": "Loading",
     "notFound": "Page Not Found",
     "forSixtyDays": "60 days",
@@ -714,6 +740,7 @@
     "light": "Light",
     "dark": "Dark",
     "comingSoon": "Coming Soon",
+    "payWithTamara": "Pay with Tamara",
     "comingSoonMessage": "We are working hard to bring you this lesson. Stay tuned!",
     "transcript": "Transcript",
     "second": "Second",

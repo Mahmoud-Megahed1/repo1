@@ -610,6 +610,32 @@ export type TranslationType = {
   };
   Global: {
     englishom: string;
+    aiReview: {
+      title: string;
+    };
+    chatbot: {
+      title: string;
+    };
+    support: {
+      note: string;
+      title: string;
+    };
+    lessonCompleted: string;
+    lessonInstructions: {
+      READ: string;
+      PICTURES: string;
+      LISTEN: string;
+      WRITE: string;
+      SPEAK: string;
+      TODAY: string;
+      Q_A: string;
+      GRAMMAR: string;
+      PHRASAL_VERBS: string;
+      IDIOMS: string;
+      DAILY_TEST: string;
+    };
+    nextDay: string;
+    dailySpeakingSuccess: string;
     chooseYourLevel: string;
     loading: string;
     notFound: string;
@@ -734,6 +760,7 @@ export type TranslationType = {
     show: string;
     hide: string;
     comingSoon: string;
+    payWithTamara: string;
     comingSoonMessage: string;
     transcript: string;
     tryAgain: string;
