@@ -38,53 +38,41 @@ export const Route = createFileRoute('/$locale/_globalLayout/_auth/app/report')(
     component: ReportPage,
 });
 
-// ─── Dashed Line Connector with small arrow tip ────────────────────────────
-// Left nodes: line goes from node's right edge → toward brain (arrow tip on RIGHT end)
-// Right nodes: line goes from node's left edge → toward brain (arrow tip on LEFT end)
+// ─── Solid Line Connector with glowing dot (from new mockup) ───────────────
+// Lines originate from the brain's surface and connect to the nodes.
+// We use a glowing circle (dot) at the brain side and a solid line to the node.
 
-function ConnectorLine({ direction }: { direction: 'to-right' | 'to-left' }) {
+function ConnectorLine({ direction, lineLength = 'w-16 lg:w-24', offsetTop = 'top-1/2' }: { direction: 'to-right' | 'to-left', lineLength?: string, offsetTop?: string }) {
     const isToRight = direction === 'to-right';
+    const color = isToRight ? '#22d3ee' : '#fcd34d'; // Cyan left, Amber right
+    const glowClass = isToRight ? 'drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]' : 'drop-shadow-[0_0_5px_rgba(252,211,77,0.8)]';
+
     return (
-        <svg
-            className="w-10 lg:w-16 h-4 shrink-0"
-            viewBox="0 0 64 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <line
-                x1={isToRight ? '0' : '64'}
-                y1="8"
-                x2={isToRight ? '54' : '10'}
-                y2="8"
-                stroke={isToRight ? '#22d3ee' : '#f59e0b'}
-                strokeWidth="1.5"
-                strokeDasharray="6,4"
-                opacity="0.55"
-            />
-            <polygon
-                points={isToRight ? '54,4 64,8 54,12' : '10,4 0,8 10,12'}
-                fill={isToRight ? '#22d3ee' : '#f59e0b'}
-                opacity="0.75"
-            />
-        </svg>
+        <div className={`absolute ${offsetTop} -translate-y-1/2 ${isToRight ? '-start-2 translate-x-[-100%]' : '-end-2 translate-x-[100%]'} ${lineLength} h-px flex items-center z-0`}>
+            {/* The Line */}
+            <div className="flex-1 h-[1.5px] opacity-60" style={{ backgroundColor: color }} />
+            {/* The Glowing Dot at the brain connection point */}
+            <div className={`w-1.5 h-1.5 rounded-full ${glowClass}`} style={{ backgroundColor: color }} />
+        </div>
     );
 }
 
 // ─── Skill Node (badge with icon + label) ──────────────────────────────────
-function SkillNode({ icon, label, side }: { icon: React.ReactNode; label: string; side: 'left' | 'right' }) {
+function SkillNode({ icon, label, side, lineLength, offsetTop }: { icon: React.ReactNode; label: string; side: 'left' | 'right', lineLength?: string, offsetTop?: string }) {
     const isLeft = side === 'left';
     return (
-        <div className={`flex items-center gap-0 ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
+        <div className="relative group hover:z-20 transition-all duration-300 hover:scale-105">
+            {/* The solid connector line positioned absolutely relative to this node */}
+            <ConnectorLine direction={isLeft ? 'to-left' : 'to-right'} lineLength={lineLength} offsetTop={offsetTop} />
+
             {/* The badge */}
-            <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg border text-xs backdrop-blur-md shadow-md whitespace-nowrap ${isLeft
-                ? 'border-cyan-500/30 bg-[#111a1f]/90 text-cyan-200/90'
-                : 'border-amber-500/30 bg-[#1a1710]/90 text-amber-200/90'
+            <div className={`relative flex items-center gap-2 px-3.5 py-1.5 rounded-lg border text-xs backdrop-blur-md shadow-md whitespace-nowrap z-10 ${isLeft
+                ? 'border-cyan-500/20 bg-[#111a1f]/80 text-cyan-200/90 hover:border-cyan-400/50 hover:bg-[#111a1f]/95'
+                : 'border-amber-500/20 bg-[#1a1710]/80 text-amber-200/90 hover:border-amber-400/50 hover:bg-[#1a1710]/95'
                 }`}>
                 {icon}
-                <span className="font-semibold tracking-wide">{label}</span>
+                <span className="font-medium tracking-wide">{label}</span>
             </div>
-            {/* The dashed connector line */}
-            <ConnectorLine direction={isLeft ? 'to-right' : 'to-left'} />
         </div>
     );
 }
@@ -167,75 +155,80 @@ function ReportPage() {
                         </h2>
 
                         {/* ═══ Brain Layout: Absolute Center Image ═══ */}
-                        <div className="relative flex items-center justify-between w-full mt-12 mb-4 h-[380px]">
+                        <div className="relative flex items-center justify-between w-full mt-12 mb-4 h-[420px]">
 
                             {/* ── LEFT COLUMN: Listening + Reading ── */}
-                            <div className="flex flex-col justify-between h-full relative z-10 w-[45%] lg:w-[40%]">
+                            <div className="flex flex-col justify-between h-full relative z-10 w-[42%] lg:w-[35%] py-6">
                                 {/* LISTENING group */}
                                 <div>
-                                    <h3 className="text-cyan-400 font-extrabold text-xl lg:text-3xl tracking-widest uppercase mb-6 drop-shadow-lg">
-                                        LISTENING
-                                    </h3>
-                                    <div className="flex flex-col gap-5">
-                                        <SkillNode icon={<FileText className="w-4 h-4" />} label="Audio Mastered" side="left" />
-                                        <div className="ms-4 lg:ms-8">
-                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Speaking" side="left" />
+                                    <div className="flex flex-col gap-6 items-end">
+                                        <div className="-me-8 relative">
+                                            <SkillNode icon={<FileText className="w-4 h-4" />} label="Audio Mastered" side="left" lineLength="w-12" offsetTop="top-[20%]" />
                                         </div>
-                                        <div className="ms-8 lg:ms-16">
-                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="left" />
+                                        <h3 className="text-cyan-400 font-bold text-xl lg:text-3xl tracking-wide w-full text-end -me-4 opacity-90 drop-shadow-md">
+                                            Speaking
+                                        </h3>
+                                        <div className="me-2 relative">
+                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Speaking" side="left" lineLength="w-8" offsetTop="top-1/2" />
+                                        </div>
+                                        <div className="-me-6 relative">
+                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="left" lineLength="w-10" offsetTop="top-[80%]" />
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* READING group */}
-                                <div>
-                                    <h3 className="text-cyan-400 font-extrabold text-xl lg:text-3xl tracking-widest uppercase mb-6 drop-shadow-lg">
-                                        READING
+                                <div className="mt-8 flex flex-col items-end gap-6">
+                                    <h3 className="text-cyan-400 font-bold text-xl lg:text-3xl tracking-wide w-full text-end -me-4 opacity-90 drop-shadow-md">
+                                        Reading
                                     </h3>
-                                    <div className="flex flex-col gap-5">
-                                        <div className="ms-4 lg:ms-8">
-                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="left" />
-                                        </div>
-                                        <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Read" side="left" />
+                                    <div className="-me-2 relative">
+                                        <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="left" lineLength="w-12" offsetTop="top-[20%]" />
+                                    </div>
+                                    <div className="me-4 relative">
+                                        <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Read" side="left" lineLength="w-8" offsetTop="top-[70%]" />
                                     </div>
                                 </div>
                             </div>
 
                             {/* ── CENTER COLUMN: Brain Image ── */}
-                            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
+                            <div className="absolute left-1/2 top-1/2 -translate-x-[48%] -translate-y-[45%] z-0">
                                 <img
                                     src="/images/report/brain.png"
                                     alt="Brain"
-                                    className="w-[200px] lg:w-[280px] object-contain drop-shadow-[0_0_40px_rgba(251,191,36,0.12)] select-none opacity-90 mix-blend-screen"
+                                    className="w-[200px] lg:w-[320px] object-contain drop-shadow-[0_0_50px_rgba(251,191,36,0.15)] select-none opacity-95 mix-blend-screen"
                                     draggable={false}
                                 />
                             </div>
 
-                            {/* ── RIGHT COLUMN: Writing + Speaking ── */}
-                            <div className="flex flex-col justify-between h-full relative z-10 w-[45%] lg:w-[40%]">
-                                {/* WRITING group */}
-                                <div className="flex flex-col items-end text-end">
-                                    <h3 className="text-amber-400 font-extrabold text-xl lg:text-3xl tracking-widest uppercase mb-6 drop-shadow-lg">
-                                        WRITING
+                            {/* ── RIGHT COLUMN: Grammar + Speaking ── */}
+                            <div className="flex flex-col justify-between h-full relative z-10 w-[42%] lg:w-[35%] py-6">
+                                {/* GRAMMAR group */}
+                                <div className="flex flex-col items-start gap-6">
+                                    <div className="-ms-6 relative">
+                                        <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Learning" side="right" lineLength="w-12" offsetTop="top-[30%]" />
+                                    </div>
+                                    <h3 className="text-amber-100/90 font-bold text-xl lg:text-3xl tracking-wide ms-4 drop-shadow-md">
+                                        Grammar
                                     </h3>
-                                    <div className="flex flex-col gap-5 items-end">
-                                        <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Learning" side="right" />
-                                        <div className="me-4 lg:me-8">
-                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" />
-                                        </div>
+                                    <div className="ms-2 relative">
+                                        <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" lineLength="w-10" offsetTop="top-1/2" />
                                     </div>
                                 </div>
 
                                 {/* SPEAKING group */}
-                                <div className="flex flex-col items-end text-end">
-                                    <h3 className="text-amber-400 font-extrabold text-xl lg:text-3xl tracking-widest uppercase mb-6 drop-shadow-lg">
-                                        SPEAKING
+                                <div className="mt-8 flex flex-col items-start gap-6">
+                                    <div className="ms-12 relative flex items-center justify-between w-[200px]">
+                                        <span className="text-zinc-500 text-[10px] tracking-widest uppercase flex items-center gap-1"><Mic className="w-3 h-3" /> Words Written</span>
+                                    </div>
+                                    <h3 className="text-amber-100/90 font-bold text-xl lg:text-3xl tracking-wide -ms-2 opacity-90 drop-shadow-md">
+                                        Speaking
                                     </h3>
-                                    <div className="flex flex-col gap-5 items-end">
-                                        <div className="me-4 lg:me-8">
-                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="right" />
-                                        </div>
-                                        <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" />
+                                    <div className="-ms-4 relative">
+                                        <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="right" lineLength="w-16" offsetTop="top-[30%]" />
+                                    </div>
+                                    <div className="ms-4 relative">
+                                        <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" lineLength="w-8" offsetTop="top-[80%]" />
                                     </div>
                                 </div>
                             </div>
