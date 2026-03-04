@@ -43,30 +43,28 @@ export const Route = createFileRoute('/$locale/_globalLayout/_auth/app/report')(
 // Right nodes: line goes from node's left edge → toward brain (arrow tip on LEFT end)
 
 function ConnectorLine({ direction }: { direction: 'to-right' | 'to-left' }) {
-    // to-right: line starts left, arrow points right (for LEFT side nodes → brain)
-    // to-left:  line starts right, arrow points left (for RIGHT side nodes → brain)
     const isToRight = direction === 'to-right';
     return (
         <svg
-            className="w-16 lg:w-24 h-4 shrink-0"
-            viewBox="0 0 96 16"
+            className="w-10 lg:w-16 h-4 shrink-0"
+            viewBox="0 0 64 16"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
         >
             <line
-                x1={isToRight ? '0' : '96'}
+                x1={isToRight ? '0' : '64'}
                 y1="8"
-                x2={isToRight ? '86' : '10'}
+                x2={isToRight ? '54' : '10'}
                 y2="8"
                 stroke={isToRight ? '#22d3ee' : '#f59e0b'}
                 strokeWidth="1.5"
                 strokeDasharray="6,4"
-                opacity="0.5"
+                opacity="0.55"
             />
             <polygon
-                points={isToRight ? '86,4 96,8 86,12' : '10,4 0,8 10,12'}
+                points={isToRight ? '54,4 64,8 54,12' : '10,4 0,8 10,12'}
                 fill={isToRight ? '#22d3ee' : '#f59e0b'}
-                opacity="0.7"
+                opacity="0.75"
             />
         </svg>
     );
@@ -79,8 +77,8 @@ function SkillNode({ icon, label, side }: { icon: React.ReactNode; label: string
         <div className={`flex items-center gap-0 ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
             {/* The badge */}
             <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg border text-xs backdrop-blur-md shadow-md whitespace-nowrap ${isLeft
-                    ? 'border-cyan-500/30 bg-[#111a1f]/90 text-cyan-200/90'
-                    : 'border-amber-500/30 bg-[#1a1710]/90 text-amber-200/90'
+                ? 'border-cyan-500/30 bg-[#111a1f]/90 text-cyan-200/90'
+                : 'border-amber-500/30 bg-[#1a1710]/90 text-amber-200/90'
                 }`}>
                 {icon}
                 <span className="font-semibold tracking-wide">{label}</span>
@@ -160,7 +158,7 @@ function ReportPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-6 lg:gap-8">
 
                     {/* ─── LINGUISTIC FOOTPRINT (LEFT) ─── */}
-                    <div className="relative rounded-[2rem] bg-[#161a23] border border-zinc-800/80 p-6 lg:p-8 shadow-2xl flex flex-col overflow-hidden">
+                    <div className="relative rounded-[2rem] bg-[#161a23] border border-zinc-800/80 p-6 lg:p-8 shadow-2xl flex flex-col">
                         <div className="absolute inset-x-20 top-0 h-[1px] bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
 
                         <h2 className="text-xl md:text-2xl font-black text-gray-200 uppercase tracking-widest italic text-center mt-2 drop-shadow-md">
@@ -169,7 +167,7 @@ function ReportPage() {
                         </h2>
 
                         {/* ═══ Brain Grid: 3 columns [Left Nodes | Brain Image | Right Nodes] ═══ */}
-                        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-0 mt-10 mb-4 min-h-[420px]">
+                        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-0 mt-10 mb-4 min-h-[400px]">
 
                             {/* ── LEFT COLUMN: Listening + Reading ── */}
                             <div className="flex flex-col justify-between h-full py-4">
@@ -198,11 +196,11 @@ function ReportPage() {
                             </div>
 
                             {/* ── CENTER COLUMN: Brain Image ── */}
-                            <div className="flex items-center justify-center px-2">
+                            <div className="flex items-center justify-center px-1">
                                 <img
                                     src="/images/report/brain.png"
                                     alt="Brain"
-                                    className="w-[200px] lg:w-[260px] object-contain drop-shadow-[0_0_30px_rgba(251,191,36,0.08)] select-none"
+                                    className="w-[160px] lg:w-[220px] object-contain drop-shadow-[0_0_30px_rgba(251,191,36,0.08)] select-none"
                                     draggable={false}
                                     style={{ background: 'transparent' }}
                                 />
@@ -360,7 +358,7 @@ function ReportPage() {
                             alt="Level Shield"
                             className="w-[120px] lg:w-[140px] drop-shadow-[0_10px_20px_rgba(0,0,0,0.7)] select-none"
                             draggable={false}
-                            style={{ background: 'transparent', mixBlendMode: 'normal' }}
+                            style={{ mixBlendMode: 'lighten' }}
                         />
                         <span className="bg-[#1a1e27] border border-zinc-700/60 rounded-lg px-4 py-1.5 text-[11px] font-black text-amber-400/90 uppercase tracking-widest mt-2 drop-shadow-md">
                             {levelTitle}
