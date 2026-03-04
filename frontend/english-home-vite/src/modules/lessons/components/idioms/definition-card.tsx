@@ -9,7 +9,7 @@ const DefinitionCard: FC<Props> = ({ definitionEn, definitionAr }) => {
   return (
     <CustomAccordion
       title={t('Global.idioms.definitionCard.title')}
-      description={t('Global.idioms.definitionCard.title')}
+      description={t('Global.idioms.definitionCard.description')}
       icon={BookOpen}
       variant="blue"
       className="flex flex-col gap-6 rtl:flex-col-reverse"
