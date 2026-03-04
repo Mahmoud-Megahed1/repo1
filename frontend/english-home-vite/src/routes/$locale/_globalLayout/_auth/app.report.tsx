@@ -166,67 +166,76 @@ function ReportPage() {
                             <div className="h-0.5 w-64 bg-gradient-to-r from-transparent via-amber-400/50 to-transparent mx-auto mt-2 opacity-80" />
                         </h2>
 
-                        {/* ═══ Brain Grid: 3 columns [Left Nodes | Brain Image | Right Nodes] ═══ */}
-                        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-0 mt-10 mb-4 min-h-[400px]">
+                        {/* ═══ Brain Layout: Absolute Center Image ═══ */}
+                        <div className="relative flex items-center justify-between w-full mt-12 mb-4 h-[380px]">
 
                             {/* ── LEFT COLUMN: Listening + Reading ── */}
-                            <div className="flex flex-col justify-between h-full py-4">
+                            <div className="flex flex-col justify-between h-full relative z-10 w-[45%] lg:w-[40%]">
                                 {/* LISTENING group */}
                                 <div>
-                                    <h3 className="text-cyan-400 font-extrabold text-xl lg:text-2xl tracking-widest uppercase mb-5 drop-shadow-lg">
+                                    <h3 className="text-cyan-400 font-extrabold text-xl lg:text-3xl tracking-widest uppercase mb-6 drop-shadow-lg">
                                         LISTENING
                                     </h3>
-                                    <div className="flex flex-col gap-4">
-                                        <SkillNode icon={<FileText className="w-3.5 h-3.5" />} label="Audio Mastered" side="left" />
-                                        <SkillNode icon={<Eye className="w-3.5 h-3.5" />} label="Speaking" side="left" />
-                                        <SkillNode icon={<BookOpen className="w-3.5 h-3.5" />} label="Words Written" side="left" />
+                                    <div className="flex flex-col gap-5">
+                                        <SkillNode icon={<FileText className="w-4 h-4" />} label="Audio Mastered" side="left" />
+                                        <div className="ms-4 lg:ms-8">
+                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Speaking" side="left" />
+                                        </div>
+                                        <div className="ms-8 lg:ms-16">
+                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="left" />
+                                        </div>
                                     </div>
                                 </div>
 
                                 {/* READING group */}
-                                <div className="mt-6">
-                                    <h3 className="text-cyan-400 font-extrabold text-xl lg:text-2xl tracking-widest uppercase mb-5 drop-shadow-lg">
+                                <div>
+                                    <h3 className="text-cyan-400 font-extrabold text-xl lg:text-3xl tracking-widest uppercase mb-6 drop-shadow-lg">
                                         READING
                                     </h3>
-                                    <div className="flex flex-col gap-4">
-                                        <SkillNode icon={<Eye className="w-3.5 h-3.5" />} label="Visual Associations" side="left" />
-                                        <SkillNode icon={<BookOpen className="w-3.5 h-3.5" />} label="Words Read" side="left" />
+                                    <div className="flex flex-col gap-5">
+                                        <div className="ms-4 lg:ms-8">
+                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="left" />
+                                        </div>
+                                        <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Read" side="left" />
                                     </div>
                                 </div>
                             </div>
 
                             {/* ── CENTER COLUMN: Brain Image ── */}
-                            <div className="flex items-center justify-center px-1">
+                            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
                                 <img
                                     src="/images/report/brain.png"
                                     alt="Brain"
-                                    className="w-[160px] lg:w-[220px] object-contain drop-shadow-[0_0_30px_rgba(251,191,36,0.08)] select-none"
+                                    className="w-[200px] lg:w-[280px] object-contain drop-shadow-[0_0_40px_rgba(251,191,36,0.12)] select-none opacity-90 mix-blend-screen"
                                     draggable={false}
-                                    style={{ background: 'transparent' }}
                                 />
                             </div>
 
                             {/* ── RIGHT COLUMN: Writing + Speaking ── */}
-                            <div className="flex flex-col justify-between h-full py-4">
+                            <div className="flex flex-col justify-between h-full relative z-10 w-[45%] lg:w-[40%]">
                                 {/* WRITING group */}
-                                <div>
-                                    <h3 className="text-amber-400 font-extrabold text-xl lg:text-2xl tracking-widest uppercase mb-5 drop-shadow-lg text-end">
+                                <div className="flex flex-col items-end text-end">
+                                    <h3 className="text-amber-400 font-extrabold text-xl lg:text-3xl tracking-widest uppercase mb-6 drop-shadow-lg">
                                         WRITING
                                     </h3>
-                                    <div className="flex flex-col gap-4 items-end">
-                                        <SkillNode icon={<Eye className="w-3.5 h-3.5" />} label="Visual Learning" side="right" />
-                                        <SkillNode icon={<BookOpen className="w-3.5 h-3.5" />} label="Words Written" side="right" />
+                                    <div className="flex flex-col gap-5 items-end">
+                                        <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Learning" side="right" />
+                                        <div className="me-4 lg:me-8">
+                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" />
+                                        </div>
                                     </div>
                                 </div>
 
                                 {/* SPEAKING group */}
-                                <div className="mt-6">
-                                    <h3 className="text-amber-400 font-extrabold text-xl lg:text-2xl tracking-widest uppercase mb-5 drop-shadow-lg text-end">
+                                <div className="flex flex-col items-end text-end">
+                                    <h3 className="text-amber-400 font-extrabold text-xl lg:text-3xl tracking-widest uppercase mb-6 drop-shadow-lg">
                                         SPEAKING
                                     </h3>
-                                    <div className="flex flex-col gap-4 items-end">
-                                        <SkillNode icon={<Eye className="w-3.5 h-3.5" />} label="Visual Associations" side="right" />
-                                        <SkillNode icon={<BookOpen className="w-3.5 h-3.5" />} label="Words Written" side="right" />
+                                    <div className="flex flex-col gap-5 items-end">
+                                        <div className="me-4 lg:me-8">
+                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="right" />
+                                        </div>
+                                        <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" />
                                     </div>
                                 </div>
                             </div>
@@ -356,9 +365,9 @@ function ReportPage() {
                         <img
                             src="/images/report/shield.png"
                             alt="Level Shield"
-                            className="w-[120px] lg:w-[140px] drop-shadow-[0_10px_20px_rgba(0,0,0,0.7)] select-none"
+                            className="w-[120px] lg:w-[150px] drop-shadow-[0_10px_20px_rgba(0,0,0,0.7)] select-none opacity-95 mix-blend-screen"
+                            style={{ filter: 'contrast(1.2)' }}
                             draggable={false}
-                            style={{ mixBlendMode: 'lighten' }}
                         />
                         <span className="bg-[#1a1e27] border border-zinc-700/60 rounded-lg px-4 py-1.5 text-[11px] font-black text-amber-400/90 uppercase tracking-widest mt-2 drop-shadow-md">
                             {levelTitle}
