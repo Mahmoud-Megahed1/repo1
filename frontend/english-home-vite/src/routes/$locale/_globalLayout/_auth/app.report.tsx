@@ -38,41 +38,65 @@ export const Route = createFileRoute('/$locale/_globalLayout/_auth/app/report')(
     component: ReportPage,
 });
 
-// ─── Solid Line Connector with glowing dot (from new mockup) ───────────────
+// ─── Solid Polyline Connector with glowing dot (from new mockup) ───────────
 // Lines originate from the brain's surface and connect to the nodes.
-// We use a glowing circle (dot) at the brain side and a solid line to the node.
+// We use a glowing circle (dot) at the brain side and a polyline to the node.
 
-function ConnectorLine({ direction, lineLength = 'w-16 lg:w-24', offsetTop = 'top-1/2' }: { direction: 'to-right' | 'to-left', lineLength?: string, offsetTop?: string }) {
-    const isToRight = direction === 'to-right';
-    const color = isToRight ? '#22d3ee' : '#fcd34d'; // Cyan left, Amber right
-    const glowClass = isToRight ? 'drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]' : 'drop-shadow-[0_0_5px_rgba(252,211,77,0.8)]';
+function ConnectorLine({ side, bendOffset = 0, width = 60 }: { side: 'left' | 'right', bendOffset?: number, width?: number }) {
+    const isLeft = side === 'left';
+    const color = isLeft ? '#22d3ee' : '#fbbf24'; // Cyan left, Amber right
+    const dropShadowClass = isLeft
+        ? 'drop-shadow-[0_0_6px_rgba(34,211,238,0.9)]'
+        : 'drop-shadow-[0_0_6px_rgba(251,191,36,0.9)]';
+
+    const hLength = width * 0.35; // 35% horizontal, rest diagonal
+    const startX = isLeft ? 0 : width;
+    const endX = isLeft ? width : 0;
+    const midX = isLeft ? hLength : width - hLength;
+
+    // bendOffset is the vertical shift: positive = down, negative = up
+    const endY = 1 + bendOffset;
 
     return (
-        <div className={`absolute ${offsetTop} -translate-y-1/2 ${isToRight ? '-start-2 translate-x-[-100%]' : '-end-2 translate-x-[100%]'} ${lineLength} h-px flex items-center z-0`}>
-            {/* The Line */}
-            <div className="flex-1 h-[1.5px] opacity-60" style={{ backgroundColor: color }} />
-            {/* The Glowing Dot at the brain connection point */}
-            <div className={`w-1.5 h-1.5 rounded-full ${glowClass}`} style={{ backgroundColor: color }} />
-        </div>
+        <svg
+            width={width}
+            height="2"
+            className="overflow-visible shrink-0 mx-2"
+            style={{ zIndex: 0 }}
+        >
+            <polyline
+                points={`${startX},1 ${midX},1 ${endX},${endY}`}
+                fill="none"
+                stroke={color}
+                strokeWidth="1.5"
+                opacity="0.6"
+            />
+            <circle
+                cx={endX}
+                cy={endY}
+                r="3.5"
+                fill={color}
+                className={dropShadowClass}
+            />
+        </svg>
     );
 }
 
 // ─── Skill Node (badge with icon + label) ──────────────────────────────────
-function SkillNode({ icon, label, side, lineLength, offsetTop }: { icon: React.ReactNode; label: string; side: 'left' | 'right', lineLength?: string, offsetTop?: string }) {
+function SkillNode({ icon, label, side, bendOffset = 0, width = 60 }: { icon: React.ReactNode; label: string; side: 'left' | 'right', bendOffset?: number, width?: number }) {
     const isLeft = side === 'left';
     return (
-        <div className="relative group hover:z-20 transition-all duration-300 hover:scale-105">
-            {/* The solid connector line positioned absolutely relative to this node */}
-            <ConnectorLine direction={isLeft ? 'to-left' : 'to-right'} lineLength={lineLength} offsetTop={offsetTop} />
-
+        <div className={`flex items-center group hover:z-20 transition-all duration-300 hover:scale-105 ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
             {/* The badge */}
-            <div className={`relative flex items-center gap-2 px-3.5 py-1.5 rounded-lg border text-xs backdrop-blur-md shadow-md whitespace-nowrap z-10 ${isLeft
-                ? 'border-cyan-500/20 bg-[#111a1f]/80 text-cyan-200/90 hover:border-cyan-400/50 hover:bg-[#111a1f]/95'
-                : 'border-amber-500/20 bg-[#1a1710]/80 text-amber-200/90 hover:border-amber-400/50 hover:bg-[#1a1710]/95'
+            <div className={`relative flex items-center gap-2 px-3.5 py-2 rounded-xl border text-[11px] backdrop-blur-md shadow-lg whitespace-nowrap z-10 ${isLeft
+                    ? 'border-cyan-500/20 bg-[#111a1f]/90 text-cyan-50/90 hover:border-cyan-400/50 hover:bg-[#111a1f]'
+                    : 'border-amber-500/20 bg-[#1a1710]/90 text-amber-50/90 hover:border-amber-400/50 hover:bg-[#1a1710]'
                 }`}>
                 {icon}
-                <span className="font-medium tracking-wide">{label}</span>
+                <span className="font-bold tracking-wider uppercase">{label}</span>
             </div>
+
+            <ConnectorLine side={side} bendOffset={bendOffset} width={width} />
         </div>
     );
 }
@@ -158,77 +182,79 @@ function ReportPage() {
                         <div className="relative flex items-center justify-between w-full mt-12 mb-4 h-[420px]">
 
                             {/* ── LEFT COLUMN: Listening + Reading ── */}
-                            <div className="flex flex-col justify-between h-full relative z-10 w-[42%] lg:w-[35%] py-6">
-                                {/* LISTENING group */}
+                            <div className="flex flex-col justify-between h-full relative z-10 w-[42%] lg:w-[35%] py-4">
+                                {/* SPEAKING/LISTENING group */}
                                 <div>
-                                    <div className="flex flex-col gap-6 items-end">
-                                        <div className="-me-8 relative">
-                                            <SkillNode icon={<FileText className="w-4 h-4" />} label="Audio Mastered" side="left" lineLength="w-12" offsetTop="top-[20%]" />
+                                    <h3 className="text-cyan-400 font-bold text-3xl tracking-wide mb-6 drop-shadow-md">
+                                        Speaking
+                                    </h3>
+                                    <div className="flex flex-col gap-6 items-start ms-4">
+                                        <SkillNode icon={<FileText className="w-4 h-4" />} label="Audio Mastered" side="left" bendOffset={40} width={80} />
+                                        <div className="ms-8">
+                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Speaking" side="left" bendOffset={-10} width={45} />
                                         </div>
-                                        <h3 className="text-cyan-400 font-bold text-xl lg:text-3xl tracking-wide w-full text-end -me-4 opacity-90 drop-shadow-md">
-                                            Speaking
-                                        </h3>
-                                        <div className="me-2 relative">
-                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Speaking" side="left" lineLength="w-8" offsetTop="top-1/2" />
-                                        </div>
-                                        <div className="-me-6 relative">
-                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="left" lineLength="w-10" offsetTop="top-[80%]" />
+                                        <div className="ms-4">
+                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="left" bendOffset={-35} width={65} />
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* READING group */}
-                                <div className="mt-8 flex flex-col items-end gap-6">
-                                    <h3 className="text-cyan-400 font-bold text-xl lg:text-3xl tracking-wide w-full text-end -me-4 opacity-90 drop-shadow-md">
+                                <div className="mt-8">
+                                    <h3 className="text-cyan-400 font-bold text-3xl tracking-wide mb-6 drop-shadow-md">
                                         Reading
                                     </h3>
-                                    <div className="-me-2 relative">
-                                        <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="left" lineLength="w-12" offsetTop="top-[20%]" />
-                                    </div>
-                                    <div className="me-4 relative">
-                                        <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Read" side="left" lineLength="w-8" offsetTop="top-[70%]" />
+                                    <div className="flex flex-col gap-6 items-start ms-4">
+                                        <div className="ms-4">
+                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="left" bendOffset={25} width={55} />
+                                        </div>
+                                        <div className="ms-12">
+                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Read" side="left" bendOffset={-25} width={75} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             {/* ── CENTER COLUMN: Brain Image ── */}
-                            <div className="absolute left-1/2 top-1/2 -translate-x-[48%] -translate-y-[45%] z-0">
+                            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[45%] z-0">
                                 <img
                                     src="/images/report/brain.png"
                                     alt="Brain"
-                                    className="w-[200px] lg:w-[320px] object-contain drop-shadow-[0_0_50px_rgba(251,191,36,0.15)] select-none opacity-95 mix-blend-screen"
+                                    className="w-[220px] lg:w-[320px] object-contain drop-shadow-[0_0_50px_rgba(251,191,36,0.15)] select-none opacity-95 mix-blend-screen"
                                     draggable={false}
                                 />
                             </div>
 
                             {/* ── RIGHT COLUMN: Grammar + Speaking ── */}
-                            <div className="flex flex-col justify-between h-full relative z-10 w-[42%] lg:w-[35%] py-6">
+                            <div className="flex flex-col justify-between h-full relative z-10 w-[42%] lg:w-[35%] py-4">
                                 {/* GRAMMAR group */}
-                                <div className="flex flex-col items-start gap-6">
-                                    <div className="-ms-6 relative">
-                                        <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Learning" side="right" lineLength="w-12" offsetTop="top-[30%]" />
-                                    </div>
-                                    <h3 className="text-amber-100/90 font-bold text-xl lg:text-3xl tracking-wide ms-4 drop-shadow-md">
+                                <div className="flex flex-col items-end">
+                                    <h3 className="text-amber-100/90 font-bold text-3xl tracking-wide w-full text-end mb-6 drop-shadow-md">
                                         Grammar
                                     </h3>
-                                    <div className="ms-2 relative">
-                                        <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" lineLength="w-10" offsetTop="top-1/2" />
+                                    <div className="flex flex-col items-end gap-6 me-4">
+                                        <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Learning" side="right" bendOffset={50} width={85} />
+                                        <div className="me-8">
+                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" bendOffset={10} width={55} />
+                                        </div>
                                     </div>
                                 </div>
 
                                 {/* SPEAKING group */}
-                                <div className="mt-8 flex flex-col items-start gap-6">
-                                    <div className="ms-12 relative flex items-center justify-between w-[200px]">
-                                        <span className="text-zinc-500 text-[10px] tracking-widest uppercase flex items-center gap-1"><Mic className="w-3 h-3" /> Words Written</span>
-                                    </div>
-                                    <h3 className="text-amber-100/90 font-bold text-xl lg:text-3xl tracking-wide -ms-2 opacity-90 drop-shadow-md">
+                                <div className="mt-8 flex flex-col items-end">
+                                    <h3 className="text-amber-100/90 font-bold text-3xl tracking-wide w-full text-end mb-6 drop-shadow-md">
                                         Speaking
                                     </h3>
-                                    <div className="-ms-4 relative">
-                                        <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="right" lineLength="w-16" offsetTop="top-[30%]" />
-                                    </div>
-                                    <div className="ms-4 relative">
-                                        <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" lineLength="w-8" offsetTop="top-[80%]" />
+                                    <div className="flex flex-col items-end gap-6 me-4 relative">
+                                        <div className="absolute -top-5 end-14 flex items-center gap-1.5 text-zinc-500 text-[9px] tracking-widest uppercase opacity-80">
+                                            <Mic className="w-3 h-3" /> Words Written
+                                        </div>
+                                        <div className="me-2 mt-4">
+                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="right" bendOffset={25} width={70} />
+                                        </div>
+                                        <div className="me-10">
+                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" bendOffset={-20} width={55} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
