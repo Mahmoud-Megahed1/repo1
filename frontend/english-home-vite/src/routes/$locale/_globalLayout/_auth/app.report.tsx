@@ -101,7 +101,10 @@ function SkillNode({ icon, label, side, bendOffset = 0, width = 60 }: { icon: Re
                 <span className="font-bold tracking-wider uppercase">{label}</span>
             </div>
 
-            <ConnectorLine side={side} bendOffset={bendOffset} width={width} />
+            {/* Negative margin to pull the line tight against the badge edge */}
+            <div className={isLeft ? "-ml-1" : "-mr-1"}>
+                <ConnectorLine side={side} bendOffset={bendOffset} width={width} />
+            </div>
         </div>
     );
 }
@@ -227,7 +230,7 @@ function ReportPage() {
                                 <img
                                     src="/images/report/brain.png"
                                     alt="Brain"
-                                    className="w-[240px] lg:w-[340px] object-contain drop-shadow-[0_0_60px_rgba(251,191,36,0.18)] select-none opacity-95"
+                                    className="w-[240px] lg:w-[340px] object-contain drop-shadow-[0_0_60px_rgba(251,191,36,0.18)] select-none opacity-95 mix-blend-screen"
                                     draggable={false}
                                 />
                             </div>
@@ -393,7 +396,7 @@ function ReportPage() {
                         <img
                             src="/images/report/shield.png"
                             alt="Level Shield"
-                            className="w-[120px] lg:w-[150px] drop-shadow-[0_10px_20px_rgba(0,0,0,0.7)] select-none opacity-95"
+                            className="w-[120px] lg:w-[150px] drop-shadow-[0_10px_20px_rgba(0,0,0,0.7)] select-none opacity-95 mix-blend-screen"
                             style={{ filter: 'contrast(1.2)' }}
                             draggable={false}
                         />
