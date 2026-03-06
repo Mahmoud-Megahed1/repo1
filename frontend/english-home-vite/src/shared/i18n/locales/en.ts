@@ -854,7 +854,6 @@ export default {
     light: 'Light',
     dark: 'Dark',
     comingSoon: 'Coming Soon',
-    payWithTamara: 'Pay with Tamara',
     comingSoonMessage:
       'We are working hard to bring you this lesson. Stay tuned!',
     transcript: 'Transcript',

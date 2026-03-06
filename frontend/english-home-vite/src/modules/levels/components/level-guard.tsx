@@ -7,9 +7,9 @@ import { KeyRound } from 'lucide-react';
 import * as React from 'react';
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import useLocale from '@hooks/use-locale';
-import { useLocalizedLevelById } from '../queries';
-import { usePayment, useTamaraPayment } from '../mutations';
+
+
+import { usePayment } from '../mutations';
 
 const LevelGuard = ({
   levelId,
@@ -38,8 +38,6 @@ const LockedLevel: FC<LockedLevelProps> = ({
 }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const locale = useLocale();
-  const { level } = useLocalizedLevelById(levelId, locale);
 
   const userData = {
     city: user?.country || 'Riyadh',
@@ -48,10 +46,6 @@ const LockedLevel: FC<LockedLevelProps> = ({
   };
 
   const { mutate: payNow, isPending: isPayPending } = usePayment(
-    levelId,
-    userData
-  );
-  const { mutate: tamaraPay, isPending: isTamaraPending } = useTamaraPayment(
     levelId,
     userData
   );
@@ -78,33 +72,16 @@ const LockedLevel: FC<LockedLevelProps> = ({
         {/* Standard Pay Button */}
         <Button
           onClick={() => payNow()}
-          disabled={isPayPending || isTamaraPending}
+          disabled={isPayPending}
           className="h-12 w-full text-lg font-semibold"
         >
           {isPayPending ? t('Global.processing') : t('Global.lockedLevel.cta')}
           <KeyRound className="ml-2 h-5 w-5" />
         </Button>
-
-        {/* Tamara Button */}
-        {/* Tamara Widget */}
-        <div className="w-full">
-          {!isTamaraPending ? (
-            <tamara-widget
-              type="tamara-summary"
-              amount={(level?.price || '1089').toString()}
-              inline-type="2"
-              onClick={() => tamaraPay()}
-              className="cursor-pointer"
-            ></tamara-widget>
-          ) : (
-            <Button disabled className="w-full">
-              {t('Global.processing')}...
-            </Button>
-          )}
-        </div>
       </div>
     </div>
   );
 };
 
 export default LevelGuard;
+

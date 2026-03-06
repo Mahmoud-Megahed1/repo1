@@ -18,15 +18,6 @@ declare global {
 
   namespace JSX {
     interface IntrinsicElements {
-      'tamara-widget': React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & {
-        type?: string;
-        amount?: string;
-        'inline-type'?: string;
-        class?: string;
-      };
     }
   }
 }
@@ -39,15 +30,6 @@ declare module 'react' {
 
   namespace JSX {
     interface IntrinsicElements {
-      'tamara-widget': React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & {
-        type?: string;
-        amount?: string;
-        'inline-type'?: string;
-        class?: string;
-      };
     }
   }
 }

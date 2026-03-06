@@ -760,7 +760,6 @@ export type TranslationType = {
     show: string;
     hide: string;
     comingSoon: string;
-    payWithTamara: string;
     comingSoonMessage: string;
     transcript: string;
     tryAgain: string;

@@ -839,7 +839,6 @@ export default {
     light: 'فاتح',
     dark: 'داكن',
     comingSoon: 'قريباً',
-    payWithTamara: 'ادفع مع تمارا',
     comingSoonMessage: 'نحن نعمل بجد لتقديم هذا الدرس لك. ترقبوا!',
     transcript: 'النص',
     second: 'ثانية',

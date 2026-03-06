@@ -14,8 +14,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as LocaleGlobalLayoutRouteImport } from './routes/$locale/_globalLayout'
 import { Route as LocaleGlobalLayoutIndexRouteImport } from './routes/$locale/_globalLayout/index'
-import { Route as PaymentTamaraSuccessRouteImport } from './routes/payment.tamara.success'
-import { Route as PaymentTamaraFailureRouteImport } from './routes/payment.tamara.failure'
+
 import { Route as LocaleGlobalLayoutUserGuideRouteImport } from './routes/$locale/_globalLayout/user-guide'
 import { Route as LocaleGlobalLayoutTermsAndConditionsRouteImport } from './routes/$locale/_globalLayout/terms-and-conditions'
 import { Route as LocaleGlobalLayoutSuspendedRouteImport } from './routes/$locale/_globalLayout/suspended'
@@ -62,16 +61,7 @@ const LocaleGlobalLayoutIndexRoute = LocaleGlobalLayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LocaleGlobalLayoutRoute,
 } as any)
-const PaymentTamaraSuccessRoute = PaymentTamaraSuccessRouteImport.update({
-  id: '/payment/tamara/success',
-  path: '/payment/tamara/success',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PaymentTamaraFailureRoute = PaymentTamaraFailureRouteImport.update({
-  id: '/payment/tamara/failure',
-  path: '/payment/tamara/failure',
-  getParentRoute: () => rootRouteImport,
-} as any)
+
 const LocaleGlobalLayoutUserGuideRoute =
   LocaleGlobalLayoutUserGuideRouteImport.update({
     id: '/user-guide',
@@ -206,8 +196,7 @@ export interface FileRoutesByFullPath {
   '/$locale/suspended': typeof LocaleGlobalLayoutSuspendedRoute
   '/$locale/terms-and-conditions': typeof LocaleGlobalLayoutTermsAndConditionsRoute
   '/$locale/user-guide': typeof LocaleGlobalLayoutUserGuideRoute
-  '/payment/tamara/failure': typeof PaymentTamaraFailureRoute
-  '/payment/tamara/success': typeof PaymentTamaraSuccessRoute
+
   '/$locale/': typeof LocaleGlobalLayoutIndexRoute
   '/$locale/app': typeof LocaleGlobalLayoutAuthAppRouteRouteWithChildren
   '/$locale/verify-email': typeof LocaleGlobalLayoutAuthVerifyEmailRoute
@@ -234,8 +223,7 @@ export interface FileRoutesByTo {
   '/$locale/suspended': typeof LocaleGlobalLayoutSuspendedRoute
   '/$locale/terms-and-conditions': typeof LocaleGlobalLayoutTermsAndConditionsRoute
   '/$locale/user-guide': typeof LocaleGlobalLayoutUserGuideRoute
-  '/payment/tamara/failure': typeof PaymentTamaraFailureRoute
-  '/payment/tamara/success': typeof PaymentTamaraSuccessRoute
+
   '/$locale/verify-email': typeof LocaleGlobalLayoutAuthVerifyEmailRoute
   '/$locale/app/account': typeof LocaleGlobalLayoutAuthAppAccountRoute
   '/$locale/app/report': typeof LocaleGlobalLayoutAuthAppReportRoute
@@ -261,8 +249,7 @@ export interface FileRoutesById {
   '/$locale/_globalLayout/suspended': typeof LocaleGlobalLayoutSuspendedRoute
   '/$locale/_globalLayout/terms-and-conditions': typeof LocaleGlobalLayoutTermsAndConditionsRoute
   '/$locale/_globalLayout/user-guide': typeof LocaleGlobalLayoutUserGuideRoute
-  '/payment/tamara/failure': typeof PaymentTamaraFailureRoute
-  '/payment/tamara/success': typeof PaymentTamaraSuccessRoute
+
   '/$locale/_globalLayout/': typeof LocaleGlobalLayoutIndexRoute
   '/$locale/_globalLayout/_auth/app': typeof LocaleGlobalLayoutAuthAppRouteRouteWithChildren
   '/$locale/_globalLayout/_auth/verify-email': typeof LocaleGlobalLayoutAuthVerifyEmailRoute
@@ -291,8 +278,7 @@ export interface FileRouteTypes {
     | '/$locale/suspended'
     | '/$locale/terms-and-conditions'
     | '/$locale/user-guide'
-    | '/payment/tamara/failure'
-    | '/payment/tamara/success'
+
     | '/$locale/'
     | '/$locale/app'
     | '/$locale/verify-email'
@@ -319,8 +305,7 @@ export interface FileRouteTypes {
     | '/$locale/suspended'
     | '/$locale/terms-and-conditions'
     | '/$locale/user-guide'
-    | '/payment/tamara/failure'
-    | '/payment/tamara/success'
+
     | '/$locale/verify-email'
     | '/$locale/app/account'
     | '/$locale/app/report'
@@ -345,8 +330,7 @@ export interface FileRouteTypes {
     | '/$locale/_globalLayout/suspended'
     | '/$locale/_globalLayout/terms-and-conditions'
     | '/$locale/_globalLayout/user-guide'
-    | '/payment/tamara/failure'
-    | '/payment/tamara/success'
+
     | '/$locale/_globalLayout/'
     | '/$locale/_globalLayout/_auth/app'
     | '/$locale/_globalLayout/_auth/verify-email'
@@ -364,8 +348,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   LocaleGlobalLayoutRoute: typeof LocaleGlobalLayoutRouteWithChildren
   AuthCallbackRoute: typeof AuthCallbackRoute
-  PaymentTamaraFailureRoute: typeof PaymentTamaraFailureRoute
-  PaymentTamaraSuccessRoute: typeof PaymentTamaraSuccessRoute
+
 }
 
 declare module '@tanstack/react-router' {
@@ -405,20 +388,7 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleGlobalLayoutIndexRouteImport
       parentRoute: typeof LocaleGlobalLayoutRoute
     }
-    '/payment/tamara/success': {
-      id: '/payment/tamara/success'
-      path: '/payment/tamara/success'
-      fullPath: '/payment/tamara/success'
-      preLoaderRoute: typeof PaymentTamaraSuccessRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/payment/tamara/failure': {
-      id: '/payment/tamara/failure'
-      path: '/payment/tamara/failure'
-      fullPath: '/payment/tamara/failure'
-      preLoaderRoute: typeof PaymentTamaraFailureRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+
     '/$locale/_globalLayout/user-guide': {
       id: '/$locale/_globalLayout/user-guide'
       path: '/user-guide'
@@ -662,8 +632,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   LocaleGlobalLayoutRoute: LocaleGlobalLayoutRouteWithChildren,
   AuthCallbackRoute: AuthCallbackRoute,
-  PaymentTamaraFailureRoute: PaymentTamaraFailureRoute,
-  PaymentTamaraSuccessRoute: PaymentTamaraSuccessRoute,
+
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

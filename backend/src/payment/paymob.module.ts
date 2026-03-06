@@ -1,10 +1,10 @@
 // filepath: /mnt/DATA/Englishom/src/payment/paymob.module.ts
 import { Module, forwardRef } from '@nestjs/common';
 import { PaymobService } from './paymob.service';
-import { TamaraService } from './tamara.service';
+
 import { CourseModule } from '../course/course.module';
 import { ConfigModule } from '@nestjs/config';
-import { TamaraController } from './tamara.controller';
+
 import { DatabaseModule } from '../common/database/database.module';
 import { OrderRepo } from './repo/order.repo';
 import { Order, OrderSchema } from './models/order.schema';
@@ -17,14 +17,13 @@ import { MailModule } from '../common/mail/mail.module';
 @Module({
   providers: [
     PaymobService,
-    TamaraService,
     OrderRepo,
     {
       provide: OrderService,
       useExisting: OrderRepo,
     },
   ],
-  controllers: [PaymobController, TamaraController],
+  controllers: [PaymobController],
   imports: [
     forwardRef(() => UserModule),
     forwardRef(() => CourseModule),
@@ -33,6 +32,6 @@ import { MailModule } from '../common/mail/mail.module';
     MailModule,
     ConfigModule,
   ],
-  exports: [PaymobService, TamaraService, OrderRepo, OrderService],
+  exports: [PaymobService, OrderRepo, OrderService],
 })
 export class PaymentModule { }

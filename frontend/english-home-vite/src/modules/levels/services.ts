@@ -17,20 +17,6 @@ export function payment({
   );
 }
 
-export function tamaraPayment({
-  data,
-  config,
-}: {
-  data: PaymentParams;
-  config?: AxiosRequestConfig;
-}) {
-  return axiosClient.post<{ checkoutUrl: string }>(
-    '/payment/tamara/checkout',
-    { ...data },
-    config
-  );
-}
-
 export function getCompletedDays(levelName: LevelId) {
   return axiosClient.get<number>(`/users/completed-days`, {
     params: {
