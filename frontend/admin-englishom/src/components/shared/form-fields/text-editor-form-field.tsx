@@ -57,7 +57,7 @@ const TextEditorFormField = <T extends FieldValues>({
       <ReactQuill
         theme="snow"
         value={form.watch(name)}
-        onChange={(value) => form.setValue(name, value as never)}
+        onChange={(value: string) => form.setValue(name, value as never)}
         onBlur={() => form.trigger(name)}
         modules={modules}
         formats={formats}
