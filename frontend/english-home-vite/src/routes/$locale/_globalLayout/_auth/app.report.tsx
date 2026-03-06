@@ -46,10 +46,10 @@ function ConnectorLine({ side, bendOffset = 0, width = 60 }: { side: 'left' | 'r
     const isLeft = side === 'left';
     const color = isLeft ? '#22d3ee' : '#fbbf24'; // Cyan left, Amber right
     const dropShadowClass = isLeft
-        ? 'drop-shadow-[0_0_8px_rgba(34,211,238,1)]'
-        : 'drop-shadow-[0_0_8px_rgba(251,191,36,1)]';
+        ? 'drop-shadow-[0_0_6px_rgba(34,211,238,0.9)]'
+        : 'drop-shadow-[0_0_6px_rgba(251,191,36,0.9)]';
 
-    const hLength = width * 0.4; // 40% horizontal, rest diagonal
+    const hLength = Math.max(15, width * 0.45); // 45% horizontal
     const startX = isLeft ? 0 : width;
     const endX = isLeft ? width : 0;
     const midX = isLeft ? hLength : width - hLength;
@@ -61,20 +61,25 @@ function ConnectorLine({ side, bendOffset = 0, width = 60 }: { side: 'left' | 'r
         <svg
             width={width}
             height="2"
-            className="overflow-visible shrink-0 mx-1 lg:mx-2"
+            className="overflow-visible shrink-0"
             style={{ zIndex: 0 }}
         >
+            {/* Origin anchor dot at the badge */}
+            <circle cx={startX} cy="1" r="1.5" fill={color} opacity="0.9" />
+
             <polyline
                 points={`${startX},1 ${midX},1 ${endX},${endY}`}
                 fill="none"
                 stroke={color}
-                strokeWidth="2"
-                opacity="0.5"
+                strokeWidth="1.5"
+                strokeLinejoin="round"
+                opacity="0.6"
             />
+            {/* Destination glowing dot at the brain surface */}
             <circle
                 cx={endX}
                 cy={endY}
-                r="4"
+                r="3.5"
                 fill={color}
                 className={dropShadowClass}
             />
@@ -141,11 +146,11 @@ function ReportPage() {
         journeyTimeline: isAr ? 'الجدول الزمني' : 'Journey Timeline',
         knowledgeFortress: isAr ? 'حصن المعرفة' : 'Knowledge Fortress',
         aiPrediction: isAr ? 'توقعات الذكاء الاصطناعي:' : 'AI Prediction:',
-        speaking: 'Speaking',
-        listening: 'Listening',
-        reading: 'Reading',
-        writing: 'Writing',
-        grammar: 'Grammar',
+        speaking: isAr ? 'التحدث' : 'Speaking',
+        listening: isAr ? 'الاستماع' : 'Listening',
+        reading: isAr ? 'القراءة' : 'Reading',
+        writing: isAr ? 'الكتابة' : 'Writing',
+        grammar: isAr ? 'القواعد النحوية' : 'Grammar',
         activeStreak: isAr ? 'سلسلة النشاط' : 'ACTIVE STREAK',
         masteredWords: isAr ? 'كلمات متقنة' : 'Mastered\nWords',
         idiomsPhrasal: isAr ? 'مصطلحات وأفعال مركبة' : 'IDIOMS & PHRASAL VERBS',
@@ -183,20 +188,20 @@ function ReportPage() {
 
                             {/* ── LEFT COLUMN: Listening + Reading ── */}
                             <div className="flex flex-col justify-between h-full relative z-10 w-[42%] lg:w-[35%] py-2">
-                                {/* SPEAKING/LISTENING group */}
+                                {/* LISTENING group */}
                                 <div>
                                     <h3 className="text-cyan-400 font-bold text-3xl tracking-wide mb-6 drop-shadow-md">
-                                        Speaking
+                                        {t.listening}
                                     </h3>
-                                    <div className="flex flex-col gap-6 items-start">
+                                    <div className="flex flex-col gap-5 items-start">
                                         <div className="ms-0">
-                                            <SkillNode icon={<FileText className="w-4 h-4" />} label="Audio Mastered" side="left" bendOffset={45} width={90} />
+                                            <SkillNode icon={<FileText className="w-4 h-4" />} label="Audio Mastered" side="left" bendOffset={35} width={90} />
                                         </div>
-                                        <div className="ms-12">
-                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Speaking" side="left" bendOffset={-10} width={40} />
+                                        <div className="ms-10 mt-1">
+                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Speaking" side="left" bendOffset={5} width={50} />
                                         </div>
-                                        <div className="ms-4">
-                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="left" bendOffset={-40} width={75} />
+                                        <div className="ms-4 mt-1">
+                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="left" bendOffset={-25} width={75} />
                                         </div>
                                     </div>
                                 </div>
@@ -204,14 +209,14 @@ function ReportPage() {
                                 {/* READING group */}
                                 <div className="mt-8">
                                     <h3 className="text-cyan-400 font-bold text-3xl tracking-wide mb-6 drop-shadow-md">
-                                        Reading
+                                        {t.reading}
                                     </h3>
                                     <div className="flex flex-col gap-6 items-start ms-4">
-                                        <div className="ms-4">
-                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="left" bendOffset={30} width={60} />
+                                        <div className="ms-2">
+                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="left" bendOffset={20} width={65} />
                                         </div>
-                                        <div className="ms-14">
-                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Read" side="left" bendOffset={-30} width={85} />
+                                        <div className="ms-12 mt-1">
+                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Read" side="left" bendOffset={-20} width={80} />
                                         </div>
                                     </div>
                                 </div>
@@ -222,7 +227,7 @@ function ReportPage() {
                                 <img
                                     src="/images/report/brain.png"
                                     alt="Brain"
-                                    className="w-[240px] lg:w-[340px] object-contain drop-shadow-[0_0_60px_rgba(251,191,36,0.18)] select-none opacity-95 mix-blend-screen"
+                                    className="w-[240px] lg:w-[340px] object-contain drop-shadow-[0_0_60px_rgba(251,191,36,0.18)] select-none opacity-95"
                                     draggable={false}
                                 />
                             </div>
@@ -231,31 +236,33 @@ function ReportPage() {
                             <div className="flex flex-col justify-between h-full relative z-10 w-[42%] lg:w-[35%] py-2">
                                 {/* GRAMMAR group */}
                                 <div className="flex flex-col items-end">
-                                    <h3 className="text-amber-100/90 font-bold text-3xl tracking-wide w-full text-end mb-6 drop-shadow-md">
-                                        Grammar
+                                    <h3 className="text-[#f5ebd6] font-extrabold text-3xl tracking-wide w-full text-end mb-6 drop-shadow-md">
+                                        {t.grammar}
                                     </h3>
-                                    <div className="flex flex-col items-end gap-6 me-0">
-                                        <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Learning" side="right" bendOffset={55} width={95} />
-                                        <div className="me-14">
-                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" bendOffset={10} width={50} />
+                                    <div className="flex flex-col items-end gap-5 me-0">
+                                        <div className="me-2">
+                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Learning" side="right" bendOffset={40} width={90} />
+                                        </div>
+                                        <div className="me-12 mt-1">
+                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" bendOffset={0} width={55} />
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* SPEAKING group */}
                                 <div className="mt-8 flex flex-col items-end">
-                                    <h3 className="text-amber-100/90 font-bold text-3xl tracking-wide w-full text-end mb-6 drop-shadow-md">
-                                        Speaking
+                                    <h3 className="text-[#f5ebd6] font-extrabold text-3xl tracking-wide w-full text-end mb-6 drop-shadow-md">
+                                        {t.speaking}
                                     </h3>
-                                    <div className="flex flex-col items-end gap-6 me-4 relative">
-                                        <div className="absolute -top-7 end-0 flex items-center gap-1.5 text-zinc-500 text-[10px] tracking-widest uppercase opacity-90 font-bold">
-                                            <Mic className="w-4 h-4" /> WORDS WRITTEN
+                                    <div className="flex flex-col items-end gap-5 me-2 relative">
+                                        <div className="absolute -top-7 end-0 flex items-center gap-1.5 text-zinc-500 text-[10px] tracking-widest uppercase opacity-90 font-bold whitespace-nowrap">
+                                            <Mic className="w-4 h-4" /> AUDIO RECORDED
                                         </div>
-                                        <div className="me-0 mt-4">
-                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="right" bendOffset={30} width={75} />
+                                        <div className="me-2 mt-3">
+                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="right" bendOffset={20} width={80} />
                                         </div>
-                                        <div className="me-12">
-                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" bendOffset={-35} width={65} />
+                                        <div className="me-14 mt-1">
+                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" bendOffset={-25} width={60} />
                                         </div>
                                     </div>
                                 </div>
@@ -386,7 +393,7 @@ function ReportPage() {
                         <img
                             src="/images/report/shield.png"
                             alt="Level Shield"
-                            className="w-[120px] lg:w-[150px] drop-shadow-[0_10px_20px_rgba(0,0,0,0.7)] select-none opacity-95 mix-blend-screen"
+                            className="w-[120px] lg:w-[150px] drop-shadow-[0_10px_20px_rgba(0,0,0,0.7)] select-none opacity-95"
                             style={{ filter: 'contrast(1.2)' }}
                             draggable={false}
                         />
