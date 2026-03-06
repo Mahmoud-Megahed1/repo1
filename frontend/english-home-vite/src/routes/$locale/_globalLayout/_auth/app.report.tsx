@@ -218,8 +218,8 @@ function ReportPage() {
                                         <div className="ms-2">
                                             <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="left" bendOffset={20} width={65} />
                                         </div>
-                                        <div className="ms-12 mt-1">
-                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Read" side="left" bendOffset={-20} width={80} />
+                                        <div className="ms-6 mt-2">
+                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Read" side="left" bendOffset={-35} width={70} />
                                         </div>
                                     </div>
                                 </div>
@@ -230,7 +230,7 @@ function ReportPage() {
                                 <img
                                     src="/images/report/brain.png"
                                     alt="Brain"
-                                    className="w-[240px] lg:w-[340px] object-contain drop-shadow-[0_0_60px_rgba(251,191,36,0.18)] select-none opacity-95 mix-blend-screen"
+                                    className="w-[240px] lg:w-[340px] object-contain drop-shadow-[0_0_60px_rgba(251,191,36,0.18)] select-none opacity-95"
                                     draggable={false}
                                 />
                             </div>
@@ -264,8 +264,8 @@ function ReportPage() {
                                         <div className="me-2 mt-3">
                                             <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="right" bendOffset={20} width={80} />
                                         </div>
-                                        <div className="me-14 mt-1">
-                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" bendOffset={-25} width={60} />
+                                        <div className="me-6 mt-2">
+                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" bendOffset={-35} width={70} />
                                         </div>
                                     </div>
                                 </div>
@@ -396,7 +396,7 @@ function ReportPage() {
                         <img
                             src="/images/report/shield.png"
                             alt="Level Shield"
-                            className="w-[120px] lg:w-[150px] drop-shadow-[0_10px_20px_rgba(0,0,0,0.7)] select-none opacity-95 mix-blend-screen"
+                            className="w-[120px] lg:w-[150px] drop-shadow-[0_10px_20px_rgba(0,0,0,0.7)] select-none opacity-95"
                             style={{ filter: 'contrast(1.2)' }}
                             draggable={false}
                         />
