@@ -214,7 +214,7 @@ export class PaymobController {
       const data = {
         amount: course.price, // Use whole currency amount for our internal processing
         currency: 'SAR', // <- Saudi Riyal
-        payment_methods: [integration_id],
+        payment_methods: [integration_id, 24018], // added 24018 for Tamara
         items: [
           {
             name: paymentIntentionDto.level_name,

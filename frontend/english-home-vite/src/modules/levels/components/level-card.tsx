@@ -155,6 +155,8 @@ const useComponentVariant = ({
             <Clock size={14} />
             {t('Global.forSixtyDays')}
           </p>
+          {/* @ts-ignore JSX custom element */}
+          {price > 0 && <tamara-widget type="tamara-summary" amount={price} inline-type="2"></tamara-widget>}
         </div>
       ),
       cta: (
@@ -188,6 +190,8 @@ const useComponentVariant = ({
             <Clock size={14} />
             {t('Global.forSixtyDays')}
           </p>
+          {/* @ts-ignore JSX custom element */}
+          {price > 0 && <tamara-widget type="tamara-summary" amount={price} inline-type="2"></tamara-widget>}
         </div>
       ),
       cta: (
@@ -272,6 +276,8 @@ const useComponentVariant = ({
               <Clock size={14} />
               {t('Global.forSixtyDays')}
             </p>
+            {/* @ts-ignore JSX custom element */}
+            {price > 0 && <tamara-widget type="tamara-summary" amount={price} inline-type="2"></tamara-widget>}
           </div>
         </div>
       ),
