@@ -1,4 +1,3 @@
-import NextLessonButton from '@components/next-lesson-button';
 import useAudioPlayer from '@hooks/use-audio-player';
 import { useIsMobile } from '@hooks/use-mobile';
 import type { PictureLesson } from '@modules/lessons/types';
@@ -18,8 +17,6 @@ type Props = Omit<PictureLesson, 'id'> & {
   next: () => void;
   hasPrevItems: boolean;
   hasNextItems: boolean;
-  showNextLessonButton?: boolean;
-  onComplete?: () => void;
 };
 
 const PictureCard: FC<Props> = ({
@@ -33,8 +30,6 @@ const PictureCard: FC<Props> = ({
   hasPrevItems,
   next,
   prev,
-  showNextLessonButton,
-  onComplete,
 }) => {
   const { ref, togglePlay, isPlaying } = useAudioPlayer();
   const { t, i18n } = useTranslation();
@@ -47,9 +42,9 @@ const PictureCard: FC<Props> = ({
   }, [isMobile]);
 
   return (
-    <div className="flex flex-col gap-2 lg:flex-row lg:items-stretch w-full">
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch w-full">
       {/* Image Section */}
-      <div className="relative flex-1 flex items-center justify-center overflow-hidden rounded-lg bg-black/5 dark:bg-white/5 min-h-[280px] lg:min-h-[420px]">
+      <div className="relative flex-1 lg:w-1/2 flex items-center justify-center overflow-hidden rounded-lg bg-black/5 dark:bg-white/5 min-h-[280px] lg:min-h-[420px]">
         <img
           src={pictureSrc}
           className="h-auto w-full object-contain max-h-[300px] lg:max-h-[450px] rounded-lg select-none pointer-events-none"
@@ -81,8 +76,8 @@ const PictureCard: FC<Props> = ({
       </div>
 
       {/* Content Section */}
-      <div className="flex flex-col gap-2 lg:w-[340px] xl:w-[400px] shrink-0">
-        <Card className="shadow-none border-border flex-1">
+      <div className="flex flex-col gap-2 flex-1 lg:w-1/2 shrink-0">
+        <Card className="shadow-none border-border flex-1 h-full">
           <CardHeader className="space-y-4 pb-4">
             <div className="flex items-center justify-between gap-2">
               <div>
@@ -145,7 +140,7 @@ const PictureCard: FC<Props> = ({
             </div>
 
             {showExamples && (
-              <ul lang="en" className="space-y-2 mt-2 max-h-[100px] lg:max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
+              <ul lang="en" className="space-y-2 mt-2 max-h-[100px] lg:max-h-[180px] overflow-y-auto pr-2 custom-scrollbar">
                 {examples.map((example, index) => (
                   <li
                     key={index}
@@ -158,14 +153,6 @@ const PictureCard: FC<Props> = ({
             )}
           </CardContent>
         </Card>
-
-        {showNextLessonButton && (
-          <NextLessonButton
-            lessonName="LISTEN"
-            onClick={onComplete}
-            className="w-full"
-          />
-        )}
       </div>
     </div>
   );
