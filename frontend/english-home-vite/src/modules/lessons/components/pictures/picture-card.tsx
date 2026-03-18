@@ -47,28 +47,32 @@ const PictureCard: FC<Props> = ({
   }, [isMobile]);
 
   return (
-    <div className="flex flex-col gap-2 lg:flex-row lg:items-start w-full">
+    <div className="flex flex-col gap-2 lg:flex-row lg:items-stretch w-full">
       {/* Image Section */}
-      <div className="relative flex-1 flex items-center justify-center overflow-hidden">
+      <div className="relative flex-1 flex items-center justify-center overflow-hidden rounded-lg bg-black/5 dark:bg-white/5 min-h-[280px] lg:min-h-[420px]">
         <img
           src={pictureSrc}
-          className="h-auto w-full object-contain max-h-[300px] lg:max-h-[480px] rounded-lg"
+          className="h-auto w-full object-contain max-h-[300px] lg:max-h-[450px] rounded-lg select-none pointer-events-none"
           alt={wordEn}
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
         />
 
+        {/* Navigation arrow - Previous */}
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-1/2 -translate-y-1/2 rounded-full bg-black/40 text-gray-300 hover:bg-black/50 hover:text-white disabled:opacity-0 ltr:left-2 rtl:right-2 rtl:rotate-180"
+          className="absolute top-1/2 -translate-y-1/2 rounded-full bg-black/40 text-gray-300 hover:bg-black/50 hover:text-white disabled:opacity-30 ltr:left-2 rtl:right-2 rtl:rotate-180 pointer-events-auto"
           onClick={prev}
           disabled={!hasPrevItems}
         >
           <ChevronLeftIcon size={24} />
         </Button>
+        {/* Navigation arrow - Next */}
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-1/2 -translate-y-1/2 rounded-full bg-black/40 text-gray-300 hover:bg-black/50 hover:text-white disabled:opacity-0 ltr:right-2 rtl:left-2 rtl:rotate-180"
+          className="absolute top-1/2 -translate-y-1/2 rounded-full bg-black/40 text-gray-300 hover:bg-black/50 hover:text-white disabled:opacity-30 ltr:right-2 rtl:left-2 rtl:rotate-180 pointer-events-auto"
           onClick={next}
           disabled={!hasNextItems}
         >
@@ -77,15 +81,15 @@ const PictureCard: FC<Props> = ({
       </div>
 
       {/* Content Section */}
-      <div className="flex flex-col gap-2 lg:w-[300px] xl:w-[360px] shrink-0">
-        <Card className="shadow-none border-border">
+      <div className="flex flex-col gap-2 lg:w-[340px] xl:w-[400px] shrink-0">
+        <Card className="shadow-none border-border flex-1">
           <CardHeader className="space-y-4 pb-4">
             <div className="flex items-center justify-between gap-2">
               <div>
                 <span className="text-muted-foreground text-xs uppercase font-medium">
                   {t('Global.english')}
                 </span>
-                <h3 lang="en" className="text-lg font-semibold">
+                <h3 lang="en" className="text-xl font-semibold">
                   {wordEn}
                 </h3>
               </div>
@@ -93,7 +97,7 @@ const PictureCard: FC<Props> = ({
                 <span className="text-muted-foreground text-xs uppercase font-medium">
                   {t('Global.arabic')}
                 </span>
-                <h3 lang="ar" className="text-lg font-semibold">
+                <h3 lang="ar" className="text-xl font-semibold">
                   {wordAr}
                 </h3>
               </div>
@@ -102,7 +106,7 @@ const PictureCard: FC<Props> = ({
               <span className="text-muted-foreground text-xs uppercase font-medium block mb-1">
                 {isAr ? 'التعريف' : 'Definition'}
               </span>
-              <CardDescription lang="en" className="text-sm">
+              <CardDescription lang="en" className="text-sm leading-relaxed">
                 {definition}
               </CardDescription>
             </div>
@@ -141,7 +145,7 @@ const PictureCard: FC<Props> = ({
             </div>
 
             {showExamples && (
-              <ul lang="en" className="space-y-2 mt-2 max-h-[100px] lg:max-h-[140px] overflow-y-auto pr-2 custom-scrollbar">
+              <ul lang="en" className="space-y-2 mt-2 max-h-[100px] lg:max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
                 {examples.map((example, index) => (
                   <li
                     key={index}

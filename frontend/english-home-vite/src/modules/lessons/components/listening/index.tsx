@@ -52,13 +52,20 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
 
   return (
     <div className="mx-auto flex size-full max-w-3xl flex-col gap-4" {...props}>
-      {/* Audio Player Section */}
-      <div>
-        <div className="mb-2 flex flex-wrap items-center justify-between gap-4">
-          <h4 className="mb-2 flex items-center gap-2 text-xl font-bold">
+      {/* Header: Title + Progress Bars */}
+      <div className="flex flex-col gap-1">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h4 className="flex items-center gap-2 text-xl font-bold">
             <span className="size-2 rounded-full bg-amber-400" />
             {t('Global.sidebarItems.LISTEN')}
           </h4>
+          <LessonProgress currentIndex={currentIndex} total={lesson.definitions.length} />
+        </div>
+      </div>
+
+      {/* Audio Player Section */}
+      <div>
+        <div className="mb-2 flex items-center justify-end">
           {/* Show transcript */}
           <Button
             variant="outline"
@@ -87,9 +94,6 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
           </CardContent>
         </Card>
       )}
-
-      {/* Progress Bar */}
-      <LessonProgress currentIndex={currentIndex} total={lesson.definitions.length} />
 
       {/* Definitions Section — Paginated */}
       <div className="space-y-4">
