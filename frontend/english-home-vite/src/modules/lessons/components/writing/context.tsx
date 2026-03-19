@@ -15,7 +15,6 @@ import {
   CardTitle,
 } from '@ui/card';
 import { Progress } from '@ui/progress';
-import LessonProgress from '@components/lesson-progress';
 import {
   createContext,
   use,
@@ -294,7 +293,6 @@ export const WritingControls = ({ nextLessonButton }: { nextLessonButton?: React
   const { t } = useTranslation();
   return (
     <div className="space-y-4">
-      <LessonProgress currentIndex={currentIndex} total={total} />
       <div className="flex items-center justify-between">
         <Button variant="outline" onClick={goPrev} disabled={!hasPrev}>
           {t('Global.prev')}

@@ -1,5 +1,4 @@
 import { AudioPlayback } from '@components/audio-playback';
-import { accordionVariants } from '@components/custom-accordion';
 import NextLessonButton from '@components/next-lesson-button';
 import useItemsPagination from '@hooks/use-items-pagination';
 import useLocale from '@hooks/use-locale';
@@ -13,7 +12,6 @@ import { Button } from '@ui/button';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@ui/card';
@@ -152,28 +150,6 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
   return (
     <div className="mx-auto flex max-w-2xl flex-col space-y-4">
       <LessonProgress currentIndex={currentIndex} total={sentences.length} />
-      <Card>
-        <CardHeader className="w-full">
-          <div className="flex items-center gap-4">
-            <div className={cn(accordionVariants({ variant: 'blue' }))}>
-              <Mic className="h-6 w-6 text-white" />
-            </div>
-            <div className="rtl:space-y-1">
-              <h2 className="text-xl font-bold md:text-2xl">
-                {t('Global.speaking.title')}
-              </h2>
-              <CardDescription>
-                {t('Global.speaking.subDescription')}
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <CardDescription className="text-base">
-            {t('Global.speaking.description')}
-          </CardDescription>
-        </CardContent>
-      </Card>
 
       <Card>
         <CardHeader lang="en" className="flex items-center gap-4">

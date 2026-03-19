@@ -8,8 +8,7 @@ import { type LevelId } from '../../types';
 import { useMarkTaskAsCompleted } from '../../mutations';
 import type { ReadLesson } from '../../types';
 import RichTextViewer from '@components/rich-text-viewer';
-import { BookOpen } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@ui/card';
+import { Card, CardContent } from '@ui/card';
 
 type Props = {
   lesson: ReadLesson;
@@ -87,13 +86,7 @@ const Reading: FC<Props> = ({
 
       {/* Right Column: Text Content - scrollable */}
       <Card className="flex-1 min-w-0 flex flex-col lg:overflow-hidden border-border shadow-card">
-        <CardHeader className="flex items-center gap-2 shrink-0 pb-2">
-          <BookOpen className="h-5 w-5" />
-          <CardTitle className="text-xl font-semibold">
-            {t('Global.sidebarItems.READ')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex-1 min-h-0 lg:overflow-y-auto lg:pe-2">
+        <CardContent className="flex-1 min-h-0 lg:overflow-y-auto lg:pe-2 pt-6">
           <div className="bg-accent/30 w-full rounded-lg p-3">
             <RichTextViewer lang="en">{textContent}</RichTextViewer>
           </div>
