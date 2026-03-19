@@ -1,3 +1,4 @@
+import NextLessonButton from '@components/next-lesson-button';
 import useAudioPlayer from '@hooks/use-audio-player';
 import { useIsMobile } from '@hooks/use-mobile';
 import type { PictureLesson } from '@modules/lessons/types';
@@ -17,6 +18,8 @@ type Props = Omit<PictureLesson, 'id'> & {
   next: () => void;
   hasPrevItems: boolean;
   hasNextItems: boolean;
+  isLast?: boolean;
+  onComplete?: () => void;
 };
 
 const PictureCard: FC<Props> = ({
@@ -30,6 +33,8 @@ const PictureCard: FC<Props> = ({
   hasPrevItems,
   next,
   prev,
+  isLast,
+  onComplete,
 }) => {
   const { ref, togglePlay, isPlaying } = useAudioPlayer();
   const { t, i18n } = useTranslation();
@@ -42,12 +47,12 @@ const PictureCard: FC<Props> = ({
   }, [isMobile]);
 
   return (
-    <div className="flex flex-col gap-2 lg:flex-row lg:items-stretch w-full">
-      {/* Image Section */}
-      <div className="relative lg:flex-[1.2] flex items-center justify-center overflow-hidden">
+    <div className="flex flex-col gap-3 lg:flex-row-reverse lg:items-stretch w-full">
+      {/* Image Section — right side (closer to sidebar) */}
+      <div className="relative lg:flex-[1.2] flex items-center justify-center rounded-lg border border-border overflow-hidden bg-muted/20 min-h-[280px]">
         <img
           src={pictureSrc}
-          className="h-auto w-full object-contain max-h-[300px] lg:max-h-[480px] rounded-lg select-none pointer-events-none"
+          className="h-auto w-full object-contain max-h-[300px] lg:max-h-[480px] select-none pointer-events-none"
           alt={wordEn}
           draggable={false}
           onContextMenu={(e) => e.preventDefault()}
@@ -57,7 +62,7 @@ const PictureCard: FC<Props> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-1/2 -translate-y-1/2 rounded-full bg-black/40 text-gray-300 hover:bg-black/50 hover:text-white disabled:opacity-30 ltr:left-2 rtl:right-2 rtl:rotate-180"
+          className="absolute z-10 top-1/2 -translate-y-1/2 left-2 rounded-full bg-black/40 text-gray-300 hover:bg-black/50 hover:text-white disabled:opacity-30"
           onClick={prev}
           disabled={!hasPrevItems}
         >
@@ -66,7 +71,7 @@ const PictureCard: FC<Props> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-1/2 -translate-y-1/2 rounded-full bg-black/40 text-gray-300 hover:bg-black/50 hover:text-white disabled:opacity-30 ltr:right-2 rtl:left-2 rtl:rotate-180"
+          className="absolute z-10 top-1/2 -translate-y-1/2 right-2 rounded-full bg-black/40 text-gray-300 hover:bg-black/50 hover:text-white disabled:opacity-30"
           onClick={next}
           disabled={!hasNextItems}
         >
@@ -74,9 +79,9 @@ const PictureCard: FC<Props> = ({
         </Button>
       </div>
 
-      {/* Content Section */}
+      {/* Content Section — left side */}
       <div className="flex flex-col gap-2 lg:w-[340px] xl:w-[400px] shrink-0">
-        <Card className="shadow-none border-border">
+        <Card className="shadow-none border-border flex-1">
           <CardHeader className="space-y-4 pb-4">
             <div className="flex items-center justify-between gap-2">
               <div>
@@ -152,6 +157,14 @@ const PictureCard: FC<Props> = ({
             )}
           </CardContent>
         </Card>
+
+        {/* Next lesson button — always visible, faded until last image */}
+        <NextLessonButton
+          lessonName="LISTEN"
+          onClick={onComplete}
+          className={`w-full transition-opacity ${isLast ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}
+          disabled={!isLast}
+        />
       </div>
     </div>
   );

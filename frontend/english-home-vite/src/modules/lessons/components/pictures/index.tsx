@@ -1,6 +1,5 @@
 import useItemsPagination from '@hooks/use-items-pagination';
 import LessonProgress from '@components/lesson-progress';
-import NextLessonButton from '@components/next-lesson-button';
 import { useEffect, type ComponentProps, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PictureLesson } from '../../types';
@@ -71,6 +70,8 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
           prev={prev}
           hasNextItems={hasNextItems}
           hasPrevItems={hasPrevItems}
+          isLast={isLast}
+          onComplete={handleComplete}
           {...currentItem}
         />
         <PictureSidebar
@@ -80,15 +81,9 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
           title={t('Global.vocabulary')}
         />
       </div>
-      {/* Next lesson button - always visible, disabled/faded until last image */}
-      <NextLessonButton
-        lessonName="LISTEN"
-        onClick={handleComplete}
-        className={`mt-4 w-full transition-opacity ${isLast ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}
-        disabled={!isLast}
-      />
     </div>
   );
 };
 export default Pictures;
+
 
