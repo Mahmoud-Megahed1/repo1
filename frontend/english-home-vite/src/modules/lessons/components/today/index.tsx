@@ -49,7 +49,7 @@ const Today: FC<Props> = ({
 
       {/* 2-column grid on desktop/iPad */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
-        {/* Left Column: Instructions + Audio */}
+        {/* Left Column: Instructions + Audio + Practice Sentences */}
         <div className="space-y-6">
           <InstructionsCard instructions={instructions} />
 
@@ -69,11 +69,12 @@ const Today: FC<Props> = ({
               />
             </CardContent>
           </Card>
+
+          <SentencesCard sentences={sentences} />
         </div>
 
-        {/* Right Column: Sentences + Practice Speaking + Next */}
+        {/* Right Column: Practice Speaking + Next */}
         <div className="space-y-6">
-          <SentencesCard sentences={sentences} />
           <PracticeSpeaking
             day={day}
             lessonName={lessonName}
