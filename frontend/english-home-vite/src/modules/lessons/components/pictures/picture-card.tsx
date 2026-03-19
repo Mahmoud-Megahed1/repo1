@@ -43,7 +43,7 @@ const PictureCard: FC<Props> = ({
   return (
     <div className="flex flex-col gap-3 lg:flex-row lg:items-start w-full">
       {/* Image Section — left side, no frame */}
-      <div className="relative flex-1 overflow-hidden rounded-lg max-h-[360px]">
+      <div className="relative lg:w-[420px] shrink-0 overflow-hidden rounded-lg max-h-[360px]">
         <img
           src={pictureSrc}
           className="h-full w-full object-cover select-none pointer-events-none rounded-lg max-h-[360px]"
@@ -74,7 +74,7 @@ const PictureCard: FC<Props> = ({
       </div>
 
       {/* Content Section — right of image */}
-      <div className="flex flex-col gap-2 lg:w-[380px] shrink-0">
+      <div className="flex flex-col gap-2 flex-1">
         <Card className="shadow-none border-border flex-1">
           <CardHeader className="space-y-4 pb-4">
             <div className="flex items-center justify-between gap-2">

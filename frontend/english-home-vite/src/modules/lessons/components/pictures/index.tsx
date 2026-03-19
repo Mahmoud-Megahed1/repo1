@@ -57,6 +57,12 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
       `${window.location.pathname}?${searchParams}`
     );
   }, [currentIndex]);
+
+  // Scroll to top only on first mount so header is visible
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   if (!currentItem) return null;
   return (
     <div className="mx-auto w-full max-w-7xl" {...props}>
