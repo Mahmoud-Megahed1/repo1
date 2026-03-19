@@ -320,18 +320,7 @@ const DailyTest: FC<DailyTestProps> = ({ lesson, day, levelId }) => {
             'flex flex-col',
             type === 'image' && 'lg:flex-row lg:items-stretch'
           )}>
-            {/* Left Column: Image for Image-type questions */}
-            {type === 'image' && (
-              <div className="relative group lg:w-[45%] xl:w-[50%] shrink-0 flex items-center justify-center bg-black/5 dark:bg-white/5 p-0 border-b lg:border-b-0 lg:border-e border-border min-h-[200px] lg:min-h-0 overflow-hidden">
-                <img
-                  src={question}
-                  alt="Daily Test Question"
-                  className="w-full h-full max-h-[250px] lg:max-h-[400px] rounded-none lg:rounded-s-lg object-contain transition-transform duration-300 group-hover:scale-[1.02]"
-                />
-              </div>
-            )}
-
-            {/* Right Column: Content + Options */}
+            {/* Content + Options — first in DOM (RIGHT in RTL) */}
             <div className={cn(
               'flex flex-col p-4',
               type === 'image' ? 'flex-1' : 'w-full max-w-3xl mx-auto'
@@ -400,7 +389,7 @@ const DailyTest: FC<DailyTestProps> = ({ lesson, day, levelId }) => {
                 </RadioGroup>
               </div>
 
-              {/* Navigation Controls at bottom of right column */}
+              {/* Navigation Controls */}
               <div className="mt-4 flex items-center justify-between pt-3 border-t border-border">
                 <Button
                   onClick={prev}
@@ -435,6 +424,17 @@ const DailyTest: FC<DailyTestProps> = ({ lesson, day, levelId }) => {
                 )}
               </div>
             </div>
+
+            {/* Image — second in DOM (LEFT in RTL), no frame */}
+            {type === 'image' && (
+              <div className="relative group lg:w-[45%] xl:w-[50%] shrink-0 flex items-center justify-center p-0 min-h-[200px] lg:min-h-0 overflow-hidden">
+                <img
+                  src={question}
+                  alt="Daily Test Question"
+                  className="w-full h-full max-h-[250px] lg:max-h-[400px] rounded-lg object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+                />
+              </div>
+            )}
           </div>
         </Card>
       )}
