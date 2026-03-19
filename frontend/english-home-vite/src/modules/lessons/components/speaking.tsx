@@ -151,10 +151,31 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
     <div className="mx-auto flex max-w-5xl flex-col space-y-4">
       <LessonProgress currentIndex={currentIndex} total={sentences.length} />
 
-      {/* 2-column layout: practice LEFT, data RIGHT */}
+      {/* 2-column layout: data first (LTR=left, RTL=right), practice second */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
-        {/* LEFT: Practice / Recording / Results */}
-        <div className="order-2 lg:order-1">
+        {/* Sentence Data (number, text, audio) — first in DOM = start side */}
+        <div>
+          <Card>
+            <CardHeader lang="en" className="flex items-center gap-4">
+              <div className="dark:to-secondary to-primary flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#96796e] p-3 text-xl font-bold text-white shadow-lg">
+                {currentIndex + 1}
+              </div>
+              <CardTitle className="text-xl font-bold md:text-2xl">
+                {sentence}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AudioPlayback
+                key={soundSrc}
+                audioSrc={soundSrc}
+                className="border-input/50 w-full border"
+              />
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Practice / Recording / Results — second in DOM = end side */}
+        <div>
           <Card>
             <CardContent className="pt-6">
               {currentRecord.recordUrl ? (
@@ -209,27 +230,6 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
                   value={currentRecord?.recordUrl}
                 />
               )}
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* RIGHT: Sentence Data (number, text, audio) */}
-        <div className="order-1 lg:order-2">
-          <Card>
-            <CardHeader lang="en" className="flex items-center gap-4">
-              <div className="dark:to-secondary to-primary flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#96796e] p-3 text-xl font-bold text-white shadow-lg">
-                {currentIndex + 1}
-              </div>
-              <CardTitle className="text-xl font-bold md:text-2xl">
-                {sentence}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <AudioPlayback
-                key={soundSrc}
-                audioSrc={soundSrc}
-                className="border-input/50 w-full border"
-              />
             </CardContent>
           </Card>
         </div>

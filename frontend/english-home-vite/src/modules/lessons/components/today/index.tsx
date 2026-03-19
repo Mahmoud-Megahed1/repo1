@@ -22,7 +22,7 @@ type Props = {
   levelId: LevelId;
 };
 const Today: FC<Props> = ({
-  lesson: { description, instructions, sentences, soundSrc, title },
+  lesson: { description, instructions, sentences, soundSrc },
   day,
   lessonName,
   levelId,
@@ -34,11 +34,8 @@ const Today: FC<Props> = ({
   });
   return (
     <div className="mx-auto max-w-6xl space-y-4">
-      {/* Title + description — inline, no card wrapper to save space */}
-      <div lang="ar">
-        <h2 className="text-xl md:text-2xl font-bold">{title}</h2>
-        <p className="text-muted-foreground text-sm md:text-base mt-1">{description}</p>
-      </div>
+      {/* Description only — title is now in the parent route header */}
+      <p lang="ar" className="text-muted-foreground text-sm md:text-base">{description}</p>
 
       {/* 2-column grid on desktop/iPad */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
@@ -63,7 +60,17 @@ const Today: FC<Props> = ({
             </CardContent>
           </Card>
 
-          <SentencesCard sentences={sentences} />
+          {/* Practice Sentences — scroll into view when opened */}
+          <div
+            id="practice-sentences"
+            onClick={() => {
+              setTimeout(() => {
+                document.getElementById('practice-sentences')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }, 100);
+            }}
+          >
+            <SentencesCard sentences={sentences} />
+          </div>
         </div>
 
         {/* Right Column: Practice Speaking + Next */}

@@ -30,7 +30,7 @@ function RouteComponent() {
   const { t } = useTranslation();
   const { dynamicTheme } = useTheme();
   const { id: levelId, day, lessonName } = useParams({ from: Route.id });
-  const { isEmpty, isFetching } = useLessonContext();
+  const { isEmpty, isFetching, lesson } = useLessonContext();
   const { levelsDetails } = useAuth();
   const currentDay =
     levelsDetails?.find(({ levelName }) => levelName === levelId)?.currentDay ||
@@ -118,7 +118,9 @@ function RouteComponent() {
           {/* Lesson title + Orange instruction bar + Green completion badge — all on one line */}
           <div className="flex flex-wrap items-center gap-3">
             <h2 className="text-xl md:text-2xl font-bold shrink-0">
-              {t(`Global.sidebarItems.${lessonName}` as any)}
+              {lessonName === 'TODAY' && (lesson as any)?.data?.[0]?.title
+                ? (lesson as any).data[0].title
+                : t(`Global.sidebarItems.${lessonName}` as any)}
             </h2>
             <div className="bg-amber-100 dark:bg-amber-900/40 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-100 px-5 py-2.5 rounded-xl font-semibold flex-1 flex items-center gap-2 text-sm md:text-base">
               <span className="text-amber-500 text-lg">💡</span>
