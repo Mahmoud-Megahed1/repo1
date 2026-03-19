@@ -66,23 +66,32 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
   return (
     <div
       className={cn(
-        'mx-auto flex w-full max-w-4xl flex-col space-y-8 pb-10',
+        'mx-auto flex w-full max-w-6xl flex-col space-y-4 pb-6',
         className
       )}
       {...props}
     >
       <LessonProgress currentIndex={currentIndex} total={lesson.length} />
-      <div className="flex flex-col space-y-8">
-        <DefinitionCard
-          definitionAr={currentItem.definitionAr}
-          definitionEn={currentItem.definitionEn}
-        />
-        <UseCasesCard useCases={useCases} />
-        <ExamplesCard examples={currentItem.examples} />
+
+      {/* 2-column: Definition+UseCases first (RTL=right), Examples second (RTL=left) */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
+        {/* Definition + UseCases */}
+        <div className="space-y-4">
+          <DefinitionCard
+            definitionAr={currentItem.definitionAr}
+            definitionEn={currentItem.definitionEn}
+          />
+          <UseCasesCard useCases={useCases} />
+        </div>
+
+        {/* Examples */}
+        <div>
+          <ExamplesCard examples={currentItem.examples} />
+        </div>
       </div>
 
       {isLast && (
-        <div className="flex justify-end mt-10">
+        <div className="flex justify-end mt-4">
           <NextLessonButton lessonName="IDIOMS" onClick={handleComplete} />
         </div>
       )}

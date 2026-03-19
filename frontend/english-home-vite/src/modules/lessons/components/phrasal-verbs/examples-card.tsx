@@ -23,7 +23,7 @@ const ExamplesCard: FC<Props> = ({ examples }) => {
             description={t('Global.phrasalVerbs.examplesCard.description')}
             icon={MessageCircle}
             variant="purple"
-            className="mt-8 space-y-10"
+            className="space-y-10"
             opened
         >
             <ul className="flex h-4 items-center justify-center gap-2">

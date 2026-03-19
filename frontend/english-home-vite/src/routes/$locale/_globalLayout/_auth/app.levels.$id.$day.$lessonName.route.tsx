@@ -19,6 +19,10 @@ import ScrollArrows from '@components/scroll-arrows';
 import { GlobalAiChat } from '@modules/lessons/components/global-ai-chat';
 import { useAiChatStore } from '@hooks/use-ai-chat-store';
 import { useTheme } from '@components/contexts/theme-context';
+import { useLessonProgressStore } from '@hooks/use-lesson-progress-store';
+import { Progress } from '@ui/progress';
+import useLocale from '@hooks/use-locale';
+import { localizedNumber } from '@lib/utils';
 
 export const Route = createFileRoute(
   '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName'
@@ -114,31 +118,62 @@ function RouteComponent() {
       ) : isEmpty ? (
         <ComingSoon />
       ) : (
-        <div key={lessonName} className="py-8 space-y-6">
-          {/* Lesson title + Orange instruction bar + Green completion badge — all on one line */}
-          <div className="flex flex-wrap items-center gap-3">
-            <h2 className="text-xl md:text-2xl font-bold shrink-0">
-              {lessonName === 'TODAY' && (lesson as any)?.data?.[0]?.title
-                ? (lesson as any).data[0].title
-                : t(`Global.sidebarItems.${lessonName}` as any)}
-            </h2>
-            <div className="bg-amber-100 dark:bg-amber-900/40 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-100 px-5 py-2.5 rounded-xl font-semibold flex-1 flex items-center gap-2 text-sm md:text-base">
-              <span className="text-amber-500 text-lg">💡</span>
-              <span>{t(`Global.lessonInstructions.${lessonName}` as any)}</span>
-            </div>
-            {completedTasks?.data?.includes(lessonName) && (
-              <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-4 py-2.5 rounded-xl font-bold flex items-center gap-2 text-sm shrink-0 animate-in fade-in duration-500">
-                <CheckCircle2 className="w-5 h-5" />
-                <span>{t('Global.lessonCompleted' as any)}</span>
-              </div>
-            )}
-          </div>
+        <div key={lessonName} className="py-4 space-y-3">
+          {/* Lesson title + Orange instruction bar + Green badge + Progress — all on one line */}
+          <HeaderBar
+            lessonName={lessonName}
+            lesson={lesson}
+            completedTasks={completedTasks}
+            t={t}
+          />
           <Outlet />
         </div>
       )}
       <ScrollArrows />
       <GlobalAiChat isLessonCompleted={areAllTasksCompleted} />
     </LevelGuard>
+  );
+}
+
+function HeaderBar({ lessonName, lesson, completedTasks, t }: {
+  lessonName: string;
+  lesson: any;
+  completedTasks: any;
+  t: any;
+}) {
+  const { currentIndex, total } = useLessonProgressStore();
+  const locale = useLocale() === 'ar' ? 'ar-EG' : 'en-US';
+
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <h2 className="text-xl md:text-2xl font-bold shrink-0">
+        {lessonName === 'TODAY' && lesson?.data?.[0]?.title
+          ? lesson.data[0].title
+          : t(`Global.sidebarItems.${lessonName}` as any)}
+      </h2>
+      <div className="bg-amber-100 dark:bg-amber-900/40 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-100 px-5 py-2.5 rounded-xl font-semibold flex-1 flex items-center gap-2 text-sm md:text-base">
+        <span className="text-amber-500 text-lg">💡</span>
+        <span>{t(`Global.lessonInstructions.${lessonName}` as any)}</span>
+      </div>
+      {completedTasks?.data?.includes(lessonName) && (
+        <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-4 py-2.5 rounded-xl font-bold flex items-center gap-2 text-sm shrink-0 animate-in fade-in duration-500">
+          <CheckCircle2 className="w-5 h-5" />
+          <span>{t('Global.lessonCompleted' as any)}</span>
+        </div>
+      )}
+      {total > 0 && (
+        <div className="flex items-center gap-3 shrink-0">
+          <span className="text-sm text-muted-foreground whitespace-nowrap">
+            {localizedNumber(currentIndex + 1, locale)} {t('Global.of' as any)}{' '}
+            {localizedNumber(total, locale)}
+          </span>
+          <Progress
+            value={((currentIndex + 1) / total) * 100}
+            className="w-32 md:w-40"
+          />
+        </div>
+      )}
+    </div>
   );
 }
 
