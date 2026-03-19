@@ -148,79 +148,94 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
   const { sentence, soundSrc } = currentItem;
   const currentRecord = usersRecords[currentIndex];
   return (
-    <div className="mx-auto flex max-w-2xl flex-col space-y-4">
+    <div className="mx-auto flex max-w-5xl flex-col space-y-4">
       <LessonProgress currentIndex={currentIndex} total={sentences.length} />
 
-      <Card>
-        <CardHeader lang="en" className="flex items-center gap-4">
-          <div className="dark:to-secondary to-primary flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#96796e] p-3 text-xl font-bold text-white shadow-lg">
-            {currentIndex + 1}
-          </div>
-          <CardTitle className="text-xl font-bold md:text-2xl">
-            {sentence}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AudioPlayback
-            key={soundSrc}
-            audioSrc={soundSrc}
-            className="border-input/50 w-full border"
-          />
-          {currentRecord.recordUrl ? (
-            isPending ? (
-              <Loading />
-            ) : (
-              <div className="flex flex-col items-center gap-4">
-                {currentRecord.results?.isPassed && (
-                  <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-6 py-3 rounded-lg font-bold flex items-center gap-3 shadow-sm animate-in fade-in zoom-in duration-300">
-                    <CheckCircle2 className="w-6 h-6" />
-                    <span>{t('Global.dailySpeakingSuccess' as any)}</span>
+      {/* 2-column layout: practice LEFT, data RIGHT */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
+        {/* LEFT: Practice / Recording / Results */}
+        <div className="order-2 lg:order-1">
+          <Card>
+            <CardContent className="pt-6">
+              {currentRecord.recordUrl ? (
+                isPending ? (
+                  <Loading />
+                ) : (
+                  <div className="flex flex-col items-center gap-4">
+                    {currentRecord.results?.isPassed && (
+                      <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-6 py-3 rounded-lg font-bold flex items-center gap-3 shadow-sm animate-in fade-in zoom-in duration-300">
+                        <CheckCircle2 className="w-6 h-6" />
+                        <span>{t('Global.dailySpeakingSuccess' as any)}</span>
+                      </div>
+                    )}
+                    <SpeakingFeedback
+                      result={currentRecord.results!}
+                      onReset={() => {
+                        setUsersRecords((prev) => {
+                          const newData = [...prev];
+                          newData[currentIndex].recordUrl = null;
+                          newData[currentIndex].results = undefined;
+                          return newData;
+                        });
+                        resetMutation();
+                      }}
+                      recordUrl={currentRecord.recordUrl}
+                      className="w-full"
+                    />
+
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="mt-2 w-full md:w-auto"
+                      onClick={() => {
+                        setUsersRecords((prev) => {
+                          const newData = [...prev];
+                          newData[currentIndex].recordUrl = null;
+                          newData[currentIndex].results = undefined;
+                          return newData;
+                        });
+                        resetMutation();
+                      }}
+                    >
+                      <RotateCcw className="mr-2 h-4 w-4" />
+                      {t('Global.tryAgain')}
+                    </Button>
                   </div>
-                )}
-                <SpeakingFeedback
-                  result={currentRecord.results!}
-                  onReset={() => {
-                    setUsersRecords((prev) => {
-                      const newData = [...prev];
-                      newData[currentIndex].recordUrl = null;
-                      newData[currentIndex].results = undefined;
-                      return newData;
-                    });
-                    resetMutation(); // Clear the mutation state
-                  }}
-                  recordUrl={currentRecord.recordUrl}
-                  className="mt-4 w-full"
+                )
+              ) : (
+                <Recorder
+                  key={currentIndex}
+                  onValueChange={(file) => handleRecordChange(file)}
+                  value={currentRecord?.recordUrl}
                 />
+              )}
+            </CardContent>
+          </Card>
+        </div>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="mt-4 w-full md:w-auto"
-                  onClick={() => {
-                    setUsersRecords((prev) => {
-                      const newData = [...prev];
-                      newData[currentIndex].recordUrl = null;
-                      newData[currentIndex].results = undefined;
-                      return newData;
-                    });
-                    resetMutation(); // Also reset on button click
-                  }}
-                >
-                  <RotateCcw className="mr-2 h-4 w-4" />
-                  {t('Global.tryAgain')}
-                </Button>
+        {/* RIGHT: Sentence Data (number, text, audio) */}
+        <div className="order-1 lg:order-2">
+          <Card>
+            <CardHeader lang="en" className="flex items-center gap-4">
+              <div className="dark:to-secondary to-primary flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#96796e] p-3 text-xl font-bold text-white shadow-lg">
+                {currentIndex + 1}
               </div>
-            )
-          ) : (
-            <Recorder
-              key={currentIndex}
-              onValueChange={(file) => handleRecordChange(file)}
-              value={currentRecord?.recordUrl}
-            />
-          )}
-        </CardContent>
-      </Card>
+              <CardTitle className="text-xl font-bold md:text-2xl">
+                {sentence}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AudioPlayback
+                key={soundSrc}
+                audioSrc={soundSrc}
+                className="border-input/50 w-full border"
+              />
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
+      {/* Navigation bar */}
       <div className="sticky bottom-0 bg-background/80 backdrop-blur-sm p-4 border-t mt-4 flex items-center justify-between z-10">
         <Button variant="outline" onClick={prev} disabled={!hasPrevItems}>
           {t('Global.prev')}
@@ -239,8 +254,6 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
         </ul>
 
         <div className="flex gap-2">
-
-
           {isLast ? (
             <NextLessonButton lessonName="TODAY" className="px-8" />
           ) : (

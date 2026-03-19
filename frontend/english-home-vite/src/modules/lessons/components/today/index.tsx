@@ -5,7 +5,6 @@ import type { LessonId, LevelId } from '@shared/types/entities';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@ui/card';
@@ -34,18 +33,12 @@ const Today: FC<Props> = ({
     levelId,
   });
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      {/* Title card - spans full width */}
-      <Card lang="ar" className="gap-2">
-        <CardHeader>
-          <CardTitle className="text-xl md:text-2xl">{title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <CardDescription className="md:text-base">
-            {description}
-          </CardDescription>
-        </CardContent>
-      </Card>
+    <div className="mx-auto max-w-6xl space-y-4">
+      {/* Title + description — inline, no card wrapper to save space */}
+      <div lang="ar">
+        <h2 className="text-xl md:text-2xl font-bold">{title}</h2>
+        <p className="text-muted-foreground text-sm md:text-base mt-1">{description}</p>
+      </div>
 
       {/* 2-column grid on desktop/iPad */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
