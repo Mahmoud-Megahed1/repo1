@@ -56,9 +56,17 @@ const Reading: FC<Props> = ({
       )}
       {...props}
     >
-      {/* Left Column: Image + Audio + Next Button */}
+      {/* Text Content — first in DOM so it appears RIGHT in RTL */}
+      <Card className="flex-1 min-w-0 flex flex-col lg:overflow-hidden border-border shadow-card">
+        <CardContent className="flex-1 min-h-0 lg:overflow-y-auto lg:pe-2 pt-6">
+          <div className="bg-accent/30 w-full rounded-lg p-3">
+            <RichTextViewer lang="en">{textContent}</RichTextViewer>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Image + Audio + Next — second in DOM so it appears LEFT in RTL */}
       <div className="flex w-full flex-col gap-3 lg:w-[45%] xl:w-[42%] lg:shrink-0">
-        {/* Image */}
         {imageSrc && (
           <div className="flex-1 min-h-0 flex items-center justify-center overflow-hidden rounded-xl">
             <img
@@ -68,8 +76,6 @@ const Reading: FC<Props> = ({
             />
           </div>
         )}
-
-        {/* Audio Player */}
         <div className="space-y-1">
           <h3 className="text-base font-bold">
             {t('Global.sidebarItems.LISTEN')}
@@ -79,19 +85,8 @@ const Reading: FC<Props> = ({
             title={t('Global.sidebarItems.LISTEN')}
           />
         </div>
-
-        {/* Next Lesson Button */}
         <NextLessonButton lessonName="PICTURES" onClick={handleComplete} />
       </div>
-
-      {/* Right Column: Text Content - scrollable */}
-      <Card className="flex-1 min-w-0 flex flex-col lg:overflow-hidden border-border shadow-card">
-        <CardContent className="flex-1 min-h-0 lg:overflow-y-auto lg:pe-2 pt-6">
-          <div className="bg-accent/30 w-full rounded-lg p-3">
-            <RichTextViewer lang="en">{textContent}</RichTextViewer>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type FC } from 'react';
+import { useLessonProgressStore } from '@hooks/use-lesson-progress-store';
 import type { DailyTestLesson } from '../types';
 import useItemsPagination from '@hooks/use-items-pagination';
 import {
@@ -15,7 +16,6 @@ import { useTranslation } from 'react-i18next';
 import { RadioGroup, RadioGroupItem } from '@ui/radio-group';
 import { Label } from '@ui/label';
 import { cn, localizedNumber } from '@lib/utils';
-import { Progress } from '@ui/progress';
 import useLocale from '@hooks/use-locale';
 import { useMarkDayAsCompleted, useMarkTaskAsCompleted, useGetDayStatus } from '../mutations';
 import type { LevelId } from '@shared/types/entities';
@@ -38,20 +38,18 @@ const TestProgress = ({
   currentIndex: number;
   total: number;
 }) => {
-  const { t } = useTranslation();
-  const locale = useLocale() === 'ar' ? 'ar-EG' : 'en-US';
-  return (
-    <div className="flex flex-1 items-center gap-4">
-      <div className="shrink-0">
-        {localizedNumber(currentIndex + 1, locale)} {t('Global.of')}{' '}
-        {localizedNumber(total, locale)}
-      </div>
-      <Progress
-        value={((currentIndex + 1) / total) * 100}
-        className="flex-1 md:max-w-52"
-      />
-    </div>
-  );
+  const setProgress = useLessonProgressStore((s) => s.setProgress);
+  const resetProgress = useLessonProgressStore((s) => s.resetProgress);
+
+  useEffect(() => {
+    setProgress(currentIndex, total);
+  }, [currentIndex, total, setProgress]);
+
+  useEffect(() => {
+    return () => resetProgress();
+  }, [resetProgress]);
+
+  return null;
 };
 
 const ResultCard = ({
@@ -324,11 +322,11 @@ const DailyTest: FC<DailyTestProps> = ({ lesson, day, levelId }) => {
           )}>
             {/* Left Column: Image for Image-type questions */}
             {type === 'image' && (
-              <div className="relative group lg:w-[45%] xl:w-[50%] shrink-0 flex items-center justify-center bg-black/5 dark:bg-white/5 p-0 border-b lg:border-b-0 lg:border-e border-border min-h-[300px] lg:min-h-0 overflow-hidden">
+              <div className="relative group lg:w-[45%] xl:w-[50%] shrink-0 flex items-center justify-center bg-black/5 dark:bg-white/5 p-0 border-b lg:border-b-0 lg:border-e border-border min-h-[200px] lg:min-h-0 overflow-hidden">
                 <img
                   src={question}
                   alt="Daily Test Question"
-                  className="w-full h-full max-h-[320px] lg:max-h-[700px] rounded-none lg:rounded-s-lg object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+                  className="w-full h-full max-h-[250px] lg:max-h-[400px] rounded-none lg:rounded-s-lg object-contain transition-transform duration-300 group-hover:scale-[1.02]"
                 />
               </div>
             )}
@@ -403,7 +401,7 @@ const DailyTest: FC<DailyTestProps> = ({ lesson, day, levelId }) => {
               </div>
 
               {/* Navigation Controls at bottom of right column */}
-              <div className="mt-8 flex items-center justify-between pt-4 border-t border-border">
+              <div className="mt-4 flex items-center justify-between pt-3 border-t border-border">
                 <Button
                   onClick={prev}
                   variant="ghost"

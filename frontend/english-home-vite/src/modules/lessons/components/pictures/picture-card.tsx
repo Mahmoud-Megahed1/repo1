@@ -42,38 +42,7 @@ const PictureCard: FC<Props> = ({
 
   return (
     <div className="flex flex-col gap-3 lg:flex-row lg:items-start w-full">
-      {/* Image Section — left side, no frame */}
-      <div className="relative lg:w-[420px] shrink-0 overflow-hidden rounded-lg max-h-[360px]">
-        <img
-          src={pictureSrc}
-          className="h-full w-full object-cover select-none pointer-events-none rounded-lg max-h-[360px]"
-          alt={wordEn}
-          draggable={false}
-          onContextMenu={(e) => e.preventDefault()}
-          onDragStart={(e) => e.preventDefault()}
-        />
-
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute z-10 top-1/2 -translate-y-1/2 left-3 rounded-full bg-black/40 text-white hover:bg-black/60 disabled:opacity-30"
-          onClick={prev}
-          disabled={!hasPrevItems}
-        >
-          <ChevronLeftIcon size={24} />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute z-10 top-1/2 -translate-y-1/2 right-3 rounded-full bg-black/40 text-white hover:bg-black/60 disabled:opacity-30"
-          onClick={next}
-          disabled={!hasNextItems}
-        >
-          <ChevronRightIcon size={24} />
-        </Button>
-      </div>
-
-      {/* Content Section — right of image */}
+      {/* Content Section — first in DOM (RIGHT in RTL, LEFT in LTR) */}
       <div className="flex flex-col gap-2 flex-1">
         <Card className="shadow-none border-border flex-1">
           <CardHeader className="space-y-4 pb-4">
@@ -152,13 +121,43 @@ const PictureCard: FC<Props> = ({
           </CardContent>
         </Card>
 
-        {/* Next lesson button — always visible, faded until last image */}
         <NextLessonButton
           lessonName="LISTEN"
           onClick={onComplete}
           className={`w-full transition-opacity ${isLast ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}
           disabled={!isLast}
         />
+      </div>
+
+      {/* Image Section — second in DOM (LEFT in RTL, RIGHT in LTR) */}
+      <div className="relative lg:w-[420px] shrink-0 overflow-hidden rounded-lg max-h-[360px]">
+        <img
+          src={pictureSrc}
+          className="h-full w-full object-cover select-none pointer-events-none rounded-lg max-h-[360px]"
+          alt={wordEn}
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
+        />
+
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute z-10 top-1/2 -translate-y-1/2 left-3 rounded-full bg-black/40 text-white hover:bg-black/60 disabled:opacity-30"
+          onClick={prev}
+          disabled={!hasPrevItems}
+        >
+          <ChevronLeftIcon size={24} />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute z-10 top-1/2 -translate-y-1/2 right-3 rounded-full bg-black/40 text-white hover:bg-black/60 disabled:opacity-30"
+          onClick={next}
+          disabled={!hasNextItems}
+        >
+          <ChevronRightIcon size={24} />
+        </Button>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ const ExamplesCard: FC<Props> = ({ examples }) => {
       description={t('Global.idioms.examplesCard.description')}
       icon={MessageCircle}
       variant="purple"
-      className="mt-8 space-y-10"
+      className="space-y-10"
     >
       <ul className="flex h-4 items-center justify-center gap-2">
         {Array.from({ length: examples.length }).map((_, index) => (

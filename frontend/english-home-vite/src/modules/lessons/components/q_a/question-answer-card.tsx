@@ -20,8 +20,8 @@ const QuestionAnswerCard: FC<QuestionAnswerCardProps> = ({
   const locale = useLocale() === 'en' ? 'en-US' : 'ar-EG';
   return (
     <Card className="border-none">
-      <CardContent className="space-y-8">
-        <div className="space-y-4">
+      <CardContent className="space-y-4 py-3">
+        <div className="space-y-2">
           <h2 className="flex items-center gap-2 text-xl font-bold">
             <span className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-full text-center text-sm">
               {localizedNumber(index, locale)}
@@ -37,7 +37,7 @@ const QuestionAnswerCard: FC<QuestionAnswerCardProps> = ({
             </CardContent>
           </Card>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-2">
           <h2 className="flex items-center gap-2 text-xl font-bold">
             <CheckCircle className="text-green-600" /> {t('Global.answer')}
           </h2>
