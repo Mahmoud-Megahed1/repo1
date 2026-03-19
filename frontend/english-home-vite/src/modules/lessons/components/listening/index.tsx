@@ -52,20 +52,24 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
 
   return (
     <div className="mx-auto flex size-full max-w-3xl flex-col gap-4" {...props}>
-      {/* Header: Title + Progress Bars */}
-      <div className="flex flex-col gap-1">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      {/* Top Header: Title + Progress */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
           <h4 className="flex items-center gap-2 text-xl font-bold">
             <span className="size-2 rounded-full bg-amber-400" />
             {t('Global.sidebarItems.LISTEN')}
           </h4>
-          <LessonProgress currentIndex={currentIndex} total={lesson.definitions.length} />
+          <h4 className="flex items-center gap-2 text-xl font-bold">
+            <span className="size-2 rounded-full bg-green-600" />
+            {t('Global.definitions')}
+          </h4>
         </div>
+        <LessonProgress currentIndex={currentIndex} total={lesson.definitions.length} />
       </div>
 
       {/* Audio Player Section */}
       <div>
-        <div className="mb-2 flex items-center justify-end">
+        <div className="mb-2 flex flex-wrap items-center justify-end gap-4">
           {/* Show transcript */}
           <Button
             variant="outline"
@@ -97,10 +101,6 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
 
       {/* Definitions Section — Paginated */}
       <div className="space-y-4">
-        <h4 className="flex items-center gap-2 text-xl font-bold">
-          <span className="size-2 rounded-full bg-green-600" />
-          {t('Global.definitions')}
-        </h4>
 
         {/* Current Definition Card */}
         {currentDefinition && (

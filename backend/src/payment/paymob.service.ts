@@ -134,7 +134,6 @@ export class PaymobService {
           ...item,
           amount: item.amount * 100, // Convert to cents for payment provider
         })),
-        redirection_url: this.frontendRedirectService.getPaymentSuccessUrl(paymentRequest.items[0]?.name || 'Unknown'),
       };
 
       const res = await fetch(`${this.PAYMOB_INTENTION_URL}`, {

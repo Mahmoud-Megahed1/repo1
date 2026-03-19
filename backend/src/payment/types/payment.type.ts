@@ -27,6 +27,7 @@ export class PaymentRequest {
   payment_methods: number[];
   items: Item[];
   billing_data: BillingData;
+  redirection_url?: string;
 }
 
 export interface hmacValidationType {

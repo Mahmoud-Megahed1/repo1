@@ -1,6 +1,5 @@
 import useItemsPagination from '@hooks/use-items-pagination';
 import LessonProgress from '@components/lesson-progress';
-import NextLessonButton from '@components/next-lesson-button';
 import { useEffect, type ComponentProps, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PictureLesson } from '../../types';
@@ -61,33 +60,16 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
   if (!currentItem) return null;
   return (
     <div className="mx-auto w-full max-w-7xl" {...props}>
-      <div className="mb-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center gap-6">
-            <div className="flex flex-col gap-1">
-              <h1 className="text-2xl font-bold">
-                {t('Global.pictureVocabulary.title')}
-              </h1>
-              <p className="text-muted-foreground text-sm">
-                {t('Global.pictureVocabulary.description')}
-              </p>
-            </div>
-            <div className="w-32 md:w-48 hidden md:block">
-              <LessonProgress currentIndex={currentIndex} total={lesson.length} />
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="md:hidden flex-1">
-              <LessonProgress currentIndex={currentIndex} total={lesson.length} />
-            </div>
-            {isLast && (
-              <NextLessonButton
-                lessonName="LISTEN"
-                onClick={handleComplete}
-              />
-            )}
-          </div>
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">
+            {t('Global.pictureVocabulary.title')}
+          </h1>
+          <p className="text-muted-foreground text-sm">
+            {t('Global.pictureVocabulary.description')}
+          </p>
         </div>
+        <LessonProgress currentIndex={currentIndex} total={lesson.length} />
       </div>
       <div className="flex w-full flex-col gap-4 md:flex-row md:items-start">
         <PictureCard
@@ -96,6 +78,8 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
           prev={prev}
           hasNextItems={hasNextItems}
           hasPrevItems={hasPrevItems}
+          showNextLessonButton={isLast}
+          onComplete={handleComplete}
           {...currentItem}
         />
         <PictureSidebar

@@ -211,10 +211,13 @@ export class PaymobController {
 
       // SAUDI ARABIA
 
+      const frontendUrl = this.configService.get<string>('FRONTEND_URL');
+
       const data = {
         amount: course.price, // Use whole currency amount for our internal processing
         currency: 'SAR', // <- Saudi Riyal
         payment_methods: [integration_id, 24018], // added 24018 for Tamara
+        redirection_url: frontendUrl, // Redirect user back to the website after payment
         items: [
           {
             name: paymentIntentionDto.level_name,
