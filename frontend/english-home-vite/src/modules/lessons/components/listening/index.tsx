@@ -52,20 +52,8 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
 
   return (
     <div className="mx-auto flex size-full max-w-3xl flex-col gap-4" {...props}>
-      {/* Top Header: Title + Progress */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <h4 className="flex items-center gap-2 text-xl font-bold">
-            <span className="size-2 rounded-full bg-amber-400" />
-            {t('Global.sidebarItems.LISTEN')}
-          </h4>
-          <h4 className="flex items-center gap-2 text-xl font-bold">
-            <span className="size-2 rounded-full bg-green-600" />
-            {t('Global.definitions')}
-          </h4>
-        </div>
-        <LessonProgress currentIndex={currentIndex} total={lesson.definitions.length} />
-      </div>
+      {/* Progress bar at top */}
+      <LessonProgress currentIndex={currentIndex} total={lesson.definitions.length} />
 
       {/* Audio Player Section */}
       <div>

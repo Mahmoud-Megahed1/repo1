@@ -1,5 +1,6 @@
 import useItemsPagination from '@hooks/use-items-pagination';
 import LessonProgress from '@components/lesson-progress';
+import NextLessonButton from '@components/next-lesson-button';
 import { useEffect, type ComponentProps, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PictureLesson } from '../../types';
@@ -60,15 +61,7 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
   if (!currentItem) return null;
   return (
     <div className="mx-auto w-full max-w-7xl" {...props}>
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">
-            {t('Global.pictureVocabulary.title')}
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            {t('Global.pictureVocabulary.description')}
-          </p>
-        </div>
+      <div className="mb-3">
         <LessonProgress currentIndex={currentIndex} total={lesson.length} />
       </div>
       <div className="flex w-full flex-col gap-4 md:flex-row md:items-start">
@@ -78,8 +71,6 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
           prev={prev}
           hasNextItems={hasNextItems}
           hasPrevItems={hasPrevItems}
-          showNextLessonButton={isLast}
-          onComplete={handleComplete}
           {...currentItem}
         />
         <PictureSidebar
@@ -89,7 +80,15 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
           title={t('Global.vocabulary')}
         />
       </div>
+      {/* Next lesson button - always visible, disabled/faded until last image */}
+      <NextLessonButton
+        lessonName="LISTEN"
+        onClick={handleComplete}
+        className={`mt-4 w-full transition-opacity ${isLast ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}
+        disabled={!isLast}
+      />
     </div>
   );
 };
 export default Pictures;
+

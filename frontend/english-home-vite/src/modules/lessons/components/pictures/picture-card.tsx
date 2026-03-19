@@ -1,4 +1,3 @@
-import NextLessonButton from '@components/next-lesson-button';
 import useAudioPlayer from '@hooks/use-audio-player';
 import { useIsMobile } from '@hooks/use-mobile';
 import type { PictureLesson } from '@modules/lessons/types';
@@ -18,8 +17,6 @@ type Props = Omit<PictureLesson, 'id'> & {
   next: () => void;
   hasPrevItems: boolean;
   hasNextItems: boolean;
-  showNextLessonButton?: boolean;
-  onComplete?: () => void;
 };
 
 const PictureCard: FC<Props> = ({
@@ -33,8 +30,6 @@ const PictureCard: FC<Props> = ({
   hasPrevItems,
   next,
   prev,
-  showNextLessonButton,
-  onComplete,
 }) => {
   const { ref, togglePlay, isPlaying } = useAudioPlayer();
   const { t, i18n } = useTranslation();
@@ -47,7 +42,7 @@ const PictureCard: FC<Props> = ({
   }, [isMobile]);
 
   return (
-    <div className="flex flex-col gap-2 lg:flex-row lg:items-start w-full">
+    <div className="flex flex-col gap-2 lg:flex-row lg:items-stretch w-full">
       {/* Image Section */}
       <div className="relative lg:flex-[1.2] flex items-center justify-center overflow-hidden">
         <img
@@ -157,14 +152,6 @@ const PictureCard: FC<Props> = ({
             )}
           </CardContent>
         </Card>
-
-        {showNextLessonButton && (
-          <NextLessonButton
-            lessonName="LISTEN"
-            onClick={onComplete}
-            className="w-full"
-          />
-        )}
       </div>
     </div>
   );
