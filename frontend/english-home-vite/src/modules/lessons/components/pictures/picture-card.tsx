@@ -42,11 +42,11 @@ const PictureCard: FC<Props> = ({
 
   return (
     <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch w-full">
-      {/* Image Section — left side */}
-      <div className="relative lg:flex-[1.2] flex items-center justify-center rounded-lg border border-border overflow-hidden bg-muted/20 min-h-[280px]">
+      {/* Image Section — left side, no frame */}
+      <div className="relative lg:flex-[1.2] overflow-hidden rounded-lg">
         <img
           src={pictureSrc}
-          className="h-auto w-full object-contain max-h-[300px] lg:max-h-[480px] select-none pointer-events-none"
+          className="h-full w-full object-cover select-none pointer-events-none rounded-lg"
           alt={wordEn}
           draggable={false}
           onContextMenu={(e) => e.preventDefault()}
@@ -56,7 +56,7 @@ const PictureCard: FC<Props> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="absolute z-10 top-1/2 -translate-y-1/2 left-2 rounded-full bg-black/40 text-gray-300 hover:bg-black/50 hover:text-white disabled:opacity-30"
+          className="absolute z-10 top-1/2 -translate-y-1/2 left-3 rounded-full bg-black/40 text-white hover:bg-black/60 disabled:opacity-30"
           onClick={prev}
           disabled={!hasPrevItems}
         >
@@ -65,7 +65,7 @@ const PictureCard: FC<Props> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="absolute z-10 top-1/2 -translate-y-1/2 right-2 rounded-full bg-black/40 text-gray-300 hover:bg-black/50 hover:text-white disabled:opacity-30"
+          className="absolute z-10 top-1/2 -translate-y-1/2 right-3 rounded-full bg-black/40 text-white hover:bg-black/60 disabled:opacity-30"
           onClick={next}
           disabled={!hasNextItems}
         >
@@ -73,8 +73,8 @@ const PictureCard: FC<Props> = ({
         </Button>
       </div>
 
-      {/* Content Section — left side */}
-      <div className="flex flex-col gap-2 lg:w-[340px] xl:w-[400px] shrink-0">
+      {/* Content Section — right side */}
+      <div className="flex flex-col gap-2 flex-1">
         <Card className="shadow-none border-border flex-1">
           <CardHeader className="space-y-4 pb-4">
             <div className="flex items-center justify-between gap-2">
