@@ -1,6 +1,5 @@
 import NextLessonButton from '@components/next-lesson-button';
 import useAudioPlayer from '@hooks/use-audio-player';
-import { useIsMobile } from '@hooks/use-mobile';
 import type { PictureLesson } from '@modules/lessons/types';
 import { Button } from '@ui/button';
 import { Card, CardContent, CardDescription, CardHeader } from '@ui/card';
@@ -10,7 +9,7 @@ import {
   PauseIcon,
   PlayIcon,
 } from 'lucide-react';
-import { useEffect, useState, type FC } from 'react';
+import { useState, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = Omit<PictureLesson, 'id'> & {
@@ -39,16 +38,11 @@ const PictureCard: FC<Props> = ({
   const { ref, togglePlay, isPlaying } = useAudioPlayer();
   const { t, i18n } = useTranslation();
   const [showExamples, setShowExamples] = useState(true);
-  const isMobile = useIsMobile();
   const isAr = i18n.language === 'ar';
 
-  useEffect(() => {
-    if (!isMobile) window.scrollTo({ top: 110, behavior: 'instant' });
-  }, [isMobile]);
-
   return (
-    <div className="flex flex-col gap-3 lg:flex-row-reverse lg:items-stretch w-full">
-      {/* Image Section — right side (closer to sidebar) */}
+    <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch w-full">
+      {/* Image Section — left side */}
       <div className="relative lg:flex-[1.2] flex items-center justify-center rounded-lg border border-border overflow-hidden bg-muted/20 min-h-[280px]">
         <img
           src={pictureSrc}

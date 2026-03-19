@@ -65,7 +65,6 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
       </div>
       <div className="flex w-full flex-col gap-4 md:flex-row md:items-start">
         <PictureCard
-          key={currentIndex}
           next={next}
           prev={prev}
           hasNextItems={hasNextItems}
