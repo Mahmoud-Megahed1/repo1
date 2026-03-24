@@ -1,10 +1,11 @@
-// Student Report Dashboard Page — Exact Pixel-Perfect Match of Client Mockup
+// Student Report Dashboard Page — Desktop Brain Diagram + Mobile Accordion
 import axiosClient from '@lib/axios-client';
 import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useBreadcrumbStore } from '@hooks/use-breadcrumb-store';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@shared/components/ui/tooltip';
 import {
     CalendarDays,
     BookOpen,
@@ -18,7 +19,18 @@ import {
     Link2,
     Eye,
     FileText,
-    ScrollText
+    ScrollText,
+    ChevronDown,
+    Headphones,
+    Volume2,
+    BookMarked,
+    Image,
+    Type,
+    Trophy,
+    Pen,
+    Gauge,
+    MessageCircle,
+    Ear,
 } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────
@@ -38,35 +50,169 @@ export const Route = createFileRoute('/$locale/_globalLayout/_auth/app/report')(
     component: ReportPage,
 });
 
-// ─── Solid Polyline Connector with glowing dot (from new mockup) ───────────
-// Lines originate from the brain's surface and connect to the nodes.
-// We use a glowing circle (dot) at the brain side and a polyline to the node.
+// ─── Skill Feature Data ──────────────────────────────────────────────────
+interface SkillFeature {
+    labelEn: string;
+    labelAr: string;
+    tooltipEn: string;
+    tooltipAr: string;
+    icon: React.ReactNode;
+}
 
-function ConnectorLine({ side, bendOffset = 0, width = 60 }: { side: 'left' | 'right', bendOffset?: number, width?: number }) {
+interface SkillCategoryData {
+    id: string;
+    titleEn: string;
+    titleAr: string;
+    groupLabelEn: string;
+    groupLabelAr: string;
+    variant: 'cyan' | 'amber';
+    features: SkillFeature[];
+}
+
+const CATEGORIES: SkillCategoryData[] = [
+    {
+        id: 'listening',
+        titleEn: 'LISTENING',
+        titleAr: 'الاستماع',
+        groupLabelEn: 'LIVING',
+        groupLabelAr: 'استيعاب',
+        variant: 'cyan',
+        features: [
+            {
+                labelEn: 'Audio Mastered',
+                labelAr: 'إتقان الصوتيات',
+                tooltipEn: 'Tracks the total number of audio files fully listened to by the student.',
+                tooltipAr: 'تتبع عدد الملفات الصوتية التي استمع إليها الطالب بالكامل.',
+                icon: <Headphones className="w-3.5 h-3.5" />,
+            },
+            {
+                labelEn: 'Audio Recognition',
+                labelAr: 'تمييز الصوت',
+                tooltipEn: 'The ability to understand the word immediately upon hearing it.',
+                tooltipAr: 'قدرة الطالب على فهم الكلمة بمجرد سماعها.',
+                icon: <Ear className="w-3.5 h-3.5" />,
+            },
+            {
+                labelEn: 'Echo Precision',
+                labelAr: 'دقة الترديد',
+                tooltipEn: 'Linking auditory input with the student\'s mental representation.',
+                tooltipAr: 'ربط ما يسمعه الطالب بقدرته على تمثيله ذهنياً.',
+                icon: <Volume2 className="w-3.5 h-3.5" />,
+            },
+        ],
+    },
+    {
+        id: 'reading',
+        titleEn: 'READING',
+        titleAr: 'القراءة',
+        groupLabelEn: 'LIVING',
+        groupLabelAr: 'استيعاب',
+        variant: 'cyan',
+        features: [
+            {
+                labelEn: 'Words Read',
+                labelAr: 'الكلمات المقروءة',
+                tooltipEn: 'Direct tracking of the number of words the student has visually processed.',
+                tooltipAr: 'تتبع مباشر لعدد الكلمات التي مر عليها بصر الطالب.',
+                icon: <BookMarked className="w-3.5 h-3.5" />,
+            },
+            {
+                labelEn: 'Visual Associations',
+                labelAr: 'الارتباطات البصرية',
+                tooltipEn: 'Linking words with images to reinforce meaning in memory.',
+                tooltipAr: 'ربط الكلمات بالصور لترسيخ المعنى في الذاكرة.',
+                icon: <Image className="w-3.5 h-3.5" />,
+            },
+            {
+                labelEn: 'Sentence Meaning',
+                labelAr: 'فهم الجمل',
+                tooltipEn: 'The ability to grasp the word\'s meaning within the sentence context.',
+                tooltipAr: 'قدرة الطالب على استيعاب معنى الكلمة داخل السياق.',
+                icon: <Type className="w-3.5 h-3.5" />,
+            },
+        ],
+    },
+    {
+        id: 'writing',
+        titleEn: 'WRITING',
+        titleAr: 'الكتابة',
+        groupLabelEn: 'PRODUCING',
+        groupLabelAr: 'إنتاج',
+        variant: 'amber',
+        features: [
+            {
+                labelEn: 'Daily Mastery',
+                labelAr: 'تثبيت الكلمات',
+                tooltipEn: 'Success indicator for full mastery of the daily 20 words.',
+                tooltipAr: 'مؤشر النجاح والتمكن الكامل من الـ 20 كلمة اليومية.',
+                icon: <Trophy className="w-3.5 h-3.5" />,
+            },
+            {
+                labelEn: 'Spelling Accuracy',
+                labelAr: 'دقة الإملاء',
+                tooltipEn: 'Measuring the spelling correctness of each target word.',
+                tooltipAr: 'قياس مدى صحة كتابة الحروف لكل كلمة مستهدفة.',
+                icon: <CheckCircle2 className="w-3.5 h-3.5" />,
+            },
+            {
+                labelEn: 'Words Written',
+                labelAr: 'الكلمات المكتوبة',
+                tooltipEn: 'Statistics of the total words written by the student in gaps.',
+                tooltipAr: 'إحصائية لعدد الكلمات التي كتبها الطالب في الفراغات.',
+                icon: <Pen className="w-3.5 h-3.5" />,
+            },
+        ],
+    },
+    {
+        id: 'speaking',
+        titleEn: 'SPEAKING',
+        titleAr: 'التحدث',
+        groupLabelEn: 'PRODUCING',
+        groupLabelAr: 'إنتاج',
+        variant: 'amber',
+        features: [
+            {
+                labelEn: 'Audio Recorded',
+                labelAr: 'التسجيلات الصوتية',
+                tooltipEn: 'Tracking the total number of voice tasks completed.',
+                tooltipAr: 'تتبع إجمالي المهام الصوتية التي تم إنجازها.',
+                icon: <Mic className="w-3.5 h-3.5" />,
+            },
+            {
+                labelEn: 'Phonetic Precision',
+                labelAr: 'الدقة الصوتية',
+                tooltipEn: 'Focusing on correct pronunciation and phonetic accuracy.',
+                tooltipAr: 'التركيز على صحة مخارج الحروف ونطق الكلمات.',
+                icon: <MessageCircle className="w-3.5 h-3.5" />,
+            },
+            {
+                labelEn: 'Vocal Fluency',
+                labelAr: 'الطلاقة اللفظية',
+                tooltipEn: 'Measuring speed and continuity of speech without hesitation.',
+                tooltipAr: 'قياس سرعة واستمرارية التحدث دون توقف.',
+                icon: <Gauge className="w-3.5 h-3.5" />,
+            },
+        ],
+    },
+];
+
+// ─── Desktop: Connector Line (polyline with glowing dot) ─────────────────
+function ConnectorLine({ side, bendOffset = 0, width = 60 }: { side: 'left' | 'right'; bendOffset?: number; width?: number }) {
     const isLeft = side === 'left';
-    const color = isLeft ? '#22d3ee' : '#fbbf24'; // Cyan left, Amber right
+    const color = isLeft ? '#22d3ee' : '#fbbf24';
     const dropShadowClass = isLeft
         ? 'drop-shadow-[0_0_6px_rgba(34,211,238,0.9)]'
         : 'drop-shadow-[0_0_6px_rgba(251,191,36,0.9)]';
 
-    const hLength = Math.max(15, width * 0.45); // 45% horizontal
+    const hLength = Math.max(15, width * 0.45);
     const startX = isLeft ? 0 : width;
     const endX = isLeft ? width : 0;
     const midX = isLeft ? hLength : width - hLength;
-
-    // bendOffset is the vertical shift: positive = down, negative = up
     const endY = 1 + bendOffset;
 
     return (
-        <svg
-            width={width}
-            height="2"
-            className="overflow-visible shrink-0"
-            style={{ zIndex: 0 }}
-        >
-            {/* Origin anchor dot at the badge */}
+        <svg width={width} height="2" className="overflow-visible shrink-0" style={{ zIndex: 0 }}>
             <circle cx={startX} cy="1" r="1.5" fill={color} opacity="0.9" />
-
             <polyline
                 points={`${startX},1 ${midX},1 ${endX},${endY}`}
                 fill="none"
@@ -75,35 +221,143 @@ function ConnectorLine({ side, bendOffset = 0, width = 60 }: { side: 'left' | 'r
                 strokeLinejoin="round"
                 opacity="0.6"
             />
-            {/* Destination glowing dot at the brain surface */}
-            <circle
-                cx={endX}
-                cy={endY}
-                r="3.5"
-                fill={color}
-                className={dropShadowClass}
-            />
+            <circle cx={endX} cy={endY} r="3.5" fill={color} className={dropShadowClass} />
         </svg>
     );
 }
 
-// ─── Skill Node (badge with icon + label) ──────────────────────────────────
-function SkillNode({ icon, label, side, bendOffset = 0, width = 60 }: { icon: React.ReactNode; label: string; side: 'left' | 'right', bendOffset?: number, width?: number }) {
+// ─── Desktop: Skill Node (badge + connector + tooltip) ──────────────────
+function DesktopSkillNode({
+    icon,
+    label,
+    tooltip,
+    side,
+    bendOffset = 0,
+    width = 60,
+}: {
+    icon: React.ReactNode;
+    label: string;
+    tooltip: string;
+    side: 'left' | 'right';
+    bendOffset?: number;
+    width?: number;
+}) {
     const isLeft = side === 'left';
     return (
-        <div className={`flex items-center group hover:z-20 transition-all duration-300 hover:scale-105 ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
-            {/* The badge */}
-            <div className={`relative flex items-center gap-2 px-3.5 py-2 rounded-xl border text-[11px] backdrop-blur-md shadow-lg whitespace-nowrap z-10 ${isLeft
-                ? 'border-cyan-500/20 bg-[#111a1f]/90 text-cyan-50/90 hover:border-cyan-400/50 hover:bg-[#111a1f]'
-                : 'border-amber-500/20 bg-[#1a1710]/90 text-amber-50/90 hover:border-amber-400/50 hover:bg-[#1a1710]'
-                }`}>
-                {icon}
-                <span className="font-bold tracking-wider uppercase">{label}</span>
-            </div>
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <div className={`flex items-center group hover:z-20 transition-all duration-300 hover:scale-105 cursor-help ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
+                    <div className={`relative flex items-center gap-2 px-3.5 py-2 rounded-xl border text-[11px] backdrop-blur-md shadow-lg whitespace-nowrap z-10 ${isLeft
+                        ? 'border-cyan-500/20 bg-[#111a1f]/90 text-cyan-50/90 hover:border-cyan-400/50 hover:bg-[#111a1f]'
+                        : 'border-amber-500/20 bg-[#1a1710]/90 text-amber-50/90 hover:border-amber-400/50 hover:bg-[#1a1710]'
+                        }`}>
+                        {icon}
+                        <span className="font-bold tracking-wider uppercase">{label}</span>
+                    </div>
+                    <div className={isLeft ? "-ml-1" : "-mr-1"}>
+                        <ConnectorLine side={side} bendOffset={bendOffset} width={width} />
+                    </div>
+                </div>
+            </TooltipTrigger>
+            <TooltipContent
+                side={isLeft ? 'left' : 'right'}
+                sideOffset={8}
+                className="max-w-[260px] text-center bg-zinc-900 text-zinc-100 border border-zinc-700 shadow-xl px-3 py-2 text-xs leading-relaxed"
+            >
+                {tooltip}
+            </TooltipContent>
+        </Tooltip>
+    );
+}
 
-            {/* Negative margin to pull the line tight against the badge edge */}
-            <div className={isLeft ? "-ml-1" : "-mr-1"}>
-                <ConnectorLine side={side} bendOffset={bendOffset} width={width} />
+// ─── Mobile: Skill Badge with Tooltip ────────────────────────────────────
+function MobileSkillBadge({
+    icon,
+    label,
+    tooltip,
+    variant = 'cyan',
+}: {
+    icon: React.ReactNode;
+    label: string;
+    tooltip: string;
+    variant?: 'cyan' | 'amber';
+}) {
+    const colors = variant === 'cyan'
+        ? 'border-cyan-500/30 bg-cyan-950/40 text-cyan-200 hover:border-cyan-400/60 hover:bg-cyan-950/60'
+        : 'border-amber-500/30 bg-amber-950/40 text-amber-200 hover:border-amber-400/60 hover:bg-amber-950/60';
+
+    return (
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[11px] font-semibold tracking-wide cursor-help transition-all duration-200 backdrop-blur-sm ${colors}`}>
+                    {icon}
+                    <span>{label}</span>
+                </div>
+            </TooltipTrigger>
+            <TooltipContent
+                side="top"
+                sideOffset={6}
+                className="max-w-[260px] text-center bg-zinc-900 text-zinc-100 border border-zinc-700 shadow-xl px-3 py-2 text-xs leading-relaxed"
+            >
+                {tooltip}
+            </TooltipContent>
+        </Tooltip>
+    );
+}
+
+// ─── Mobile: Accordion Card ─────────────────────────────────────────────
+function MobileCategoryCard({
+    category,
+    isAr,
+    isOpen,
+    onToggle,
+}: {
+    category: SkillCategoryData;
+    isAr: boolean;
+    isOpen: boolean;
+    onToggle: () => void;
+}) {
+    const isCyan = category.variant === 'cyan';
+    const borderColor = isCyan ? 'border-cyan-500/25' : 'border-amber-500/25';
+    const borderGlow = isCyan
+        ? 'hover:border-cyan-400/50 hover:shadow-[0_0_30px_rgba(34,211,238,0.08)]'
+        : 'hover:border-amber-400/50 hover:shadow-[0_0_30px_rgba(251,191,36,0.08)]';
+    const groupColor = isCyan ? 'text-cyan-500/60' : 'text-amber-500/60';
+    const titleColor = isCyan ? 'text-cyan-300' : 'text-amber-200';
+    const expandBorder = isOpen
+        ? isCyan ? 'border-cyan-500/40 shadow-[0_0_40px_rgba(34,211,238,0.1)]' : 'border-amber-500/40 shadow-[0_0_40px_rgba(251,191,36,0.1)]'
+        : '';
+    const chevronColor = isCyan ? 'text-cyan-400' : 'text-amber-400';
+
+    return (
+        <div className={`rounded-2xl bg-[#161a23] border ${borderColor} ${borderGlow} ${expandBorder} transition-all duration-300 overflow-hidden`}>
+            <button onClick={onToggle} className="w-full flex items-center justify-between px-5 py-4 cursor-pointer group">
+                <div className={`flex items-center gap-3 ${isAr ? 'flex-row-reverse text-right' : ''}`}>
+                    <div className="flex flex-col">
+                        <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${groupColor}`}>
+                            {isAr ? category.groupLabelAr : category.groupLabelEn}
+                        </span>
+                        <span className={`text-xl font-black tracking-wide ${titleColor}`}>
+                            {isAr ? category.titleAr : category.titleEn}
+                        </span>
+                    </div>
+                </div>
+                <ChevronDown className={`w-5 h-5 ${chevronColor} transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+            </button>
+            <div className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
+                <div className="px-5 pb-4 pt-1">
+                    <div className="flex flex-wrap gap-2">
+                        {category.features.map((feature, idx) => (
+                            <MobileSkillBadge
+                                key={idx}
+                                icon={feature.icon}
+                                label={isAr ? feature.labelAr : feature.labelEn}
+                                tooltip={isAr ? feature.tooltipAr : feature.tooltipEn}
+                                variant={category.variant}
+                            />
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -128,6 +382,17 @@ function ReportPage() {
     const { i18n } = useTranslation();
     const isAr = i18n.language === 'ar';
 
+    const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({
+        listening: true,
+        reading: false,
+        writing: true,
+        speaking: false,
+    });
+
+    const toggleCategory = (id: string) => {
+        setOpenCategories((prev) => ({ ...prev, [id]: !prev[id] }));
+    };
+
     useEffect(() => {
         useBreadcrumbStore.getState().setItems([{ label: isAr ? 'تقرير الطالب' : 'Student Report', isCurrent: true }]);
     }, [isAr]);
@@ -143,6 +408,21 @@ function ReportPage() {
     const levelLabel = report.currentLevel?.name?.replace('LEVEL_', '') || 'A1';
     const levelTitle = `LEVEL ${levelLabel} KNIGHT`;
 
+    // Helper: get feature label/tooltip by lang
+    const fl = (f: SkillFeature) => isAr ? f.labelAr : f.labelEn;
+    const ft = (f: SkillFeature) => isAr ? f.tooltipAr : f.tooltipEn;
+
+    // Categories refs
+    const listening = CATEGORIES[0];
+    const reading = CATEGORIES[1];
+    const writing = CATEGORIES[2];
+    const speaking = CATEGORIES[3];
+
+    // Connector side for desktop: LTR → listening/reading=left, writing/speaking=right
+    // RTL → listening/reading=right, writing/speaking=left
+    const leftSide = isAr ? 'right' as const : 'left' as const;
+    const rightSide = isAr ? 'left' as const : 'right' as const;
+
     const t = {
         footprint: isAr ? 'بصمتك اللغوية' : 'YOUR LINGUISTIC FOOTPRINT',
         arsenal: 'Linguistic Arsenal',
@@ -153,7 +433,6 @@ function ReportPage() {
         listening: isAr ? 'الاستماع' : 'Listening',
         reading: isAr ? 'القراءة' : 'Reading',
         writing: isAr ? 'الكتابة' : 'Writing',
-        grammar: isAr ? 'القواعد النحوية' : 'Grammar',
         activeStreak: isAr ? 'سلسلة النشاط' : 'ACTIVE STREAK',
         masteredWords: isAr ? 'كلمات متقنة' : 'Mastered\nWords',
         idiomsPhrasal: isAr ? 'مصطلحات وأفعال مركبة' : 'IDIOMS & PHRASAL VERBS',
@@ -177,126 +456,148 @@ function ReportPage() {
                 {/* ═══════════ ROW 1: Top Section ═══════════ */}
                 <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-6 lg:gap-8">
 
-                    {/* ─── LINGUISTIC FOOTPRINT (LEFT) ─── */}
-                    <div className="relative rounded-[2rem] bg-[#161a23] border border-zinc-800/80 p-6 lg:p-8 shadow-2xl flex flex-col">
+                    {/* ─── LINGUISTIC FOOTPRINT ─── */}
+                    <div className="relative rounded-[2rem] bg-[#161a23] border border-zinc-800/80 p-5 lg:p-8 shadow-2xl flex flex-col">
                         <div className="absolute inset-x-20 top-0 h-[1px] bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
 
-                        <h2 className="text-xl md:text-2xl font-black text-gray-200 uppercase tracking-widest italic text-center mt-2 drop-shadow-md">
+                        <h2 className="text-lg md:text-2xl font-black text-gray-200 uppercase tracking-widest italic text-center mt-2 drop-shadow-md">
                             {t.footprint}
-                            <div className="h-0.5 w-64 bg-gradient-to-r from-transparent via-amber-400/50 to-transparent mx-auto mt-2 opacity-80" />
+                            <div className="h-0.5 w-48 md:w-64 bg-gradient-to-r from-transparent via-amber-400/50 to-transparent mx-auto mt-2 opacity-80" />
                         </h2>
 
-                        {/* ═══ Brain Layout: Absolute Center Image ═══ */}
-                        <div className="relative flex items-center justify-between w-full mt-12 mb-4 h-[420px]">
-
-                            {/* ── LEFT COLUMN: Listening + Reading ── */}
-                            <div className="flex flex-col justify-between h-full relative z-10 w-[42%] lg:w-[35%] py-2">
-                                {/* LISTENING group */}
+                        {/* ══════ DESKTOP: Brain Diagram with Arrows ══════ */}
+                        <div className="hidden lg:flex relative items-center justify-between w-full mt-10 mb-4 h-[420px]">
+                            {/* LEFT COLUMN: Listening + Reading */}
+                            <div className="flex flex-col justify-between h-full relative z-10 w-[38%] py-2">
+                                {/* LISTENING */}
                                 <div>
-                                    <h3 className="text-cyan-400 font-bold text-3xl tracking-wide mb-6 drop-shadow-md">
+                                    <h3 className="text-cyan-400 font-bold text-3xl tracking-wide mb-5 drop-shadow-md">
                                         {t.listening}
                                     </h3>
-                                    <div className="flex flex-col gap-5 items-start">
+                                    <div className="flex flex-col gap-4 items-start">
                                         <div className="ms-0">
-                                            <SkillNode icon={<FileText className="w-4 h-4" />} label="Audio Mastered" side="left" bendOffset={35} width={90} />
+                                            <DesktopSkillNode icon={listening.features[0].icon} label={fl(listening.features[0])} tooltip={ft(listening.features[0])} side={leftSide} bendOffset={30} width={85} />
                                         </div>
-                                        <div className="ms-10 mt-1">
-                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Speaking" side="left" bendOffset={5} width={50} />
+                                        <div className="ms-8 mt-1">
+                                            <DesktopSkillNode icon={listening.features[1].icon} label={fl(listening.features[1])} tooltip={ft(listening.features[1])} side={leftSide} bendOffset={5} width={55} />
                                         </div>
-                                        <div className="ms-4 mt-1">
-                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="left" bendOffset={-25} width={75} />
+                                        <div className="ms-3 mt-1">
+                                            <DesktopSkillNode icon={listening.features[2].icon} label={fl(listening.features[2])} tooltip={ft(listening.features[2])} side={leftSide} bendOffset={-20} width={70} />
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* READING group */}
-                                <div className="mt-8">
-                                    <h3 className="text-cyan-400 font-bold text-3xl tracking-wide mb-6 drop-shadow-md">
+                                {/* READING */}
+                                <div className="mt-6">
+                                    <h3 className="text-cyan-400 font-bold text-3xl tracking-wide mb-5 drop-shadow-md">
                                         {t.reading}
                                     </h3>
-                                    <div className="flex flex-col gap-6 items-start ms-4">
+                                    <div className="flex flex-col gap-5 items-start ms-3">
                                         <div className="ms-2">
-                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="left" bendOffset={20} width={65} />
+                                            <DesktopSkillNode icon={reading.features[1].icon} label={fl(reading.features[1])} tooltip={ft(reading.features[1])} side={leftSide} bendOffset={15} width={60} />
                                         </div>
-                                        <div className="ms-6 mt-2">
-                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Read" side="left" bendOffset={-35} width={70} />
+                                        <div className="ms-5 mt-1">
+                                            <DesktopSkillNode icon={reading.features[0].icon} label={fl(reading.features[0])} tooltip={ft(reading.features[0])} side={leftSide} bendOffset={-10} width={65} />
+                                        </div>
+                                        <div className="ms-0 mt-1">
+                                            <DesktopSkillNode icon={reading.features[2].icon} label={fl(reading.features[2])} tooltip={ft(reading.features[2])} side={leftSide} bendOffset={-30} width={80} />
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* ── CENTER COLUMN: Brain Image ── */}
+                            {/* CENTER: Brain Image */}
                             <div className="absolute left-1/2 top-1/2 -translate-x-[50%] -translate-y-[45%] z-0">
                                 <img
                                     src="/images/report/brain.png"
                                     alt="Brain"
-                                    className="w-[240px] lg:w-[340px] object-contain drop-shadow-[0_0_60px_rgba(251,191,36,0.18)] select-none opacity-95"
+                                    className="w-[300px] object-contain drop-shadow-[0_0_60px_rgba(251,191,36,0.18)] select-none opacity-95"
                                     draggable={false}
                                 />
                             </div>
 
-                            {/* ── RIGHT COLUMN: Grammar + Speaking ── */}
-                            <div className="flex flex-col justify-between h-full relative z-10 w-[42%] lg:w-[35%] py-2">
-                                {/* GRAMMAR group */}
+                            {/* RIGHT COLUMN: Writing + Speaking */}
+                            <div className="flex flex-col justify-between h-full relative z-10 w-[38%] py-2">
+                                {/* WRITING */}
                                 <div className="flex flex-col items-end">
-                                    <h3 className="text-[#f5ebd6] font-extrabold text-3xl tracking-wide w-full text-end mb-6 drop-shadow-md">
-                                        {t.grammar}
+                                    <h3 className="text-[#f5ebd6] font-extrabold text-3xl tracking-wide w-full text-end mb-5 drop-shadow-md">
+                                        {t.writing}
                                     </h3>
-                                    <div className="flex flex-col items-end gap-5 me-0">
+                                    <div className="flex flex-col items-end gap-4 me-0">
                                         <div className="me-2">
-                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Learning" side="right" bendOffset={40} width={90} />
+                                            <DesktopSkillNode icon={writing.features[0].icon} label={fl(writing.features[0])} tooltip={ft(writing.features[0])} side={rightSide} bendOffset={30} width={85} />
                                         </div>
-                                        <div className="me-12 mt-1">
-                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" bendOffset={0} width={55} />
+                                        <div className="me-10 mt-1">
+                                            <DesktopSkillNode icon={writing.features[1].icon} label={fl(writing.features[1])} tooltip={ft(writing.features[1])} side={rightSide} bendOffset={0} width={55} />
+                                        </div>
+                                        <div className="me-4 mt-1">
+                                            <DesktopSkillNode icon={writing.features[2].icon} label={fl(writing.features[2])} tooltip={ft(writing.features[2])} side={rightSide} bendOffset={-20} width={70} />
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* SPEAKING group */}
-                                <div className="mt-8 flex flex-col items-end">
-                                    <h3 className="text-[#f5ebd6] font-extrabold text-3xl tracking-wide w-full text-end mb-6 drop-shadow-md">
+                                {/* SPEAKING */}
+                                <div className="mt-6 flex flex-col items-end">
+                                    <h3 className="text-[#f5ebd6] font-extrabold text-3xl tracking-wide w-full text-end mb-5 drop-shadow-md">
                                         {t.speaking}
                                     </h3>
-                                    <div className="flex flex-col items-end gap-5 me-2 relative">
-                                        <div className="absolute -top-7 end-0 flex items-center gap-1.5 text-zinc-500 text-[10px] tracking-widest uppercase opacity-90 font-bold whitespace-nowrap">
-                                            <Mic className="w-4 h-4" /> AUDIO RECORDED
+                                    <div className="flex flex-col items-end gap-4 me-2">
+                                        <div className="me-2 mt-1">
+                                            <DesktopSkillNode icon={speaking.features[0].icon} label={fl(speaking.features[0])} tooltip={ft(speaking.features[0])} side={rightSide} bendOffset={15} width={75} />
                                         </div>
-                                        <div className="me-2 mt-3">
-                                            <SkillNode icon={<Eye className="w-4 h-4" />} label="Visual Associations" side="right" bendOffset={20} width={80} />
+                                        <div className="me-6 mt-1">
+                                            <DesktopSkillNode icon={speaking.features[1].icon} label={fl(speaking.features[1])} tooltip={ft(speaking.features[1])} side={rightSide} bendOffset={-10} width={65} />
                                         </div>
-                                        <div className="me-6 mt-2">
-                                            <SkillNode icon={<BookOpen className="w-4 h-4" />} label="Words Written" side="right" bendOffset={-35} width={70} />
+                                        <div className="me-0 mt-1">
+                                            <DesktopSkillNode icon={speaking.features[2].icon} label={fl(speaking.features[2])} tooltip={ft(speaking.features[2])} side={rightSide} bendOffset={-30} width={80} />
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        {/* ══════ MOBILE: Brain Image + Accordion ══════ */}
+                        <div className="lg:hidden">
+                            {/* Brain Image — compact */}
+                            <div className="flex justify-center my-5">
+                                <img
+                                    src="/images/report/brain.png"
+                                    alt="Brain"
+                                    className="w-[130px] md:w-[180px] object-contain drop-shadow-[0_0_40px_rgba(251,191,36,0.15)] select-none opacity-95"
+                                    draggable={false}
+                                />
+                            </div>
+                            {/* Accordion Cards */}
+                            <div className="flex flex-col gap-3">
+                                {CATEGORIES.map((cat) => (
+                                    <MobileCategoryCard
+                                        key={cat.id}
+                                        category={cat}
+                                        isAr={isAr}
+                                        isOpen={!!openCategories[cat.id]}
+                                        onToggle={() => toggleCategory(cat.id)}
+                                    />
+                                ))}
                             </div>
                         </div>
                     </div>
 
                     {/* ─── LINGUISTIC ARSENAL TOP (RIGHT) ─── */}
                     <div className="relative rounded-[2rem] bg-[#161a23] border border-zinc-800/80 p-8 shadow-2xl flex flex-col justify-between">
-
-                        {/* Top layout: Coin + Title + Stats */}
                         <div className="flex items-start gap-8 relative z-10 pt-2">
                             <GoldCoin value={report.arsenal.masteredWords} label={t.masteredWords} />
-
                             <div className="flex-1 pt-3">
                                 <h1 className="text-[26px] font-black text-white tracking-wide mb-5">{t.arsenal}</h1>
-
                                 <div className="flex items-center gap-2 mb-4">
                                     <BookOpen className="w-5 h-5 text-gray-400" />
                                     <span className="text-[10px] font-bold tracking-widest text-zinc-300 uppercase">{t.idiomsPhrasal}</span>
                                     <Plus className="w-5 h-5 text-purple-500 ms-1 -me-1" />
                                     <span className="text-xl font-bold text-white">{report.arsenal.idioms + report.arsenal.phrasalVerbs}</span>
                                 </div>
-
                                 <p className="text-[10px] text-zinc-400 font-bold tracking-[0.1em] ms-1 uppercase">
                                     {t.voiceTraining}: {report.skills.speaking.tasksCompleted} {t.hours}
                                 </p>
                             </div>
                         </div>
 
-                        {/* Progress Bar Section */}
                         <div className="mt-8">
                             <div className="flex items-center justify-between text-[10px] font-bold tracking-widest uppercase mb-2">
                                 <span className="text-zinc-400">{t.wordsMastered}</span>
@@ -304,21 +605,16 @@ function ReportPage() {
                                     {report.arsenal.fluencyPercent}% <span className="text-zinc-500 font-medium tracking-wide">{t.fluency} {report.skills.listening.tasksCompleted} {t.hours}</span> <Mic className="w-3.5 h-3.5 text-zinc-500" />
                                 </span>
                             </div>
-
                             <div className="flex items-center gap-3">
                                 <div className="flex-1 h-[6px] bg-[#1a1f26] rounded-full overflow-hidden">
                                     <div className="h-full bg-[#00d084] rounded-full transition-all duration-1000" style={{ width: `${report.arsenal.fluencyPercent}%` }} />
                                 </div>
                                 <span className="text-[#00d084] font-bold text-sm leading-none">{report.arsenal.fluencyPercent}%</span>
                             </div>
-
                             <p className="text-[9px] text-zinc-500 font-bold tracking-[0.1em] mt-4 uppercase">
                                 SENTENCES TAKEN: {report.skills.writing.tasksCompleted} | VOICES SHARED: {report.skills.listening.tasksCompleted} {t.hours}
                             </p>
-
-                            {/* 2x2 Stats Grid */}
                             <div className="grid grid-cols-2 gap-x-4 gap-y-7 mt-8 border-t border-gray-800/50 pt-6">
-                                {/* Col 1 */}
                                 <div className="flex flex-col gap-6 w-full">
                                     <div className="flex items-start justify-between pe-2">
                                         <div className="flex items-start gap-2">
@@ -337,8 +633,6 @@ function ReportPage() {
                                         <span className="text-base font-bold text-white">{report.quizzes.correctAnswers}</span>
                                     </div>
                                 </div>
-
-                                {/* Col 2 */}
                                 <div className="flex flex-col gap-6 w-full">
                                     <div className="flex items-start justify-between pe-2">
                                         <div className="flex items-start gap-2">
@@ -368,15 +662,11 @@ function ReportPage() {
                 {/* ═══════════ ROW 2: Knowledge Fortress & Journey Timeline ═══════════ */}
                 <div className="flex flex-col items-center w-full py-2 relative">
                     <h2 className="text-2xl font-bold tracking-widest uppercase text-gray-200 mb-6 drop-shadow-md">{t.knowledgeFortress}</h2>
-
                     <div className="flex w-full justify-center items-center gap-4 relative z-10 px-2 flex-wrap lg:flex-nowrap max-w-4xl">
-                        {/* Left: Journey Timeline Pill */}
                         <div className="flex items-center gap-4 px-8 py-3.5 rounded-[1rem] border border-zinc-700/50 bg-[#14171d] shadow-lg">
                             <CalendarDays className="w-6 h-6 text-zinc-400" />
                             <span className="text-lg font-bold text-white tracking-wide">{t.journeyTimeline}</span>
                         </div>
-
-                        {/* Middle: Active Pill */}
                         <div className="flex items-center rounded-[1rem] border border-zinc-700/50 bg-[#14171d] flex-1 justify-center divide-x divide-zinc-700/50 shadow-inner max-w-xl overflow-hidden">
                             <div className="flex items-center gap-3 px-6 py-4">
                                 <Clock className="w-5 h-5 text-zinc-400" />
@@ -390,8 +680,6 @@ function ReportPage() {
                             </div>
                         </div>
                     </div>
-
-                    {/* Right Shield — Transparent Background */}
                     <div className="absolute end-4 -top-8 z-20 flex flex-col items-center">
                         <img
                             src="/images/report/shield.png"
@@ -409,11 +697,8 @@ function ReportPage() {
                 {/* ═══════════ ROW 3: Linguistic Arsenal Bottom Cards ═══════════ */}
                 <div className="rounded-[2rem] bg-[#161a23] border border-zinc-800/80 p-8 shadow-2xl relative">
                     <h2 className="text-xl md:text-2xl text-gray-300 font-normal tracking-wide mb-8">Linguistic Arsenal</h2>
-
                     <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-12 lg:gap-16 items-center">
-                        {/* Two big rings on left */}
                         <div className="flex items-center gap-12 ps-4">
-                            {/* Cyan Ring (Book Inside) */}
                             <div className="flex flex-col items-center gap-5 border-r border-zinc-800/60 pr-12">
                                 <div className="relative w-32 h-32 flex items-center justify-center rounded-full">
                                     <svg className="absolute inset-0 w-full h-full -rotate-90">
@@ -427,8 +712,6 @@ function ReportPage() {
                                     <p className="text-[13px] text-zinc-200 font-medium">{report.skills.speaking.tasksCompleted} Hours</p>
                                 </div>
                             </div>
-
-                            {/* Gold Ring (Text Inside) */}
                             <div className="flex flex-col items-center gap-5">
                                 <div className="relative w-32 h-32 flex items-center justify-center rounded-full">
                                     <svg className="absolute inset-0 w-full h-full -rotate-90">
@@ -446,10 +729,7 @@ function ReportPage() {
                                 </div>
                             </div>
                         </div>
-
-                        {/* Right side stats: 2x2 grid */}
                         <div className="grid grid-cols-2 gap-4 lg:pe-4">
-                            {/* Box 1 */}
                             <div className="rounded-[1.25rem] border border-zinc-700/50 bg-[#161a23] p-[1.5rem] flex flex-col justify-center shadow-lg relative overflow-hidden">
                                 <div className="w-8 h-[2px] bg-cyan-400 rounded-full mb-5" />
                                 <div className="flex items-center gap-4">
@@ -457,8 +737,6 @@ function ReportPage() {
                                     <span className="text-base text-zinc-200 tracking-wide">{t.idioms}: {report.arsenal.idioms}</span>
                                 </div>
                             </div>
-
-                            {/* Box 2 */}
                             <div className="rounded-[1.25rem] border border-zinc-700/50 bg-[#161a23] p-[1.5rem] flex flex-col justify-center shadow-lg relative overflow-hidden">
                                 <div className="w-8 h-[2px] bg-cyan-400 rounded-full mb-5" />
                                 <div className="flex items-center gap-4">
@@ -466,8 +744,6 @@ function ReportPage() {
                                     <span className="text-base text-zinc-200 tracking-wide">{t.phrasalVerbs}: {report.arsenal.phrasalVerbs}</span>
                                 </div>
                             </div>
-
-                            {/* Box 3 */}
                             <div className="rounded-[1.25rem] border border-zinc-700/50 bg-[#161a23] p-[1.5rem] shadow-lg flex flex-col justify-center relative overflow-hidden">
                                 <div className="w-8 h-[2px] bg-cyan-400 rounded-full mb-5" />
                                 <div className="flex items-center gap-4 mb-4">
@@ -476,8 +752,6 @@ function ReportPage() {
                                 </div>
                                 <p className="text-[13px] text-zinc-500 tracking-wide font-medium">Quizzes Completed<br />{report.quizzes.completed} {t.days}!</p>
                             </div>
-
-                            {/* Box 4 */}
                             <div className="rounded-[1.25rem] border border-zinc-700/50 bg-[#161a23] p-[1.5rem] shadow-lg flex flex-col justify-center relative overflow-hidden">
                                 <div className="w-8 h-[2px] bg-cyan-400 rounded-full mb-5" />
                                 <div className="absolute end-0 top-1/2 -translate-y-1/2 w-[3px] h-16 bg-amber-400/80 shadow-[0_0_15px_rgba(251,191,36,0.6)]" />
@@ -502,7 +776,6 @@ function ReportPage() {
                             <>{t.aiPrediction} {isAr ? 'واصل التدريب لفتح توقعات الذكاء الاصطناعي.' : 'Keep practicing to unlock AI-powered predictions!'}</>
                         )}
                     </p>
-                    {/* decorative sparkle */}
                     <div className="ms-auto w-5 h-5 rounded-sm bg-white/10 rotate-45 shrink-0" />
                 </div>
             </div>
