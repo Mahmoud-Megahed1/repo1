@@ -487,7 +487,7 @@ function ReportPage() {
                         </h2>
 
                         {/* ══════ DESKTOP: Brain Diagram with Arrows ══════ */}
-                        <div dir="ltr" className="hidden lg:flex relative items-center justify-between w-full mt-10 mb-4 h-[420px]">
+                        <div style={{ direction: 'ltr', unicodeBidi: 'isolate' }} className="hidden lg:flex relative items-center justify-between w-full mt-10 mb-4 h-[420px]">
                             {/* LEFT COLUMN: Listening + Reading */}
                             <div className="flex flex-col justify-between h-full relative z-10 w-[38%] py-2">
                                 {/* LISTENING */}
