@@ -17,8 +17,6 @@ import {
     Bot,
     Clock,
     Link2,
-    Eye,
-    FileText,
     ScrollText,
     ChevronDown,
     Headphones,
@@ -217,7 +215,7 @@ function ConnectorLine({ side, bendOffset = 0, width = 60 }: { side: 'left' | 'r
                 points={`${startX},1 ${midX},1 ${endX},${endY}`}
                 fill="none"
                 stroke={color}
-                strokeWidth="1.5"
+                strokeWidth="2"
                 strokeLinejoin="round"
                 opacity="0.6"
             />
@@ -237,7 +235,7 @@ function DesktopSkillNode({
 }: {
     icon: React.ReactNode;
     label: string;
-    tooltip: string;
+    tooltip: React.ReactNode;
     side: 'left' | 'right';
     bendOffset?: number;
     width?: number;
@@ -246,7 +244,7 @@ function DesktopSkillNode({
     return (
         <Tooltip>
             <TooltipTrigger asChild>
-                <div className={`flex items-center group hover:z-20 transition-all duration-300 hover:scale-105 cursor-help ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
+                <div dir="ltr" className={`flex items-center group hover:z-20 transition-all duration-300 hover:scale-105 cursor-help ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
                     <div className={`relative flex items-center gap-2 px-3.5 py-2 rounded-xl border text-[11px] backdrop-blur-md shadow-lg whitespace-nowrap z-10 ${isLeft
                         ? 'border-cyan-500/20 bg-[#111a1f]/90 text-cyan-50/90 hover:border-cyan-400/50 hover:bg-[#111a1f]'
                         : 'border-amber-500/20 bg-[#1a1710]/90 text-amber-50/90 hover:border-amber-400/50 hover:bg-[#1a1710]'
@@ -279,7 +277,7 @@ function MobileSkillBadge({
 }: {
     icon: React.ReactNode;
     label: string;
-    tooltip: string;
+    tooltip: React.ReactNode;
     variant?: 'cyan' | 'amber';
 }) {
     const colors = variant === 'cyan'
@@ -311,11 +309,13 @@ function MobileCategoryCard({
     isAr,
     isOpen,
     onToggle,
+    tooltipBuilder,
 }: {
     category: SkillCategoryData;
     isAr: boolean;
     isOpen: boolean;
     onToggle: () => void;
+    tooltipBuilder: (f: SkillFeature) => React.ReactNode;
 }) {
     const isCyan = category.variant === 'cyan';
     const borderColor = isCyan ? 'border-cyan-500/25' : 'border-amber-500/25';
@@ -352,7 +352,7 @@ function MobileCategoryCard({
                                 key={idx}
                                 icon={feature.icon}
                                 label={isAr ? feature.labelAr : feature.labelEn}
-                                tooltip={isAr ? feature.tooltipAr : feature.tooltipEn}
+                                tooltip={tooltipBuilder(feature)}
                                 variant={category.variant}
                             />
                         ))}
@@ -408,9 +408,41 @@ function ReportPage() {
     const levelLabel = report.currentLevel?.name?.replace('LEVEL_', '') || 'A1';
     const levelTitle = `LEVEL ${levelLabel} KNIGHT`;
 
-    // Helper: get feature label/tooltip by lang
+    // Helper: get feature label by lang
     const fl = (f: SkillFeature) => isAr ? f.labelAr : f.labelEn;
-    const ft = (f: SkillFeature) => isAr ? f.tooltipAr : f.tooltipEn;
+
+    // Map each feature to its stat value from the report
+    const featureStats: Record<string, { value: number | string; unitEn: string; unitAr: string }> = {
+        'Audio Mastered': { value: report.skills.listening.tasksCompleted, unitEn: 'audio files completed', unitAr: 'ملف صوتي مكتمل' },
+        'Audio Recognition': { value: report.skills.listening.tasksCompleted, unitEn: 'words recognized', unitAr: 'كلمة تم تمييزها' },
+        'Echo Precision': { value: report.skills.listening.tasksCompleted, unitEn: 'echo tasks', unitAr: 'مهمة ترديد' },
+        'Words Read': { value: report.skills.reading.tasksCompleted, unitEn: 'words read', unitAr: 'كلمة مقروءة' },
+        'Visual Associations': { value: report.skills.reading.tasksCompleted, unitEn: 'associations made', unitAr: 'ارتباط بصري' },
+        'Sentence Meaning': { value: report.skills.reading.tasksCompleted, unitEn: 'sentences analyzed', unitAr: 'جملة تم تحليلها' },
+        'Daily Mastery': { value: report.arsenal.masteredWords, unitEn: 'words mastered / 20 daily', unitAr: 'كلمة متقنة / 20 يومياً' },
+        'Spelling Accuracy': { value: `${report.quizzes.averageScore}%`, unitEn: 'accuracy rate', unitAr: 'نسبة الدقة' },
+        'Words Written': { value: report.skills.writing.tasksCompleted, unitEn: 'words written', unitAr: 'كلمة مكتوبة' },
+        'Audio Recorded': { value: report.skills.speaking.tasksCompleted, unitEn: 'recordings completed', unitAr: 'تسجيل مكتمل' },
+        'Phonetic Precision': { value: `${report.quizzes.averageScore}%`, unitEn: 'pronunciation accuracy', unitAr: 'دقة النطق' },
+        'Vocal Fluency': { value: `${report.arsenal.fluencyPercent}%`, unitEn: 'fluency score', unitAr: 'درجة الطلاقة' },
+    };
+
+    // Build rich tooltip: purpose text + stat value
+    const buildTooltip = (f: SkillFeature): React.ReactNode => {
+        const stat = featureStats[f.labelEn];
+        const purposeText = isAr ? f.tooltipAr : f.tooltipEn;
+        return (
+            <div className="space-y-1.5">
+                <p>{purposeText}</p>
+                {stat && (
+                    <div className="border-t border-zinc-600/50 pt-1.5 flex items-center gap-1.5">
+                        <span className="text-amber-400 font-black text-sm">{stat.value}</span>
+                        <span className="text-zinc-400 text-[10px]">{isAr ? stat.unitAr : stat.unitEn}</span>
+                    </div>
+                )}
+            </div>
+        );
+    };
 
     // Categories refs
     const listening = CATEGORIES[0];
@@ -476,13 +508,13 @@ function ReportPage() {
                                     </h3>
                                     <div className="flex flex-col gap-4 items-start">
                                         <div className="ms-0">
-                                            <DesktopSkillNode icon={listening.features[0].icon} label={fl(listening.features[0])} tooltip={ft(listening.features[0])} side={leftSide} bendOffset={30} width={85} />
+                                            <DesktopSkillNode icon={listening.features[0].icon} label={fl(listening.features[0])} tooltip={buildTooltip(listening.features[0])} side={leftSide} bendOffset={20} width={120} />
                                         </div>
-                                        <div className="ms-8 mt-1">
-                                            <DesktopSkillNode icon={listening.features[1].icon} label={fl(listening.features[1])} tooltip={ft(listening.features[1])} side={leftSide} bendOffset={5} width={55} />
+                                        <div className="ms-5 mt-1">
+                                            <DesktopSkillNode icon={listening.features[1].icon} label={fl(listening.features[1])} tooltip={buildTooltip(listening.features[1])} side={leftSide} bendOffset={5} width={90} />
                                         </div>
-                                        <div className="ms-3 mt-1">
-                                            <DesktopSkillNode icon={listening.features[2].icon} label={fl(listening.features[2])} tooltip={ft(listening.features[2])} side={leftSide} bendOffset={-20} width={70} />
+                                        <div className="ms-2 mt-1">
+                                            <DesktopSkillNode icon={listening.features[2].icon} label={fl(listening.features[2])} tooltip={buildTooltip(listening.features[2])} side={leftSide} bendOffset={-15} width={105} />
                                         </div>
                                     </div>
                                 </div>
@@ -491,15 +523,15 @@ function ReportPage() {
                                     <h3 className="text-cyan-400 font-bold text-3xl tracking-wide mb-5 drop-shadow-md">
                                         {t.reading}
                                     </h3>
-                                    <div className="flex flex-col gap-5 items-start ms-3">
-                                        <div className="ms-2">
-                                            <DesktopSkillNode icon={reading.features[1].icon} label={fl(reading.features[1])} tooltip={ft(reading.features[1])} side={leftSide} bendOffset={15} width={60} />
+                                    <div className="flex flex-col gap-5 items-start ms-1">
+                                        <div className="ms-0">
+                                            <DesktopSkillNode icon={reading.features[1].icon} label={fl(reading.features[1])} tooltip={buildTooltip(reading.features[1])} side={leftSide} bendOffset={15} width={100} />
                                         </div>
-                                        <div className="ms-5 mt-1">
-                                            <DesktopSkillNode icon={reading.features[0].icon} label={fl(reading.features[0])} tooltip={ft(reading.features[0])} side={leftSide} bendOffset={-10} width={65} />
+                                        <div className="ms-4 mt-1">
+                                            <DesktopSkillNode icon={reading.features[0].icon} label={fl(reading.features[0])} tooltip={buildTooltip(reading.features[0])} side={leftSide} bendOffset={-5} width={110} />
                                         </div>
-                                        <div className="ms-0 mt-1">
-                                            <DesktopSkillNode icon={reading.features[2].icon} label={fl(reading.features[2])} tooltip={ft(reading.features[2])} side={leftSide} bendOffset={-30} width={80} />
+                                        <div className="ms-1 mt-1">
+                                            <DesktopSkillNode icon={reading.features[2].icon} label={fl(reading.features[2])} tooltip={buildTooltip(reading.features[2])} side={leftSide} bendOffset={-25} width={130} />
                                         </div>
                                     </div>
                                 </div>
@@ -523,14 +555,14 @@ function ReportPage() {
                                         {t.writing}
                                     </h3>
                                     <div className="flex flex-col items-end gap-4 me-0">
-                                        <div className="me-2">
-                                            <DesktopSkillNode icon={writing.features[0].icon} label={fl(writing.features[0])} tooltip={ft(writing.features[0])} side={rightSide} bendOffset={30} width={85} />
+                                        <div className="me-0">
+                                            <DesktopSkillNode icon={writing.features[0].icon} label={fl(writing.features[0])} tooltip={buildTooltip(writing.features[0])} side={rightSide} bendOffset={20} width={120} />
                                         </div>
-                                        <div className="me-10 mt-1">
-                                            <DesktopSkillNode icon={writing.features[1].icon} label={fl(writing.features[1])} tooltip={ft(writing.features[1])} side={rightSide} bendOffset={0} width={55} />
+                                        <div className="me-5 mt-1">
+                                            <DesktopSkillNode icon={writing.features[1].icon} label={fl(writing.features[1])} tooltip={buildTooltip(writing.features[1])} side={rightSide} bendOffset={5} width={90} />
                                         </div>
-                                        <div className="me-4 mt-1">
-                                            <DesktopSkillNode icon={writing.features[2].icon} label={fl(writing.features[2])} tooltip={ft(writing.features[2])} side={rightSide} bendOffset={-20} width={70} />
+                                        <div className="me-2 mt-1">
+                                            <DesktopSkillNode icon={writing.features[2].icon} label={fl(writing.features[2])} tooltip={buildTooltip(writing.features[2])} side={rightSide} bendOffset={-15} width={105} />
                                         </div>
                                     </div>
                                 </div>
@@ -539,15 +571,15 @@ function ReportPage() {
                                     <h3 className="text-[#f5ebd6] font-extrabold text-3xl tracking-wide w-full text-end mb-5 drop-shadow-md">
                                         {t.speaking}
                                     </h3>
-                                    <div className="flex flex-col items-end gap-4 me-2">
-                                        <div className="me-2 mt-1">
-                                            <DesktopSkillNode icon={speaking.features[0].icon} label={fl(speaking.features[0])} tooltip={ft(speaking.features[0])} side={rightSide} bendOffset={15} width={75} />
-                                        </div>
-                                        <div className="me-6 mt-1">
-                                            <DesktopSkillNode icon={speaking.features[1].icon} label={fl(speaking.features[1])} tooltip={ft(speaking.features[1])} side={rightSide} bendOffset={-10} width={65} />
-                                        </div>
+                                    <div className="flex flex-col items-end gap-4 me-0">
                                         <div className="me-0 mt-1">
-                                            <DesktopSkillNode icon={speaking.features[2].icon} label={fl(speaking.features[2])} tooltip={ft(speaking.features[2])} side={rightSide} bendOffset={-30} width={80} />
+                                            <DesktopSkillNode icon={speaking.features[0].icon} label={fl(speaking.features[0])} tooltip={buildTooltip(speaking.features[0])} side={rightSide} bendOffset={15} width={100} />
+                                        </div>
+                                        <div className="me-4 mt-1">
+                                            <DesktopSkillNode icon={speaking.features[1].icon} label={fl(speaking.features[1])} tooltip={buildTooltip(speaking.features[1])} side={rightSide} bendOffset={-5} width={110} />
+                                        </div>
+                                        <div className="me-1 mt-1">
+                                            <DesktopSkillNode icon={speaking.features[2].icon} label={fl(speaking.features[2])} tooltip={buildTooltip(speaking.features[2])} side={rightSide} bendOffset={-25} width={130} />
                                         </div>
                                     </div>
                                 </div>
@@ -574,6 +606,7 @@ function ReportPage() {
                                         isAr={isAr}
                                         isOpen={!!openCategories[cat.id]}
                                         onToggle={() => toggleCategory(cat.id)}
+                                        tooltipBuilder={buildTooltip}
                                     />
                                 ))}
                             </div>
