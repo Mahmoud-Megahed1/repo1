@@ -450,10 +450,10 @@ function ReportPage() {
     const writing = CATEGORIES[2];
     const speaking = CATEGORIES[3];
 
-    // Connector side for desktop: LTR → listening/reading=left, writing/speaking=right
-    // RTL → listening/reading=right, writing/speaking=left
-    const leftSide = isAr ? 'right' as const : 'left' as const;
-    const rightSide = isAr ? 'left' as const : 'right' as const;
+    // Connector side: always left for listening/reading column, right for writing/speaking column
+    // The brain diagram layout stays the same in both LTR and RTL (dir='ltr' on container)
+    const leftSide = 'left' as const;
+    const rightSide = 'right' as const;
 
     const t = {
         footprint: isAr ? 'بصمتك اللغوية' : 'YOUR LINGUISTIC FOOTPRINT',
@@ -498,7 +498,7 @@ function ReportPage() {
                         </h2>
 
                         {/* ══════ DESKTOP: Brain Diagram with Arrows ══════ */}
-                        <div className="hidden lg:flex relative items-center justify-between w-full mt-10 mb-4 h-[420px]">
+                        <div dir="ltr" className="hidden lg:flex relative items-center justify-between w-full mt-10 mb-4 h-[420px]">
                             {/* LEFT COLUMN: Listening + Reading */}
                             <div className="flex flex-col justify-between h-full relative z-10 w-[38%] py-2">
                                 {/* LISTENING */}
