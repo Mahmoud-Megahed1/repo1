@@ -194,23 +194,49 @@ const CATEGORIES: SkillCategoryData[] = [
     },
 ];
 
-// ─── Desktop: Connector Line (straight horizontal line with glowing dot) ──────
-function ConnectorLine({ side, width = 80 }: { side: 'left' | 'right'; width?: number }) {
+// ─── Desktop: Connector Line (L-shaped elbow path with glowing dot) ───────
+function ConnectorLine({ side, variant = 'cyan', width = 80, yOffset = 0 }: { side: 'left' | 'right'; variant?: 'cyan' | 'amber'; width?: number; yOffset?: number }) {
     const isLeft = side === 'left';
-    const color = isLeft ? '#22d3ee' : '#fbbf24';
-    const dropShadow = isLeft
+    const color = variant === 'cyan' ? '#22d3ee' : '#fbbf24';
+    const glow = variant === 'cyan'
         ? 'drop-shadow-[0_0_8px_rgba(34,211,238,0.9)]'
         : 'drop-shadow-[0_0_8px_rgba(251,191,36,0.9)]';
 
-    // Badge end = start, Brain end = end (dot)
-    const brainX = isLeft ? width : 0;
+    const h = Math.abs(yOffset) > 0 ? width * 0.55 : width; // bend point
+    const svgH = Math.max(12, Math.abs(yOffset) + 12);
+    const cy = 6; // center Y for start
+
+    // Build an L-shaped SVG path
+    let pathD: string;
+    let dotX: number, dotY: number;
+
+    if (isLeft) {
+        // Left badge → right toward brain
+        if (yOffset === 0) {
+            pathD = `M 0 ${cy} H ${width}`;
+            dotX = width; dotY = cy;
+        } else {
+            pathD = `M 0 ${cy} H ${h} L ${width} ${cy + yOffset}`;
+            dotX = width; dotY = cy + yOffset;
+        }
+    } else {
+        // Right badge → left toward brain
+        if (yOffset === 0) {
+            pathD = `M ${width} ${cy} H 0`;
+            dotX = 0; dotY = cy;
+        } else {
+            pathD = `M ${width} ${cy} H ${width - h} L 0 ${cy + yOffset}`;
+            dotX = 0; dotY = cy + yOffset;
+        }
+    }
+
     const badgeX = isLeft ? 0 : width;
 
     return (
-        <svg width={width} height="8" className="overflow-visible shrink-0">
-            <line x1={badgeX} y1="4" x2={brainX} y2="4" stroke={color} strokeWidth="1.5" opacity="0.5" />
-            <circle cx={brainX} cy="4" r="3.5" fill={color} className={dropShadow} />
-            <circle cx={badgeX} cy="4" r="1.5" fill={color} opacity="0.7" />
+        <svg width={width} height={svgH} className="overflow-visible shrink-0">
+            <path d={pathD} fill="none" stroke={color} strokeWidth="1.5" opacity="0.5" strokeLinejoin="round" />
+            <circle cx={dotX} cy={dotY} r="3.5" fill={color} className={glow} />
+            <circle cx={badgeX} cy={cy} r="1.5" fill={color} opacity="0.7" />
         </svg>
     );
 }
@@ -221,20 +247,25 @@ function DesktopSkillNode({
     label,
     tooltip,
     side,
+    variant = 'cyan',
     width = 80,
+    yOffset = 0,
 }: {
     icon: React.ReactNode;
     label: string;
     tooltip: React.ReactNode;
     side: 'left' | 'right';
+    variant?: 'cyan' | 'amber';
     width?: number;
+    yOffset?: number;
 }) {
     const isLeft = side === 'left';
+    const isCyan = variant === 'cyan';
     return (
         <Tooltip>
             <TooltipTrigger asChild>
                 <div dir="ltr" className={`flex items-center group hover:z-20 transition-all duration-200 hover:scale-[1.03] cursor-help ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
-                    <div className={`relative flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-xs backdrop-blur-md shadow-lg whitespace-nowrap z-10 ${isLeft
+                    <div className={`relative flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-xs backdrop-blur-md shadow-lg whitespace-nowrap z-10 ${isCyan
                         ? 'border-cyan-500/30 bg-[#0f1a20]/90 text-cyan-50 hover:border-cyan-400/60'
                         : 'border-amber-500/30 bg-[#1a1508]/90 text-amber-50 hover:border-amber-400/60'
                         }`}>
@@ -242,7 +273,7 @@ function DesktopSkillNode({
                         <span className="font-bold tracking-wide">{label}</span>
                     </div>
                     <div className={isLeft ? "-ml-0.5" : "-mr-0.5"}>
-                        <ConnectorLine side={side} width={width} />
+                        <ConnectorLine side={side} variant={variant} width={width} yOffset={yOffset} />
                     </div>
                 </div>
             </TooltipTrigger>
@@ -257,7 +288,7 @@ function DesktopSkillNode({
     );
 }
 
-// ─── Mobile: Skill Badge with Tooltip ────────────────────────────────────
+// ─── Mobile: Skill Badge with CLICK-to-expand (not hover) ────────────────
 function MobileSkillBadge({
     icon,
     label,
@@ -269,26 +300,30 @@ function MobileSkillBadge({
     tooltip: React.ReactNode;
     variant?: 'cyan' | 'amber';
 }) {
+    const [open, setOpen] = useState(false);
     const colors = variant === 'cyan'
-        ? 'border-cyan-500/30 bg-cyan-950/40 text-cyan-200 hover:border-cyan-400/60 hover:bg-cyan-950/60'
-        : 'border-amber-500/30 bg-amber-950/40 text-amber-200 hover:border-amber-400/60 hover:bg-amber-950/60';
+        ? 'border-cyan-500/30 bg-cyan-950/40 text-cyan-200'
+        : 'border-amber-500/30 bg-amber-950/40 text-amber-200';
+    const activeColors = variant === 'cyan'
+        ? 'border-cyan-400/60 bg-cyan-950/60 shadow-[0_0_12px_rgba(34,211,238,0.15)]'
+        : 'border-amber-400/60 bg-amber-950/60 shadow-[0_0_12px_rgba(251,191,36,0.15)]';
 
     return (
-        <Tooltip>
-            <TooltipTrigger asChild>
-                <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[11px] font-semibold tracking-wide cursor-help transition-all duration-200 backdrop-blur-sm ${colors}`}>
-                    {icon}
-                    <span>{label}</span>
-                </div>
-            </TooltipTrigger>
-            <TooltipContent
-                side="top"
-                sideOffset={6}
-                className="max-w-[260px] text-center bg-zinc-900 text-zinc-100 border border-zinc-700 shadow-xl px-3 py-2 text-xs leading-relaxed"
+        <div className="flex flex-col w-full">
+            <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
+                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-[11px] font-semibold tracking-wide transition-all duration-200 backdrop-blur-sm active:scale-95 touch-manipulation ${colors} ${open ? activeColors : ''}`}
             >
-                {tooltip}
-            </TooltipContent>
-        </Tooltip>
+                {icon}
+                <span>{label}</span>
+            </button>
+            {open && (
+                <div className="mt-1.5 mx-1 px-3 py-2.5 rounded-lg bg-zinc-900/95 border border-zinc-700 text-xs text-zinc-200 leading-relaxed">
+                    {tooltip}
+                </div>
+            )}
+        </div>
     );
 }
 
@@ -333,7 +368,7 @@ function MobileCategoryCard({
                 </div>
                 <ChevronDown className={`w-5 h-5 ${chevronColor} transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
             </button>
-            <div className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
+            <div className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
                 <div className="px-5 pb-4 pt-1">
                     <div className="flex flex-wrap gap-2">
                         {category.features.map((feature, idx) => (
@@ -439,10 +474,9 @@ function ReportPage() {
     const writing = CATEGORIES[2];
     const speaking = CATEGORIES[3];
 
-    // Connector side: always left for listening/reading column, right for writing/speaking column
-    // The brain diagram layout stays the same in both LTR and RTL (dir='ltr' on container)
-    const leftSide = 'left' as const;
-    const rightSide = 'right' as const;
+    // Connector side & variant are now passed inline to each DesktopSkillNode
+    // In LTR: listening/reading(cyan) on left, writing/speaking(amber) on right
+    // In RTL: layout mirrors — writing/speaking(amber) on left, listening/reading(cyan) on right
 
     const t = {
         footprint: isAr ? 'بصمتك اللغوية' : 'YOUR LINGUISTIC FOOTPRINT',
@@ -487,8 +521,9 @@ function ReportPage() {
                         </h2>
 
                         {/* ══════ DESKTOP: Brain Diagram with Arrows ══════ */}
+                        {/* Layout is ALWAYS the same for both EN/AR: Cyan(Listening+Reading) on LEFT, Amber(Writing+Speaking) on RIGHT */}
                         <div style={{ direction: 'ltr', unicodeBidi: 'isolate' }} className="hidden lg:flex relative items-center justify-between w-full mt-10 mb-4 h-[420px]">
-                            {/* LEFT COLUMN: Listening + Reading */}
+                            {/* LEFT COLUMN: Listening + Reading (cyan) — always */}
                             <div className="flex flex-col justify-between h-full relative z-10 w-[38%] py-2">
                                 {/* LISTENING */}
                                 <div>
@@ -496,9 +531,9 @@ function ReportPage() {
                                         {t.listening}
                                     </h3>
                                     <div className="flex flex-col gap-4 items-start">
-                                            <DesktopSkillNode icon={listening.features[0].icon} label={fl(listening.features[0])} tooltip={buildTooltip(listening.features[0])} side={leftSide} width={100} />
-                                            <DesktopSkillNode icon={listening.features[1].icon} label={fl(listening.features[1])} tooltip={buildTooltip(listening.features[1])} side={leftSide} width={80} />
-                                            <DesktopSkillNode icon={listening.features[2].icon} label={fl(listening.features[2])} tooltip={buildTooltip(listening.features[2])} side={leftSide} width={90} />
+                                        <DesktopSkillNode icon={listening.features[0].icon} label={fl(listening.features[0])} tooltip={buildTooltip(listening.features[0])} side="left" variant="cyan" width={100} />
+                                        <DesktopSkillNode icon={listening.features[1].icon} label={fl(listening.features[1])} tooltip={buildTooltip(listening.features[1])} side="left" variant="cyan" width={80} />
+                                        <DesktopSkillNode icon={listening.features[2].icon} label={fl(listening.features[2])} tooltip={buildTooltip(listening.features[2])} side="left" variant="cyan" width={90} />
                                     </div>
                                 </div>
                                 {/* READING */}
@@ -507,9 +542,9 @@ function ReportPage() {
                                         {t.reading}
                                     </h3>
                                     <div className="flex flex-col gap-4 items-start">
-                                            <DesktopSkillNode icon={reading.features[1].icon} label={fl(reading.features[1])} tooltip={buildTooltip(reading.features[1])} side={leftSide} width={70} />
-                                            <DesktopSkillNode icon={reading.features[0].icon} label={fl(reading.features[0])} tooltip={buildTooltip(reading.features[0])} side={leftSide} width={90} />
-                                            <DesktopSkillNode icon={reading.features[2].icon} label={fl(reading.features[2])} tooltip={buildTooltip(reading.features[2])} side={leftSide} width={110} />
+                                        <DesktopSkillNode icon={reading.features[1].icon} label={fl(reading.features[1])} tooltip={buildTooltip(reading.features[1])} side="left" variant="cyan" width={70} />
+                                        <DesktopSkillNode icon={reading.features[0].icon} label={fl(reading.features[0])} tooltip={buildTooltip(reading.features[0])} side="left" variant="cyan" width={90} />
+                                        <DesktopSkillNode icon={reading.features[2].icon} label={fl(reading.features[2])} tooltip={buildTooltip(reading.features[2])} side="left" variant="cyan" width={110} />
                                     </div>
                                 </div>
                             </div>
@@ -524,7 +559,7 @@ function ReportPage() {
                                 />
                             </div>
 
-                            {/* RIGHT COLUMN: Writing + Speaking */}
+                            {/* RIGHT COLUMN: Writing + Speaking (amber) — always */}
                             <div className="flex flex-col justify-between h-full relative z-10 w-[38%] py-2">
                                 {/* WRITING */}
                                 <div className="flex flex-col items-end">
@@ -532,9 +567,9 @@ function ReportPage() {
                                         {t.writing}
                                     </h3>
                                     <div className="flex flex-col items-end gap-4">
-                                            <DesktopSkillNode icon={writing.features[0].icon} label={fl(writing.features[0])} tooltip={buildTooltip(writing.features[0])} side={rightSide} width={100} />
-                                            <DesktopSkillNode icon={writing.features[1].icon} label={fl(writing.features[1])} tooltip={buildTooltip(writing.features[1])} side={rightSide} width={80} />
-                                            <DesktopSkillNode icon={writing.features[2].icon} label={fl(writing.features[2])} tooltip={buildTooltip(writing.features[2])} side={rightSide} width={90} />
+                                        <DesktopSkillNode icon={writing.features[0].icon} label={fl(writing.features[0])} tooltip={buildTooltip(writing.features[0])} side="right" variant="amber" width={100} />
+                                        <DesktopSkillNode icon={writing.features[1].icon} label={fl(writing.features[1])} tooltip={buildTooltip(writing.features[1])} side="right" variant="amber" width={80} />
+                                        <DesktopSkillNode icon={writing.features[2].icon} label={fl(writing.features[2])} tooltip={buildTooltip(writing.features[2])} side="right" variant="amber" width={90} />
                                     </div>
                                 </div>
                                 {/* SPEAKING */}
@@ -543,9 +578,9 @@ function ReportPage() {
                                         {t.speaking}
                                     </h3>
                                     <div className="flex flex-col items-end gap-4">
-                                            <DesktopSkillNode icon={speaking.features[0].icon} label={fl(speaking.features[0])} tooltip={buildTooltip(speaking.features[0])} side={rightSide} width={70} />
-                                            <DesktopSkillNode icon={speaking.features[1].icon} label={fl(speaking.features[1])} tooltip={buildTooltip(speaking.features[1])} side={rightSide} width={90} />
-                                            <DesktopSkillNode icon={speaking.features[2].icon} label={fl(speaking.features[2])} tooltip={buildTooltip(speaking.features[2])} side={rightSide} width={110} />
+                                        <DesktopSkillNode icon={speaking.features[0].icon} label={fl(speaking.features[0])} tooltip={buildTooltip(speaking.features[0])} side="right" variant="amber" width={70} />
+                                        <DesktopSkillNode icon={speaking.features[1].icon} label={fl(speaking.features[1])} tooltip={buildTooltip(speaking.features[1])} side="right" variant="amber" width={90} />
+                                        <DesktopSkillNode icon={speaking.features[2].icon} label={fl(speaking.features[2])} tooltip={buildTooltip(speaking.features[2])} side="right" variant="amber" width={110} />
                                     </div>
                                 </div>
                             </div>
