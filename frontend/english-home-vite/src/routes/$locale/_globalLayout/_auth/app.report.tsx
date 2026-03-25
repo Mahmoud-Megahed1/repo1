@@ -194,49 +194,40 @@ const CATEGORIES: SkillCategoryData[] = [
     },
 ];
 
-// ─── Desktop: Connector Line (L-shaped elbow path with glowing dot) ───────
-function ConnectorLine({ side, variant = 'cyan', width = 80, yOffset = 0 }: { side: 'left' | 'right'; variant?: 'cyan' | 'amber'; width?: number; yOffset?: number }) {
+// ─── Desktop: Connector Line (curved path with glowing dot — matching reference design) ───────
+function ConnectorLine({ side, variant = 'cyan', width = 80 }: { side: 'left' | 'right'; variant?: 'cyan' | 'amber'; width?: number }) {
     const isLeft = side === 'left';
     const color = variant === 'cyan' ? '#22d3ee' : '#fbbf24';
     const glow = variant === 'cyan'
         ? 'drop-shadow-[0_0_8px_rgba(34,211,238,0.9)]'
         : 'drop-shadow-[0_0_8px_rgba(251,191,36,0.9)]';
 
-    const h = Math.abs(yOffset) > 0 ? width * 0.55 : width; // bend point
-    const svgH = Math.max(12, Math.abs(yOffset) + 12);
-    const cy = 6; // center Y for start
+    const svgH = 12;
+    const cy = 6;
 
-    // Build an L-shaped SVG path
+    // Curved path: horizontal then smooth curve toward brain
     let pathD: string;
-    let dotX: number, dotY: number;
+    let dotX: number;
 
     if (isLeft) {
-        // Left badge → right toward brain
-        if (yOffset === 0) {
-            pathD = `M 0 ${cy} H ${width}`;
-            dotX = width; dotY = cy;
-        } else {
-            pathD = `M 0 ${cy} H ${h} L ${width} ${cy + yOffset}`;
-            dotX = width; dotY = cy + yOffset;
-        }
+        // Badge on left → curve right toward brain
+        const bendStart = width * 0.6;
+        pathD = `M 0 ${cy} H ${bendStart} Q ${width} ${cy}, ${width} ${cy}`;
+        dotX = width;
     } else {
-        // Right badge → left toward brain
-        if (yOffset === 0) {
-            pathD = `M ${width} ${cy} H 0`;
-            dotX = 0; dotY = cy;
-        } else {
-            pathD = `M ${width} ${cy} H ${width - h} L 0 ${cy + yOffset}`;
-            dotX = 0; dotY = cy + yOffset;
-        }
+        // Badge on right → curve left toward brain
+        const bendStart = width * 0.4;
+        pathD = `M ${width} ${cy} H ${bendStart} Q 0 ${cy}, 0 ${cy}`;
+        dotX = 0;
     }
 
     const badgeX = isLeft ? 0 : width;
 
     return (
         <svg width={width} height={svgH} className="overflow-visible shrink-0">
-            <path d={pathD} fill="none" stroke={color} strokeWidth="1.5" opacity="0.5" strokeLinejoin="round" />
-            <circle cx={dotX} cy={dotY} r="3.5" fill={color} className={glow} />
-            <circle cx={badgeX} cy={cy} r="1.5" fill={color} opacity="0.7" />
+            <path d={pathD} fill="none" stroke={color} strokeWidth="1.5" opacity="0.45" strokeLinecap="round" />
+            <circle cx={dotX} cy={cy} r="4" fill={color} className={glow} />
+            <circle cx={badgeX} cy={cy} r="1.5" fill={color} opacity="0.6" />
         </svg>
     );
 }
@@ -249,7 +240,6 @@ function DesktopSkillNode({
     side,
     variant = 'cyan',
     width = 80,
-    yOffset = 0,
 }: {
     icon: React.ReactNode;
     label: string;
@@ -257,7 +247,6 @@ function DesktopSkillNode({
     side: 'left' | 'right';
     variant?: 'cyan' | 'amber';
     width?: number;
-    yOffset?: number;
 }) {
     const isLeft = side === 'left';
     const isCyan = variant === 'cyan';
@@ -273,7 +262,7 @@ function DesktopSkillNode({
                         <span className="font-bold tracking-wide">{label}</span>
                     </div>
                     <div className={isLeft ? "-ml-0.5" : "-mr-0.5"}>
-                        <ConnectorLine side={side} variant={variant} width={width} yOffset={yOffset} />
+                        <ConnectorLine side={side} variant={variant} width={width} />
                     </div>
                 </div>
             </TooltipTrigger>
@@ -474,9 +463,14 @@ function ReportPage() {
     const writing = CATEGORIES[2];
     const speaking = CATEGORIES[3];
 
-    // Connector side & variant are now passed inline to each DesktopSkillNode
-    // In LTR: listening/reading(cyan) on left, writing/speaking(amber) on right
-    // In RTL: layout mirrors — writing/speaking(amber) on left, listening/reading(cyan) on right
+    // In Arabic (RTL), the layout MIRRORS: cyan(Listening+Reading) go RIGHT, amber(Writing+Speaking) go LEFT
+    // In English (LTR): cyan on LEFT, amber on RIGHT
+    const leftCats = isAr ? { top: writing, bottom: speaking } : { top: listening, bottom: reading };
+    const rightCats = isAr ? { top: listening, bottom: reading } : { top: writing, bottom: speaking };
+    const leftVariant = isAr ? 'amber' as const : 'cyan' as const;
+    const rightVariant = isAr ? 'cyan' as const : 'amber' as const;
+    const leftTitleColor = isAr ? 'text-[#f5ebd6]' : 'text-cyan-400';
+    const rightTitleColor = isAr ? 'text-cyan-400' : 'text-[#f5ebd6]';
 
     const t = {
         footprint: isAr ? 'بصمتك اللغوية' : 'YOUR LINGUISTIC FOOTPRINT',
@@ -504,6 +498,9 @@ function ReportPage() {
         grammarRules: isAr ? 'قواعد نحوية' : 'Grammar Rules',
     };
 
+    // Helper to get title for a category
+    const catTitle = (cat: SkillCategoryData) => isAr ? cat.titleAr : cat.titleEn;
+
     return (
         <div className="min-h-screen w-full bg-[#0d1117] py-8 pb-16" dir={isAr ? 'rtl' : 'ltr'}>
             <div className="max-w-[1100px] mx-auto px-4 lg:px-6 space-y-6 lg:space-y-8 font-sans">
@@ -521,30 +518,30 @@ function ReportPage() {
                         </h2>
 
                         {/* ══════ DESKTOP: Brain Diagram with Arrows ══════ */}
-                        {/* Layout is ALWAYS the same for both EN/AR: Cyan(Listening+Reading) on LEFT, Amber(Writing+Speaking) on RIGHT */}
+                        {/* In Arabic: layout mirrors — cyan on RIGHT, amber on LEFT */}
                         <div style={{ direction: 'ltr', unicodeBidi: 'isolate' }} className="hidden lg:flex relative items-center justify-between w-full mt-10 mb-4 h-[420px]">
-                            {/* LEFT COLUMN: Listening + Reading (cyan) — always */}
+                            {/* LEFT COLUMN */}
                             <div className="flex flex-col justify-between h-full relative z-10 w-[38%] py-2">
-                                {/* LISTENING */}
+                                {/* TOP-LEFT */}
                                 <div>
-                                    <h3 className="text-cyan-400 font-bold text-3xl tracking-wide mb-5 drop-shadow-md">
-                                        {t.listening}
+                                    <h3 className={`${leftTitleColor} font-bold text-3xl tracking-wide mb-5 drop-shadow-md`}>
+                                        {catTitle(leftCats.top)}
                                     </h3>
                                     <div className="flex flex-col gap-4 items-start">
-                                        <DesktopSkillNode icon={listening.features[0].icon} label={fl(listening.features[0])} tooltip={buildTooltip(listening.features[0])} side="left" variant="cyan" width={100} />
-                                        <DesktopSkillNode icon={listening.features[1].icon} label={fl(listening.features[1])} tooltip={buildTooltip(listening.features[1])} side="left" variant="cyan" width={80} />
-                                        <DesktopSkillNode icon={listening.features[2].icon} label={fl(listening.features[2])} tooltip={buildTooltip(listening.features[2])} side="left" variant="cyan" width={90} />
+                                        <DesktopSkillNode icon={leftCats.top.features[0].icon} label={fl(leftCats.top.features[0])} tooltip={buildTooltip(leftCats.top.features[0])} side="left" variant={leftVariant} width={100} />
+                                        <DesktopSkillNode icon={leftCats.top.features[1].icon} label={fl(leftCats.top.features[1])} tooltip={buildTooltip(leftCats.top.features[1])} side="left" variant={leftVariant} width={80} />
+                                        <DesktopSkillNode icon={leftCats.top.features[2].icon} label={fl(leftCats.top.features[2])} tooltip={buildTooltip(leftCats.top.features[2])} side="left" variant={leftVariant} width={90} />
                                     </div>
                                 </div>
-                                {/* READING */}
+                                {/* BOTTOM-LEFT */}
                                 <div className="mt-6">
-                                    <h3 className="text-cyan-400 font-bold text-3xl tracking-wide mb-5 drop-shadow-md">
-                                        {t.reading}
+                                    <h3 className={`${leftTitleColor} font-bold text-3xl tracking-wide mb-5 drop-shadow-md`}>
+                                        {catTitle(leftCats.bottom)}
                                     </h3>
                                     <div className="flex flex-col gap-4 items-start">
-                                        <DesktopSkillNode icon={reading.features[1].icon} label={fl(reading.features[1])} tooltip={buildTooltip(reading.features[1])} side="left" variant="cyan" width={70} />
-                                        <DesktopSkillNode icon={reading.features[0].icon} label={fl(reading.features[0])} tooltip={buildTooltip(reading.features[0])} side="left" variant="cyan" width={90} />
-                                        <DesktopSkillNode icon={reading.features[2].icon} label={fl(reading.features[2])} tooltip={buildTooltip(reading.features[2])} side="left" variant="cyan" width={110} />
+                                        <DesktopSkillNode icon={leftCats.bottom.features[0].icon} label={fl(leftCats.bottom.features[0])} tooltip={buildTooltip(leftCats.bottom.features[0])} side="left" variant={leftVariant} width={70} />
+                                        <DesktopSkillNode icon={leftCats.bottom.features[1].icon} label={fl(leftCats.bottom.features[1])} tooltip={buildTooltip(leftCats.bottom.features[1])} side="left" variant={leftVariant} width={90} />
+                                        <DesktopSkillNode icon={leftCats.bottom.features[2].icon} label={fl(leftCats.bottom.features[2])} tooltip={buildTooltip(leftCats.bottom.features[2])} side="left" variant={leftVariant} width={110} />
                                     </div>
                                 </div>
                             </div>
@@ -559,28 +556,28 @@ function ReportPage() {
                                 />
                             </div>
 
-                            {/* RIGHT COLUMN: Writing + Speaking (amber) — always */}
+                            {/* RIGHT COLUMN */}
                             <div className="flex flex-col justify-between h-full relative z-10 w-[38%] py-2">
-                                {/* WRITING */}
+                                {/* TOP-RIGHT */}
                                 <div className="flex flex-col items-end">
-                                    <h3 className="text-[#f5ebd6] font-extrabold text-3xl tracking-wide w-full text-end mb-5 drop-shadow-md">
-                                        {t.writing}
+                                    <h3 className={`${rightTitleColor} font-extrabold text-3xl tracking-wide w-full text-end mb-5 drop-shadow-md`}>
+                                        {catTitle(rightCats.top)}
                                     </h3>
                                     <div className="flex flex-col items-end gap-4">
-                                        <DesktopSkillNode icon={writing.features[0].icon} label={fl(writing.features[0])} tooltip={buildTooltip(writing.features[0])} side="right" variant="amber" width={100} />
-                                        <DesktopSkillNode icon={writing.features[1].icon} label={fl(writing.features[1])} tooltip={buildTooltip(writing.features[1])} side="right" variant="amber" width={80} />
-                                        <DesktopSkillNode icon={writing.features[2].icon} label={fl(writing.features[2])} tooltip={buildTooltip(writing.features[2])} side="right" variant="amber" width={90} />
+                                        <DesktopSkillNode icon={rightCats.top.features[0].icon} label={fl(rightCats.top.features[0])} tooltip={buildTooltip(rightCats.top.features[0])} side="right" variant={rightVariant} width={100} />
+                                        <DesktopSkillNode icon={rightCats.top.features[1].icon} label={fl(rightCats.top.features[1])} tooltip={buildTooltip(rightCats.top.features[1])} side="right" variant={rightVariant} width={80} />
+                                        <DesktopSkillNode icon={rightCats.top.features[2].icon} label={fl(rightCats.top.features[2])} tooltip={buildTooltip(rightCats.top.features[2])} side="right" variant={rightVariant} width={90} />
                                     </div>
                                 </div>
-                                {/* SPEAKING */}
+                                {/* BOTTOM-RIGHT */}
                                 <div className="mt-6 flex flex-col items-end">
-                                    <h3 className="text-[#f5ebd6] font-extrabold text-3xl tracking-wide w-full text-end mb-5 drop-shadow-md">
-                                        {t.speaking}
+                                    <h3 className={`${rightTitleColor} font-extrabold text-3xl tracking-wide w-full text-end mb-5 drop-shadow-md`}>
+                                        {catTitle(rightCats.bottom)}
                                     </h3>
                                     <div className="flex flex-col items-end gap-4">
-                                        <DesktopSkillNode icon={speaking.features[0].icon} label={fl(speaking.features[0])} tooltip={buildTooltip(speaking.features[0])} side="right" variant="amber" width={70} />
-                                        <DesktopSkillNode icon={speaking.features[1].icon} label={fl(speaking.features[1])} tooltip={buildTooltip(speaking.features[1])} side="right" variant="amber" width={90} />
-                                        <DesktopSkillNode icon={speaking.features[2].icon} label={fl(speaking.features[2])} tooltip={buildTooltip(speaking.features[2])} side="right" variant="amber" width={110} />
+                                        <DesktopSkillNode icon={rightCats.bottom.features[0].icon} label={fl(rightCats.bottom.features[0])} tooltip={buildTooltip(rightCats.bottom.features[0])} side="right" variant={rightVariant} width={70} />
+                                        <DesktopSkillNode icon={rightCats.bottom.features[1].icon} label={fl(rightCats.bottom.features[1])} tooltip={buildTooltip(rightCats.bottom.features[1])} side="right" variant={rightVariant} width={90} />
+                                        <DesktopSkillNode icon={rightCats.bottom.features[2].icon} label={fl(rightCats.bottom.features[2])} tooltip={buildTooltip(rightCats.bottom.features[2])} side="right" variant={rightVariant} width={110} />
                                     </div>
                                 </div>
                             </div>
