@@ -644,6 +644,9 @@ export type TranslationType = {
     renew: string;
     completed: string;
     renewSubscription: string;
+    renewalPrice: string;
+    upgradeDiscount: string;
+    originalPrice: string;
     expiredOn: string;
     expiresAt: string;
     validUntil: string;

@@ -1,6 +1,7 @@
 import {
   AlertCircle,
   CheckCircle2,
+  Languages,
   Lock,
   Phone,
 } from 'lucide-react';
@@ -11,6 +12,7 @@ import { Checkbox } from './ui/checkbox';
 import { useReactivate } from '@/modules/auth/mutations';
 import { cn } from '@lib/utils';
 import { useAuth } from './contexts/auth-context';
+import LanguageSwitcher from './language-switcher';
 
 type Props = {
   userName?: string;
@@ -47,7 +49,18 @@ const SuspendedAccountPage: React.FC<Props> = ({
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 px-4 py-12 relative">
+      {/* Language Switcher */}
+      <LanguageSwitcher
+        className={cn(
+          "fixed top-5 z-50 flex items-center gap-2 rounded-full bg-white/90 backdrop-blur-sm px-4 py-2.5 text-sm font-bold text-gray-700 shadow-lg border border-gray-200/60 hover:bg-white hover:shadow-xl hover:scale-105 transition-all duration-300",
+          isAr ? "left-5" : "right-5"
+        )}
+      >
+        <Languages className="h-4 w-4" />
+        <span>{isAr ? 'EN' : 'عربي'}</span>
+      </LanguageSwitcher>
+
       <div className="w-full max-w-2xl">
         {/* Main Reactivation Card */}
         <div className="overflow-hidden rounded-3xl border border-blue-100 bg-white shadow-2xl transition-all duration-500">

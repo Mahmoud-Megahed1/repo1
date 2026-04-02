@@ -50,6 +50,7 @@ export type LevelCardProps = {
   variant?: 'unlocked' | 'locked' | 'coming-soon' | 'expired';
   isCompleted?: boolean;
   expiresAt?: string;
+  previousLevelCompleted?: boolean;
 };
 
 const LevelCard: FC<LevelCardProps> = ({
@@ -62,6 +63,7 @@ const LevelCard: FC<LevelCardProps> = ({
   variant = 'locked',
   isCompleted = false,
   expiresAt,
+  previousLevelCompleted = false,
 }) => {
   const {
     cta,
@@ -78,6 +80,7 @@ const LevelCard: FC<LevelCardProps> = ({
     expiresAt,
     variant,
     isCompleted,
+    previousLevelCompleted,
   });
   return (
     <Card className={cn('relative', className)}>
@@ -119,12 +122,14 @@ const useComponentVariant = ({
   expiresAt,
   variant = 'locked',
   isCompleted = false,
+  previousLevelCompleted = false,
 }: {
   levelId: LevelId;
   price: number;
   expiresAt?: string;
   variant?: 'unlocked' | 'locked' | 'coming-soon' | 'expired';
   isCompleted?: boolean;
+  previousLevelCompleted?: boolean;
 }) => {
   const { mutate, isPending } = usePayment(levelId);
   const { t } = useTranslation();
@@ -135,6 +140,10 @@ const useComponentVariant = ({
       (1000 * 60 * 60 * 24)
     )
     : 0;
+
+  // Calculate discount prices
+  const renewalPrice = Math.round(price * 0.25); // Renewal: pay 25% of original
+  const upgradePrice = Math.round(price * 0.85); // Upgrade: 15% off
 
   const variants: ComponentVariant = {
     'coming-soon': {
@@ -175,7 +184,47 @@ const useComponentVariant = ({
     locked: {
       iconBg: 'default',
       labelVariant: 'default',
-      content: (
+      cta: (
+        <Button
+          className="w-full"
+          onClick={() => mutate()}
+          disabled={isPending}
+        >
+          {isPending ? t('Global.processing') : previousLevelCompleted ? t('Global.unlock') + ' (-15%)' : t('Global.unlock')}
+          <KeyRound />
+        </Button>
+      ),
+      content: previousLevelCompleted ? (
+        <div className="space-y-2">
+          <p className="flex items-center gap-2 rounded-md border-green-200 bg-green-100 px-3 py-1.5 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-300 text-sm font-semibold">
+            {t('Global.upgradeDiscount')}
+          </p>
+          <p className="flex items-center">
+            <span className="text-muted-foreground pe-2 text-sm">
+              {t('Global.originalPrice')}
+            </span>
+            <span className="inline-flex items-center gap-1 font-bold line-through opacity-50">
+              <RiyalSymbol className="size-4" />
+              {price}
+            </span>
+          </p>
+          <p className="flex items-center">
+            <span className="text-muted-foreground pe-2 text-sm">
+              {t('Global.price')}
+            </span>
+            <span className="inline-flex items-center gap-1 font-bold text-green-600 dark:text-green-400">
+              <RiyalSymbol className="size-4" />
+              {upgradePrice}
+            </span>
+          </p>
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2 py-0.5 rounded-full border border-green-200 dark:border-green-800">
+            <Clock size={14} />
+            {t('Global.forSixtyDays')}
+          </p>
+          {/* @ts-ignore JSX custom element */}
+          {upgradePrice > 0 && <tamara-widget type="tamara-summary" amount={upgradePrice} inline-type="2"></tamara-widget>}
+        </div>
+      ) : (
         <div className="space-y-2">
           <p className="flex items-center">
             <span className="text-muted-foreground pe-2 text-sm">
@@ -193,16 +242,6 @@ const useComponentVariant = ({
           {/* @ts-ignore JSX custom element */}
           {price > 0 && <tamara-widget type="tamara-summary" amount={price} inline-type="2"></tamara-widget>}
         </div>
-      ),
-      cta: (
-        <Button
-          className="w-full"
-          onClick={() => mutate()}
-          disabled={isPending}
-        >
-          {isPending ? t('Global.processing') : t('Global.unlock')}
-          <KeyRound />
-        </Button>
       ),
     },
     unlocked: {
@@ -265,11 +304,20 @@ const useComponentVariant = ({
           <div className="flex flex-col gap-2 pt-1">
             <p className="flex items-center">
               <span className="text-muted-foreground pe-2 text-sm">
-                <b>{t('Global.renew')}:</b>
+                <b>{t('Global.originalPrice')}:</b>
               </span>
-              <span className="inline-flex items-center gap-1 font-bold">
+              <span className="inline-flex items-center gap-1 font-bold line-through opacity-50">
                 <RiyalSymbol className="size-4" />
                 {price}
+              </span>
+            </p>
+            <p className="flex items-center">
+              <span className="text-muted-foreground pe-2 text-sm">
+                <b>{t('Global.renewalPrice')}:</b>
+              </span>
+              <span className="inline-flex items-center gap-1 font-bold text-green-600 dark:text-green-400">
+                <RiyalSymbol className="size-4" />
+                {renewalPrice}
               </span>
             </p>
             <p className="flex items-center gap-1.5 text-sm font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2 py-0.5 rounded-full border border-green-200 dark:border-green-800">
@@ -277,7 +325,7 @@ const useComponentVariant = ({
               {t('Global.forSixtyDays')}
             </p>
             {/* @ts-ignore JSX custom element */}
-            {price > 0 && <tamara-widget type="tamara-summary" amount={price} inline-type="2"></tamara-widget>}
+            {renewalPrice > 0 && <tamara-widget type="tamara-summary" amount={renewalPrice} inline-type="2"></tamara-widget>}
           </div>
         </div>
       ),

@@ -416,10 +416,10 @@ function ReportPage() {
     });
 
     if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-[#0d1117]"><div className="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" /></div>;
-    if (error || !report) return <div className="min-h-screen flex items-center text-red-400 justify-center bg-[#0d1117]">Failed to load report.</div>;
+    if (error || !report) return <div className="min-h-screen flex items-center text-red-400 justify-center bg-[#0d1117]">{isAr ? 'فشل في تحميل التقرير.' : 'Failed to load report.'}</div>;
 
     const levelLabel = report.currentLevel?.name?.replace('LEVEL_', '') || 'A1';
-    const levelTitle = `LEVEL ${levelLabel} KNIGHT`;
+    const levelTitle = isAr ? `المستوى ${levelLabel} فارس` : `LEVEL ${levelLabel} KNIGHT`;
 
     // Helper: get feature label by lang
     const fl = (f: SkillFeature) => isAr ? f.labelAr : f.labelEn;
@@ -474,7 +474,7 @@ function ReportPage() {
 
     const t = {
         footprint: isAr ? 'بصمتك اللغوية' : 'YOUR LINGUISTIC FOOTPRINT',
-        arsenal: 'Linguistic Arsenal',
+        arsenal: isAr ? 'الترسانة اللغوية' : 'Linguistic Arsenal',
         journeyTimeline: isAr ? 'الجدول الزمني' : 'Journey Timeline',
         knowledgeFortress: isAr ? 'حصن المعرفة' : 'Knowledge Fortress',
         aiPrediction: isAr ? 'توقعات الذكاء الاصطناعي:' : 'AI Prediction:',
@@ -642,7 +642,7 @@ function ReportPage() {
                                 <span className="text-[#00d084] font-bold text-sm leading-none">{report.arsenal.fluencyPercent}%</span>
                             </div>
                             <p className="text-[9px] text-zinc-500 font-bold tracking-[0.1em] mt-4 uppercase">
-                                SENTENCES TAKEN: {report.skills.writing.tasksCompleted} | VOICES SHARED: {report.skills.listening.tasksCompleted} {t.hours}
+                                {isAr ? `جمل مأخوذة: ${report.skills.writing.tasksCompleted} | تسجيلات مشاركة: ${report.skills.listening.tasksCompleted} ${t.hours}` : <>SENTENCES TAKEN: {report.skills.writing.tasksCompleted} | VOICES SHARED: {report.skills.listening.tasksCompleted} {t.hours}</>}
                             </p>
                             <div className="grid grid-cols-2 gap-x-4 gap-y-7 mt-8 border-t border-gray-800/50 pt-6">
                                 <div className="flex flex-col gap-6 w-full">
@@ -650,7 +650,7 @@ function ReportPage() {
                                         <div className="flex items-start gap-2">
                                             <Map className="w-4 h-4 text-zinc-400 mt-0.5" />
                                             <div className="flex flex-col">
-                                                <span className="text-[10px] text-zinc-400 font-bold tracking-widest leading-snug uppercase">GRAMMAR RULES<br />UNLOCKED</span>
+                                                <span className="text-[10px] text-zinc-400 font-bold tracking-widest leading-snug uppercase">{isAr ? <>قواعد نحوية<br />مفتوحة</> : <>GRAMMAR RULES<br />UNLOCKED</>}</span>
                                             </div>
                                         </div>
                                         <span className="text-base font-bold text-white">{report.arsenal.grammarRules}</span>
@@ -658,7 +658,7 @@ function ReportPage() {
                                     <div className="flex items-center justify-between pe-2">
                                         <div className="flex items-center gap-2">
                                             <CheckSquare className="w-4 h-4 text-zinc-400" />
-                                            <span className="text-[10px] text-zinc-400 font-bold tracking-widest leading-snug uppercase">CORRECT ANSWERS</span>
+                                            <span className="text-[10px] text-zinc-400 font-bold tracking-widest leading-snug uppercase">{isAr ? 'إجابات صحيحة' : 'CORRECT ANSWERS'}</span>
                                         </div>
                                         <span className="text-base font-bold text-white">{report.quizzes.correctAnswers}</span>
                                     </div>
@@ -668,7 +668,7 @@ function ReportPage() {
                                         <div className="flex items-start gap-2">
                                             <CheckCircle2 className="w-4 h-4 text-zinc-400 mt-0.5" />
                                             <div className="flex flex-col">
-                                                <span className="text-[10px] text-zinc-400 font-bold tracking-widest leading-snug uppercase">QUIZZES COMPLETED<br />COMPLETED: {report.quizzes.averageScore}%</span>
+                                                <span className="text-[10px] text-zinc-400 font-bold tracking-widest leading-snug uppercase">{isAr ? <>اختبارات مكتملة<br />المعدل: {report.quizzes.averageScore}%</> : <>QUIZZES COMPLETED<br />COMPLETED: {report.quizzes.averageScore}%</>}</span>
                                             </div>
                                         </div>
                                         <span className="text-base font-bold text-white">{report.quizzes.completed}</span>
@@ -676,11 +676,11 @@ function ReportPage() {
                                     <div className="flex items-start justify-between pe-2">
                                         <div className="flex items-start gap-2">
                                             <CheckSquare className="w-4 h-4 text-zinc-400 mt-0.5" />
-                                            <span className="text-[10px] text-zinc-400 font-bold tracking-widest leading-snug uppercase">CURRENT<br />STREAK</span>
+                                            <span className="text-[10px] text-zinc-400 font-bold tracking-widest leading-snug uppercase">{isAr ? <>السلسلة<br />الحالية</> : <>CURRENT<br />STREAK</>}</span>
                                         </div>
                                         <div className="flex flex-col items-center justify-center pt-1">
                                             <span className="text-base font-bold text-white leading-none">{report.journey.currentStreak}</span>
-                                            <span className="text-[10px] font-bold text-white leading-tight uppercase mt-1">DAYS</span>
+                                            <span className="text-[10px] font-bold text-white leading-tight uppercase mt-1">{isAr ? 'أيام' : 'DAYS'}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -726,7 +726,7 @@ function ReportPage() {
 
                 {/* ═══════════ ROW 3: Linguistic Arsenal Bottom Cards ═══════════ */}
                 <div className="rounded-[2rem] bg-[#161a23] border border-zinc-800/80 p-8 shadow-2xl relative">
-                    <h2 className="text-xl md:text-2xl text-gray-300 font-normal tracking-wide mb-8">Linguistic Arsenal</h2>
+                    <h2 className="text-xl md:text-2xl text-gray-300 font-normal tracking-wide mb-8">{t.arsenal}</h2>
                     <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-12 lg:gap-16 items-center">
                         <div className="flex items-center gap-12 ps-4">
                             <div className="flex flex-col items-center gap-5 border-r border-zinc-800/60 pr-12">
@@ -738,8 +738,8 @@ function ReportPage() {
                                     <BookOpen className="w-10 h-10 text-zinc-300" strokeWidth={1.5} />
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-[13px] text-zinc-400">Voice Training:</p>
-                                    <p className="text-[13px] text-zinc-200 font-medium">{report.skills.speaking.tasksCompleted} Hours</p>
+                                    <p className="text-[13px] text-zinc-400">{isAr ? 'تدريب صوتي:' : 'Voice Training:'}</p>
+                                    <p className="text-[13px] text-zinc-200 font-medium">{report.skills.speaking.tasksCompleted} {isAr ? 'ساعات' : 'Hours'}</p>
                                 </div>
                             </div>
                             <div className="flex flex-col items-center gap-5">
@@ -750,7 +750,7 @@ function ReportPage() {
                                     </svg>
                                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-900/40 rounded-full m-2">
                                         <span className="text-3xl font-bold text-amber-100">{report.arsenal.masteredWords}</span>
-                                        <span className="text-[9px] text-zinc-400 mt-0.5 leading-tight text-center px-4 uppercase font-bold">Mastered<br />Words</span>
+                                        <span className="text-[9px] text-zinc-400 mt-0.5 leading-tight text-center px-4 uppercase font-bold">{isAr ? <>كلمات<br />متقنة</> : <>Mastered<br />Words</>}</span>
                                     </div>
                                 </div>
                                 <div className="text-center">
@@ -780,7 +780,7 @@ function ReportPage() {
                                     <span className="text-4xl font-light text-zinc-200 leading-none">{report.skills.reading.tasksCompleted}</span>
                                     <span className="text-[13px] font-medium text-zinc-400 leading-snug">{t.readingSpeed}:<br /><span className="text-zinc-300">+{(report.skills.reading.tasksCompleted * 0.1).toFixed(1)}x</span></span>
                                 </div>
-                                <p className="text-[13px] text-zinc-500 tracking-wide font-medium">Quizzes Completed<br />{report.quizzes.completed} {t.days}!</p>
+                                <p className="text-[13px] text-zinc-500 tracking-wide font-medium">{isAr ? 'اختبارات مكتملة' : 'Quizzes Completed'}<br />{report.quizzes.completed} {t.days}!</p>
                             </div>
                             <div className="rounded-[1.25rem] border border-zinc-700/50 bg-[#161a23] p-[1.5rem] shadow-lg flex flex-col justify-center relative overflow-hidden">
                                 <div className="w-8 h-[2px] bg-cyan-400 rounded-full mb-5" />
@@ -789,7 +789,7 @@ function ReportPage() {
                                     <span className="text-4xl font-light text-zinc-200 leading-none">{report.arsenal.grammarRules}</span>
                                     <span className="text-[13px] font-medium text-zinc-400 leading-snug">{t.grammarRules}:<br /><span className="text-zinc-300">({report.quizzes.averageScore}% {t.accuracy})</span></span>
                                 </div>
-                                <p className="text-[13px] text-zinc-500 tracking-wide font-medium">Current Streak:</p>
+                                <p className="text-[13px] text-zinc-500 tracking-wide font-medium">{isAr ? 'السلسلة الحالية:' : 'Current Streak:'}</p>
                             </div>
                         </div>
                     </div>

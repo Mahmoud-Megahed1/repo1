@@ -34,7 +34,7 @@ function RouteComponent() {
   const { t } = useTranslation();
   const { dynamicTheme } = useTheme();
   const { id: levelId, day, lessonName } = useParams({ from: Route.id });
-  const { isEmpty, isFetching, lesson } = useLessonContext();
+  const { isEmpty, isFetching } = useLessonContext();
   const { levelsDetails } = useAuth();
   const currentDay =
     levelsDetails?.find(({ levelName }) => levelName === levelId)?.currentDay ||
@@ -93,18 +93,21 @@ function RouteComponent() {
     .filter(id => id !== 'DAILY_TEST')
     .every(id => completedTasks?.data?.includes(id));
 
-  // Auto-trigger AI Chat when all 10 tasks are done
+  // Only show AI Review on the current day, not when reviewing past days
+  const isCurrentDay = +day === currentDay;
+
+  // Auto-trigger AI Chat when all 10 tasks are done (only on the current day, only once ever)
   useEffect(() => {
-    if (!areAllTasksCompleted || dynamicTheme?.showAIReviewChat === false) return;
+    if (!areAllTasksCompleted || !isCurrentDay || dynamicTheme?.showAIReviewChat === false) return;
 
-    const storageKey = `ai-review-opened-${levelId}-${day}-${lessonName}`;
-    const hasOpened = sessionStorage.getItem(storageKey);
+    const storageKey = `ai-review-shown-${levelId}-${day}`;
+    const hasBeenShown = localStorage.getItem(storageKey);
 
-    if (!hasOpened) {
+    if (!hasBeenShown) {
       setOpenAiChat(true);
-      sessionStorage.setItem(storageKey, 'true');
+      localStorage.setItem(storageKey, 'true');
     }
-  }, [areAllTasksCompleted, setOpenAiChat, dynamicTheme?.showAIReviewChat, levelId, day, lessonName]);
+  }, [areAllTasksCompleted, isCurrentDay, setOpenAiChat, dynamicTheme?.showAIReviewChat, levelId, day]);
 
   return (
     <LevelGuard levelId={levelId as LevelId}>
@@ -122,7 +125,6 @@ function RouteComponent() {
           {/* Lesson title + Orange instruction bar + Green badge + Progress — all on one line */}
           <HeaderBar
             lessonName={lessonName}
-            lesson={lesson}
             completedTasks={completedTasks}
             t={t}
           />
@@ -130,14 +132,13 @@ function RouteComponent() {
         </div>
       )}
       <ScrollArrows />
-      <GlobalAiChat isLessonCompleted={areAllTasksCompleted} />
+      <GlobalAiChat isLessonCompleted={areAllTasksCompleted && isCurrentDay} />
     </LevelGuard>
   );
 }
 
-function HeaderBar({ lessonName, lesson, completedTasks, t }: {
+function HeaderBar({ lessonName, completedTasks, t }: {
   lessonName: string;
-  lesson: any;
   completedTasks: any;
   t: any;
 }) {
@@ -147,9 +148,7 @@ function HeaderBar({ lessonName, lesson, completedTasks, t }: {
   return (
     <div className="flex flex-wrap items-center gap-3">
       <h2 className="text-xl md:text-2xl font-bold shrink-0">
-        {lessonName === 'TODAY' && lesson?.data?.[0]?.title
-          ? lesson.data[0].title
-          : t(`Global.sidebarItems.${lessonName}` as any)}
+        {t(`Global.sidebarItems.${lessonName}` as any)}
       </h2>
       <div className="bg-amber-100 dark:bg-amber-900/40 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-100 px-5 py-2.5 rounded-xl font-semibold flex-1 flex items-center gap-2 text-sm md:text-base">
         <span className="text-amber-500 text-lg">💡</span>

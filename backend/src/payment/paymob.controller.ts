@@ -16,6 +16,9 @@ import {
 import { PaymobService } from './paymob.service';
 import { PaymentRequestDto } from './dto/orderData';
 import { Level_Name } from '../common/shared/enums';
+import { CertificateRepo } from '../user/repo/certificate.repo';
+import { Types } from 'mongoose';
+import { OrderAccessStatus } from './types';
 import { UserService } from '../user/user.service';
 import { CurrentUser } from '../user-auth/decorator/get-curr-user.decorator';
 import { User } from '../user/models/user.schema';
@@ -41,6 +44,7 @@ export class PaymobController {
     private readonly paymobService: PaymobService,
     private readonly userService: UserService,
     private readonly courseService: CourseService,
+    private readonly certificateRepo: CertificateRepo,
   ) {}
 
   private validateHMAC(
@@ -213,15 +217,56 @@ export class PaymobController {
 
       const frontendUrl = this.configService.get<string>('FRONTEND_URL');
 
+      // === DISCOUNT CALCULATION ===
+      let finalPrice = course.price;
+      let discountType: 'renewal' | 'upgrade' | null = null;
+
+      // 1. Renewal: User had this level but it expired → pays only 25% of the price
+      const expiredOrder = await this.paymobService.orderRepo.findCompletedOrder(
+        user._id.toString(),
+        paymentIntentionDto.level_name,
+      );
+      if (expiredOrder && (expiredOrder as any).accessStatus === OrderAccessStatus.EXPIRED) {
+        discountType = 'renewal';
+        finalPrice = Math.round(course.price * 0.25); // Pay only 25% of original price
+        this.logger.log(
+          `Renewal discount applied for user ${user._id}: ${course.price} → ${finalPrice} SAR (25% of original)`,
+        );
+      }
+
+      // 2. Upgrade: User completed the previous level → 15% discount on next level
+      if (!discountType) {
+        const levelOrder = [
+          Level_Name.LEVEL_A1, Level_Name.LEVEL_A2,
+          Level_Name.LEVEL_B1, Level_Name.LEVEL_B2,
+          Level_Name.LEVEL_C1, Level_Name.LEVEL_C2,
+        ];
+        const currentIndex = levelOrder.indexOf(paymentIntentionDto.level_name);
+        if (currentIndex > 0) {
+          const previousLevel = levelOrder[currentIndex - 1];
+          const certificate = await this.certificateRepo.findOne({
+            userId: new Types.ObjectId(user._id.toString()),
+            level_name: previousLevel,
+          });
+          if (certificate) {
+            discountType = 'upgrade';
+            finalPrice = Math.round(course.price * 0.85); // 15% discount
+            this.logger.log(
+              `Upgrade discount applied for user ${user._id}: ${course.price} → ${finalPrice} SAR (15% off, completed ${previousLevel})`,
+            );
+          }
+        }
+      }
+
       const data = {
-        amount: course.price, // Use whole currency amount for our internal processing
+        amount: finalPrice,
         currency: 'SAR', // <- Saudi Riyal
         payment_methods: [integration_id, 24018], // added 24018 for Tamara
-        redirection_url: frontendUrl, // Redirect user back to the website after payment
+        redirection_url: `${frontendUrl}/en/app/levels`, // Redirect user back to the levels page after payment
         items: [
           {
             name: paymentIntentionDto.level_name,
-            amount: course.price,
+            amount: finalPrice,
             description: course.descriptionEn || `${course.titleEn} course`,
             quantity: 1,
           },

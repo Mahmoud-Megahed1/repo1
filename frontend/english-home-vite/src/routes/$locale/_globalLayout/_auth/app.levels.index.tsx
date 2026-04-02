@@ -26,20 +26,32 @@ function RouteComponent() {
   const { localizedLevels, isLoading } = useLocalizedLevels(locale);
   const { levelsDetails } = useAuth();
   const { t } = useTranslation();
+  const levelOrder = ['LEVEL_A1', 'LEVEL_A2', 'LEVEL_B1', 'LEVEL_B2', 'LEVEL_C1', 'LEVEL_C2'] as const;
   const normalizedLevels =
-    localizedLevels?.map(({ isAvailable, levelId, ...rest }) => ({
-      ...rest,
-      levelId,
-      expiresAt: levelsDetails.find((level) => level.levelName === levelId)
-        ?.expiresAt,
-      isCompleted: levelsDetails.find((level) => level.levelName === levelId)
-        ?.isCompleted,
-      variant: getLevelVariant({
-        isAvailable,
+    localizedLevels?.map(({ isAvailable, levelId, ...rest }) => {
+      // Check if the previous level is completed (for upgrade discount)
+      const currentIndex = levelOrder.indexOf(levelId);
+      const previousLevelCompleted = currentIndex > 0
+        ? !!levelsDetails.find(
+            (level) => level.levelName === levelOrder[currentIndex - 1] && level.isCompleted
+          )
+        : false;
+
+      return {
+        ...rest,
         levelId,
-        userLevels: levelsDetails,
-      }),
-    })) || [];
+        expiresAt: levelsDetails.find((level) => level.levelName === levelId)
+          ?.expiresAt,
+        isCompleted: levelsDetails.find((level) => level.levelName === levelId)
+          ?.isCompleted,
+        previousLevelCompleted,
+        variant: getLevelVariant({
+          isAvailable,
+          levelId,
+          userLevels: levelsDetails,
+        }),
+      };
+    }) || [];
   useEffect(() => {
     useBreadcrumbStore
       .getState()

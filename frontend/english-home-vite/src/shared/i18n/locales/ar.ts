@@ -818,6 +818,9 @@ export default {
     renew: 'تجديد',
     validUntil: 'صالح حتى',
     renewSubscription: 'جدد الاشتراك',
+    renewalPrice: 'سعر التجديد (٢٥٪ من السعر الأصلي)',
+    upgradeDiscount: 'خصم ترقية ١٥٪',
+    originalPrice: 'السعر الأصلي',
     daysLeft: 'أيام متبقية',
     notFoundDescription: 'الصفحة التي تبحث عنها غير موجودة.',
     lockedLevel: {

@@ -22,7 +22,7 @@ type Props = {
   levelId: LevelId;
 };
 const Today: FC<Props> = ({
-  lesson: { description, instructions, sentences, soundSrc },
+  lesson: { title, description, instructions, sentences, soundSrc },
   day,
   lessonName,
   levelId,
@@ -34,7 +34,10 @@ const Today: FC<Props> = ({
   });
   return (
     <div className="mx-auto max-w-6xl space-y-4">
-      {/* Description only — title is now in the parent route header */}
+      {/* Lesson title (question) + description */}
+      {title && (
+        <h3 className="text-lg md:text-xl font-bold">{title}</h3>
+      )}
       <p lang="ar" className="text-muted-foreground text-sm md:text-base">{description}</p>
 
       {/* 2-column grid on desktop/iPad */}

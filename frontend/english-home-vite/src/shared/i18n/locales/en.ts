@@ -833,6 +833,9 @@ export default {
     renew: 'Renew',
     validUntil: 'Valid until',
     renewSubscription: 'Renew Subscription',
+    renewalPrice: 'Renewal Price (25% of original)',
+    upgradeDiscount: '15% Upgrade Discount',
+    originalPrice: 'Original Price',
     daysLeft: 'Days remaining',
     notFoundDescription: 'The page you are looking for does not exist.',
     lockedLevel: {

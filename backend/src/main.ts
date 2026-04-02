@@ -26,10 +26,24 @@ async function bootstrap() {
     app.enableShutdownHooks();
 
 
-    // Enable CORS for production domains
-    // Enable CORS for production domains (Open for debugging)
+    // Enable CORS for production domains only
+    const allowedOrigins = [
+      'https://englishom.com',
+      'https://www.englishom.com',
+      'https://admin.englishom.com',
+      'https://api.englishom.com',
+    ];
+
     app.enableCors({
-      origin: true, // Allow all origins temporarily
+      origin: (origin, callback) => {
+        // Allow requests with no origin (server-to-server, mobile apps, curl, etc.)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+          return callback(null, true);
+        }
+        logger.warn(`Blocked CORS request from unauthorized origin: ${origin}`);
+        return callback(new Error('Not allowed by CORS'));
+      },
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       credentials: true,
     });
