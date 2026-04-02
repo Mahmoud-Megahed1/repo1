@@ -258,11 +258,13 @@ export class PaymobController {
         }
       }
 
+      const locale = paymentIntentionDto.locale || 'en';
+
       const data = {
         amount: finalPrice,
         currency: 'SAR', // <- Saudi Riyal
         payment_methods: [integration_id, 24018], // added 24018 for Tamara
-        redirection_url: `${frontendUrl}/en/app/levels`, // Redirect user back to the levels page after payment
+        redirection_url: `${frontendUrl}/${locale}/app/levels`, // Dynamic locale-based redirect
         items: [
           {
             name: paymentIntentionDto.level_name,

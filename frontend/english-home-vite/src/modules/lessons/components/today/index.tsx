@@ -36,9 +36,9 @@ const Today: FC<Props> = ({
     <div className="mx-auto max-w-6xl space-y-4">
       {/* Lesson title (question) + description */}
       {title && (
-        <h3 className="text-lg md:text-xl font-bold">{title}</h3>
+        <h3 dir="rtl" className="text-lg md:text-xl font-bold text-right">{title}</h3>
       )}
-      <p lang="ar" className="text-muted-foreground text-sm md:text-base">{description}</p>
+      <p dir="rtl" lang="ar" className="text-muted-foreground text-sm md:text-base text-right">{description}</p>
 
       {/* 2-column grid on desktop/iPad */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">

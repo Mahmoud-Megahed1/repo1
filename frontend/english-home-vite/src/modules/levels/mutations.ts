@@ -1,8 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { payment } from './services';
 import type { LevelId } from '@shared/types/entities';
+import useLocale from '@hooks/use-locale';
 
 export function usePayment(levelId: LevelId, userData?: { city?: string; country?: string; phone?: string }) {
+  const locale = useLocale();
+
   return useMutation({
     mutationKey: ['payment', levelId],
     mutationFn: () =>
@@ -12,6 +15,7 @@ export function usePayment(levelId: LevelId, userData?: { city?: string; country
           city: userData?.city || 'Riyadh',
           country: userData?.country || 'Saudi Arabia',
           phone_number: userData?.phone || '966500000000',
+          locale: locale || 'en',
         },
       }),
     onSuccess: (data) => {

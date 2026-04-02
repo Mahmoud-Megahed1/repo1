@@ -13,6 +13,7 @@ export type PaymentParams = {
   phone_number: string;
   city: string;
   country: string;
+  locale: string;
 };
 
 export type LevelType = {

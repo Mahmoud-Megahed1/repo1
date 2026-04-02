@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsIn, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Level_Name } from '../../common/shared/enums';
 
 export class PaymentRequestDto {
@@ -18,4 +18,9 @@ export class PaymentRequestDto {
   @IsString()
   @IsNotEmpty()
   country: string;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(['ar', 'en'])
+  locale?: string;
 }

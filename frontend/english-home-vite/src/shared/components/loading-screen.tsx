@@ -15,9 +15,6 @@ const LoadingScreen: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
     >
       <BookLoader className="text-primary" />
       <span className="sr-only">{t('Global.loading')}</span>
-      <span className="text-muted-foreground animate-pulse font-medium">
-        {t('Global.loading')}...
-      </span>
     </div>
   );
 };
