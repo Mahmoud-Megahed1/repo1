@@ -36,7 +36,7 @@ const Today: FC<Props> = ({
     <div className="mx-auto max-w-6xl space-y-4">
       {/* Lesson title (question) + description */}
       {title && (
-        <h3 dir="rtl" className="text-lg md:text-xl font-bold text-right">{title}</h3>
+        <h3 dir="rtl" lang="ar" className="text-lg md:text-xl font-bold text-right">{title}</h3>
       )}
       <p dir="rtl" lang="ar" className="text-muted-foreground text-sm md:text-base text-right">{description}</p>
 
