@@ -29,10 +29,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     try {
       const { emails, name } = profile;
 
+      const email = emails[0].value;
       const user: Partial<User> = {
-        email: emails[0].value,
-        firstName: name?.givenName || '',
-        lastName: name?.familyName || '',
+        email,
+        firstName: name?.givenName || email.split('@')[0] || 'User',
+        lastName: name?.familyName || name?.givenName || 'User',
         strategy: profile.provider,
       };
 

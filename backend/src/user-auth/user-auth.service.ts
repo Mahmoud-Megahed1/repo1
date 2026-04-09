@@ -276,7 +276,10 @@ export class UserAuthService {
   }
 
   async findOrCreateOAuthUser(profile: any, req?: any) {
-    const { email, strategy, firstName, lastName } = profile;
+    const { email, strategy } = profile;
+    // Ensure names are never empty (defence-in-depth)
+    const firstName = profile.firstName || email.split('@')[0] || 'User';
+    const lastName = profile.lastName || firstName || 'User';
 
     const user = await this.userService.findByEmail(email);
 
@@ -313,7 +316,8 @@ export class UserAuthService {
       lastActivity: this.timeService.createDate(),
     };
 
-    if (user.firstName !== firstName || user.lastName !== lastName) {
+    // Only update names if the new values are non-empty and different
+    if (firstName && lastName && (user.firstName !== firstName || user.lastName !== lastName)) {
       updateData.firstName = firstName;
       updateData.lastName = lastName;
     }
