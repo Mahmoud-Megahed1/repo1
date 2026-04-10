@@ -10,7 +10,7 @@ import type { LessonId, LevelId } from '@shared/types/entities';
 import { Button } from '@ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@ui/card';
 import { Skeleton } from '@ui/skeleton';
-import { Mic } from 'lucide-react';
+import { Mic, RotateCcw } from 'lucide-react';
 import { useEffect, useMemo, useState, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 type Props = {
@@ -102,19 +102,27 @@ const PracticeSpeaking: FC<Props> = ({
                 isPending ? (
                     <AnalyzingSkeleton />
                 ) : resultData ? (
-                    <div className="flex flex-col items-center gap-3 w-full">
+                    <div className="flex flex-col items-center gap-2 w-full">
                         <SpeakingFeedback
                             result={{
                                 ...resultData,
                             }}
                             recordUrl={audioUrl}
-                            onReset={() => {
+                            className="w-full"
+                        />
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full md:w-auto"
+                            onClick={() => {
                                 setAudioUrl(null);
                                 setIsReset(true);
                                 resetMutation();
                             }}
-                            className="w-full"
-                        />
+                        >
+                            <RotateCcw className="h-4 w-4" />
+                            {t('Global.tryAgain')}
+                        </Button>
                     </div>
                 ) : (
                     recorder

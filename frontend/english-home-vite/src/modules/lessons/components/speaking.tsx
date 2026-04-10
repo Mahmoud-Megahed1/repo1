@@ -15,7 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@ui/card';
-import { Mic, CheckCircle2 } from 'lucide-react';
+import { Mic, CheckCircle2, RotateCcw } from 'lucide-react';
 import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -189,10 +189,17 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
                 isPending ? (
                   <Loading />
                 ) : (
-                  <div className="flex flex-col items-center gap-3">
+                  <div className="flex flex-col items-center gap-2">
                     <SpeakingFeedback
                       result={currentRecord.results!}
-                      onReset={() => {
+                      recordUrl={currentRecord.recordUrl}
+                      className="w-full"
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full md:w-auto"
+                      onClick={() => {
                         setUsersRecords((prev) => {
                           const newData = [...prev];
                           newData[currentIndex].recordUrl = null;
@@ -201,9 +208,10 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
                         });
                         resetMutation();
                       }}
-                      recordUrl={currentRecord.recordUrl}
-                      className="w-full"
-                    />
+                    >
+                      <RotateCcw className="h-4 w-4" />
+                      {t('Global.tryAgain')}
+                    </Button>
                   </div>
                 )
               ) : (

@@ -76,11 +76,11 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
       </div>
       {isTranscriptVisible && (
         <Card className="gap-2">
-          <CardHeader>
+          <CardHeader className="pb-2">
             <CardTitle>{t('Global.transcript')}</CardTitle>
           </CardHeader>
-          <CardContent>
-            <RichTextViewer lang="en">
+          <CardContent className="max-h-[40vh] overflow-y-auto">
+            <RichTextViewer lang="en" className="leading-relaxed text-sm md:text-base">
               {lesson.transcript.replace(/{(.*?)}/g, '<b>$1</b>')}
             </RichTextViewer>
           </CardContent>
