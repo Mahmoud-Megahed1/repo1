@@ -69,7 +69,7 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
       <div className="mb-3">
         <LessonProgress currentIndex={currentIndex} total={lesson.length} />
       </div>
-      <div className="flex w-full flex-col gap-4 md:flex-row md:items-start">
+      <div className="flex w-full flex-col gap-4">
         <PictureCard
           next={next}
           prev={prev}
