@@ -1,13 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html dir="rtl" lang="ar">
 <head>
+    <meta charset="UTF-8">
     <style>
         .container {
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            direction: rtl;
+            text-align: right;
         }
         .header {
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
@@ -20,24 +23,6 @@
             background: #f8f9fa;
             padding: 30px 20px;
             border-radius: 0 0 10px 10px;
-        }
-        .emoji {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        .cta-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: bold;
-            margin: 20px 0;
-            transition: transform 0.2s;
-        }
-        .cta-button:hover {
-            transform: translateY(-2px);
         }
         .success-box {
             background: #d4edda;
@@ -65,52 +50,48 @@
             font-weight: bold;
             color: #28a745;
         }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="emoji">🎉✅</div>
-            <h1>Payment Successful!</h1>
+            <h1>تم إتمام عملية الدفع بنجاح!</h1>
         </div>
         <div class="content">
-            <p>Hi {{userName}},</p>
+            <p>مرحباً {{userName}}،</p>
             
             <div class="success-box">
-                <strong>🎊 Congratulations!</strong> Your payment has been successfully processed and you now have access to your new course level!
+                <strong>تهانينا!</strong> تمت معالجة دفعتك بنجاح.
             </div>
             
             <div class="course-details">
-                <h3>📚 Course Details</h3>
-                <p><strong>Level:</strong> {{levelName}}</p>
-                <p><strong>Amount Paid:</strong> <span class="price">{{amount}} SAR</span></p>
-                <p><strong>Payment Date:</strong> {{paymentDate}}</p>
-                <p><strong>Order ID:</strong> {{orderId}}</p>
+                <p><strong>المستوى:</strong> {{levelName}}</p>
+                <p><strong>المبلغ المدفوع:</strong> <span class="price">{{amount}} ريالات سعودية</span></p>
+                <p><strong>تاريخ الدفع:</strong> {{paymentDate}}</p>
             </div>
             
-            <h3>🚀 What's Next?</h3>
-            <ul>
-                <li>🔓 Your new level is now unlocked</li>
-                <li>📖 Access all course materials immediately</li>
-                <li>🎯 Start learning at your own pace</li>
-                <li>📊 Track your progress in your dashboard</li>
-            </ul>
+            <p style="color: #28a745; font-weight: bold; text-align: center;">أصبح بإمكانك الآن الوصول إلى مستوى الدورة التدريبية الجديدة!</p>
             
             <div style="text-align: center;">
-                <a href="{{courseUrl}}" class="cta-button">Start Learning Now</a>
+                <a href="{{courseUrl}}" class="cta-button">ابدأ التعلم الآن</a>
             </div>
             
-            <p><strong>Need Help? 🤝</strong></p>
-            <p>If you have any questions or need assistance with your new course, our support team is here to help!</p>
-            
-            <p>Thank you for choosing Englishom for your English learning journey! 🌟</p>
-            
-            <p>Best regards,<br>
-            <strong>The Englishom Team</strong></p>
+            <p>أطيب التحيات،<br>
+            <strong>فريق إنجلشوم</strong></p>
         </div>
         <div class="footer">
-            <p>© 2024 Englishom. Supporting English learners worldwide.</p>
-            <p>This is an automated email. Please do not reply to this message.</p>
+            <p>© 2026 Englishom. جميع الحقوق محفوظة.</p>
+            <p>هذه رسالة تلقائية، يرجى عدم الرد عليها.</p>
         </div>
     </div>
 </body>

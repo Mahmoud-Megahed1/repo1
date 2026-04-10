@@ -24,69 +24,59 @@ export const SpeakingFeedback = ({
   return (
     <Card
       className={cn(
-        'animate-in dark:bg-accent/10 fade-in slide-in-from-bottom-4 space-y-6 p-8 duration-500 dark:border',
+        'animate-in dark:bg-accent/10 fade-in slide-in-from-bottom-4 space-y-3 p-4 md:p-6 duration-500 dark:border',
         className
       )}
       {...props}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-foreground text-2xl font-bold">
-          {t('Global.yourResults')}
-        </h2>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onReset}
-          className="text-muted-foreground hover:text-foreground"
-        >
-          <RotateCcw className="mr-2 h-4 w-4" />
-          {t('Global.tryAgain')}
-        </Button>
-      </div>
-
-      {/* Similarity Score */}
-      <div className="relative">
-        <div className="flex items-center justify-center">
-          <div className="relative h-40 w-40">
-            <svg className="h-40 w-40 -rotate-90 transform">
+      {/* Header with results title, try again, score circle, and pass/fail — all in one compact row */}
+      <div className="flex items-center gap-3 md:gap-4">
+        {/* Score Circle - compact size */}
+        <div className="relative shrink-0">
+          <div className="relative h-24 w-24 md:h-28 md:w-28">
+            <svg className="h-24 w-24 md:h-28 md:w-28 -rotate-90 transform">
               <circle
-                cx="80"
-                cy="80"
-                r="70"
+                cx="50%"
+                cy="50%"
+                r="40"
                 stroke="currentColor"
-                strokeWidth="12"
+                strokeWidth="8"
                 fill="transparent"
                 className="text-muted"
               />
               <circle
-                cx="80"
-                cy="80"
-                r="70"
+                cx="50%"
+                cy="50%"
+                r="40"
                 stroke="currentColor"
-                strokeWidth="12"
+                strokeWidth="8"
                 fill="transparent"
-                strokeDasharray={`${2 * Math.PI * 70}`}
-                strokeDashoffset={`${2 * Math.PI * 70 * (1 - similarityPercentage / 100)}`}
+                strokeDasharray={`${2 * Math.PI * 40}`}
+                strokeDashoffset={`${2 * Math.PI * 40 * (1 - similarityPercentage / 100)}`}
                 className={isPassed ? 'text-success' : 'text-destructive'}
                 strokeLinecap="round"
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-foreground text-4xl font-bold">
+              <span className="text-foreground text-2xl md:text-3xl font-bold">
                 {similarityPercentage}%
               </span>
-              <span className="text-muted-foreground text-sm">
+              <span className="text-muted-foreground text-[10px] md:text-xs">
                 {t('Global.similarity')}
               </span>
             </div>
           </div>
         </div>
 
-        {/* Pass/Fail Badge */}
-        <div className="mt-4 flex justify-center">
+        {/* Right side: Title + Pass/Fail + Try Again */}
+        <div className="flex flex-col gap-2 flex-1 min-w-0">
+          <h2 className="text-foreground text-lg md:text-xl font-bold">
+            {t('Global.yourResults')}
+          </h2>
+
+          {/* Pass/Fail Badge */}
           <div
-            className={`flex items-center gap-2 rounded-full px-4 py-2 ${
+            className={`flex items-center gap-2 rounded-full px-3 py-1.5 w-fit ${
               isPassed
                 ? 'bg-success/10 text-success'
                 : 'bg-destructive/10 text-destructive'
@@ -94,49 +84,60 @@ export const SpeakingFeedback = ({
           >
             {isPassed ? (
               <>
-                <CheckCircle2 className="h-5 w-5" />
-                <span className="font-semibold">{t('Global.passed')}</span>
+                <CheckCircle2 className="h-4 w-4" />
+                <span className="font-semibold text-sm">{t('Global.passed')}</span>
               </>
             ) : (
               <>
-                <XCircle className="h-5 w-5" />
-                <span className="font-semibold">
+                <XCircle className="h-4 w-4" />
+                <span className="font-semibold text-sm">
                   {t('Global.keepPracticing')}
                 </span>
               </>
             )}
           </div>
+
+          {/* Try Again Button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onReset}
+            className="text-muted-foreground hover:text-foreground w-fit p-0 h-auto"
+          >
+            <RotateCcw className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" />
+            {t('Global.tryAgain')}
+          </Button>
         </div>
       </div>
 
-      {/* Transcripts Comparison */}
-      <div className="border-border space-y-4 border-t pt-4">
-        <div className="space-y-2">
-          <p className="text-muted-foreground text-sm font-medium tracking-wide">
+      {/* Transcripts Comparison - compact */}
+      <div className="border-border space-y-2 border-t pt-3">
+        <div className="space-y-1.5">
+          <p className="text-muted-foreground text-xs font-medium tracking-wide">
             {t('Global.whatYouSaid')}
           </p>
           <div
             lang="en"
             className={cn(
-              `flex flex-col-reverse items-center justify-between gap-4 rounded-lg border p-4 md:flex-row`,
+              `flex flex-col-reverse items-center justify-between gap-2 rounded-lg border p-3 md:flex-row`,
               {
                 'bg-success/5 border-success/20': isPassed,
                 'bg-destructive/10 border-destructive/20': !isPassed,
               }
             )}
           >
-            <p className="text-foreground">{userTranscript}</p>
+            <p className="text-foreground text-sm">{userTranscript}</p>
             {recordUrl && (
-              <EarSound className="cursor-pointer" soundSrc={recordUrl} />
+              <EarSound className="cursor-pointer shrink-0" soundSrc={recordUrl} />
             )}
           </div>
         </div>
       </div>
 
-      {/* Tips */}
+      {/* Tips - compact */}
       {!isPassed && (
-        <div className="bg-muted/50 rounded-lg p-4">
-          <p className="text-muted-foreground text-sm">
+        <div className="bg-muted/50 rounded-lg p-3">
+          <p className="text-muted-foreground text-xs">
             <span className="text-foreground font-semibold">
               {t('Global.tip.title')}:{' '}
             </span>

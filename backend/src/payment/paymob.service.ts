@@ -667,7 +667,7 @@ export class PaymobService {
     orderId: string,
   ): Promise<void> {
     try {
-      const paymentDate = new Date().toLocaleDateString('en-US', {
+      const paymentDate = new Date().toLocaleDateString('ar-SA', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -679,7 +679,7 @@ export class PaymobService {
 
       // Replace template variables
       const personalizedEmail = this.paymentSuccessEmailTemplate
-        .replace(/{{userName}}/g, user.firstName || 'there')
+        .replace(/{{userName}}/g, user.firstName || 'عزيزي')
         .replace(/{{levelName}}/g, levelName)
         .replace(/{{amount}}/g, amount.toString()) // Amount is already in whole currency
         .replace(/{{paymentDate}}/g, paymentDate)
@@ -689,7 +689,7 @@ export class PaymobService {
       // Prepare email data
       const mailOptions = {
         to: user.email,
-        subject: `🎉 Payment Successful - Welcome to ${levelName} Level!`,
+        subject: `🎉 تم الدفع بنجاح - مرحباً بك في مستوى ${levelName}!`,
         htmlContent: personalizedEmail,
       };
 

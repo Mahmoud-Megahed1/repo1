@@ -15,7 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@ui/card';
-import { Mic, CheckCircle2, RotateCcw } from 'lucide-react';
+import { Mic, CheckCircle2 } from 'lucide-react';
 import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -164,12 +164,19 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
                 {sentence}
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-3">
               <AudioPlayback
                 key={soundSrc}
                 audioSrc={soundSrc}
                 className="border-input/50 w-full border"
               />
+              {/* Success message: only after ALL exercises are passed, shown below audio */}
+              {allPassed && (
+                <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-4 py-2 rounded-lg font-bold flex items-center gap-3 shadow-sm animate-in fade-in zoom-in duration-300">
+                  <CheckCircle2 className="w-5 h-5 shrink-0" />
+                  <span className="text-sm">{t('Global.dailySpeakingSuccess' as any)}</span>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -182,13 +189,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
                 isPending ? (
                   <Loading />
                 ) : (
-                  <div className="flex flex-col items-center gap-4">
-                    {currentRecord.results?.isPassed && (
-                      <div className="bg-green-100 dark:bg-green-900 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-100 px-6 py-3 rounded-lg font-bold flex items-center gap-3 shadow-sm animate-in fade-in zoom-in duration-300">
-                        <CheckCircle2 className="w-6 h-6" />
-                        <span>{t('Global.dailySpeakingSuccess' as any)}</span>
-                      </div>
-                    )}
+                  <div className="flex flex-col items-center gap-3">
                     <SpeakingFeedback
                       result={currentRecord.results!}
                       onReset={() => {
@@ -203,24 +204,6 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
                       recordUrl={currentRecord.recordUrl}
                       className="w-full"
                     />
-
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="mt-2 w-full md:w-auto"
-                      onClick={() => {
-                        setUsersRecords((prev) => {
-                          const newData = [...prev];
-                          newData[currentIndex].recordUrl = null;
-                          newData[currentIndex].results = undefined;
-                          return newData;
-                        });
-                        resetMutation();
-                      }}
-                    >
-                      <RotateCcw className="mr-2 h-4 w-4" />
-                      {t('Global.tryAgain')}
-                    </Button>
                   </div>
                 )
               ) : (
