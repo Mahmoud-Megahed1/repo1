@@ -51,81 +51,84 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
   };
 
   return (
-    <div className="mx-auto flex size-full max-w-3xl flex-col gap-4" {...props}>
+    <div className="mx-auto flex size-full max-w-5xl flex-col gap-6" {...props}>
       {/* Progress bar at top */}
       <LessonProgress currentIndex={currentIndex} total={lesson.definitions.length} />
 
-      {/* Audio Player Section */}
-      <div>
-        <div className="mb-2 flex flex-wrap items-center justify-end gap-4">
-          {/* Show transcript */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setTranscriptVisible((prev) => !prev)}
-          >
-            <FileText className="mr-2 h-4 w-4" />
-            {isTranscriptVisible ? t('Global.hide') : t('Global.show')}{' '}
-            {t('Global.transcript')}
-          </Button>
-        </div>
-        <AudioPlayback
-          audioSrc={lesson.soundSrc}
-          title={t('Global.sidebarItems.LISTEN')}
-        />
-      </div>
-      {isTranscriptVisible && (
-        <Card className="gap-2">
-          <CardHeader className="pb-2">
-            <CardTitle>{t('Global.transcript')}</CardTitle>
-          </CardHeader>
-          <CardContent className="max-h-[40vh] overflow-y-auto">
-            <RichTextViewer lang="en" className="leading-relaxed text-sm md:text-base">
-              {lesson.transcript.replace(/{(.*?)}/g, '<b>$1</b>')}
-            </RichTextViewer>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Definitions Section — Paginated */}
-      <div className="space-y-4">
-
-        {/* Current Definition Card */}
-        {currentDefinition && (
-          <div lang="en" className="font-inter">
-            <DefinitionCard
-              word={currentDefinition.word}
-              definition={currentDefinition.definition}
-              soundSrc={currentDefinition.soundSrc}
-              index={currentIndex + 1}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        {/* Audio Player and Transcript Section */}
+        <div className="space-y-4">
+          <div>
+            <div className="mb-2 flex flex-wrap items-center justify-end gap-4">
+              {/* Show transcript */}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setTranscriptVisible((prev) => !prev)}
+              >
+                <FileText className="mr-2 h-4 w-4" />
+                {isTranscriptVisible ? t('Global.hide') : t('Global.show')}{' '}
+                {t('Global.transcript')}
+              </Button>
+            </div>
+            <AudioPlayback
+              audioSrc={lesson.soundSrc}
+              title={t('Global.sidebarItems.LISTEN')}
             />
           </div>
-        )}
-
-        {/* Pagination Controls — Arrow buttons + dots */}
-        <div className="flex items-center justify-between">
-          <Button variant="outline" onClick={prev} disabled={!hasPrevItems}>
-            {t('Global.prev')}
-          </Button>
-          <ul className="flex items-center gap-1">
-            {Array(lesson.definitions.length)
-              .fill(0)
-              .map((_, i) => (
-                <li
-                  key={i}
-                  className={cn('bg-accent size-2 rounded-full', {
-                    'bg-primary scale-105': i === currentIndex,
-                  })}
-                />
-              ))}
-          </ul>
-          {isLast ? (
-            <NextLessonButton lessonName="WRITE" onClick={handleComplete} />
-          ) : (
-            <Button variant="outline" onClick={next} disabled={!hasNextItems}>
-              {t('Global.next')}
-            </Button>
+          {isTranscriptVisible && (
+            <Card className="gap-2">
+              <CardHeader className="pb-2">
+                <CardTitle>{t('Global.transcript')}</CardTitle>
+              </CardHeader>
+              <CardContent className="max-h-[40vh] overflow-y-auto">
+                <RichTextViewer lang="en" className="leading-relaxed text-sm md:text-base">
+                  {lesson.transcript.replace(/{(.*?)}/g, '<b>$1</b>')}
+                </RichTextViewer>
+              </CardContent>
+            </Card>
           )}
+        </div>
+
+        {/* Definitions Section — Paginated */}
+        <div className="space-y-4">
+          {/* Current Definition Card */}
+          {currentDefinition && (
+            <div lang="en" className="font-inter">
+              <DefinitionCard
+                word={currentDefinition.word}
+                definition={currentDefinition.definition}
+                soundSrc={currentDefinition.soundSrc}
+                index={currentIndex + 1}
+              />
+            </div>
+          )}
+
+          {/* Pagination Controls — Arrow buttons + dots */}
+          <div className="flex items-center justify-between mt-4 bg-background/50 p-2 rounded-lg border backdrop-blur-sm">
+            <Button variant="outline" onClick={prev} disabled={!hasPrevItems}>
+              {t('Global.prev')}
+            </Button>
+            <ul className="flex items-center gap-1">
+              {Array(lesson.definitions.length)
+                .fill(0)
+                .map((_, i) => (
+                  <li
+                    key={i}
+                    className={cn('bg-accent size-2 rounded-full transition-all duration-300', {
+                      'bg-primary scale-125': i === currentIndex,
+                    })}
+                  />
+                ))}
+            </ul>
+            {isLast ? (
+              <NextLessonButton lessonName="WRITE" onClick={handleComplete} />
+            ) : (
+              <Button variant="outline" onClick={next} disabled={!hasNextItems}>
+                {t('Global.next')}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>

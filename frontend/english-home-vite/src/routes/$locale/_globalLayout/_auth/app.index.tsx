@@ -14,10 +14,9 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // Constants
-const ROUTE_PATH = '/$locale/_globalLayout/_auth/app/' as const;
 const HOME_SIDEBAR_ID = 'Home' as const;
 
-export const Route = createFileRoute(ROUTE_PATH)({
+export const Route = createFileRoute('/$locale/_globalLayout/_auth/app/')({
   component: RouteComponent,
   onEnter: () => {
     useSidebarStore.getState().handleActiveItem(HOME_SIDEBAR_ID);
