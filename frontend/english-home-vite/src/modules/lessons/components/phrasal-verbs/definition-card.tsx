@@ -16,7 +16,6 @@ const DefinitionCard: FC<Props> = ({ definitionEn, definitionAr }) => {
             icon={BookOpen}
             variant="blue"
             className="flex flex-col gap-6 rtl:flex-col-reverse"
-            opened
         >
             <div lang="en">
                 <div className="mb-3 flex items-center gap-2 text-blue-600 dark:text-blue-400">

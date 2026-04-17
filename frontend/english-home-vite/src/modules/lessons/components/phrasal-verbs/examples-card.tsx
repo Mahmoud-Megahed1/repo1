@@ -26,7 +26,6 @@ const ExamplesCard: FC<Props> = ({ examples, onAudioPlay }) => {
             icon={MessageCircle}
             variant="purple"
             className="space-y-10"
-            opened
         >
             <ul className="flex h-4 items-center justify-center gap-2">
                 {Array.from({ length: examples.length }).map((_, index) => (
