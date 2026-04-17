@@ -42,6 +42,8 @@ const FreezeSubscriptionModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
     const remainingDays = 20 - (user?.totalPausedDays || 0);
     const remainingAttempts = 2 - (user?.voluntaryPauseAttempts || 0);
+    const daysSinceCreation = Math.floor((new Date().getTime() - new Date(user?.createdAt || Date.now()).getTime()) / (1000 * 60 * 60 * 24));
+    const isEligible = daysSinceCreation >= 20;
 
     if (user?.isVoluntaryPaused) {
         return (
@@ -54,7 +56,7 @@ const FreezeSubscriptionModal: React.FC<Props> = ({ isOpen, onClose }) => {
                         <DialogTitle className="text-2xl font-bold">
                             {isAr ? 'اشتراكك متجمد حالياً' : 'Your Subscription is Frozen'}
                         </DialogTitle>
-                        <DialogDescription className="text-balance text-base mt-2">
+                        <DialogDescription className="text-balance text-center text-base mt-2">
                             {isAr
                                 ? `اشتراكك متوقف مؤقتاً وسيتفعل تلقائياً بتاريخ ${new Date(user.pauseScheduledEndDate!).toLocaleDateString('ar-EG')}. هل تود العودة للدراسة الآن؟`
                                 : `Your subscription is paused and will automatically reactivate on ${new Date(user.pauseScheduledEndDate!).toLocaleDateString()}. Would you like to resume now?`}
@@ -97,7 +99,7 @@ const FreezeSubscriptionModal: React.FC<Props> = ({ isOpen, onClose }) => {
                     <DialogTitle className="text-2xl font-bold">
                         {isAr ? 'تجميد الاشتراك مؤقتاً' : 'Freeze Subscription'}
                     </DialogTitle>
-                    <DialogDescription className="text-balance text-base mt-2">
+                    <DialogDescription className="text-balance text-center text-base mt-2">
                         {isAr
                             ? 'يمكنك إيقاف استهلاك أيام اشتراكك لفترة محددة إذا كنت مشغولاً. لديك فرصتان فقط بإجمالي 20 يوماً.'
                             : 'You can pause your subscription days for a specific period if you are busy. You have only 2 attempts with a total of 20 days.'}
@@ -118,7 +120,13 @@ const FreezeSubscriptionModal: React.FC<Props> = ({ isOpen, onClose }) => {
                     </div>
 
                     {/* Duration Selection */}
-                    {remainingAttempts > 0 && remainingDays > 0 ? (
+                    {!isEligible ? (
+                        <div className="p-6 rounded-2xl border-2 border-dashed border-red-100 bg-red-50 text-center">
+                            <p className="text-red-700 font-medium">
+                                {isAr ? 'لا يمكن استخدام هذه الميزة إلا بعد مرور 20 يوماً على الأقل من بدء الاشتراك.' : 'This feature can only be used after at least 20 days from the start of the subscription.'}
+                            </p>
+                        </div>
+                    ) : remainingAttempts > 0 && remainingDays > 0 ? (
                         <div className="space-y-6">
                             <div className="flex justify-between items-center px-1">
                                 <label className="font-bold text-gray-900">{isAr ? 'مدة التجميد بالساعات' : 'Freeze Duration'}</label>
@@ -158,7 +166,7 @@ const FreezeSubscriptionModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 <DialogFooter className="mt-2 sm:flex-col gap-3">
                     <Button
                         onClick={handlePause}
-                        disabled={isPausing || remainingAttempts <= 0 || remainingDays <= 0}
+                        disabled={isPausing || !isEligible || remainingAttempts <= 0 || remainingDays <= 0}
                         className="w-full h-14 rounded-2xl bg-indigo-600 hover:bg-indigo-700 font-bold text-lg shadow-lg shadow-indigo-100"
                     >
                         {isPausing ? (
