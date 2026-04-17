@@ -41,9 +41,9 @@ const Today: FC<Props> = ({
       <p dir="rtl" lang="ar" className="text-muted-foreground text-sm md:text-base text-right">{description}</p>
 
       {/* 2-column grid on desktop/iPad */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
-        {/* Left Column: Instructions + Audio + Practice Sentences */}
-        <div className="space-y-6">
+      <div className="space-y-6">
+        {/* Top Row: Instructions & Audio */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
           <InstructionsCard instructions={instructions} />
 
           <Card className="gap-2">
@@ -62,31 +62,27 @@ const Today: FC<Props> = ({
               />
             </CardContent>
           </Card>
-
-          {/* Practice Sentences — scroll into view when opened */}
-          <div
-            id="practice-sentences"
-            onClick={() => {
-              setTimeout(() => {
-                document.getElementById('practice-sentences')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }, 100);
-            }}
-          >
-            <SentencesCard sentences={sentences} />
-          </div>
         </div>
 
-        {/* Right Column: Practice Speaking + Next */}
-        <div className="space-y-6">
-          <PracticeSpeaking
-            day={day}
-            lessonName={lessonName}
-            levelId={levelId}
-            defaultResult={data?.data}
-            isLoading={isFetching}
-            sentenceText={sentences.join(' ')}
-          />
-          <NextLessonButton lessonName="Q_A" />
+        {/* Bottom Row: Sentences & Practice Speaking */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
+          {/* Practice Sentences */}
+          <div id="practice-sentences">
+            <SentencesCard sentences={sentences} />
+          </div>
+
+          {/* Right Column: Practice Speaking + Next */}
+          <div className="space-y-6">
+            <PracticeSpeaking
+              day={day}
+              lessonName={lessonName}
+              levelId={levelId}
+              defaultResult={data?.data}
+              isLoading={isFetching}
+              sentenceText={sentences.join(' ')}
+            />
+            <NextLessonButton lessonName="Q_A" />
+          </div>
         </div>
       </div>
     </div>

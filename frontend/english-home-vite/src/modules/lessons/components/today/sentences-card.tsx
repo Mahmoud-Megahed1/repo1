@@ -15,6 +15,7 @@ const SentencesCard = ({ sentences }: Props) => {
       icon={Book}
       title={t('Global.todayLesson.practiceSentences')}
       opened={true}
+      className="max-h-[60vh] overflow-y-auto"
     >
       <ul lang="en" className="grid grid-cols-2 gap-4">
         {sentences.map((sentence, index) => (
