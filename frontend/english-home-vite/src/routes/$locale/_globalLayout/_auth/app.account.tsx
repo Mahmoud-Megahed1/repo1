@@ -289,7 +289,7 @@ const LevelCard: FC<Props> = (props = { variants: 'inProgress' } as Props) => {
               {t('Global.expiresAt')}
             </span>
             <span className="text-sm font-semibold">
-              {formatDate(props.expiresAt)}
+              {formatDate(props.expiresAt, locale)}
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -310,7 +310,7 @@ const LevelCard: FC<Props> = (props = { variants: 'inProgress' } as Props) => {
               {t('Global.validUntil')}
             </span>
             <span className="text-sm font-semibold text-green-500">
-              {formatDate(oneDayBefore(props.expiresAt))}
+              {formatDate(oneDayBefore(props.expiresAt), locale)}
             </span>
           </div>
           <Certification
@@ -329,7 +329,7 @@ const LevelCard: FC<Props> = (props = { variants: 'inProgress' } as Props) => {
               {t('Global.expiredOn')}
             </span>
             <span className="text-destructive text-sm font-semibold">
-              {formatDate(props.expiresAt)}
+              {formatDate(props.expiresAt, locale)}
             </span>
           </div>
           <Button

@@ -24,10 +24,11 @@ const BlockedAccountPage: React.FC<Props> = ({
   supportEmail = 'support@englishlearning.com',
   supportPhone = '+1 (555) 123-4567',
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    const locale = i18n.language === 'ar' ? 'ar-EG' : 'en-US';
+    return new Date(dateString).toLocaleDateString(locale, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',

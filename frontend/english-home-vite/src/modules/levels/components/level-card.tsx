@@ -132,7 +132,8 @@ const useComponentVariant = ({
   previousLevelCompleted?: boolean;
 }) => {
   const { mutate, isPending } = usePayment(levelId);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
   const daysLeft = expiresAt
     ? Math.ceil(
@@ -260,7 +261,7 @@ const useComponentVariant = ({
         <p className="flex items-center gap-2 rounded-md border-green-200 bg-green-100 px-3 py-2 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-300">
           <Clock size={20} />
           <span className="flex w-full flex-wrap items-center justify-between text-sm font-semibold">
-            {t('Global.validUntil')} {formatDate(oneDayBefore(expiresAt!))}
+            {t('Global.validUntil')} {formatDate(oneDayBefore(expiresAt!), lang)}
             <span className="text-xs">
               {daysLeft} {t('Global.daysLeft')}
             </span>
@@ -298,7 +299,7 @@ const useComponentVariant = ({
           <p className="border-destructive/20 bg-destructive/20 text-destructive dark:border-destructive dark:bg-destructive/20 flex items-center gap-2 rounded-md px-3 py-2">
             <Clock size={20} />
             <span className="text-sm font-semibold">
-              {t('Global.expiredOn')} {formatDate(expiresAt)}
+              {t('Global.expiredOn')} {formatDate(expiresAt, lang)}
             </span>
           </p>
           <div className="flex flex-col gap-2 pt-1">

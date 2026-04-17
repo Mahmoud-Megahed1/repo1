@@ -42,12 +42,13 @@ const withProtectedRoute = <P extends object>(
 
 const CheckStatus = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
+  const locale = useLocale();
   const status = user!.status;
   if (status === 'blocked')
     return (
       <BlockedAccountPage
         userEmail={user?.email}
-        blockDate={new Date(user!.lastActivity).toLocaleDateString()}
+        blockDate={new Date(user!.lastActivity).toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US')}
       />
     );
   if (status === 'suspended' || user?.isVoluntaryPaused)

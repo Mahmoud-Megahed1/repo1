@@ -144,9 +144,10 @@ function floatTo16BitPCM(view: DataView, offset: number, input: Float32Array) {
   }
 }
 
-export function formatDate(dateString?: string | Date) {
+export function formatDate(dateString?: string | Date, locale?: string) {
   if (!dateString) return '';
-  return new Date(dateString).toLocaleDateString(undefined, {
+  const resolvedLocale = locale === 'ar' ? 'ar-EG' : locale === 'en' ? 'en-US' : locale;
+  return new Date(dateString).toLocaleDateString(resolvedLocale, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',

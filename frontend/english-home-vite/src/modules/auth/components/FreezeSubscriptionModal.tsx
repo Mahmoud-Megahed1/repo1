@@ -59,7 +59,7 @@ const FreezeSubscriptionModal: React.FC<Props> = ({ isOpen, onClose }) => {
                         <DialogDescription className="text-balance text-center text-base mt-2">
                             {isAr
                                 ? `اشتراكك متوقف مؤقتاً وسيتفعل تلقائياً بتاريخ ${new Date(user.pauseScheduledEndDate!).toLocaleDateString('ar-EG')}. هل تود العودة للدراسة الآن؟`
-                                : `Your subscription is paused and will automatically reactivate on ${new Date(user.pauseScheduledEndDate!).toLocaleDateString()}. Would you like to resume now?`}
+                                : `Your subscription is paused and will automatically reactivate on ${new Date(user.pauseScheduledEndDate!).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}. Would you like to resume now?`}
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className="mt-6 sm:flex-col gap-3">
