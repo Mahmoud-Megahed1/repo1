@@ -1,6 +1,6 @@
 import useItemsPagination from '@hooks/use-items-pagination';
 import LessonProgress from '@components/lesson-progress';
-import { useEffect, type ComponentProps, type FC } from 'react';
+import { useEffect, useState, type ComponentProps, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PictureLesson } from '../../types';
 import PictureCard from './picture-card';
@@ -33,6 +33,14 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
         score: 100,
         feedback: 'Pictures Completed',
       });
+    }
+  };
+
+  const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
+  const handleAudioPlay = () => {
+    if (!hasPlayedAudio) {
+      setHasPlayedAudio(true);
+      handleComplete();
     }
   };
 
@@ -77,6 +85,7 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
           hasPrevItems={hasPrevItems}
           isLast={isLast}
           onComplete={handleComplete}
+          onAudioPlay={handleAudioPlay}
           {...currentItem}
         />
         <PictureSidebar

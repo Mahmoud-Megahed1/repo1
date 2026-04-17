@@ -19,6 +19,7 @@ type Props = Omit<PictureLesson, 'id'> & {
   hasNextItems: boolean;
   isLast?: boolean;
   onComplete?: () => void;
+  onAudioPlay?: () => void;
 };
 
 const PictureCard: FC<Props> = ({
@@ -34,11 +35,19 @@ const PictureCard: FC<Props> = ({
   prev,
   isLast,
   onComplete,
+  onAudioPlay,
 }) => {
   const { ref, togglePlay, isPlaying } = useAudioPlayer();
   const { t, i18n } = useTranslation();
   const [showExamples, setShowExamples] = useState(true);
   const isAr = i18n.language === 'ar';
+
+  const handleTogglePlay = () => {
+    togglePlay();
+    if (!isPlaying && onAudioPlay) {
+      onAudioPlay();
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3 lg:flex-row rtl:lg:flex-row-reverse lg:items-start w-full">
@@ -112,7 +121,7 @@ const PictureCard: FC<Props> = ({
               <Button
                 variant={isPlaying ? 'secondary' : 'default'}
                 className="w-full"
-                onClick={togglePlay}
+                onClick={handleTogglePlay}
               >
                 {isPlaying ? (
                   <>

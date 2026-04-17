@@ -2,7 +2,7 @@ import { AudioPlayback } from '@components/audio-playback';
 import NextLessonButton from '@components/next-lesson-button';
 import { cn } from '@lib/utils';
 import { useParams } from '@tanstack/react-router';
-import { useMemo, type ComponentProps, type FC } from 'react';
+import { useMemo, useState, type ComponentProps, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { type LevelId } from '../../types';
 import { useMarkTaskAsCompleted } from '../../mutations';
@@ -34,6 +34,14 @@ const Reading: FC<Props> = ({
         score: 100,
         feedback: 'Reading Completed',
       });
+    }
+  };
+
+  const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
+  const handleAudioPlay = () => {
+    if (!hasPlayedAudio) {
+      setHasPlayedAudio(true);
+      handleComplete();
     }
   };
 
@@ -74,9 +82,10 @@ const Reading: FC<Props> = ({
           <AudioPlayback
             audioSrc={soundSrc}
             title={t('Global.sidebarItems.LISTEN')}
+            onPlay={handleAudioPlay}
           />
         </div>
-        <NextLessonButton lessonName="PICTURES" onClick={handleComplete} />
+        <NextLessonButton lessonName="PICTURES" />
       </div>
 
       {/* Text Content */}

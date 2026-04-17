@@ -12,12 +12,14 @@ const QuestionAnswerWithPagination = ({
   onIndexChange,
   defaultIndex = 0,
   nextLessonButton,
+  onAudioPlay,
 }: {
   lesson: QuestionAnswerLesson[];
   // eslint-disable-next-line no-unused-vars
   onIndexChange?: (index: number) => void;
   defaultIndex?: number;
   nextLessonButton?: ReactNode;
+  onAudioPlay?: () => void;
 }) => {
   const { next, prev, currentItem, currentIndex, hasNextItems, hasPrevItems, isLast } =
     useItemsPagination(lesson, defaultIndex);
@@ -32,6 +34,7 @@ const QuestionAnswerWithPagination = ({
       <QuestionAnswerCard
         key={currentIndex}
         index={currentIndex + 1}
+        onAudioPlay={onAudioPlay}
         {...currentItem}
       />
       <div className="mt-6 flex items-center justify-between gap-2">

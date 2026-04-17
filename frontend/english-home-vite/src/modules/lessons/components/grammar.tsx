@@ -23,7 +23,7 @@ import {
   SwatchBook,
   type LucideIcon,
 } from 'lucide-react';
-import { type ComponentProps, type FC, type ReactNode } from 'react';
+import { type ComponentProps, type FC, type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { GrammarLesson } from '../types';
 import NextLessonButton from '@components/next-lesson-button';
@@ -84,6 +84,8 @@ const Grammar: FC<Props> = ({
     console.error('Error parsing accordion values from localStorage', error);
   }
 
+  const [hasOpenedAccordion, setHasOpenedAccordion] = useState(false);
+
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-8">
       <Card className={cn('border-none', className)} {...props}>
@@ -96,9 +98,13 @@ const Grammar: FC<Props> = ({
             type="multiple"
             className="w-full space-y-4 *:border-none"
             defaultValue={accordionValues}
-            onValueChange={(value) =>
-              localStorage.setItem('accordionValues', JSON.stringify(value))
-            }
+            onValueChange={(value) => {
+              localStorage.setItem('accordionValues', JSON.stringify(value));
+              if (value.length > 0 && !hasOpenedAccordion) {
+                setHasOpenedAccordion(true);
+                handleComplete();
+              }
+            }}
           >
             <CustomAccordion
               title={t('Global.useCases')}
@@ -160,7 +166,7 @@ const Grammar: FC<Props> = ({
           </Accordion>
         </CardContent>
       </Card>
-      <NextLessonButton lessonName="PHRASAL_VERBS" onClick={handleComplete} />
+      <NextLessonButton lessonName="PHRASAL_VERBS" />
     </div>
   );
 };

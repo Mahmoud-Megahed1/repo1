@@ -5,7 +5,7 @@ import { Pause, Play, Volume2 } from 'lucide-react';
 import { useEffect, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const PlaybackAudio = ({ src }: { src: string }) => {
+const PlaybackAudio = ({ src, onPlay }: { src: string; onPlay?: () => void }) => {
   const id = useId();
   const { playExclusive, register, getAudioState, unregister } =
     useAudiosStore();
@@ -17,13 +17,21 @@ const PlaybackAudio = ({ src }: { src: string }) => {
     register(id, audio);
     return () => unregister(id);
   }, [src, register, unregister, id]);
+
+  const handlePlay = () => {
+    playExclusive(id);
+    if (!isPlaying && onPlay) {
+      onPlay();
+    }
+  };
+
   return (
     <div
       lang={locale}
       className="bg-accent/30 inline-flex items-center justify-between gap-4 rounded-md border p-4"
     >
       <Button
-        onClick={() => playExclusive(id)}
+        onClick={handlePlay}
         variant={isPlaying ? 'secondary' : 'default'}
         className="rounded-full"
         size={'icon'}

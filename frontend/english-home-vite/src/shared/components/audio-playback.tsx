@@ -6,6 +6,7 @@ type Props = {
   title?: string;
   className?: string;
   download?: boolean;
+  onPlay?: () => void;
 };
 
 export function AudioPlayback({
@@ -13,6 +14,7 @@ export function AudioPlayback({
   title = 'Audio',
   className,
   download = false,
+  onPlay,
 }: Props) {
   title = document.querySelector('html')?.lang === 'ar' ? 'مقطع صوتي' : title;
   const {
@@ -29,11 +31,18 @@ export function AudioPlayback({
     volume,
   } = useAudioPlayer();
 
+  const handleTogglePlay = () => {
+    togglePlay();
+    if (!isPlaying && onPlay) {
+      onPlay();
+    }
+  };
+
   return (
     <AudioPlayer
       audioSrc={audioSrc}
       ref={ref}
-      onTogglePlay={togglePlay}
+      onTogglePlay={handleTogglePlay}
       onCurrentTimeChange={setCurrentTime}
       onReset={resetAudio}
       onToggleMute={handleMute}

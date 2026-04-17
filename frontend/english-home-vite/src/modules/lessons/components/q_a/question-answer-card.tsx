@@ -8,6 +8,7 @@ import type { QuestionAnswerLesson } from '../../types';
 import PlaybackAudio from './playback-audio';
 type QuestionAnswerCardProps = {
   index: number;
+  onAudioPlay?: () => void;
 } & QuestionAnswerLesson;
 const QuestionAnswerCard: FC<QuestionAnswerCardProps> = ({
   index,
@@ -15,6 +16,7 @@ const QuestionAnswerCard: FC<QuestionAnswerCardProps> = ({
   answer,
   answerSrc,
   questionSrc,
+  onAudioPlay,
 }) => {
   const { t } = useTranslation();
   const locale = useLocale() === 'en' ? 'en-US' : 'ar-EG';
@@ -33,7 +35,7 @@ const QuestionAnswerCard: FC<QuestionAnswerCardProps> = ({
               <CardTitle className="text-lg md:text-xl">{question}</CardTitle>
             </CardHeader>
             <CardContent>
-              <PlaybackAudio src={questionSrc} />
+              <PlaybackAudio src={questionSrc} onPlay={onAudioPlay} />
             </CardContent>
           </Card>
         </div>
@@ -46,7 +48,7 @@ const QuestionAnswerCard: FC<QuestionAnswerCardProps> = ({
               <CardTitle className="text-lg md:text-xl">{answer}</CardTitle>
             </CardHeader>
             <CardContent>
-              <PlaybackAudio src={answerSrc} />
+              <PlaybackAudio src={answerSrc} onPlay={onAudioPlay} />
             </CardContent>
           </Card>
         </div>

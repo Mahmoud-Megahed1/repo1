@@ -1,6 +1,6 @@
 import useItemsPagination from '@hooks/use-items-pagination';
 import { cn } from '@lib/utils';
-import { useEffect, type ComponentProps, type FC } from 'react';
+import { useEffect, useState, type ComponentProps, type FC } from 'react';
 import type { PhrasalVerbLesson } from '../../types';
 import useLocale from '@hooks/use-locale';
 import { useTranslation } from 'react-i18next';
@@ -40,6 +40,14 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
         score: 100,
         feedback: 'Phrasal Verbs Completed',
       });
+    }
+  };
+
+  const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
+  const handleAudioPlay = () => {
+    if (!hasPlayedAudio) {
+      setHasPlayedAudio(true);
+      handleComplete();
     }
   };
 
@@ -86,13 +94,13 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
 
         {/* Examples */}
         <div>
-          <ExamplesCard examples={currentItem.examples} />
+          <ExamplesCard examples={currentItem.examples} onAudioPlay={handleAudioPlay} />
         </div>
       </div>
 
       {isLast && (
         <div className="flex justify-end mt-4">
-          <NextLessonButton lessonName="IDIOMS" onClick={handleComplete} />
+          <NextLessonButton lessonName="IDIOMS" />
         </div>
       )}
     </div>

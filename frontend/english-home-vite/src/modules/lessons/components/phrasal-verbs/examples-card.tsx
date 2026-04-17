@@ -8,9 +8,11 @@ import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PhrasalVerbLesson } from '../../types';
 
-type Props = Pick<PhrasalVerbLesson, 'examples'>;
+type Props = Pick<PhrasalVerbLesson, 'examples'> & {
+    onAudioPlay?: () => void;
+};
 
-const ExamplesCard: FC<Props> = ({ examples }) => {
+const ExamplesCard: FC<Props> = ({ examples, onAudioPlay }) => {
     const { t } = useTranslation();
     const { currentItem, next, prev, hasNextItems, hasPrevItems, currentIndex } =
         useItemsPagination(examples);
@@ -110,6 +112,7 @@ const ExamplesCard: FC<Props> = ({ examples }) => {
                 audioSrc={currentItem.soundSrc}
                 className="bg-muted/40"
                 title={t('Global.listenToAudio')}
+                onPlay={onAudioPlay}
             />
         </CustomAccordion>
     );

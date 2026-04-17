@@ -50,6 +50,14 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
     }
   };
 
+  const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
+  const handleAudioPlay = () => {
+    if (!hasPlayedAudio) {
+      setHasPlayedAudio(true);
+      handleComplete();
+    }
+  };
+
   return (
     <div className="mx-auto flex size-full max-w-5xl flex-col gap-6" {...props}>
       {/* Progress bar at top */}
@@ -74,6 +82,7 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
             <AudioPlayback
               audioSrc={lesson.soundSrc}
               title={t('Global.sidebarItems.LISTEN')}
+              onPlay={handleAudioPlay}
             />
           </div>
           {isTranscriptVisible && (
@@ -122,7 +131,7 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
                 ))}
             </ul>
             {isLast ? (
-              <NextLessonButton lessonName="WRITE" onClick={handleComplete} />
+              <NextLessonButton lessonName="WRITE" />
             ) : (
               <Button variant="outline" onClick={next} disabled={!hasNextItems}>
                 {t('Global.next')}

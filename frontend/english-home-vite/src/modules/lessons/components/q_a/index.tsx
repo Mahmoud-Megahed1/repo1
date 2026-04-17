@@ -1,6 +1,6 @@
 import { cn } from '@lib/utils';
 import { Button } from '@ui/button';
-import { useEffect, useState, type ComponentProps, type FC } from 'react';
+import { useEffect, useRef, useState, type ComponentProps, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { QuestionAnswerLesson } from '../../types';
 import QuestionAnswerList from './question-answer-list';
@@ -39,6 +39,14 @@ const Q_A: FC<Props> = ({ lesson, className, ...props }) => {
     }
   };
 
+  const hasPlayedAudioRef = useRef(false);
+  const handleAudioPlay = () => {
+    if (!hasPlayedAudioRef.current) {
+      hasPlayedAudioRef.current = true;
+      handleComplete();
+    }
+  };
+
   // Update search params when current index changes
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -61,19 +69,20 @@ const Q_A: FC<Props> = ({ lesson, className, ...props }) => {
         </Button>
       </div>
       {showAll ? (
-        <QuestionAnswerList lesson={lesson} />
+        <QuestionAnswerList lesson={lesson} onAudioPlay={handleAudioPlay} />
       ) : (
         <QuestionAnswerWithPagination
           lesson={lesson}
           onIndexChange={setCurrentIndex}
           defaultIndex={questionIndex}
+          onAudioPlay={handleAudioPlay}
           nextLessonButton={
-            <NextLessonButton lessonName="GRAMMAR" onClick={handleComplete} />
+            <NextLessonButton lessonName="GRAMMAR" />
           }
         />
       )}
       {showAll && (
-        <NextLessonButton lessonName="GRAMMAR" className="mt-8" onClick={handleComplete} />
+        <NextLessonButton lessonName="GRAMMAR" className="mt-8" />
       )}
     </div>
   );

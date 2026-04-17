@@ -7,8 +7,10 @@ import { ArrowLeft, ArrowRight, Globe, MessageCircle } from 'lucide-react';
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { IdiomLesson } from '.';
-type Props = Pick<IdiomLesson, 'examples'>;
-const ExamplesCard: FC<Props> = ({ examples }) => {
+type Props = Pick<IdiomLesson, 'examples'> & {
+  onAudioPlay?: () => void;
+};
+const ExamplesCard: FC<Props> = ({ examples, onAudioPlay }) => {
   const { t } = useTranslation();
   const { currentItem, next, prev, hasNextItems, hasPrevItems, currentIndex } =
     useItemsPagination<IdiomLesson['examples'][number]>(examples);
@@ -103,6 +105,7 @@ const ExamplesCard: FC<Props> = ({ examples }) => {
         audioSrc={currentItem.soundSrc}
         className="bg-muted/40"
         title={t('Global.listenToAudio')}
+        onPlay={onAudioPlay}
       />
     </CustomAccordion>
   );

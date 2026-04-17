@@ -1,5 +1,5 @@
 import useLocale from '@hooks/use-locale';
-import type { FC } from 'react';
+import { useState, type FC } from 'react';
 import DefinitionCard from './definition-card';
 import ExamplesCard from './examples-card';
 import UseCasesCard from './use-cases-card';
@@ -32,6 +32,14 @@ const Idioms: FC<Props> = ({ lesson }) => {
       });
     }
   };
+
+  const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
+  const handleAudioPlay = () => {
+    if (!hasPlayedAudio) {
+      setHasPlayedAudio(true);
+      handleComplete();
+    }
+  };
   return (
     <div className="mx-auto flex max-w-6xl flex-col space-y-4">
       {/* 2-column: Definition+UseCases first (RTL=right), Examples second (RTL=left) */}
@@ -44,10 +52,10 @@ const Idioms: FC<Props> = ({ lesson }) => {
           <UseCasesCard useCases={useCases} />
         </div>
         <div>
-          <ExamplesCard examples={lesson.examples} />
+          <ExamplesCard examples={lesson.examples} onAudioPlay={handleAudioPlay} />
         </div>
       </div>
-      <NextLessonButton lessonName="DAILY_TEST" onClick={handleComplete} />
+      <NextLessonButton lessonName="DAILY_TEST" />
     </div>
   );
 };
