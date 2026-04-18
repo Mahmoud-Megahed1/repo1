@@ -149,3 +149,14 @@ export const adminPauseUser = ({
 export const adminResumeUser = (userId: string) => {
   return client.post(`/subscription/admin/resume`, { userId });
 };
+
+// Super or Manager only
+export const grantDaysToUser = ({
+  userId,
+  days,
+}: {
+  userId: string;
+  days: number;
+}) => {
+  return client.post(`/admin/users/${userId}/grant-days`, { days });
+};

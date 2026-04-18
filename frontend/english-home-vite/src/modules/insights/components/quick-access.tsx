@@ -105,6 +105,7 @@ const QuickAccess = () => {
           <FreezeSubscriptionModal
             isOpen={isFreezeModalOpen}
             onClose={() => setIsFreezeModalOpen(false)}
+            currentDay={currentLevel.currentDay}
           />
         </div>
       </CardContent>

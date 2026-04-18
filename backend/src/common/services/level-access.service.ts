@@ -32,10 +32,10 @@ export class LevelAccessService {
       totalPausedDays += currentPauseDuration;
     }
 
-    const expiresAt = new Date(purchaseDate.getTime() + (this.ACCESS_DAYS + totalPausedDays) * 24 * 60 * 60 * 1000);
+    const expiresAt = new Date(purchaseDate.getTime() + (this.ACCESS_DAYS + totalPausedDays + (user.adminGrantedDays || 0)) * 24 * 60 * 60 * 1000);
     const now = new Date();
     const daysElapsed = Math.max(0, Math.floor((now.getTime() - purchaseDate.getTime()) / (1000 * 60 * 60 * 24)));
-    const daysLeft = Math.max(0, (this.ACCESS_DAYS + totalPausedDays) - daysElapsed);
+    const daysLeft = Math.max(0, (this.ACCESS_DAYS + totalPausedDays + (user.adminGrantedDays || 0)) - daysElapsed);
     const isExpired = daysLeft <= 0;
 
     return {

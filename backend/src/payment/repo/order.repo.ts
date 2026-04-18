@@ -116,6 +116,26 @@ export class OrderRepo extends AbstractRepo<Order> implements OrderService {
       .sort({ createdAt: -1 }); // Get the most recent active completed order
   }
 
+  /**
+   * Find ANY active completed order for a user across all levels
+   * Used to enforce "one active course at a time" restriction
+   */
+  async findAnyActiveCompletedOrder(
+    userId: string,
+    session?: ClientSession,
+  ): Promise<Order | null> {
+    const userIdObjectId = toObjectId(userId);
+
+    return await this.orderModel
+      .findOne({
+        userId: userIdObjectId,
+        paymentStatus: PaymentStatus.COMPLETED,
+        accessStatus: OrderAccessStatus.ACTIVE,
+      })
+      .session(session || null)
+      .sort({ createdAt: -1 });
+  }
+
   async findUserCompletedOrders(
     userId: string,
     session?: ClientSession,

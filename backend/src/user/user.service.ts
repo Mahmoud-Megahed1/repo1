@@ -427,6 +427,37 @@ export class UserService {
   }
 
   /**
+   * Grant extra days to a user's subscription
+   * Only accessible by SUPER and MANAGER admins
+   */
+  async grantExtraDays(
+    userId: string,
+    daysToGrant: number,
+    adminId: string,
+  ): Promise<User> {
+    const user = await this.userRepo.findOne({ _id: userId });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (daysToGrant <= 0) {
+      throw new BadRequestException('Days to grant must be a positive number');
+    }
+
+    const newGrantedDays = (user.adminGrantedDays || 0) + daysToGrant;
+
+    const updatedUser = await this.userRepo.findOneAndUpdate(
+      { _id: userId },
+      { adminGrantedDays: newGrantedDays },
+    );
+
+    this.logger.log(`Admin ${adminId} granted ${daysToGrant} extra days to user ${userId}`);
+
+    return updatedUser;
+  }
+
+  /**
    * Suspend a user
    */
   async suspendUser(userId: string, reason?: string): Promise<User> {

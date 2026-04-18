@@ -28,54 +28,15 @@ export const SpeakingFeedback = ({
       )}
       {...props}
     >
-      {/* Single compact row: Score Circle | Results info + What you said */}
-      <div className="flex items-center gap-3 md:gap-4">
-        {/* Score Circle - compact */}
-        <div className="relative shrink-0">
-          <div className="relative h-20 w-20 md:h-24 md:w-24">
-            <svg className="h-20 w-20 md:h-24 md:w-24 -rotate-90 transform" viewBox="0 0 96 96">
-              <circle
-                cx="48"
-                cy="48"
-                r="38"
-                stroke="currentColor"
-                strokeWidth="7"
-                fill="transparent"
-                className="text-muted"
-              />
-              <circle
-                cx="48"
-                cy="48"
-                r="38"
-                stroke="currentColor"
-                strokeWidth="7"
-                fill="transparent"
-                strokeDasharray={`${2 * Math.PI * 38}`}
-                strokeDashoffset={`${2 * Math.PI * 38 * (1 - similarityPercentage / 100)}`}
-                className={isPassed ? 'text-success' : 'text-destructive'}
-                strokeLinecap="round"
-              />
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-foreground text-lg md:text-2xl font-bold">
-                {similarityPercentage}%
-              </span>
-              <span className="text-muted-foreground text-[9px] md:text-[10px]">
-                {t('Global.similarity')}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Right side: Title + Pass/Fail + What you said - all compact */}
-        <div className="flex flex-col gap-1.5 flex-1 min-w-0">
+        {/* Left side: Results info + What you said + Progress Bar */}
+        <div className="flex flex-col gap-2.5 flex-1 min-w-0">
           {/* Results title + Pass/Fail in one row */}
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
             <h2 className="text-foreground text-base md:text-lg font-bold">
               {t('Global.yourResults')}
             </h2>
             <div
-              className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${
+              className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs ${
                 isPassed
                   ? 'bg-success/10 text-success'
                   : 'bg-destructive/10 text-destructive'
@@ -83,20 +44,35 @@ export const SpeakingFeedback = ({
             >
               {isPassed ? (
                 <>
-                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  <CheckCircle2 className="h-4 w-4" />
                   <span className="font-semibold">{t('Global.passed')}</span>
                 </>
               ) : (
                 <>
-                  <XCircle className="h-3.5 w-3.5" />
+                  <XCircle className="h-4 w-4" />
                   <span className="font-semibold">{t('Global.keepPracticing')}</span>
                 </>
               )}
             </div>
           </div>
 
+          {/* Horizontal Progress Bar */}
+          <div className="space-y-1.5">
+            <div className="flex justify-between items-center text-sm font-semibold">
+              <span className="text-muted-foreground">{t('Global.similarity')}</span>
+              <span className={isPassed ? 'text-success' : 'text-destructive'}>
+                {similarityPercentage}%
+              </span>
+            </div>
+            <div className="h-2.5 w-full rounded-full bg-accent overflow-hidden">
+              <div 
+                className={cn("h-full transition-all duration-1000 ease-out rounded-full", isPassed ? 'bg-success' : 'bg-destructive')} 
+                style={{ width: `${similarityPercentage}%` }} 
+              />
+            </div>
+          </div>
           {/* What you said - inline compact */}
-          <div className="space-y-0.5">
+          <div className="space-y-0.5 mt-1">
             <p className="text-muted-foreground text-[10px] md:text-xs font-medium">
               {t('Global.whatYouSaid')}
             </p>
@@ -127,7 +103,6 @@ export const SpeakingFeedback = ({
             </p>
           )}
         </div>
-      </div>
     </Card>
   );
 };

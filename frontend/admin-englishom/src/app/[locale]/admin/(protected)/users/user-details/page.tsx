@@ -15,9 +15,10 @@ import { Form } from '@/components/ui/form';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { LEVELS_ID, LEVELS_LABELS } from '@/constants';
 import { cn, formatDate, formatRelativeTime } from '@/lib/utils';
-import { assignCourseToUser, getUserById } from '@/services/admins';
+import { assignCourseToUser, getUserById, grantDaysToUser } from '@/services/admins';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import InputFormField from '@/components/shared/form-fields/input-form-field';
 import { Activity, Calendar, IdCard, Loader2, Mail, User2 } from 'lucide-react';
 import { parseAsString, useQueryState } from 'nuqs';
 import { FC, useState } from 'react';
@@ -246,7 +247,10 @@ const UserDetails = () => {
       <section className="box flex flex-col gap-8 px-8 py-6">
         <div className="flex items-center justify-between">
           <h2 className="subheading">Courses</h2>
-          <AddCourseForm userId={userDetails._id} />
+          <div className="flex items-center gap-2">
+            <GrantDaysForm userId={userDetails._id} />
+            <AddCourseForm userId={userDetails._id} />
+          </div>
         </div>
         <section>
           {isLoading ? (
@@ -326,5 +330,69 @@ const LEVELS_OPTIONS = LEVELS_ID.map((level) => ({
   value: level,
   label: LEVELS_LABELS[level],
 }));
+
+const grantDaysSchema = z.object({
+  days: z.coerce.number().min(1, 'Must grant at least 1 day').max(365, 'Cannot grant more than 365 days at once'),
+});
+
+const GrantDaysForm: FC<{ userId: string }> = ({ userId }) => {
+  const queryClient = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['grantDaysToUser'],
+    mutationFn: grantDaysToUser,
+    onSuccess: () => {
+      setOpen(false);
+      queryClient.invalidateQueries({ queryKey: ['userDetails', userId] });
+    },
+  });
+  const form = useForm<z.infer<typeof grantDaysSchema>>({
+    resolver: zodResolver(grantDaysSchema),
+    defaultValues: {
+      days: 30,
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof grantDaysSchema>) {
+    mutate({
+      userId,
+      days: values.days,
+    });
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">Grant Extra Days</Button>
+      </DialogTrigger>
+      <DialogContent className="p-0">
+        <ScrollArea className="flex max-h-[90vh] flex-col px-5 py-6">
+          <DialogHeader className="mb-4 px-1">
+            <DialogTitle className="text-xl">Grant Extra Days</DialogTitle>
+          </DialogHeader>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-4 p-1"
+            >
+              <p className="text-sm text-muted-foreground">
+                Grant extra subscription days to the user. This will extend their current subscription or give them new active days.
+              </p>
+              <InputFormField
+                control={form.control}
+                name="days"
+                label="Number of Days"
+                type="number"
+              />
+              <Button disabled={isPending} className="ms-auto">
+                {isPending ? 'Granting...' : 'Grant'}
+              </Button>
+            </form>
+          </Form>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 export default UserDetails;

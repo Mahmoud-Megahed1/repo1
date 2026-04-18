@@ -17,9 +17,10 @@ import { Slider } from '@/shared/components/ui/slider';
 interface Props {
     isOpen: boolean;
     onClose: () => void;
+    currentDay?: number;
 }
 
-const FreezeSubscriptionModal: React.FC<Props> = ({ isOpen, onClose }) => {
+const FreezeSubscriptionModal: React.FC<Props> = ({ isOpen, onClose, currentDay = 1 }) => {
     const { i18n } = useTranslation();
     const isAr = i18n.language === 'ar';
     const { user } = useAuth();
@@ -42,8 +43,7 @@ const FreezeSubscriptionModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
     const remainingDays = 20 - (user?.totalPausedDays || 0);
     const remainingAttempts = 2 - (user?.voluntaryPauseAttempts || 0);
-    const daysSinceCreation = Math.floor((new Date().getTime() - new Date(user?.createdAt || Date.now()).getTime()) / (1000 * 60 * 60 * 24));
-    const isEligible = daysSinceCreation >= 20;
+    const isEligible = currentDay > 20;
 
     if (user?.isVoluntaryPaused) {
         return (

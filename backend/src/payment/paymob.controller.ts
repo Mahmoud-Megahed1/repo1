@@ -217,44 +217,50 @@ export class PaymobController {
 
       const frontendUrl = this.configService.get<string>('FRONTEND_URL');
 
+      // === ONE ACTIVE COURSE RESTRICTION ===
+      // Find ANY active course for the user. If they have one, they cannot buy a new one.
+      const anyActiveOrder = await this.paymobService.orderRepo.findAnyActiveCompletedOrder(
+        user._id.toString()
+      );
+      if (anyActiveOrder) {
+        throw new BadRequestException('You already have an active course. You cannot purchase a new one until your current course expires.');
+      }
+
       // === DISCOUNT CALCULATION ===
       let finalPrice = course.price;
-      let discountType: 'renewal' | 'upgrade' | null = null;
+      let discountType: 'renewal' | 'loyalty_15' | 'loyalty_20' | null = null;
 
-      // 1. Renewal: User had this level but it expired → pays only 25% of the price
-      const expiredOrder = await this.paymobService.orderRepo.findCompletedOrder(
-        user._id.toString(),
-        paymentIntentionDto.level_name,
+      // Get all previous completed orders for this user
+      const userCompletedOrders = await this.paymobService.orderRepo.findUserCompletedOrders(user._id.toString());
+      
+      // 1. Renewal: User had THIS specific level but it expired → pays only 25% of the price
+      const hasExpiredSameCourse = userCompletedOrders.some(
+        (order) => order.levelName === paymentIntentionDto.level_name && (order as any).accessStatus === OrderAccessStatus.EXPIRED
       );
-      if (expiredOrder && (expiredOrder as any).accessStatus === OrderAccessStatus.EXPIRED) {
+
+      if (hasExpiredSameCourse) {
         discountType = 'renewal';
         finalPrice = Math.round(course.price * 0.25); // Pay only 25% of original price
         this.logger.log(
-          `Renewal discount applied for user ${user._id}: ${course.price} → ${finalPrice} SAR (25% of original)`,
+          `Renewal discount applied for user ${user._id}: ${course.price} → ${finalPrice} SAR (25% of original)`
         );
-      }
-
-      // 2. Upgrade: User completed the previous level → 15% discount on next level
-      if (!discountType) {
-        const levelOrder = [
-          Level_Name.LEVEL_A1, Level_Name.LEVEL_A2,
-          Level_Name.LEVEL_B1, Level_Name.LEVEL_B2,
-          Level_Name.LEVEL_C1, Level_Name.LEVEL_C2,
-        ];
-        const currentIndex = levelOrder.indexOf(paymentIntentionDto.level_name);
-        if (currentIndex > 0) {
-          const previousLevel = levelOrder[currentIndex - 1];
-          const certificate = await this.certificateRepo.findOne({
-            userId: new Types.ObjectId(user._id.toString()),
-            level_name: previousLevel,
-          });
-          if (certificate) {
-            discountType = 'upgrade';
-            finalPrice = Math.round(course.price * 0.85); // 15% discount
-            this.logger.log(
-              `Upgrade discount applied for user ${user._id}: ${course.price} → ${finalPrice} SAR (15% off, completed ${previousLevel})`,
-            );
-          }
+      } 
+      // 2. Loyalty Discount: Based on number of previous purchases
+      else if (userCompletedOrders.length > 0) {
+        if (userCompletedOrders.length >= 2) {
+          // 3rd course and above (2+ previous)
+          discountType = 'loyalty_20';
+          finalPrice = Math.round(course.price * 0.80); // 20% discount
+          this.logger.log(
+            `Loyalty discount (20%) applied for user ${user._id}: ${course.price} → ${finalPrice} SAR`
+          );
+        } else {
+          // 2nd course (1 previous)
+          discountType = 'loyalty_15';
+          finalPrice = Math.round(course.price * 0.85); // 15% discount
+          this.logger.log(
+            `Loyalty discount (15%) applied for user ${user._id}: ${course.price} → ${finalPrice} SAR`
+          );
         }
       }
 

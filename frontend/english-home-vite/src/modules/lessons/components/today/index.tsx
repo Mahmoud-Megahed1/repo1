@@ -31,8 +31,7 @@ const Today: FC<Props> = ({
   lessonName,
   levelId,
 }) => {
-  const { t, i18n } = useTranslation();
-  const isAr = i18n.language === 'ar';
+  const { t } = useTranslation();
   const { data, isFetching } = useTodayAudio({
     day,
     levelId,

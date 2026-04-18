@@ -144,7 +144,6 @@ const useComponentVariant = ({
 
   // Calculate discount prices
   const renewalPrice = Math.round(price * 0.25); // Renewal: pay 25% of original
-  const upgradePrice = Math.round(price * 0.85); // Upgrade: 15% off
 
   const variants: ComponentVariant = {
     'coming-soon': {
@@ -191,14 +190,14 @@ const useComponentVariant = ({
           onClick={() => mutate()}
           disabled={isPending}
         >
-          {isPending ? t('Global.processing') : previousLevelCompleted ? t('Global.unlock') + ' (-15%)' : t('Global.unlock')}
+          {isPending ? t('Global.processing') : previousLevelCompleted ? t('Global.unlock') + ' (Discount %)' : t('Global.unlock')}
           <KeyRound />
         </Button>
       ),
       content: previousLevelCompleted ? (
         <div className="space-y-2">
           <p className="flex items-center gap-2 rounded-md border-green-200 bg-green-100 px-3 py-1.5 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-300 text-sm font-semibold">
-            {t('Global.upgradeDiscount')}
+            {t('Global.loyaltyDiscountApplied', 'Loyalty Discount Applied (15% - 20%)')}
           </p>
           <p className="flex items-center">
             <span className="text-muted-foreground pe-2 text-sm">
@@ -209,21 +208,15 @@ const useComponentVariant = ({
               {price}
             </span>
           </p>
-          <p className="flex items-center">
+          <p className="flex flex-col">
             <span className="text-muted-foreground pe-2 text-sm">
-              {t('Global.price')}
-            </span>
-            <span className="inline-flex items-center gap-1 font-bold text-green-600 dark:text-green-400">
-              <RiyalSymbol className="size-4" />
-              {upgradePrice}
+              {t('Global.priceWithDiscount', 'Final price shown at checkout')}
             </span>
           </p>
           <p className="flex items-center gap-1.5 text-sm font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2 py-0.5 rounded-full border border-green-200 dark:border-green-800">
             <Clock size={14} />
             {t('Global.forSixtyDays')}
           </p>
-          {/* @ts-ignore JSX custom element */}
-          {upgradePrice > 0 && <tamara-widget type="tamara-summary" amount={upgradePrice} inline-type="2"></tamara-widget>}
         </div>
       ) : (
         <div className="space-y-2">

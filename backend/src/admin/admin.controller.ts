@@ -167,6 +167,22 @@ export class AdminController {
     return cleanResponse(user);
   }
 
+  // Grant extra days to user - SUPER and MANAGER
+  @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER)
+  @Post('users/:id/grant-days')
+  async grantExtraDays(
+    @Param('id') userId: string,
+    @Body('days') days: number,
+    @CurrentAdmin() currentAdmin: Admin,
+  ) {
+    const user = await this.userService.grantExtraDays(
+      userId,
+      days,
+      currentAdmin._id.toString(),
+    );
+    return cleanResponse(user);
+  }
+
   // Get admin by ID - SUPER and MANAGER can view admin details
   @Get('details/:id')
   async getAdminById(@Param() mongoID: GetAdminDto) {

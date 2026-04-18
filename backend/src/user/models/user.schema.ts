@@ -55,6 +55,9 @@ export class User extends AbstractUser {
   @Prop({ type: Number, default: 0 })
   totalPausedDays: number; // Max 20 total
 
+  @Prop({ type: Number, default: 0 })
+  adminGrantedDays: number; // Extra days granted by admin
+
   @Prop({
     type: [
       {

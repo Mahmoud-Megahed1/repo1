@@ -1,6 +1,5 @@
 import AnalyzingSkeleton from '@components/analyzing-skeleton';
 import { AudioPlayback } from '@components/audio-playback';
-import CustomAccordion from '@components/custom-accordion';
 import { SpeakingFeedback } from '@components/speaking-feedback';
 import useLocale from '@hooks/use-locale';
 import useRecorder from '@hooks/use-recorder';
@@ -93,44 +92,48 @@ const PracticeSpeaking: FC<Props> = ({
     );
 
     return (
-        <CustomAccordion
-            variant={'purple'}
-            icon={Mic}
-            title={t('Global.todayLesson.practiceSpeaking')}
-        >
-            {audioUrl ? (
-                isPending ? (
-                    <AnalyzingSkeleton />
-                ) : resultData ? (
-                    <div className="flex flex-col items-center gap-2 w-full">
-                        <SpeakingFeedback
-                            result={{
-                                ...resultData,
-                            }}
-                            recordUrl={audioUrl}
-                            className="w-full"
-                        />
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="w-full md:w-auto"
-                            onClick={() => {
-                                setAudioUrl(null);
-                                setIsReset(true);
-                                resetMutation();
-                            }}
-                        >
-                            <RotateCcw className="h-4 w-4" />
-                            {t('Global.tryAgain')}
-                        </Button>
-                    </div>
+        <Card className="border-purple-200 dark:border-purple-900/50">
+            <CardHeader className="bg-purple-50/50 dark:bg-purple-900/10 pb-4">
+                <CardTitle className="text-purple-700 dark:text-purple-400 flex items-center gap-2 text-lg">
+                    <Mic className="h-5 w-5" />
+                    {t('Global.todayLesson.practiceSpeaking')}
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-4">
+                {audioUrl ? (
+                    isPending ? (
+                        <AnalyzingSkeleton />
+                    ) : resultData ? (
+                        <div className="flex flex-col items-center gap-3 w-full">
+                            <SpeakingFeedback
+                                result={{
+                                    ...resultData,
+                                }}
+                                recordUrl={audioUrl}
+                                className="w-full border-0 bg-accent/20"
+                            />
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-full md:w-auto"
+                                onClick={() => {
+                                    setAudioUrl(null);
+                                    setIsReset(true);
+                                    resetMutation();
+                                }}
+                            >
+                                <RotateCcw className="h-4 w-4" />
+                                {t('Global.tryAgain')}
+                            </Button>
+                        </div>
+                    ) : (
+                        recorder
+                    )
                 ) : (
                     recorder
-                )
-            ) : (
-                recorder
-            )}
-        </CustomAccordion>
+                )}
+            </CardContent>
+        </Card>
     );
 };
 
