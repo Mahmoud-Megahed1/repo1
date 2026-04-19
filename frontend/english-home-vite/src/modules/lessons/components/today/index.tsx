@@ -81,8 +81,8 @@ const Today: FC<Props> = ({
 
         {/* Column 2: Tabbed content panel */}
         <div className="flex flex-col space-y-3">
-          {/* Tab buttons */}
-          <div className="flex gap-1 rounded-xl bg-accent/50 p-1.5 shrink-0">
+          {/* Tab buttons - Explicitly using flex-row to guarantee original order */}
+          <div className="flex flex-row gap-1 rounded-xl bg-accent/50 p-1.5 shrink-0">
             {tabs.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
