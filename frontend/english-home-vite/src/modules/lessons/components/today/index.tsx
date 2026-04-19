@@ -54,15 +54,17 @@ const Today: FC<Props> = ({
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Column 1: Title + Description + Practice Speaking + Next Button */}
         <div className="flex flex-col space-y-4">
-          <div className="space-y-1.5 mb-2">
-            {/* Lesson title (question) + description */}
-            {title && (
-              <h3 dir="rtl" lang="ar" className={cn("text-lg md:text-xl font-bold", isAr ? "text-right" : "text-left")}>{title}</h3>
-            )}
-            {description && (
-              <p dir="rtl" lang="ar" className={cn("text-muted-foreground text-sm md:text-base", isAr ? "text-right" : "text-left")}>{description}</p>
-            )}
-          </div>
+          {(title || description) && (
+            <div className="space-y-1.5 mb-2">
+              {/* Lesson title (question) + description */}
+              {title && (
+                <h3 dir="rtl" lang="ar" className={cn("text-lg md:text-xl font-bold", isAr ? "text-right" : "text-left")}>{title}</h3>
+              )}
+              {description && (
+                <p dir="rtl" lang="ar" className={cn("text-muted-foreground text-sm md:text-base", isAr ? "text-right" : "text-left")}>{description}</p>
+              )}
+            </div>
+          )}
           
           <div className="w-full">
             <PracticeSpeaking
@@ -74,7 +76,7 @@ const Today: FC<Props> = ({
               sentenceText={sentences.join(' ')}
             />
           </div>
-          <div className="pt-2">
+          <div>
             <NextLessonButton lessonName="Q_A" />
           </div>
         </div>
@@ -100,8 +102,8 @@ const Today: FC<Props> = ({
             ))}
           </div>
 
-          {/* Tab content — fixed height to prevent layout shift */}
-          <div className="min-h-[300px] lg:min-h-[400px] flex-1">
+          {/* Tab content */}
+          <div className="flex-1">
             {activeTab === 'instructions' && (
               <InstructionsCard instructions={instructions} asPanel />
             )}
