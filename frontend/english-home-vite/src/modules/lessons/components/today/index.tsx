@@ -50,18 +50,18 @@ const Today: FC<Props> = ({
       {/* 2-column layout */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Column 1: Title + Description + Practice Speaking + Next Button */}
-        <div className="flex flex-col space-y-6">
-          <div className="space-y-1">
+        <div className="flex flex-col space-y-4">
+          <div className="space-y-1.5 mb-2">
             {/* Lesson title (question) + description */}
             {title && (
-              <h3 dir="rtl" lang="ar" className="text-lg md:text-xl font-bold text-right">{title}</h3>
+              <h3 className="text-lg md:text-xl font-bold">{title}</h3>
             )}
             {description && (
-              <p dir="rtl" lang="ar" className="text-muted-foreground text-sm md:text-base text-right">{description}</p>
+              <p className="text-muted-foreground text-sm md:text-base">{description}</p>
             )}
           </div>
           
-          <div className="flex-1">
+          <div className="w-full">
             <PracticeSpeaking
               day={day}
               lessonName={lessonName}
@@ -71,7 +71,7 @@ const Today: FC<Props> = ({
               sentenceText={sentences.join(' ')}
             />
           </div>
-          <div className="mt-auto">
+          <div className="pt-2">
             <NextLessonButton lessonName="Q_A" />
           </div>
         </div>
