@@ -15,6 +15,7 @@ import InstructionsCard from './instructions-card';
 import PracticeSpeaking from './practice-speaking';
 import SentencesCard from './sentences-card';
 import NextLessonButton from '@components/next-lesson-button';
+import useLocale from '@hooks/use-locale';
 import { cn } from '@lib/utils';
 type Props = {
   lesson: Omit<TodayLesson, 'id'>;
@@ -32,6 +33,8 @@ const Today: FC<Props> = ({
   levelId,
 }) => {
   const { t } = useTranslation();
+  const locale = useLocale();
+  const isAr = locale === 'ar';
   const { data, isFetching } = useTodayAudio({
     day,
     levelId,
@@ -54,10 +57,10 @@ const Today: FC<Props> = ({
           <div className="space-y-1.5 mb-2">
             {/* Lesson title (question) + description */}
             {title && (
-              <h3 className="text-lg md:text-xl font-bold">{title}</h3>
+              <h3 dir="rtl" lang="ar" className={cn("text-lg md:text-xl font-bold", isAr ? "text-right" : "text-left")}>{title}</h3>
             )}
             {description && (
-              <p className="text-muted-foreground text-sm md:text-base">{description}</p>
+              <p dir="rtl" lang="ar" className={cn("text-muted-foreground text-sm md:text-base", isAr ? "text-right" : "text-left")}>{description}</p>
             )}
           </div>
           
