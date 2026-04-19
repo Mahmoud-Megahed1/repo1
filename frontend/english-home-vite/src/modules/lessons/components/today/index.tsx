@@ -63,7 +63,7 @@ const Today: FC<Props> = ({
 
           <div className="flex flex-col space-y-3 flex-1">
             {/* Tab buttons */}
-            <div className="flex gap-1 rounded-xl bg-accent/50 p-1.5 shrink-0">
+            <div className="flex flex-row-reverse gap-1 rounded-xl bg-accent/50 p-1.5 shrink-0">
               {tabs.map(({ id, label, icon: Icon }) => (
                 <button
                   key={id}
