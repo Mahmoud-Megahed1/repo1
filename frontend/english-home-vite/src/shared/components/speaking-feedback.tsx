@@ -29,7 +29,7 @@ export const SpeakingFeedback = ({
       {...props}
     >
         {/* Left side: Results info + What you said + Progress Bar */}
-        <div className="flex flex-col gap-2.5 flex-1 min-w-0">
+        <div className="flex flex-col gap-3 flex-1 min-w-0">
           {/* Results title + Pass/Fail in one row */}
           <div className="flex items-center justify-between gap-2 flex-wrap">
             <h2 className="text-foreground text-base md:text-lg font-bold">
@@ -56,6 +56,30 @@ export const SpeakingFeedback = ({
             </div>
           </div>
 
+          {/* What you said - full text, moved up */}
+          <div className="space-y-1">
+            <p className="text-muted-foreground text-[10px] md:text-xs font-medium">
+              {t('Global.whatYouSaid')}
+            </p>
+            <div
+              lang="en"
+              className={cn(
+                'flex items-start justify-between gap-3 rounded-md border px-3 py-2.5',
+                {
+                  'bg-success/5 border-success/20': isPassed,
+                  'bg-destructive/10 border-destructive/20': !isPassed,
+                }
+              )}
+            >
+              <p className="text-foreground text-xs md:text-sm font-medium leading-relaxed whitespace-pre-wrap break-words flex-1 text-left" dir="ltr">
+                {userTranscript}
+              </p>
+              {recordUrl && (
+                <EarSound className="cursor-pointer shrink-0 mt-0.5" soundSrc={recordUrl} />
+              )}
+            </div>
+          </div>
+
           {/* Horizontal Progress Bar */}
           <div className="space-y-1.5">
             <div className="flex justify-between items-center text-sm font-semibold">
@@ -69,27 +93,6 @@ export const SpeakingFeedback = ({
                 className={cn("h-full transition-all duration-1000 ease-out rounded-full", isPassed ? 'bg-success' : 'bg-destructive')} 
                 style={{ width: `${similarityPercentage}%` }} 
               />
-            </div>
-          </div>
-          {/* What you said - inline compact */}
-          <div className="space-y-0.5 mt-1">
-            <p className="text-muted-foreground text-[10px] md:text-xs font-medium">
-              {t('Global.whatYouSaid')}
-            </p>
-            <div
-              lang="en"
-              className={cn(
-                'flex items-center justify-between gap-2 rounded-md border px-2.5 py-1.5',
-                {
-                  'bg-success/5 border-success/20': isPassed,
-                  'bg-destructive/10 border-destructive/20': !isPassed,
-                }
-              )}
-            >
-              <p className="text-foreground text-xs md:text-sm truncate">{userTranscript}</p>
-              {recordUrl && (
-                <EarSound className="cursor-pointer shrink-0" soundSrc={recordUrl} />
-              )}
             </div>
           </div>
 

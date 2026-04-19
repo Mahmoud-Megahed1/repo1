@@ -1,5 +1,5 @@
 import useLocale from '@hooks/use-locale';
-import { localizedNumber } from '@lib/utils';
+import { localizedNumber, cn } from '@lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@ui/card';
 import { CheckCircle } from 'lucide-react';
 import { type FC } from 'react';
@@ -22,8 +22,8 @@ const QuestionAnswerCard: FC<QuestionAnswerCardProps> = ({
   const locale = useLocale() === 'en' ? 'en-US' : 'ar-EG';
   return (
     <Card className="border-none shadow-none bg-transparent">
-      <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-0 md:py-3" dir="ltr">
-        <div className="space-y-2" dir={locale === 'en-US' ? 'ltr' : 'rtl'}>
+      <CardContent className={cn("flex flex-col gap-6 p-0 md:py-3", locale === 'en-US' ? 'lg:flex-row' : 'lg:flex-row-reverse')}>
+        <div className="space-y-2 flex-1" dir={locale === 'en-US' ? 'ltr' : 'rtl'}>
           <h2 className="flex items-center gap-2 text-xl font-bold">
             <span className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-full text-center text-sm">
               {localizedNumber(index, locale)}
@@ -39,7 +39,7 @@ const QuestionAnswerCard: FC<QuestionAnswerCardProps> = ({
             </CardContent>
           </Card>
         </div>
-        <div className="space-y-2" dir={locale === 'en-US' ? 'ltr' : 'rtl'}>
+        <div className="space-y-2 flex-1" dir={locale === 'en-US' ? 'ltr' : 'rtl'}>
           <h2 className="flex items-center gap-2 text-xl font-bold">
             <CheckCircle className="text-green-600" /> {t('Global.answer')}
           </h2>

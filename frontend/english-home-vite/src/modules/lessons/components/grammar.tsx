@@ -122,7 +122,7 @@ const Grammar: FC<Props> = ({
               icon={Book}
               value="item-2"
             >
-              <ul lang="en" className="space-y-2">
+              <ul lang="en" dir="ltr" className="space-y-2 text-left">
                 {examples.map((example, index) => (
                   <li key={index} className="bg-muted/50 rounded-md px-3 py-2">
                     {example}
@@ -138,7 +138,8 @@ const Grammar: FC<Props> = ({
               >
                 <ul
                   lang="en"
-                  className="grid grid-cols-1 gap-x-2 gap-y-3 sm:grid-cols-2"
+                  dir="ltr"
+                  className="grid grid-cols-1 gap-x-2 gap-y-3 sm:grid-cols-2 text-left"
                 >
                   {words.map((word, index) => (
                     <li
@@ -158,7 +159,7 @@ const Grammar: FC<Props> = ({
                 icon={File}
                 value="item-4"
               >
-                <div className="bg-accent/40 rounded-md px-3 py-4">
+                <div lang="en" dir="ltr" className="bg-accent/40 rounded-md px-3 py-4 text-left">
                   <RichTextViewer lang="en">{notes}</RichTextViewer>
                 </div>
               </CustomAccordion>
