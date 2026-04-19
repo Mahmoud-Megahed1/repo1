@@ -159,8 +159,10 @@ const Grammar: FC<Props> = ({
                 icon={File}
                 value="item-4"
               >
-                <div lang="en" dir="ltr" className="bg-accent/40 rounded-md px-3 py-4 text-left">
-                  <RichTextViewer lang="en">{notes}</RichTextViewer>
+                <div className="bg-accent/40 rounded-md px-3 py-4">
+                  <RichTextViewer lang="en" dir="ltr" className="text-left [&_*]:!text-left [&_*]:!text-start w-full max-w-none">
+                    {notes}
+                  </RichTextViewer>
                 </div>
               </CustomAccordion>
             )}
