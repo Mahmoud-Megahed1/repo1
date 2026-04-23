@@ -15,7 +15,7 @@ export class SettingsRepo extends AbstractRepo<Settings> {
   async getGlobalSettings(): Promise<Settings> {
     let settings = await this.settingsModel.findOne({});
     if (!settings) {
-      settings = await this.settingsModel.create({ repurchaseDiscounts: [] });
+      settings = await this.create({ repurchaseDiscounts: [] });
     }
     return settings;
   }
