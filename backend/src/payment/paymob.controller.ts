@@ -173,31 +173,41 @@ export class PaymobController {
   @UseGuards(UserJwtGuard)
   @Get('discount-eligibility')
   async getDiscountEligibility(@CurrentUser() user: User) {
-    if ('adminRole' in user) {
-      return { discountPercentage: 0, reason: 'admin' };
-    }
+    try {
+      if ('adminRole' in user) {
+        return { discountPercentage: 0, reason: 'admin' };
+      }
 
-    const completedOrders = await this.paymobService.orderRepo.findUserCompletedOrders(user._id.toString());
-    const previousPurchasesCount = completedOrders.length;
-    
-    if (previousPurchasesCount > 0) {
-      const settings = await this.settingsService.getGlobalSettings();
-      const discounts = settings.repurchaseDiscounts || [];
+      if (!user || !user._id) {
+        this.logger.error('User or user._id is undefined in getDiscountEligibility');
+        return { discountPercentage: 0, reason: 'User not found or _id missing' };
+      }
+
+      const completedOrders = await this.paymobService.orderRepo.findUserCompletedOrders(user._id.toString());
+      const previousPurchasesCount = completedOrders.length;
       
-      if (discounts.length > 0) {
-        const discountIndex = Math.min(previousPurchasesCount - 1, discounts.length - 1);
-        const discountPercentage = discounts[discountIndex];
+      if (previousPurchasesCount > 0) {
+        const settings = await this.settingsService.getGlobalSettings();
+        const discounts = settings?.repurchaseDiscounts || [];
         
-        if (discountPercentage > 0 && discountPercentage <= 100) {
-          return {
-            discountPercentage,
-            reason: `Loyalty discount for ${previousPurchasesCount + 1}th course`,
-          };
+        if (discounts.length > 0) {
+          const discountIndex = Math.min(previousPurchasesCount - 1, discounts.length - 1);
+          const discountPercentage = discounts[discountIndex];
+          
+          if (discountPercentage > 0 && discountPercentage <= 100) {
+            return {
+              discountPercentage,
+              reason: `Loyalty discount for ${previousPurchasesCount + 1}th course`,
+            };
+          }
         }
       }
-    }
 
-    return { discountPercentage: 0, reason: 'No discount' };
+      return { discountPercentage: 0, reason: 'No discount' };
+    } catch (error) {
+      this.logger.error(`Error in getDiscountEligibility: ${error.message}`, error.stack);
+      throw new InternalServerErrorException(`Failed to get discount eligibility: ${error.message}`);
+    }
   }
 
   @UseGuards(UserJwtGuard)
