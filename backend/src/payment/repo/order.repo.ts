@@ -171,6 +171,39 @@ export class OrderRepo extends AbstractRepo<Order> implements OrderService {
       updateData.paymentDate = now;
       updateData.accessStatus = OrderAccessStatus.ACTIVE;
       updateData.accessExpiresAt = new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000);
+
+      try {
+        const order = await this.orderModel.findById(orderIdObjectId).session(session || null);
+        if (order) {
+          const previousOrder = await this.orderModel.findOne({
+            userId: order.userId,
+            levelName: order.levelName,
+            paymentStatus: PaymentStatus.COMPLETED,
+            _id: { $ne: order._id }
+          }).sort({ paymentDate: -1 }).session(session || null);
+
+          if (previousOrder) {
+            const user = await this.orderModel.db.model('User').findById(order.userId).session(session || null);
+            if (user) {
+              const purchaseDate = new Date(previousOrder.paymentDate || previousOrder.createdAt);
+              let totalPausedDays = (user as any).totalPausedDays || 0;
+              if ((user as any).pauseStartedAt) {
+                const currentPauseDuration = Math.max(0, Math.floor((now.getTime() - new Date((user as any).pauseStartedAt).getTime()) / (1000 * 60 * 60 * 24)));
+                totalPausedDays += currentPauseDuration;
+              }
+              const previousExpiresAt = new Date(purchaseDate.getTime() + (60 + (previousOrder.carriedOverDays || 0) + totalPausedDays + ((user as any).adminGrantedDays || 0)) * 24 * 60 * 60 * 1000);
+              
+              if (previousExpiresAt > now) {
+                const daysLeft = Math.floor((previousExpiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                updateData.carriedOverDays = Math.max(0, daysLeft);
+                updateData.accessExpiresAt = new Date(now.getTime() + (60 + updateData.carriedOverDays) * 24 * 60 * 60 * 1000);
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error calculating carriedOverDays', err);
+      }
     }
 
     return await this.orderModel.findByIdAndUpdate(

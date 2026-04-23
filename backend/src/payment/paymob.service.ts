@@ -18,6 +18,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { OrderSearchDto, OrderPeriod, OrderReportDto } from './dto/order-search.dto';
 import { toObjectId } from '../common/utils/mongoose.utils';
+import { SettingsService } from '../settings/settings.service';
 
 @Injectable()
 export class PaymobService {
@@ -36,6 +37,7 @@ export class PaymobService {
     private readonly userRepo: UserRepo,
     private readonly emailService: MailService,
     private readonly frontendRedirectService: FrontendRedirectService,
+    private readonly settingsService: SettingsService,
   ) {
     // Integration ID can be either string or number from config
     const integrationIdValue = this.configService.get<string | number>(
@@ -189,16 +191,16 @@ export class PaymobService {
 
       const levelName = paymentRequest.items[0].name;
 
-      // Check for existing ACTIVE completed order using transaction session
-      // This allows users to repurchase expired courses
-      const existingActiveOrder = await this.orderRepo.findActiveCompletedOrder(
+      // NEW LOGIC: Restrict buying a DIFFERENT course if one is active
+      const anyActiveOrder = await this.orderRepo.findAnyActiveCompletedOrder(
         userId,
-        levelName,
         session,
       );
 
-      if (existingActiveOrder) {
-        throw new BadRequestException('User already has this level');
+      if (anyActiveOrder && anyActiveOrder.levelName !== levelName) {
+        throw new BadRequestException(
+          `You already have an active course (${anyActiveOrder.levelName}). You cannot purchase a different course until it expires.`
+        );
       }
 
       // Create payment intention

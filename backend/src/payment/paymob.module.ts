@@ -12,6 +12,7 @@ import { UserModule } from '../user/user.module';
 import { OrderService } from '../common/shared/services/order.service';
 import { PaymobController } from './paymob.controller';
 import { MailModule } from '../common/mail/mail.module';
+import { SettingsModule } from '../settings/settings.module';
 
 // filepath: /mnt/DATA/Englishom/src/payment/paymob.module.ts
 @Module({
@@ -31,6 +32,7 @@ import { MailModule } from '../common/mail/mail.module';
     DatabaseModule.forFeature([{ name: Order.name, schema: OrderSchema }]),
     MailModule,
     ConfigModule,
+    SettingsModule,
   ],
   exports: [PaymobService, OrderRepo, OrderService],
 })

@@ -52,3 +52,7 @@ export function getCompletedTasks(levelName: LevelId, day: number | string) {
     params: { levelName, day },
   });
 }
+
+export function getDiscountEligibility() {
+  return axiosClient.get<{ discountPercentage: number; reason: string }>('/payment/discount-eligibility');
+}

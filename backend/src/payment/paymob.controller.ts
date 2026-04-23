@@ -34,6 +34,7 @@ import { AdminJwtGuard } from '../admin-auth/guards';
 import { AuthMessages } from '../common/shared/const';
 import { log } from 'console';
 import { OrderSearchDto, OrderReportDto } from './dto/order-search.dto';
+import { SettingsService } from '../settings/settings.service';
 
 @Controller('payment')
 export class PaymobController {
@@ -45,6 +46,7 @@ export class PaymobController {
     private readonly userService: UserService,
     private readonly courseService: CourseService,
     private readonly certificateRepo: CertificateRepo,
+    private readonly settingsService: SettingsService,
   ) {}
 
   private validateHMAC(
@@ -169,6 +171,36 @@ export class PaymobController {
   }
 
   @UseGuards(UserJwtGuard)
+  @Get('discount-eligibility')
+  async getDiscountEligibility(@CurrentUser() user: User) {
+    if ('adminRole' in user) {
+      return { discountPercentage: 0, reason: 'admin' };
+    }
+
+    const completedOrders = await this.paymobService.orderRepo.findUserCompletedOrders(user._id.toString());
+    const previousPurchasesCount = completedOrders.length;
+    
+    if (previousPurchasesCount > 0) {
+      const settings = await this.settingsService.getGlobalSettings();
+      const discounts = settings.repurchaseDiscounts || [];
+      
+      if (discounts.length > 0) {
+        const discountIndex = Math.min(previousPurchasesCount - 1, discounts.length - 1);
+        const discountPercentage = discounts[discountIndex];
+        
+        if (discountPercentage > 0 && discountPercentage <= 100) {
+          return {
+            discountPercentage,
+            reason: `Loyalty discount for ${previousPurchasesCount + 1}th course`,
+          };
+        }
+      }
+    }
+
+    return { discountPercentage: 0, reason: 'No discount' };
+  }
+
+  @UseGuards(UserJwtGuard)
   @Post('process-payment')
   async processPayment(
     @Body() paymentIntentionDto: PaymentRequestDto,
@@ -222,45 +254,41 @@ export class PaymobController {
       const anyActiveOrder = await this.paymobService.orderRepo.findAnyActiveCompletedOrder(
         user._id.toString()
       );
-      if (anyActiveOrder) {
-        throw new BadRequestException('You already have an active course. You cannot purchase a new one until your current course expires.');
+      if (anyActiveOrder && anyActiveOrder.levelName !== paymentIntentionDto.level_name) {
+        throw new BadRequestException(`You already have an active course (${anyActiveOrder.levelName}). You cannot purchase a different course until it expires.`);
       }
 
       // === DISCOUNT CALCULATION ===
       let finalPrice = course.price;
-      let discountType: 'renewal' | 'loyalty_15' | 'loyalty_20' | null = null;
 
-      // Get all previous completed orders for this user
-      const userCompletedOrders = await this.paymobService.orderRepo.findUserCompletedOrders(user._id.toString());
-      
       // 1. Renewal: User had THIS specific level but it expired → pays only 25% of the price
+      const userCompletedOrders = await this.paymobService.orderRepo.findUserCompletedOrders(user._id.toString());
       const hasExpiredSameCourse = userCompletedOrders.some(
         (order) => order.levelName === paymentIntentionDto.level_name && (order as any).accessStatus === OrderAccessStatus.EXPIRED
       );
 
       if (hasExpiredSameCourse) {
-        discountType = 'renewal';
         finalPrice = Math.round(course.price * 0.25); // Pay only 25% of original price
         this.logger.log(
           `Renewal discount applied for user ${user._id}: ${course.price} → ${finalPrice} SAR (25% of original)`
         );
       } 
-      // 2. Loyalty Discount: Based on number of previous purchases
+      // 2. Loyalty Discount: Based on number of previous purchases dynamically from Settings
       else if (userCompletedOrders.length > 0) {
-        if (userCompletedOrders.length >= 2) {
-          // 3rd course and above (2+ previous)
-          discountType = 'loyalty_20';
-          finalPrice = Math.round(course.price * 0.80); // 20% discount
-          this.logger.log(
-            `Loyalty discount (20%) applied for user ${user._id}: ${course.price} → ${finalPrice} SAR`
-          );
-        } else {
-          // 2nd course (1 previous)
-          discountType = 'loyalty_15';
-          finalPrice = Math.round(course.price * 0.85); // 15% discount
-          this.logger.log(
-            `Loyalty discount (15%) applied for user ${user._id}: ${course.price} → ${finalPrice} SAR`
-          );
+        const settings = await this.settingsService.getGlobalSettings();
+        const discounts = settings.repurchaseDiscounts || [];
+        
+        if (discounts.length > 0) {
+           const discountIndex = Math.min(userCompletedOrders.length - 1, discounts.length - 1);
+           const discountPercentage = discounts[discountIndex];
+           
+           if (discountPercentage > 0 && discountPercentage <= 100) {
+             finalPrice = finalPrice - (finalPrice * (discountPercentage / 100));
+             finalPrice = Math.round(finalPrice * 100) / 100;
+             this.logger.log(
+               `Loyalty discount (${discountPercentage}%) applied for user ${user._id}: ${course.price} → ${finalPrice} SAR`
+             );
+           }
         }
       }
 

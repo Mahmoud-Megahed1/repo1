@@ -24,6 +24,7 @@ import { SupportChatModule } from './support-chat/support-chat.module';
 import { ThemeModule } from './theme/theme.module';
 import { ChatModule } from './chat/chat.module';
 import { SubscriptionModule } from './subscription/subscription.module';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { SubscriptionModule } from './subscription/subscription.module';
     ChatModule,
     SubscriptionModule,
     MailModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [

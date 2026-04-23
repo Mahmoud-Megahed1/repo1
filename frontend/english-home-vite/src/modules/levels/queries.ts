@@ -14,6 +14,7 @@ import {
     getCertification,
     getLevelById,
     getUserLevels,
+    getDiscountEligibility,
 } from './services';
 export function useUserLevels() {
     const { data, ...rest } = useQuery({
@@ -90,5 +91,13 @@ export function useCertification(levelName: LevelId, enabled = true) {
         throwOnError: false,
         enabled,
         retry: false, // Don't retry if it fails (e.g. 404)
+    });
+}
+
+export function useDiscountEligibility() {
+    return useQuery({
+        queryKey: ['discountEligibility'],
+        queryFn: getDiscountEligibility,
+        select: (res) => res.data,
     });
 }

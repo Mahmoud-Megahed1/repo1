@@ -258,6 +258,21 @@ export class UserController {
     return await this.userService.activateUser(userId);
   }
 
+  @UseGuards(AdminJwtGuard)
+  @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER)
+  @Post(':id/grant-days')
+  async grantExtraDays(
+    @Param('id') id: string,
+    @Body('days') days: number,
+    @CurrentUser() admin: User | Admin,
+  ) {
+    if (!days || days <= 0) {
+      throw new BadRequestException('Days must be a positive number');
+    }
+    const user = await this.userService.grantExtraDays(id, days, admin._id.toString());
+    return cleanResponse(user);
+  }
+
   /// MUST BE AT THE END AND ADMIN ONLY
   @UseGuards(AdminJwtGuard)
   @Get(':id')

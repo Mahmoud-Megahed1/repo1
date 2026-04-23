@@ -26,6 +26,8 @@ import {
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePayment } from '../mutations';
+import { useDiscountEligibility } from '../queries';
+
 type ComponentVariant = Record<
   'coming-soon' | 'locked' | 'unlocked' | 'expired',
   {
@@ -134,6 +136,12 @@ const useComponentVariant = ({
   const { mutate, isPending } = usePayment(levelId);
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  
+  const { data: discountData } = useDiscountEligibility();
+  const discountPercentage = discountData?.discountPercentage || 0;
+  const discountedPrice = discountPercentage > 0 
+    ? Math.round(price - (price * (discountPercentage / 100))) 
+    : price;
 
   const daysLeft = expiresAt
     ? Math.ceil(
@@ -190,14 +198,14 @@ const useComponentVariant = ({
           onClick={() => mutate()}
           disabled={isPending}
         >
-          {isPending ? t('Global.processing') : previousLevelCompleted ? t('Global.unlock') + ' (Discount %)' : t('Global.unlock')}
+          {isPending ? t('Global.processing') : (previousLevelCompleted && discountPercentage > 0) ? t('Global.unlock') + ` (-${discountPercentage}%)` : t('Global.unlock')}
           <KeyRound />
         </Button>
       ),
-      content: previousLevelCompleted ? (
+      content: (previousLevelCompleted && discountPercentage > 0) ? (
         <div className="space-y-2">
           <p className="flex items-center gap-2 rounded-md border-green-200 bg-green-100 px-3 py-1.5 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-300 text-sm font-semibold">
-            {t('Global.loyaltyDiscountApplied', 'Loyalty Discount Applied (15% - 20%)')}
+            {t('Global.loyaltyDiscountApplied', `Loyalty Discount Applied (${discountPercentage}%)`)}
           </p>
           <p className="flex items-center">
             <span className="text-muted-foreground pe-2 text-sm">
@@ -210,7 +218,11 @@ const useComponentVariant = ({
           </p>
           <p className="flex flex-col">
             <span className="text-muted-foreground pe-2 text-sm">
-              {t('Global.priceWithDiscount', 'Final price shown at checkout')}
+              {t('Global.priceWithDiscount', 'Discounted Price')}
+            </span>
+            <span className="inline-flex items-center gap-1 font-bold text-green-600 dark:text-green-400 text-lg">
+              <RiyalSymbol className="size-4" />
+              {discountedPrice}
             </span>
           </p>
           <p className="flex items-center gap-1.5 text-sm font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2 py-0.5 rounded-full border border-green-200 dark:border-green-800">

@@ -33,6 +33,9 @@ export class Order extends AbstractDocument {
 
   @Prop()
   accessExpiresAt?: Date;
+
+  @Prop({ type: Number, default: 0 })
+  carriedOverDays: number;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
@@ -40,3 +43,4 @@ export const OrderSchema = SchemaFactory.createForClass(Order);
 // Add compound indexes for frequent queries
 OrderSchema.index({ userId: 1, paymentStatus: 1 });
 OrderSchema.index({ userId: 1, levelName: 1 });
+
