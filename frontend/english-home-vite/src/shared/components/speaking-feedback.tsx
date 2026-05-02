@@ -1,4 +1,4 @@
-import EarSound from '@components/ear-sound';
+import { AudioPlayback } from '@components/audio-playback';
 import { cn } from '@lib/utils';
 import type { SpeakingResult } from '@modules/lessons/types';
 import { Card } from '@ui/card';
@@ -74,10 +74,12 @@ export const SpeakingFeedback = ({
               <p className="text-foreground text-xs md:text-sm font-medium leading-relaxed whitespace-pre-wrap break-words flex-1 text-left" dir="ltr">
                 {userTranscript}
               </p>
-              {recordUrl && (
-                <EarSound className="cursor-pointer shrink-0 mt-0.5" soundSrc={recordUrl} />
-              )}
             </div>
+            {recordUrl && (
+              <div className="pt-2">
+                <AudioPlayback className="w-full" audioSrc={recordUrl} />
+              </div>
+            )}
           </div>
 
           {/* Horizontal Progress Bar */}
