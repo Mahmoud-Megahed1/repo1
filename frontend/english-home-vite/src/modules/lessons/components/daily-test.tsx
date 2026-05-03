@@ -20,7 +20,8 @@ import useLocale from '@hooks/use-locale';
 import { useMarkDayAsCompleted, useMarkTaskAsCompleted, useGetDayStatus } from '../mutations';
 import type { LevelId } from '@shared/types/entities';
 import { useParams } from '@tanstack/react-router';
-import { Link } from '@shared/i18n/routing';
+import { useNavigate } from '@shared/i18n/routing';
+import { useQueryClient } from '@tanstack/react-query';
 import { ChevronLeftIcon } from 'lucide-react';
 
 const PASS_SCORE = 70;
@@ -60,6 +61,8 @@ const ResultCard = ({
   onReset,
   onReview,
   isPassed = false,
+  isDayCompleted = false,
+  isDayAlreadyCompleted = false,
 }: {
   score: number;
   totalQuestions: number;
@@ -68,12 +71,32 @@ const ResultCard = ({
   onReset?: () => void;
   onReview?: () => void;
   isPassed?: boolean;
+  isDayCompleted?: boolean;
+  isDayAlreadyCompleted?: boolean;
 }) => {
   const { t } = useTranslation();
   const locale = useLocale() === 'ar' ? 'ar-EG' : 'en-US';
   const { day, id } = useParams({
     from: '/$locale/_globalLayout/_auth/app/levels/$id/$day/$lessonName',
   });
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [isNavigating, setIsNavigating] = useState(false);
+
+  const handleGoToNextDay = useCallback(async () => {
+    setIsNavigating(true);
+    try {
+      // Wait for getMe query to finish refetching so currentDay is up-to-date
+      await queryClient.refetchQueries({ queryKey: ['getMe'] });
+      navigate({
+        to: '/app/levels/$id/$day/$lessonName',
+        params: { id, day: String(+day + 1), lessonName: 'READ' } as any,
+      });
+    } catch {
+      setIsNavigating(false);
+    }
+  }, [queryClient, navigate, id, day]);
+
   return (
     <div className="flex flex-col">
       <Card>
@@ -145,14 +168,21 @@ const ResultCard = ({
           </Button>
         </CardFooter>
       </Card>
-      {isPassed && (
-        <Button className="w-2xs mx-auto mt-4 text-base" size={'lg'} asChild>
-          <Link
-            to="/app/levels/$id/$day/$lessonName"
-            params={{ id: id as any, day: String(+day + 1), lessonName: 'READ' }}
-          >
-            {t('Global.nextDay' as any, { day: +day + 1 })}
-          </Link>
+      {isPassed && (isDayCompleted || isDayAlreadyCompleted) && (
+        <Button
+          className="w-2xs mx-auto mt-4 text-base"
+          size={'lg'}
+          onClick={handleGoToNextDay}
+          disabled={isNavigating}
+        >
+          {isNavigating ? (
+            <span className="flex items-center gap-2">
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+              {t('Global.nextDay' as any, { day: String(+day + 1) })}
+            </span>
+          ) : (
+            t('Global.nextDay' as any, { day: String(+day + 1) })
+          )}
         </Button>
       )}
     </div>
@@ -313,6 +343,8 @@ const DailyTest: FC<DailyTestProps> = ({ lesson, day, levelId }) => {
             setTestStatus('reviewed');
           }}
           isPassed={getResult.isPassed}
+          isDayCompleted={isSuccess}
+          isDayAlreadyCompleted={!!dayStatus?.data?.dailyTestResult?.isPassed}
         />
       ) : (
         <Card className="overflow-hidden border-border shadow-card">
