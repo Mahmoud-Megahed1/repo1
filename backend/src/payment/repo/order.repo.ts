@@ -200,6 +200,12 @@ export class OrderRepo extends AbstractRepo<Order> implements OrderService {
               }
             }
           }
+          // After calculating carried over days, reset the user's adminGrantedDays and totalPausedDays
+          await this.orderModel.db.model('User').findByIdAndUpdate(
+            order.userId,
+            { $set: { adminGrantedDays: 0, totalPausedDays: 0 } },
+            { session: session || null }
+          );
         }
       } catch (err) {
         console.error('Error calculating carriedOverDays', err);

@@ -73,11 +73,12 @@ const Grammar: FC<Props> = ({
   const definition = locale === 'ar' ? definitionAr : definitionEn;
   const useCases = locale === 'ar' ? rest.useCases.ar : rest.useCases.en;
 
+  const localStorageKey = `accordionValues-${levelId}-${day}`;
   let accordionValues = [];
 
   try {
     accordionValues = JSON.parse(
-      localStorage.getItem('accordionValues') || '[]'
+      localStorage.getItem(localStorageKey) || '[]'
     );
   } catch (error) {
     accordionValues = [];
@@ -99,7 +100,7 @@ const Grammar: FC<Props> = ({
             className="w-full space-y-4 *:border-none"
             defaultValue={accordionValues}
             onValueChange={(value) => {
-              localStorage.setItem('accordionValues', JSON.stringify(value));
+              localStorage.setItem(localStorageKey, JSON.stringify(value));
               if (value.length > 0 && !hasOpenedAccordion) {
                 setHasOpenedAccordion(true);
                 handleComplete();
