@@ -227,7 +227,7 @@ export class InactiveUserCronService {
       .replaceAll('{{absentDays}}', absentDays.toString())
       .replaceAll(
         '{{loginUrl}}',
-        'https://englishom.com/login',
+        'https://englishom.com/ar/app/levels',
       );
 
     await this.sendEmailWithRetry({
@@ -247,7 +247,7 @@ export class InactiveUserCronService {
       .replaceAll('{{userName}}', user.firstName || 'طالبنا العزيز')
       .replaceAll(
         '{{supportUrl}}',
-        'https://englishom.com/login', // Redirect to login which will show reactivation page
+        'https://englishom.com/ar/app/levels', // Redirect to app levels page
       );
 
     await this.sendEmailWithRetry({

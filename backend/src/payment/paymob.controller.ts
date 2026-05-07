@@ -309,7 +309,7 @@ export class PaymobController {
         amount: finalPrice,
         currency: 'SAR', // <- Saudi Riyal
         payment_methods: [integration_id, 24018], // added 24018 for Tamara
-        redirection_url: `${frontendUrl}/${locale}/app/levels/${paymentIntentionDto.level_name}`, // Redirect to purchased level
+        redirection_url: `${frontendUrl}/${locale}/app/levels`, // Redirect to levels page (not specific level) so student sees full platform structure
         items: [
           {
             name: paymentIntentionDto.level_name,
