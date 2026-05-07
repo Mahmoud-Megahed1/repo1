@@ -81,6 +81,7 @@ const LevelCard: FC<LevelCardProps> = ({
   } = useComponentVariant({
     levelId,
     price,
+    originalPrice,
     expiresAt,
     variant,
     isCompleted,
@@ -123,6 +124,7 @@ const LevelCard: FC<LevelCardProps> = ({
 const useComponentVariant = ({
   levelId,
   price,
+  originalPrice,
   expiresAt,
   variant = 'locked',
   isCompleted = false,
@@ -130,6 +132,7 @@ const useComponentVariant = ({
 }: {
   levelId: LevelId;
   price: number;
+  originalPrice?: number;
   expiresAt?: string;
   variant?: 'unlocked' | 'locked' | 'coming-soon' | 'expired';
   isCompleted?: boolean;
@@ -240,10 +243,16 @@ const useComponentVariant = ({
         </div>
       ) : (
         <div className="space-y-2">
-          <p className="flex items-center">
+          <p className="flex items-center gap-2">
             <span className="text-muted-foreground pe-2 text-sm">
               {t('Global.price')}
             </span>
+            {originalPrice && originalPrice > price && (
+              <span className="inline-flex items-center gap-1 text-muted-foreground line-through text-sm">
+                <RiyalSymbol className="size-3" />
+                {originalPrice}
+              </span>
+            )}
             <span className="inline-flex items-center gap-1 font-bold">
               <RiyalSymbol className="size-4" />
               {price}
