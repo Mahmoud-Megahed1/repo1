@@ -178,7 +178,7 @@ export class MailService {
 
           <div style="text-align: center; margin-top: 30px;">
             <p style="font-weight: bold; font-size: 18px;">هل أنت مستعد لأول خطوة؟</p>
-            <a href="https://englishom.com" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; margin-top: 10px;">ابدأ التعلم الآن</a>
+            <a href="https://englishom.com/ar/app/levels" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; margin-top: 10px;">ابدأ التعلم الآن</a>
           </div>
         </div>
 
@@ -223,7 +223,7 @@ export class MailService {
           <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
 
           <div style="text-align: center; margin-top: 30px;">
-            <a href="https://englishom.com" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">الذهاب إلى لوحة التحكم</a>
+            <a href="https://englishom.com/ar/app/levels" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">الذهاب إلى لوحة التحكم</a>
           </div>
         </div>
       </div>
@@ -256,7 +256,7 @@ export class MailService {
           <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
 
           <div style="text-align: center; margin-top: 30px;">
-            <a href="https://englishom.com" style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">أكمل رحلة التعلم الآن</a>
+            <a href="https://englishom.com/ar/app/levels" style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">أكمل رحلة التعلم الآن</a>
           </div>
         </div>
       </div>
