@@ -5,7 +5,6 @@ import type { PhrasalVerbLesson } from '../../types';
 import useLocale from '@hooks/use-locale';
 import { useTranslation } from 'react-i18next';
 import NextLessonButton from '@components/next-lesson-button';
-import LessonProgress from '@components/lesson-progress';
 import { useParams } from '@tanstack/react-router';
 import { useMarkTaskAsCompleted } from '../../mutations';
 import { type LevelId } from '../../types';

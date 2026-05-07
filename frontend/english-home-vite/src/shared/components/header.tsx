@@ -19,6 +19,7 @@ import { Separator } from '@ui/separator';
 import { SidebarTrigger } from '@ui/sidebar';
 import type { FC } from 'react';
 import React from 'react';
+import ThemeSwitcher from './theme-switcher';
 type Props = React.ComponentProps<'header'> & {
   breadcrumbItems?: Array<BreadcrumbItemType>;
 };
@@ -38,6 +39,9 @@ const Header: FC<Props> = ({ className, breadcrumbItems = [], ...props }) => {
           className="mr-2 data-[orientation=vertical]:h-4"
         />
         <CustomBreadcrumb items={breadcrumbItems} />
+      </div>
+      <div className="ml-auto mr-4 rtl:ml-4 rtl:mr-auto">
+        <ThemeSwitcher />
       </div>
     </header>
   );

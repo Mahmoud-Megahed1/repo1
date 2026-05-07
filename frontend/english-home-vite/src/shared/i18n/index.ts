@@ -8,8 +8,8 @@ export const SUPPORTED_LOCALES = ['en', 'ar'] as const;
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
 i18n.use(initReactI18next).init({
-  lng: 'en',
-  fallbackLng: 'en',
+  lng: 'ar',
+  fallbackLng: 'ar',
   resources: {
     en: { translation: en },
     ar: { translation: ar },
