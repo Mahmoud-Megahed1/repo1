@@ -20,6 +20,7 @@ type Props = Omit<PictureLesson, 'id'> & {
   isLast?: boolean;
   onComplete?: () => void;
   onAudioPlay?: () => void;
+  hasPlayedAudio?: boolean;
 };
 
 const PictureCard: FC<Props> = ({
@@ -36,6 +37,7 @@ const PictureCard: FC<Props> = ({
   isLast,
   onComplete,
   onAudioPlay,
+  hasPlayedAudio,
 }) => {
   const { ref, togglePlay, isPlaying } = useAudioPlayer();
   const { t, i18n } = useTranslation();
@@ -164,8 +166,8 @@ const PictureCard: FC<Props> = ({
         <NextLessonButton
           lessonName="LISTEN"
           onClick={onComplete}
-          className={`w-full transition-opacity ${isLast ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}
-          disabled={!isLast}
+          className={`w-full transition-opacity ${isLast && hasPlayedAudio ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}
+          disabled={!isLast || !hasPlayedAudio}
         />
       </div>
     </div>

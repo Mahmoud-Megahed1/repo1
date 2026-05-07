@@ -85,7 +85,7 @@ const Reading: FC<Props> = ({
             onPlay={handleAudioPlay}
           />
         </div>
-        <NextLessonButton lessonName="PICTURES" />
+        <NextLessonButton lessonName="PICTURES" disabled={!hasPlayedAudio} />
       </div>
 
       {/* Text Content */}

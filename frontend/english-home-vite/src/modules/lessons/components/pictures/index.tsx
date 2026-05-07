@@ -86,6 +86,7 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
           isLast={isLast}
           onComplete={handleComplete}
           onAudioPlay={handleAudioPlay}
+          hasPlayedAudio={hasPlayedAudio}
           {...currentItem}
         />
         <PictureSidebar

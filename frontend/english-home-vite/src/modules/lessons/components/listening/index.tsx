@@ -131,7 +131,7 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
                 ))}
             </ul>
             {isLast ? (
-              <NextLessonButton lessonName="WRITE" />
+              <NextLessonButton lessonName="WRITE" disabled={!hasPlayedAudio} />
             ) : (
               <Button variant="outline" onClick={next} disabled={!hasNextItems}>
                 {t('Global.next')}
