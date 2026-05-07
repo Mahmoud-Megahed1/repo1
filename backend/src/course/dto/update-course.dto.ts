@@ -37,4 +37,8 @@ export class UpdateCourseDto {
   @IsOptional()
   @IsBoolean()
   isAvailable?: boolean;
+
+  @IsOptional()
+  @IsPositive()
+  originalPrice?: number;
 }

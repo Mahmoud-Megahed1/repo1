@@ -30,6 +30,9 @@ export class Course extends AbstractDocument {
   @Prop({ required: true, type: Number })
   price: number;
 
+  @Prop({ type: Number, default: null })
+  originalPrice: number; // السعر قبل الخصم - يظهر مشطوبًا في واجهة الطالب
+
   @Prop({ required: true, type: Boolean, default: true })
   isAvailable: boolean;
 }

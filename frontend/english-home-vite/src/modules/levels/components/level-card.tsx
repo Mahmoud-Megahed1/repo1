@@ -49,6 +49,7 @@ export type LevelCardProps = {
   levelLabel: string;
   icon: LucideIcon;
   price: number;
+  originalPrice?: number;
   variant?: 'unlocked' | 'locked' | 'coming-soon' | 'expired';
   isCompleted?: boolean;
   expiresAt?: string;
@@ -61,6 +62,7 @@ const LevelCard: FC<LevelCardProps> = ({
   levelId,
   levelLabel,
   price,
+  originalPrice,
   title,
   variant = 'locked',
   isCompleted = false,
@@ -159,10 +161,16 @@ const useComponentVariant = ({
       labelVariant: 'amber-gradient',
       content: (
         <div className="space-y-2">
-          <p className="flex items-center">
+          <p className="flex items-center gap-2">
             <span className="text-muted-foreground pe-2 text-sm">
               {t('Global.price')}
             </span>
+            {originalPrice && originalPrice > price && (
+              <span className="inline-flex items-center gap-1 text-muted-foreground line-through text-sm">
+                <RiyalSymbol className="size-3" />
+                {originalPrice}
+              </span>
+            )}
             <span className="inline-flex items-center gap-1 font-bold">
               <RiyalSymbol className="size-4" />
               {price}

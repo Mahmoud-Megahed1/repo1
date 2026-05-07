@@ -31,4 +31,8 @@ export class CreateCourseDto {
   @IsNotEmpty()
   @IsNumber()
   price: number;
+
+  @IsOptional()
+  @IsNumber()
+  originalPrice?: number;
 }
