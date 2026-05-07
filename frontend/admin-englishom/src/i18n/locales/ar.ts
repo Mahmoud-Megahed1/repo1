@@ -316,7 +316,7 @@ const ar: TranslationSchema = {
     grade: 'الدرجة',
   },
   Global: {
-    appName: 'إنجليش هوم',
+    appName: 'ENGLISHOM',
     welcome: 'مرحبًا بك في إنجليش هوم',
     description: 'ستتحدث الإنجليزية من الصفر إلى الاحتراف',
     loading: 'جاري التحميل',
@@ -366,6 +366,15 @@ const ar: TranslationSchema = {
       max: 'يجب ألا يزيد عن {max} أحرف',
       invalidEmail: 'البريد الإلكتروني غير صالح',
       emailExists: 'البريد الإلكتروني موجود بالفعل',
+    },
+  },
+  Admin: {
+    themes: {
+      title: 'المظاهر',
+      add: 'إضافة مظهر',
+      edit: 'تعديل مظهر',
+      delete: 'حذف مظهر',
+      list: 'قائمة المظاهر',
     },
   },
 };

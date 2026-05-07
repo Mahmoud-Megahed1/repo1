@@ -319,8 +319,8 @@ const en: TranslationSchema = {
     grade: 'Grade',
   },
   Global: {
-    appName: 'English Home',
-    welcome: 'Welcome to English Home',
+    appName: 'ENGLISHOM',
+    welcome: 'Welcome to ENGLISHOM',
     description: 'Learn English from zero to mastery',
     loading: 'Loading',
     level: 'Level',
@@ -369,6 +369,15 @@ const en: TranslationSchema = {
       max: 'Must not exceed {max} characters',
       invalidEmail: 'Invalid email address',
       emailExists: 'Email already exists',
+    },
+  },
+  Admin: {
+    themes: {
+      title: 'Themes',
+      add: 'Add Theme',
+      edit: 'Edit Theme',
+      delete: 'Delete Theme',
+      list: 'Themes List',
     },
   },
 };

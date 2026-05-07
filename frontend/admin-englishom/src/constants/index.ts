@@ -30,14 +30,12 @@ export const LESSONS_LINKS: Array<{
 }> = [
     { id: 'READ', href: '#', label: 'Read', icon: Icons.BookOpenText },
     { id: 'PICTURES', href: '#', label: 'Pictures', icon: Icons.Image },
-    { id: 'Q_A', href: '#', label: 'Q&A', icon: Icons.MessageCircleQuestion },
-    { id: 'GRAMMAR', href: '#', label: 'Grammar', icon: Icons.ListChecks },
     { id: 'LISTEN', href: '#', label: 'Listen', icon: Icons.Ear },
-    // { id: 'TODAY', href: '#', label: 'Today', icon: Icons.Calendar },
     { id: 'WRITE', href: '#', label: 'Write', icon: Icons.PencilLine },
     { id: 'SPEAK', href: '#', label: 'Speak', icon: Icons.Speech },
     { id: 'TODAY', href: '#', label: 'Today', icon: Icons.Calendar },
-    { id: 'DAILY_TEST', href: '#', label: 'Daily Test', icon: Icons.NotebookPen },
+    { id: 'Q_A', href: '#', label: 'Q&A', icon: Icons.MessageCircleQuestion },
+    { id: 'GRAMMAR', href: '#', label: 'Grammar', icon: Icons.ListChecks },
     {
       id: 'PHRASAL_VERBS',
       href: '#',
@@ -45,6 +43,7 @@ export const LESSONS_LINKS: Array<{
       icon: Icons.CaseSensitive,
     },
     { id: 'IDIOMS', href: '#', label: 'Idioms', icon: Icons.Search },
+    { id: 'DAILY_TEST', href: '#', label: 'Daily Test', icon: Icons.NotebookPen },
   ];
 
 export enum LevelIdEnum {
