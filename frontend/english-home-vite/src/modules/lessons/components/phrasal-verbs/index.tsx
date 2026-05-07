@@ -78,8 +78,6 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
       )}
       {...props}
     >
-      <LessonProgress currentIndex={currentIndex} total={lesson.length} />
-
       {/* 2-column: Definition+UseCases first (RTL=right), Examples second (RTL=left) */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
         {/* Definition + UseCases */}
