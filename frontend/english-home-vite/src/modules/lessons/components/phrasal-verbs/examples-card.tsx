@@ -27,6 +27,8 @@ const ExamplesCard: FC<Props> = ({ examples, onAudioPlay }) => {
             variant="purple"
             className="space-y-10"
         >
+            {/* Hide progress dots when there's only 1 example */}
+            {examples.length > 1 && (
             <ul className="flex h-4 items-center justify-center gap-2">
                 {Array.from({ length: examples.length }).map((_, index) => (
                     <li
@@ -41,6 +43,7 @@ const ExamplesCard: FC<Props> = ({ examples, onAudioPlay }) => {
                     />
                 ))}
             </ul>
+            )}
             {/* Two-column layout: Image left, Text content right */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
                 {/* Left side: Image + Navigation */}
