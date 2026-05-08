@@ -55,7 +55,7 @@ const Idioms: FC<Props> = ({ lesson }) => {
           <ExamplesCard examples={lesson.examples} onAudioPlay={handleAudioPlay} />
         </div>
       </div>
-      <NextLessonButton lessonName="DAILY_TEST" />
+      <NextLessonButton lessonName="DAILY_TEST" disabled={!hasPlayedAudio} />
     </div>
   );
 };

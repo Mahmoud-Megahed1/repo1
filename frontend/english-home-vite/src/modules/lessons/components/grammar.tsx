@@ -170,7 +170,7 @@ const Grammar: FC<Props> = ({
           </Accordion>
         </CardContent>
       </Card>
-      <NextLessonButton lessonName="PHRASAL_VERBS" />
+      <NextLessonButton lessonName="PHRASAL_VERBS" disabled={!hasOpenedAccordion} />
     </div>
   );
 };

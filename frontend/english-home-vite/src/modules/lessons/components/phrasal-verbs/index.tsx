@@ -97,7 +97,7 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
 
       {isLast && (
         <div className="flex justify-end mt-4">
-          <NextLessonButton lessonName="IDIOMS" />
+          <NextLessonButton lessonName="IDIOMS" disabled={!hasPlayedAudio} />
         </div>
       )}
     </div>

@@ -1,6 +1,6 @@
 import { cn } from '@lib/utils';
 import { Button } from '@ui/button';
-import { useEffect, useRef, useState, type ComponentProps, type FC } from 'react';
+import { useEffect, useState, type ComponentProps, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { QuestionAnswerLesson } from '../../types';
 import QuestionAnswerList from './question-answer-list';
@@ -39,10 +39,10 @@ const Q_A: FC<Props> = ({ lesson, className, ...props }) => {
     }
   };
 
-  const hasPlayedAudioRef = useRef(false);
+  const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
   const handleAudioPlay = () => {
-    if (!hasPlayedAudioRef.current) {
-      hasPlayedAudioRef.current = true;
+    if (!hasPlayedAudio) {
+      setHasPlayedAudio(true);
       handleComplete();
     }
   };
@@ -77,12 +77,12 @@ const Q_A: FC<Props> = ({ lesson, className, ...props }) => {
           defaultIndex={questionIndex}
           onAudioPlay={handleAudioPlay}
           nextLessonButton={
-            <NextLessonButton lessonName="GRAMMAR" />
+            <NextLessonButton lessonName="GRAMMAR" disabled={!hasPlayedAudio} />
           }
         />
       )}
       {showAll && (
-        <NextLessonButton lessonName="GRAMMAR" className="mt-8" />
+        <NextLessonButton lessonName="GRAMMAR" className="mt-8" disabled={!hasPlayedAudio} />
       )}
     </div>
   );
