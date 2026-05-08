@@ -906,6 +906,41 @@ export type TranslationType = {
       phoneNumberCopied: string;
       appealSubject: string;
     };
+    cancel: string;
+    purchaseAgreement: {
+      title: string;
+      description: string;
+      readFullAgreement: string;
+      checkboxLabel: string;
+      proceedToPayment: string;
+      fullAgreementTitle: string;
+      understood: string;
+      clause1Title: string;
+      clause1Content: string;
+      clause2Title: string;
+      clause2Content: string;
+      clause3Title: string;
+      clause3Content: string;
+      clause4Title: string;
+      clause4Content: string;
+      clause5Title: string;
+      clause5Content: string;
+      clause6Title: string;
+      clause6Content: string;
+      clause7Title: string;
+      clause7Content: string;
+      closing: string;
+    };
+    activeCourseConflict: {
+      title: string;
+      description: string;
+      currentCourse: string;
+      expiresAt: string;
+      daysRemaining: string;
+      terminateCourse: string;
+      terminateConfirm: string;
+      terminated: string;
+    };
   };
 
   UserGuide: {

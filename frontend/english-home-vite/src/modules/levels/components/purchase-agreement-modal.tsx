@@ -142,9 +142,9 @@ const PurchaseAgreementModal: FC<Props> = ({
               {agreementClauses.map((clause, index) => (
                 <div key={index} className="space-y-2">
                   <h3 className="font-bold text-base">
-                    {index + 1}. {clause.title}
+                    {index + 1}. {clause.title as string}
                   </h3>
-                  <p className="text-muted-foreground">{clause.content}</p>
+                  <p className="text-muted-foreground">{clause.content as string}</p>
                 </div>
               ))}
               <div className="mt-6 rounded-lg border-2 border-primary/20 bg-primary/5 p-4">
