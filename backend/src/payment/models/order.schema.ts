@@ -36,6 +36,9 @@ export class Order extends AbstractDocument {
 
   @Prop({ type: Number, default: 0 })
   carriedOverDays: number;
+
+  @Prop({ type: Boolean, default: false })
+  isFree: boolean; // true = manually assigned by admin (free/cash)
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);

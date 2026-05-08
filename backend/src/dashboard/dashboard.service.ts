@@ -152,10 +152,11 @@ export class DashboardService {
         {
           userId: user._id as any,
           levelName: level_name,
-          amount: course.price, // Use whole currency amount directly
+          amount: 0, // Admin-assigned courses are free
           paymentStatus: PaymentStatus.COMPLETED,
           paymentDate: new Date(),
           paymentId: `ADMIN_ASSIGNED_${Date.now()}`, // Special payment ID to indicate admin assignment
+          isFree: true, // Mark as manually assigned (free)
         },
         session,
       );
@@ -381,6 +382,7 @@ export class DashboardService {
   private async getTotalRevenue(): Promise<number> {
     const orders = await this.orderRepo.find({
       paymentStatus: PaymentStatus.COMPLETED,
+      isFree: { $ne: true }, // Exclude free/admin-assigned orders from revenue
     });
     if (!orders) return 0;
 
