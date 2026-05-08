@@ -931,6 +931,15 @@ export type TranslationType = {
       clause7Content: string;
       closing: string;
     };
+    testimonial: {
+      submitButton: string;
+      title: string;
+      description: string;
+      ratingLabel: string;
+      contentLabel: string;
+      contentPlaceholder: string;
+      send: string;
+    };
     activeCourseConflict: {
       title: string;
       description: string;

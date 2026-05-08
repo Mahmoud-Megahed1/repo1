@@ -1205,6 +1205,15 @@ export default {
       clause7Content: 'This agreement is governed and interpreted in accordance with applicable laws and regulations. Any dispute arising from this agreement shall be referred to the competent judicial authorities.',
       closing: 'By completing the purchase, I pledge to maintain the confidentiality of the educational material and restrict its use to personal use within the platform.',
     },
+    testimonial: {
+      submitButton: 'Share Your Feedback',
+      title: 'Share Your Experience',
+      description: 'We would love to hear about your experience with Englishom',
+      ratingLabel: 'How would you rate your experience?',
+      contentLabel: 'Your Feedback',
+      contentPlaceholder: 'Write your feedback here... What did you like? How did the platform help you?',
+      send: 'Submit Review',
+    },
     activeCourseConflict: {
       title: 'You have an active course',
       description: 'You cannot purchase a new course while you have an active course. You can terminate the current course first.',
