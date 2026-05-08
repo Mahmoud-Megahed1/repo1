@@ -91,6 +91,10 @@ export const getUserById = (id: string) => {
       levelName: LevelId;
       currentDay: number;
       isCompleted: boolean;
+      daysLeft?: number;
+      isExpired?: boolean;
+      purchaseDate?: string;
+      expiresAt?: string;
     }>;
   }>(`/dashboard/user-details/${id}`);
 };
@@ -159,4 +163,11 @@ export const grantDaysToUser = ({
   days: number;
 }) => {
   return client.post(`/admin/users/${userId}/grant-days`, { days });
+};
+
+// Terminate active course for user - Super or Manager only
+export const terminateUserCourse = (userId: string) => {
+  return client.post<{ message: string; terminatedCourse: string }>(
+    `/admin/users/${userId}/terminate-course`,
+  );
 };

@@ -219,6 +219,25 @@ export class OrderRepo extends AbstractRepo<Order> implements OrderService {
     );
   }
 
+  /**
+   * Update access expiry date for an order (used by admin to terminate course)
+   */
+  async updateAccessExpiry(
+    orderId: string,
+    newExpiryDate: Date,
+    session?: ClientSession,
+  ): Promise<Order | null> {
+    const orderIdObjectId = toObjectId(orderId);
+    return await this.orderModel.findByIdAndUpdate(
+      orderIdObjectId,
+      {
+        accessExpiresAt: newExpiryDate,
+        accessStatus: OrderAccessStatus.EXPIRED,
+      },
+      { new: true, session: session || null },
+    );
+  }
+
   async deleteOrdersForLevel(
     userId: string | Types.ObjectId,
     levelName: string,

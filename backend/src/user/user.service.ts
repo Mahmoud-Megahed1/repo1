@@ -458,6 +458,41 @@ export class UserService {
   }
 
   /**
+   * Terminate a user's active course (Admin action)
+   * Sets the access expiry to now so the user can purchase a new course
+   */
+  async terminateActiveCourse(userId: string, adminId: string) {
+    const activeOrder = await this.orderRepo.findAnyActiveCompletedOrder(userId);
+    
+    if (!activeOrder) {
+      throw new BadRequestException('No active course to terminate');
+    }
+
+    // Set access expiry to now
+    await this.orderRepo.updateAccessExpiry(
+      activeOrder._id.toString(),
+      new Date(),
+    );
+
+    // Log the action
+    await this.adminLogService.logAction(
+      adminId,
+      'TERMINATE_COURSE',
+      userId,
+      { levelName: activeOrder.levelName },
+    );
+
+    this.logger.log(
+      `Admin ${adminId} terminated active course ${activeOrder.levelName} for user ${userId}`,
+    );
+
+    return {
+      message: `Course ${activeOrder.levelName} terminated successfully`,
+      terminatedCourse: activeOrder.levelName,
+    };
+  }
+
+  /**
    * Suspend a user
    */
   async suspendUser(userId: string, reason?: string): Promise<User> {

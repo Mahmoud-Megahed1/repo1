@@ -183,6 +183,16 @@ export class AdminController {
     return cleanResponse(user);
   }
 
+  // Terminate active course for user - SUPER and MANAGER
+  @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER)
+  @Post('users/:id/terminate-course')
+  async terminateUserCourse(
+    @Param('id') userId: string,
+    @CurrentAdmin() currentAdmin: Admin,
+  ) {
+    return await this.userService.terminateActiveCourse(userId, currentAdmin._id.toString());
+  }
+
   // Get admin by ID - SUPER and MANAGER can view admin details
   @Get('details/:id')
   async getAdminById(@Param() mongoID: GetAdminDto) {

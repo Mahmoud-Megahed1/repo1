@@ -74,6 +74,7 @@ export type User = {
     reason: string;
     isVoluntary: boolean;
   }>;
+  adminGrantedDays?: number;
   createdAt: string;
   updatedAt: string;
 };

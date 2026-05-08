@@ -31,23 +31,49 @@ export const coursesColumns: ColumnDef<Course>[] = [
     enableSorting: false,
   },
   {
+    accessorKey: 'daysLeft',
+    header: 'Days Left',
+    cell: ({ row }) => {
+      const daysLeft = row.original.daysLeft ?? 0;
+      const isExpired = row.original.isExpired;
+      if (isExpired) {
+        return <span className="text-red-500 font-semibold">Expired</span>;
+      }
+      return (
+        <span className={daysLeft <= 7 ? 'text-yellow-500 font-semibold' : 'text-green-500 font-semibold'}>
+          {daysLeft} days
+        </span>
+      );
+    },
+    enableSorting: false,
+  },
+  {
     id: 'actions',
     header: 'Actions',
-    cell: ({ row }) => <DeleteCourseButton course={row.original} />,
+    cell: ({ row }) => (
+      <div className="flex items-center gap-1">
+        <TerminateCourseButton course={row.original} />
+        <DeleteCourseButton course={row.original} />
+      </div>
+    ),
   },
 ];
 
-type Course = {
+export type Course = {
   levelName: LevelId;
   currentDay: number;
   isCompleted: boolean;
   userId: string;
+  daysLeft?: number;
+  isExpired?: boolean;
+  purchaseDate?: string;
+  expiresAt?: string;
 };
 
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
+import { Trash2, XCircle } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteUserCourse } from '@/services/admins';
+import { deleteUserCourse, terminateUserCourse } from '@/services/admins';
 import { useState } from 'react';
 import {
   Dialog,
@@ -60,6 +86,59 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+
+const TerminateCourseButton = ({ course }: { course: Course }) => {
+  const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: () => terminateUserCourse(course.userId),
+    onSuccess: (res) => {
+      setOpen(false);
+      toast.success(`Course ${res.data.terminatedCourse} terminated successfully`);
+      queryClient.invalidateQueries({ queryKey: ['userDetails', course.userId] });
+    },
+    onError: (error: any) => {
+      toast.error('Failed to terminate course', {
+        description: error.response?.data?.message || 'Unknown error',
+      });
+    },
+  });
+
+  // Only show for non-expired active courses
+  if (course.isExpired || course.isCompleted) return null;
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="ghost" size="icon" className="text-yellow-600 hover:bg-yellow-100 dark:hover:bg-yellow-900/30" title="Terminate Course">
+          <XCircle size={18} />
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Terminate Course</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to terminate <b>{LEVELS_LABELS[course.levelName]}</b> for this user?
+            <br /><br />
+            This will <b>end their active subscription</b> immediately and allow them to purchase a new course.
+            The user's progress will be preserved.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button
+            variant="destructive"
+            onClick={() => mutate()}
+            disabled={isPending}
+          >
+            {isPending ? 'Terminating...' : 'Terminate Course'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 const DeleteCourseButton = ({ course }: { course: Course }) => {
   const [open, setOpen] = useState(false);
@@ -89,7 +168,7 @@ const DeleteCourseButton = ({ course }: { course: Course }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10">
+        <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10" title="Delete Course">
           <Trash2 size={18} />
         </Button>
       </DialogTrigger>
