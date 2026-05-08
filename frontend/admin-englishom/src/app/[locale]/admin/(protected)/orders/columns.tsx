@@ -35,6 +35,13 @@ export const ordersColumns: ColumnDef<Order>[] = [
     accessorKey: 'amount',
     cell: ({ getValue }) => {
       const amount = getValue() as number;
+      if (amount === 0) {
+        return (
+          <Badge variant="outline" className="text-green-600 border-green-300 dark:text-green-400 dark:border-green-700">
+            Free / مجاني
+          </Badge>
+        );
+      }
       return `${amount.toFixed(2)} ر.س`;
     },
   },
