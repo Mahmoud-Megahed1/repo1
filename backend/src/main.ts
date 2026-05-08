@@ -6,7 +6,6 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import * as express from 'express';
-import * as path from 'path';
 import * as dotenv from 'dotenv';
 import { AllExceptionsFilter } from './common/filters/all-exception';
 import helmet from 'helmet';
@@ -75,20 +74,6 @@ async function bootstrap() {
 
     app.use(express.json({ limit: '20mb' }));
     app.use(express.urlencoded({ extended: true, limit: '20mb' }));
-
-    // Serve Landing Page static files at /Landingpage
-    const landingPath = path.join(__dirname, '..', 'public', 'Landingpage');
-    app.use('/Landingpage', express.static(landingPath));
-    app.use('/Landingpage/*', (req, res) => {
-      res.sendFile(path.join(landingPath, 'index.html'));
-    });
-
-    // Serve Placement Test static files at /test
-    const testPath = path.join(__dirname, '..', 'public', 'test');
-    app.use('/test', express.static(testPath));
-    app.use('/test/*', (req, res) => {
-      res.sendFile(path.join(testPath, 'index.html'));
-    });
 
     const port = process.env.PORT || 5000;
 
