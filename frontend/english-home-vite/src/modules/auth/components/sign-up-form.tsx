@@ -143,6 +143,7 @@ export function SignupForm({
                 variant="outline"
                 type="button"
                 onClick={googleAuth}
+                disabled={!isAcceptTerms}
                 className="w-full"
               >
                 <GoogleIcon />
@@ -152,6 +153,7 @@ export function SignupForm({
                 variant="outline"
                 type="button"
                 onClick={facebookAuth}
+                disabled={!isAcceptTerms}
                 className="mt-3 w-full"
               >
                 <FacebookIcon />
