@@ -11,7 +11,7 @@ import { toObjectId } from '../../common/utils/mongoose.utils';
 @Injectable()
 export class OrderRepo extends AbstractRepo<Order> implements OrderService {
   constructor(
-    @InjectModel(Order.name) private readonly orderModel: Model<Order>,
+    @InjectModel(Order.name) public readonly orderModel: Model<Order>,
   ) {
     super(orderModel);
   }

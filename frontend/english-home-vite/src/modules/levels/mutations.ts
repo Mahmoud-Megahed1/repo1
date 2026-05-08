@@ -1,5 +1,5 @@
-import { useMutation } from '@tanstack/react-query';
-import { payment } from './services';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { payment, terminateActiveCourse } from './services';
 import type { LevelId } from '@shared/types/entities';
 import useLocale from '@hooks/use-locale';
 
@@ -24,3 +24,16 @@ export function usePayment(levelId: LevelId, userData?: { city?: string; country
   });
 }
 
+export function useTerminateActiveCourse() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['terminate-active-course'],
+    mutationFn: () => terminateActiveCourse(),
+    onSuccess: () => {
+      // Invalidate auth/user data to refresh levels
+      queryClient.invalidateQueries({ queryKey: ['auth'] });
+      queryClient.invalidateQueries({ queryKey: ['active-course'] });
+    },
+  });
+}

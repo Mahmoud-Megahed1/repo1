@@ -27,8 +27,9 @@ import type { FC } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePayment } from '../mutations';
-import { useDiscountEligibility } from '../queries';
+import { useDiscountEligibility, useActiveCourse } from '../queries';
 import PurchaseAgreementModal from './purchase-agreement-modal';
+import ActiveCourseConflictModal from './active-course-conflict-modal';
 
 type ComponentVariant = Record<
   'coming-soon' | 'locked' | 'unlocked' | 'expired',
@@ -144,8 +145,10 @@ const useComponentVariant = ({
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const [showAgreement, setShowAgreement] = useState(false);
+  const [showConflict, setShowConflict] = useState(false);
   
   const { data: discountData } = useDiscountEligibility();
+  const { data: activeCourse } = useActiveCourse();
   const discountPercentage = discountData?.discountPercentage || 0;
   const discountedPrice = discountPercentage > 0 
     ? Math.round(price - (price * (discountPercentage / 100))) 
@@ -210,7 +213,14 @@ const useComponentVariant = ({
         <>
           <Button
             className="w-full"
-            onClick={() => setShowAgreement(true)}
+            onClick={() => {
+              // Check if user has an active course that's different from this one
+              if (activeCourse && activeCourse.levelName !== levelId) {
+                setShowConflict(true);
+              } else {
+                setShowAgreement(true);
+              }
+            }}
             disabled={isPending}
           >
             {isPending ? t('Global.processing') : (previousLevelCompleted && discountPercentage > 0) ? t('Global.unlock') + ` (-${discountPercentage}%)` : t('Global.unlock')}
@@ -225,6 +235,13 @@ const useComponentVariant = ({
             }}
             isPending={isPending}
           />
+          {activeCourse && (
+            <ActiveCourseConflictModal
+              open={showConflict}
+              onOpenChange={setShowConflict}
+              activeCourse={activeCourse}
+            />
+          )}
         </>
       ),
       content: (previousLevelCompleted && discountPercentage > 0) ? (

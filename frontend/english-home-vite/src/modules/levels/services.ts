@@ -56,3 +56,11 @@ export function getCompletedTasks(levelName: LevelId, day: number | string) {
 export function getDiscountEligibility() {
   return axiosClient.get<{ discountPercentage: number; reason: string }>('/payment/discount-eligibility');
 }
+
+export function getActiveCourse() {
+  return axiosClient.get<{ activeCourse: { levelName: string; accessExpiresAt: string; paymentDate: string; orderId: string } | null }>('/payment/active-course');
+}
+
+export function terminateActiveCourse() {
+  return axiosClient.post<{ message: string; terminatedCourse: string }>('/payment/terminate-active-course');
+}

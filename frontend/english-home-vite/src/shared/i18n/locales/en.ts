@@ -1205,6 +1205,16 @@ export default {
       clause7Content: 'This agreement is governed and interpreted in accordance with applicable laws and regulations. Any dispute arising from this agreement shall be referred to the competent judicial authorities.',
       closing: 'By completing the purchase, I pledge to maintain the confidentiality of the educational material and restrict its use to personal use within the platform.',
     },
+    activeCourseConflict: {
+      title: 'You have an active course',
+      description: 'You cannot purchase a new course while you have an active course. You can terminate the current course first.',
+      currentCourse: 'Current Course',
+      expiresAt: 'Expires at',
+      daysRemaining: 'days remaining',
+      terminateCourse: 'Terminate Current Course',
+      terminateConfirm: 'Are you sure? You will lose access to the current course after termination.',
+      terminated: 'Course terminated successfully',
+    },
   },
   UserGuide: {
     title: 'Comprehensive User Guide: Your Daily Path to Fluency',

@@ -15,6 +15,7 @@ import {
     getLevelById,
     getUserLevels,
     getDiscountEligibility,
+    getActiveCourse,
 } from './services';
 export function useUserLevels() {
     const { data, ...rest } = useQuery({
@@ -99,5 +100,13 @@ export function useDiscountEligibility() {
         queryKey: ['discountEligibility'],
         queryFn: getDiscountEligibility,
         select: (res) => res.data,
+    });
+}
+
+export function useActiveCourse() {
+    return useQuery({
+        queryKey: ['active-course'],
+        queryFn: getActiveCourse,
+        select: (res) => res.data.activeCourse,
     });
 }

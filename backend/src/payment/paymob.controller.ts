@@ -519,4 +519,55 @@ export class PaymobController {
       throw new BadRequestException(`Verification failed: ${error.message}`);
     }
   }
+
+  /**
+   * Get the user's currently active course (if any)
+   */
+  @Get('active-course')
+  @UseGuards(UserJwtGuard)
+  async getActiveCourse(@CurrentUser() user: User) {
+    const activeOrder = await this.paymobService.orderRepo.findAnyActiveCompletedOrder(
+      user._id.toString(),
+    );
+    if (!activeOrder) {
+      return { activeCourse: null };
+    }
+    return {
+      activeCourse: {
+        levelName: activeOrder.levelName,
+        accessExpiresAt: activeOrder.accessExpiresAt,
+        paymentDate: activeOrder.paymentDate,
+        orderId: activeOrder._id.toString(),
+      },
+    };
+  }
+
+  /**
+   * Terminate the user's currently active course so they can buy a new one
+   */
+  @Post('terminate-active-course')
+  @UseGuards(UserJwtGuard)
+  async terminateActiveCourse(@CurrentUser() user: User) {
+    const activeOrder = await this.paymobService.orderRepo.findAnyActiveCompletedOrder(
+      user._id.toString(),
+    );
+    if (!activeOrder) {
+      throw new BadRequestException('No active course to terminate');
+    }
+
+    // Mark the order as EXPIRED
+    await this.paymobService.orderRepo.orderModel.findByIdAndUpdate(
+      activeOrder._id,
+      { accessStatus: OrderAccessStatus.EXPIRED },
+    );
+
+    this.logger.log(
+      `User ${user._id} manually terminated active course ${activeOrder.levelName}`,
+    );
+
+    return {
+      message: `Course ${activeOrder.levelName} has been terminated successfully`,
+      terminatedCourse: activeOrder.levelName,
+    };
+  }
 }
