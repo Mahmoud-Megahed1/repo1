@@ -46,7 +46,6 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
   const handleAudioPlay = () => {
     if (!hasPlayedAudio) {
       setHasPlayedAudio(true);
-      handleComplete();
     }
   };
 
@@ -97,7 +96,7 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
 
       {isLast && (
         <div className="flex justify-end mt-4">
-          <NextLessonButton lessonName="IDIOMS" disabled={!hasPlayedAudio} />
+          <NextLessonButton lessonName="IDIOMS" disabled={!hasPlayedAudio} onClick={handleComplete} />
         </div>
       )}
     </div>

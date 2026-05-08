@@ -103,7 +103,6 @@ const Grammar: FC<Props> = ({
               localStorage.setItem(localStorageKey, JSON.stringify(value));
               if (value.length > 0 && !hasOpenedAccordion) {
                 setHasOpenedAccordion(true);
-                handleComplete();
               }
             }}
           >
@@ -170,7 +169,7 @@ const Grammar: FC<Props> = ({
           </Accordion>
         </CardContent>
       </Card>
-      <NextLessonButton lessonName="PHRASAL_VERBS" disabled={!hasOpenedAccordion} />
+      <NextLessonButton lessonName="PHRASAL_VERBS" disabled={!hasOpenedAccordion} onClick={handleComplete} />
     </div>
   );
 };

@@ -43,7 +43,6 @@ const Q_A: FC<Props> = ({ lesson, className, ...props }) => {
   const handleAudioPlay = () => {
     if (!hasPlayedAudio) {
       setHasPlayedAudio(true);
-      handleComplete();
     }
   };
 
@@ -77,12 +76,12 @@ const Q_A: FC<Props> = ({ lesson, className, ...props }) => {
           defaultIndex={questionIndex}
           onAudioPlay={handleAudioPlay}
           nextLessonButton={
-            <NextLessonButton lessonName="GRAMMAR" disabled={!hasPlayedAudio} />
+            <NextLessonButton lessonName="GRAMMAR" disabled={!hasPlayedAudio} onClick={handleComplete} />
           }
         />
       )}
       {showAll && (
-        <NextLessonButton lessonName="GRAMMAR" className="mt-8" disabled={!hasPlayedAudio} />
+        <NextLessonButton lessonName="GRAMMAR" className="mt-8" disabled={!hasPlayedAudio} onClick={handleComplete} />
       )}
     </div>
   );

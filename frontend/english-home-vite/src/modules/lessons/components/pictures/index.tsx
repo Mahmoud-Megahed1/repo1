@@ -40,7 +40,6 @@ const Pictures: FC<Props> = ({ lesson, ...props }) => {
   const handleAudioPlay = () => {
     if (!hasPlayedAudio) {
       setHasPlayedAudio(true);
-      handleComplete();
     }
   };
 

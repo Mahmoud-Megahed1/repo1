@@ -54,7 +54,6 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
   const handleAudioPlay = () => {
     if (!hasPlayedAudio) {
       setHasPlayedAudio(true);
-      handleComplete();
     }
   };
 
@@ -131,7 +130,7 @@ const Listening: FC<Props> = ({ lesson, ...props }) => {
                 ))}
             </ul>
             {isLast ? (
-              <NextLessonButton lessonName="WRITE" disabled={!hasPlayedAudio} />
+              <NextLessonButton lessonName="WRITE" disabled={!hasPlayedAudio} onClick={handleComplete} />
             ) : (
               <Button variant="outline" onClick={next} disabled={!hasNextItems}>
                 {t('Global.next')}

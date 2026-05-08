@@ -37,7 +37,6 @@ const Idioms: FC<Props> = ({ lesson }) => {
   const handleAudioPlay = () => {
     if (!hasPlayedAudio) {
       setHasPlayedAudio(true);
-      handleComplete();
     }
   };
   return (
@@ -55,7 +54,7 @@ const Idioms: FC<Props> = ({ lesson }) => {
           <ExamplesCard examples={lesson.examples} onAudioPlay={handleAudioPlay} />
         </div>
       </div>
-      <NextLessonButton lessonName="DAILY_TEST" disabled={!hasPlayedAudio} />
+      <NextLessonButton lessonName="DAILY_TEST" disabled={!hasPlayedAudio} onClick={handleComplete} />
     </div>
   );
 };
