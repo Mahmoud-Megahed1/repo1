@@ -24,9 +24,11 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import type { FC } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePayment } from '../mutations';
 import { useDiscountEligibility } from '../queries';
+import PurchaseAgreementModal from './purchase-agreement-modal';
 
 type ComponentVariant = Record<
   'coming-soon' | 'locked' | 'unlocked' | 'expired',
@@ -141,6 +143,7 @@ const useComponentVariant = ({
   const { mutate, isPending } = usePayment(levelId);
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const [showAgreement, setShowAgreement] = useState(false);
   
   const { data: discountData } = useDiscountEligibility();
   const discountPercentage = discountData?.discountPercentage || 0;
@@ -204,14 +207,25 @@ const useComponentVariant = ({
       iconBg: 'default',
       labelVariant: 'default',
       cta: (
-        <Button
-          className="w-full"
-          onClick={() => mutate()}
-          disabled={isPending}
-        >
-          {isPending ? t('Global.processing') : (previousLevelCompleted && discountPercentage > 0) ? t('Global.unlock') + ` (-${discountPercentage}%)` : t('Global.unlock')}
-          <KeyRound />
-        </Button>
+        <>
+          <Button
+            className="w-full"
+            onClick={() => setShowAgreement(true)}
+            disabled={isPending}
+          >
+            {isPending ? t('Global.processing') : (previousLevelCompleted && discountPercentage > 0) ? t('Global.unlock') + ` (-${discountPercentage}%)` : t('Global.unlock')}
+            <KeyRound />
+          </Button>
+          <PurchaseAgreementModal
+            open={showAgreement}
+            onOpenChange={setShowAgreement}
+            onAccept={() => {
+              setShowAgreement(false);
+              mutate();
+            }}
+            isPending={isPending}
+          />
+        </>
       ),
       content: (previousLevelCompleted && discountPercentage > 0) ? (
         <div className="space-y-2">

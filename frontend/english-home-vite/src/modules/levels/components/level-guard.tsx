@@ -5,11 +5,12 @@ import type { LevelId } from '@shared/types/entities';
 import { Button } from '@ui/button';
 import { KeyRound } from 'lucide-react';
 import * as React from 'react';
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 
 import { usePayment } from '../mutations';
+import PurchaseAgreementModal from './purchase-agreement-modal';
 
 const LevelGuard = ({
   levelId,
@@ -49,6 +50,7 @@ const LockedLevel: FC<LockedLevelProps> = ({
     levelId,
     userData
   );
+  const [showAgreement, setShowAgreement] = useState(false);
 
   return (
     <div
@@ -71,7 +73,7 @@ const LockedLevel: FC<LockedLevelProps> = ({
       <div className="mt-8 flex w-full max-w-sm flex-col gap-4">
         {/* Standard Pay Button */}
         <Button
-          onClick={() => payNow()}
+          onClick={() => setShowAgreement(true)}
           disabled={isPayPending}
           className="h-12 w-full text-lg font-semibold"
         >
@@ -79,6 +81,15 @@ const LockedLevel: FC<LockedLevelProps> = ({
           <KeyRound className="ml-2 h-5 w-5" />
         </Button>
       </div>
+      <PurchaseAgreementModal
+        open={showAgreement}
+        onOpenChange={setShowAgreement}
+        onAccept={() => {
+          setShowAgreement(false);
+          payNow();
+        }}
+        isPending={isPayPending}
+      />
     </div>
   );
 };
