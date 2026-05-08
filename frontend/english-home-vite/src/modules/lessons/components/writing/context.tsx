@@ -16,7 +16,9 @@ import {
 } from '@ui/card';
 
 import {
+  cloneElement,
   createContext,
+  isValidElement,
   use,
   useEffect,
   useState,
@@ -312,12 +314,9 @@ export const WritingControls = ({ nextLessonButton }: { nextLessonButton?: React
             ))}
         </ul>
         {isLastItem && nextLessonButton ? (
-          <div className="flex items-center gap-2">
-            {isTaskCompleted
-              ? nextLessonButton
-              : <Button variant="outline" disabled>{t('Global.next')}</Button>
-            }
-          </div>
+          isValidElement(nextLessonButton)
+            ? cloneElement(nextLessonButton as any, { disabled: !isTaskCompleted })
+            : nextLessonButton
         ) : (
           <Button variant="outline" onClick={goNext} disabled={!hasNext}>
             {t('Global.next')}
