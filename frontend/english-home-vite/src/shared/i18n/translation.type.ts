@@ -915,6 +915,7 @@ export type TranslationType = {
       proceedToPayment: string;
       fullAgreementTitle: string;
       understood: string;
+      intro: string;
       clause1Title: string;
       clause1Content: string;
       clause2Title: string;

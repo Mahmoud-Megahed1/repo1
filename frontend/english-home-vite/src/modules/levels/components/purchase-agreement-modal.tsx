@@ -139,6 +139,11 @@ const PurchaseAgreementModal: FC<Props> = ({
           </DialogHeader>
           <ScrollArea className="h-[60vh] pe-4">
             <div className="space-y-6 text-sm leading-relaxed">
+              {/* Introduction */}
+              <p className="text-muted-foreground font-medium">
+                {t('Global.purchaseAgreement.intro')}
+              </p>
+              <hr className="border-border" />
               {agreementClauses.map((clause, index) => (
                 <div key={index} className="space-y-2">
                   <h3 className="font-bold text-base">
