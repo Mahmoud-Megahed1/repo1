@@ -1,7 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export type TestimonialDocument = Testimonial & Document;
+
+export enum TestimonialStatus {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+}
 
 @Schema({ timestamps: true })
 export class Testimonial {
@@ -25,6 +31,12 @@ export class Testimonial {
 
   @Prop()
   avatar: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'User' })
+  userId: Types.ObjectId;
+
+  @Prop({ type: String, enum: TestimonialStatus, default: TestimonialStatus.PENDING })
+  status: TestimonialStatus;
 }
 
 export const TestimonialSchema = SchemaFactory.createForClass(Testimonial);
