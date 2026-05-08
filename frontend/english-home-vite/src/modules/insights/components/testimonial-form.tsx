@@ -10,7 +10,6 @@ import {
   DialogTrigger,
 } from '@ui/dialog';
 import { Button } from '@ui/button';
-import { Textarea } from '@ui/textarea';
 import { Star, MessageSquarePlus } from 'lucide-react';
 import { cn } from '@lib/utils';
 import { useSubmitTestimonial } from '../testimonial-mutations';
@@ -92,13 +91,13 @@ const TestimonialForm: FC = () => {
             <label className="text-sm font-medium">
               {t('Global.testimonial.contentLabel')}
             </label>
-            <Textarea
+            <textarea
               value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder={t('Global.testimonial.contentPlaceholder')}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)}
+              placeholder={t('Global.testimonial.contentPlaceholder') as string}
               rows={4}
               maxLength={500}
-              className="resize-none"
+              className="flex min-h-[80px] w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
             <p className="text-xs text-muted-foreground text-end">
               {content.length}/500
