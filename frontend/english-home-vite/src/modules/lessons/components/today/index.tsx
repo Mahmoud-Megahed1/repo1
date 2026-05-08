@@ -41,6 +41,7 @@ const Today: FC<Props> = ({
   });
 
   const [activeTab, setActiveTab] = useState<TabId>('instructions');
+  const [isPracticeCompleted, setIsPracticeCompleted] = useState(false);
 
   const tabs: { id: TabId; label: string; icon: typeof List }[] = [
     { id: 'instructions', label: t('Global.todayLesson.instructions'), icon: List },
@@ -74,10 +75,11 @@ const Today: FC<Props> = ({
               defaultResult={data?.data}
               isLoading={isFetching}
               sentenceText={sentences.join(' ')}
+              onCompleted={() => setIsPracticeCompleted(true)}
             />
           </div>
           <div>
-            <NextLessonButton lessonName="Q_A" />
+            <NextLessonButton lessonName="Q_A" disabled={!isPracticeCompleted} />
           </div>
         </div>
 

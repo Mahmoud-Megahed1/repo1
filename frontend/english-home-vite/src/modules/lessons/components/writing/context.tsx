@@ -1,5 +1,5 @@
 import useItemsPagination from '@hooks/use-items-pagination';
-import { cn, localizedNumber } from '@lib/utils';
+import { cn } from '@lib/utils';
 import type { WritingLesson } from '@modules/lessons/types';
 import { useMarkTaskAsCompleted } from '@modules/lessons/mutations';
 import { getCompletedTasks } from '@modules/levels/services';
@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@ui/card';
-import { Progress } from '@ui/progress';
+
 import {
   createContext,
   use,
@@ -25,7 +25,7 @@ import {
 } from 'react';
 import CompleteSentence from './complete-sentence';
 import { useTranslation } from 'react-i18next';
-import useLocale from '@hooks/use-locale';
+
 import { useLessonProgressStore } from '@hooks/use-lesson-progress-store';
 
 type SentenceState = {
@@ -289,9 +289,10 @@ export const WritingResult = () => {
 };
 
 export const WritingControls = ({ nextLessonButton }: { nextLessonButton?: ReactNode }) => {
-  const { goNext, goPrev, hasNext, hasPrev, currentIndex, total, isLastItem } =
+  const { goNext, goPrev, hasNext, hasPrev, currentIndex, total, isLastItem, state } =
     useWriting();
   const { t } = useTranslation();
+  const isTaskCompleted = state.isChecked && state.isCorrect;
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -311,7 +312,12 @@ export const WritingControls = ({ nextLessonButton }: { nextLessonButton?: React
             ))}
         </ul>
         {isLastItem && nextLessonButton ? (
-          nextLessonButton
+          <div className="flex items-center gap-2">
+            {isTaskCompleted
+              ? nextLessonButton
+              : <Button variant="outline" disabled>{t('Global.next')}</Button>
+            }
+          </div>
         ) : (
           <Button variant="outline" onClick={goNext} disabled={!hasNext}>
             {t('Global.next')}

@@ -19,6 +19,7 @@ type Props = {
     defaultResult?: { url: string; metadata?: any };
     isLoading?: boolean;
     sentenceText: string;
+    onCompleted?: () => void;
 };
 const PracticeSpeaking: FC<Props> = ({
     day,
@@ -26,6 +27,7 @@ const PracticeSpeaking: FC<Props> = ({
     isLoading = false,
     defaultResult,
     sentenceText,
+    onCompleted,
 }) => {
     const { t } = useTranslation();
     const [audioUrl, setAudioUrl] = useState<string | null | undefined>(
@@ -71,8 +73,9 @@ const PracticeSpeaking: FC<Props> = ({
                 score: 100,
                 feedback: 'Daily Speaking Completed',
             });
+            onCompleted?.();
         }
-    }, [resultData?.isPassed, day, levelId, markTaskCompleted]);
+    }, [resultData?.isPassed, day, levelId, markTaskCompleted, onCompleted]);
 
     const recorder = useMemo(
         () => (

@@ -246,7 +246,7 @@ const Speaking: FC<Props> = ({ lesson: { sentences } }) => {
 
         <div className="flex gap-2">
           {isLast ? (
-            <NextLessonButton lessonName="TODAY" className="px-8" />
+            <NextLessonButton lessonName="TODAY" className="px-8" disabled={!allPassed} />
           ) : (
             <Button variant="default" onClick={next} disabled={!hasNextItems} className="px-8">
               {t('Global.next')}
