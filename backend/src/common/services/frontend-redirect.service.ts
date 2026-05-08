@@ -43,8 +43,8 @@ export class FrontendRedirectService {
    * Get payment success redirect URL (for emails) - defaults to user portal
    */
   getPaymentSuccessUrl(levelName: string): string {
-    // Payments are always for users, so always use frontend URL from env
+    // Redirect to the main levels page so the student sees the full platform structure
     const frontendUrl = this.getDefaultFrontendUrl();
-    return `${frontendUrl}/courses/${levelName.toLowerCase()}`;
+    return `${frontendUrl}/courses`;
   }
 }
