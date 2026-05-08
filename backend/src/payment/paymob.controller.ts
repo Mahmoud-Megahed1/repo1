@@ -265,7 +265,12 @@ export class PaymobController {
         user._id.toString()
       );
       if (anyActiveOrder && anyActiveOrder.levelName !== paymentIntentionDto.level_name) {
-        throw new BadRequestException(`You already have an active course (${anyActiveOrder.levelName}). You cannot purchase a different course until it expires.`);
+        throw new BadRequestException({
+          errorCode: 'ACTIVE_COURSE_CONFLICT',
+          message: `لديك كورس نشط حالياً (${anyActiveOrder.levelName}). لا يمكنك شراء كورس جديد حتى ينتهي الحالي.`,
+          messageEn: `You already have an active course (${anyActiveOrder.levelName}). You cannot purchase a different course until it expires.`,
+          levelName: anyActiveOrder.levelName,
+        });
       }
 
       // === DISCOUNT CALCULATION ===

@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { payment, terminateActiveCourse } from './services';
 import type { LevelId } from '@shared/types/entities';
 import useLocale from '@hooks/use-locale';
+import { toast } from 'sonner';
+import { AxiosError } from 'axios';
 
 export function usePayment(levelId: LevelId, userData?: { city?: string; country?: string; phone?: string }) {
   const locale = useLocale();
@@ -20,6 +22,15 @@ export function usePayment(levelId: LevelId, userData?: { city?: string; country
       }),
     onSuccess: (data) => {
       window.location.href = data.data.clientURL;
+    },
+    onError: (error: AxiosError<{ message?: string; messageEn?: string }>) => {
+      const data = error.response?.data;
+      if (data) {
+        const msg = locale === 'ar' ? (data.message || data.messageEn) : (data.messageEn || data.message);
+        toast.error(msg || error.message);
+      } else {
+        toast.error(error.message);
+      }
     },
   });
 }
