@@ -3,6 +3,7 @@ import { useNavigate } from '@shared/i18n/routing';
 import type { LessonId } from '@shared/types/entities';
 import { useParams } from '@tanstack/react-router';
 import { Button } from '@ui/button';
+import { CheckCircle2 } from 'lucide-react';
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -10,7 +11,7 @@ type Props = {
   lessonName: LessonId;
 } & React.ComponentProps<typeof Button>;
 
-const NextLessonButton: FC<Props> = ({ lessonName, className, onClick, ...restProps }) => {
+const NextLessonButton: FC<Props> = ({ lessonName, className, onClick, disabled, ...restProps }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const params = useParams({
@@ -33,14 +34,23 @@ const NextLessonButton: FC<Props> = ({ lessonName, className, onClick, ...restPr
   };
 
   return (
-    <Button
-      variant={'outline-primary'}
-      {...restProps}
-      className={cn('self-end', className)}
-      onClick={handleClick}
-    >
-      {t('Global.next')} - {t(`Global.sidebarItems.${lessonName}`)}
-    </Button>
+    <div className="flex flex-col items-end gap-2">
+      {!disabled && (
+        <div className="flex items-center gap-2 rounded-lg bg-green-100 px-3 py-1.5 text-sm font-bold text-green-800 shadow-sm animate-in fade-in zoom-in duration-300 dark:bg-green-900/50 dark:text-green-200">
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
+          <span>{t('Global.lessonCompleted')}</span>
+        </div>
+      )}
+      <Button
+        variant={'outline-primary'}
+        {...restProps}
+        disabled={disabled}
+        className={cn('self-end', className)}
+        onClick={handleClick}
+      >
+        {t('Global.next')} - {t(`Global.sidebarItems.${lessonName}`)}
+      </Button>
+    </div>
   );
 };
 

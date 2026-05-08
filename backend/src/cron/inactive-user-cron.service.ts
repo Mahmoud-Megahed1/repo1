@@ -247,7 +247,7 @@ export class InactiveUserCronService {
       .replaceAll('{{userName}}', user.firstName || 'طالبنا العزيز')
       .replaceAll(
         '{{supportUrl}}',
-        'https://englishom.com/ar/app/levels', // Redirect to app levels page
+        'https://wa.me/qr/NLKCDGU2XBMEE1', // Redirect to WhatsApp support
       );
 
     await this.sendEmailWithRetry({
