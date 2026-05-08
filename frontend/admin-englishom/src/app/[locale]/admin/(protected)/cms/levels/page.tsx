@@ -74,6 +74,10 @@ const createFormSchema = z.object({
     .min(1, 'Price is required')
     .transform((val) => +val)
     .refine((val) => +val > 0, { message: 'Price must be greater than 0' }),
+  originalPrice: z
+    .string()
+    .optional()
+    .transform((val) => (val ? +val : undefined)),
   isAvailable: z.boolean().optional(),
 });
 
@@ -103,6 +107,7 @@ const CreateLevelDialog: FC<{ existingLevelNames: string[] }> = ({
       descriptionAr: '',
       descriptionEn: '',
       price: '' as unknown as number,
+      originalPrice: '' as unknown as number,
       isAvailable: true,
     },
   });
@@ -188,11 +193,19 @@ const CreateLevelDialog: FC<{ existingLevelNames: string[] }> = ({
             />
             <InputFormField
               control={form.control}
-              name="price"
-              label="Price"
-              placeholder="Price"
+              name="originalPrice"
+              label="Original Price (Before Discount)"
+              placeholder="e.g. 1200"
               type="number"
-              className="col-span-full"
+              required={false}
+              lang="en"
+            />
+            <InputFormField
+              control={form.control}
+              name="price"
+              label="Sale Price (Current)"
+              placeholder="e.g. 999"
+              type="number"
               required
               lang="en"
             />
@@ -216,6 +229,10 @@ const formSchema = z.object({
     .min(1, 'Price is required')
     .transform((val) => +val)
     .refine((val) => +val > 0, { message: 'Price must be greater than 0' }),
+  originalPrice: z
+    .string()
+    .optional()
+    .transform((val) => (val ? +val : undefined)),
   isAvailable: z.boolean().optional(),
 });
 
@@ -224,6 +241,7 @@ const LevelItem: FC<LevelType> = ({
   descriptionEn,
   level_name,
   price,
+  originalPrice,
   titleAr,
   titleEn,
   isAvailable,
@@ -249,6 +267,7 @@ const LevelItem: FC<LevelType> = ({
       descriptionAr,
       descriptionEn,
       price: `${price}` as unknown as number,
+      originalPrice: originalPrice ? `${originalPrice}` as unknown as number : '' as unknown as number,
       isAvailable,
     },
   });
@@ -270,11 +289,19 @@ const LevelItem: FC<LevelType> = ({
         </div>
       </CardHeader>
       <CardContent>
-        <span>Price: </span>
-        <span lang="en" className="inline-flex items-center gap-1">
-          <RiyalSymbol className="size-4" />
-          <b>{price}</b>
-        </span>
+        <div className="flex items-center gap-3">
+          <span>Price: </span>
+          {originalPrice && originalPrice > price && (
+            <span lang="en" className="inline-flex items-center gap-1 text-muted-foreground line-through">
+              <RiyalSymbol className="size-3" />
+              {originalPrice}
+            </span>
+          )}
+          <span lang="en" className="inline-flex items-center gap-1 text-green-600 dark:text-green-400">
+            <RiyalSymbol className="size-4" />
+            <b>{price}</b>
+          </span>
+        </div>
       </CardContent>
       <CardFooter className="mt-auto flex w-full items-center justify-between">
         <Dialog open={open} onOpenChange={setOpen}>
@@ -329,11 +356,19 @@ const LevelItem: FC<LevelType> = ({
                 />
                 <InputFormField
                   control={form.control}
-                  name="price"
-                  label="Price"
-                  placeholder="Price"
+                  name="originalPrice"
+                  label="Original Price (Before Discount)"
+                  placeholder="e.g. 1200"
                   type="number"
-                  className="col-span-full"
+                  required={false}
+                  lang="en"
+                />
+                <InputFormField
+                  control={form.control}
+                  name="price"
+                  label="Sale Price (Current)"
+                  placeholder="e.g. 999"
+                  type="number"
                   required
                   lang="en"
                 />
