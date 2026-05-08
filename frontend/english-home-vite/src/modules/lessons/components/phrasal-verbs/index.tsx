@@ -11,13 +11,16 @@ import { type LevelId } from '../../types';
 import DefinitionCard from './definition-card';
 import UseCasesCard from './use-cases-card';
 import ExamplesCard from './examples-card';
+import { BookOpen, MessageCircle, HelpCircle } from 'lucide-react';
 
 type Props = {
   lesson: PhrasalVerbLesson[];
 } & ComponentProps<'div'>;
 
+type TabId = 'definition' | 'examples' | 'useCases';
+
 const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
-  useTranslation();
+  const { t } = useTranslation();
   const locale = useLocale();
 
   const searchParams = new URLSearchParams(window.location.search);
@@ -54,6 +57,14 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
     defaultIndex
   );
 
+  const [activeTab, setActiveTab] = useState<TabId>('definition');
+
+  const tabs: { id: TabId; label: string; icon: typeof BookOpen }[] = [
+    { id: 'definition', label: t('Global.phrasalVerbs.definitionCard.title'), icon: BookOpen },
+    { id: 'examples', label: t('Global.phrasalVerbs.examplesCard.title'), icon: MessageCircle },
+    { id: 'useCases', label: t('Global.phrasalVerbs.useCasesCard.title'), icon: HelpCircle },
+  ];
+
   // Update search params when current index changes
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -77,24 +88,39 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
       )}
       {...props}
     >
-      {/* 2-column: Definition+UseCases */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
-        {/* Definition */}
-        <div>
+      {/* Tab buttons — same style as Today lesson */}
+      <div className="flex flex-row gap-1 rounded-xl bg-accent/50 p-1.5 shrink-0">
+        {tabs.map(({ id, label, icon: Icon }) => (
+          <button
+            key={id}
+            onClick={() => setActiveTab(id)}
+            className={cn(
+              'flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-200',
+              activeTab === id
+                ? 'bg-primary text-primary-foreground shadow-md'
+                : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+            )}
+          >
+            <Icon className="h-4 w-4 shrink-0" />
+            <span className="truncate">{label}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Tab content — full width */}
+      <div>
+        {activeTab === 'definition' && (
           <DefinitionCard
             definitionAr={currentItem.definitionAr}
             definitionEn={currentItem.definitionEn}
           />
-        </div>
-        {/* UseCases */}
-        <div>
+        )}
+        {activeTab === 'examples' && (
+          <ExamplesCard examples={currentItem.examples} onAudioPlay={handleAudioPlay} />
+        )}
+        {activeTab === 'useCases' && (
           <UseCasesCard useCases={useCases} />
-        </div>
-      </div>
-
-      {/* Examples — Full width below */}
-      <div>
-        <ExamplesCard examples={currentItem.examples} onAudioPlay={handleAudioPlay} />
+        )}
       </div>
 
       {isLast && (
