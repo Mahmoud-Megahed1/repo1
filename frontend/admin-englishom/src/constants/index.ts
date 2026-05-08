@@ -28,12 +28,12 @@ export const LESSONS_LINKS: Array<{
   id: LessonsId;
   icon: LucideIcon;
 }> = [
-    { id: 'READ', href: '#', label: 'Read', icon: Icons.BookOpenText },
+  { id: 'READ', href: '#', label: 'Reading', icon: Icons.BookOpenText },
     { id: 'PICTURES', href: '#', label: 'Pictures', icon: Icons.Image },
-    { id: 'LISTEN', href: '#', label: 'Listen', icon: Icons.Ear },
-    { id: 'WRITE', href: '#', label: 'Write', icon: Icons.PencilLine },
-    { id: 'SPEAK', href: '#', label: 'Speak', icon: Icons.Speech },
-    { id: 'TODAY', href: '#', label: 'Today', icon: Icons.Calendar },
+    { id: 'LISTEN', href: '#', label: 'Listening', icon: Icons.Ear },
+    { id: 'WRITE', href: '#', label: 'Writing', icon: Icons.PencilLine },
+    { id: 'SPEAK', href: '#', label: 'Speaking', icon: Icons.Speech },
+    { id: 'TODAY', href: '#', label: "Today's Scene", icon: Icons.Calendar },
     { id: 'Q_A', href: '#', label: 'Q&A', icon: Icons.MessageCircleQuestion },
     { id: 'GRAMMAR', href: '#', label: 'Grammar', icon: Icons.ListChecks },
     {

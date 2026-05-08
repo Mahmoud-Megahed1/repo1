@@ -781,7 +781,7 @@ export default {
     'or-continue': 'أو يمكنك التسجيل بواسطة',
   },
   Global: {
-    englishom: 'إنجلش هوم',
+    englishom: 'إنجلشوم',
     aiReview: {
       title: 'مراجعة الذكاء الاصطناعي',
     },
