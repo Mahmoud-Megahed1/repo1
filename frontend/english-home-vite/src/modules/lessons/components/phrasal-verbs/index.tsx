@@ -77,21 +77,24 @@ const PhrasalVerbs: FC<Props> = ({ lesson, className, ...props }) => {
       )}
       {...props}
     >
-      {/* 2-column: Definition+UseCases first (RTL=right), Examples second (RTL=left) */}
+      {/* 2-column: Definition+UseCases */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
-        {/* Definition + UseCases */}
-        <div className="space-y-4">
+        {/* Definition */}
+        <div>
           <DefinitionCard
             definitionAr={currentItem.definitionAr}
             definitionEn={currentItem.definitionEn}
           />
+        </div>
+        {/* UseCases */}
+        <div>
           <UseCasesCard useCases={useCases} />
         </div>
+      </div>
 
-        {/* Examples */}
-        <div>
-          <ExamplesCard examples={currentItem.examples} onAudioPlay={handleAudioPlay} />
-        </div>
+      {/* Examples — Full width below */}
+      <div>
+        <ExamplesCard examples={currentItem.examples} onAudioPlay={handleAudioPlay} />
       </div>
 
       {isLast && (

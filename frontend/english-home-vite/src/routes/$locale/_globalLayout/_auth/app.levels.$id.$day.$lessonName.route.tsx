@@ -157,7 +157,7 @@ function HeaderBar({ lessonName, completedTasks, t }: {
           <span>{t('Global.lessonCompleted' as any)}</span>
         </div>
       )}
-      {total > 0 && (
+      {total > 1 && (
         <div className="flex items-center gap-3 shrink-0">
           <span className="text-sm text-muted-foreground whitespace-nowrap">
             {localizedNumber(currentIndex + 1, locale)} {t('Global.of' as any)}{' '}

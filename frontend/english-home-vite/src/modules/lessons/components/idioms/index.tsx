@@ -41,18 +41,21 @@ const Idioms: FC<Props> = ({ lesson }) => {
   };
   return (
     <div className="mx-auto flex max-w-6xl flex-col space-y-4">
-      {/* 2-column: Definition+UseCases first (RTL=right), Examples second (RTL=left) */}
+      {/* 2-column: Definition+UseCases */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
-        <div className="space-y-4">
+        <div>
           <DefinitionCard
             definitionEn={lesson.definitionEn}
             definitionAr={lesson.definitionAr}
           />
-          <UseCasesCard useCases={useCases} />
         </div>
         <div>
-          <ExamplesCard examples={lesson.examples} onAudioPlay={handleAudioPlay} />
+          <UseCasesCard useCases={useCases} />
         </div>
+      </div>
+      {/* Examples — Full width below */}
+      <div>
+        <ExamplesCard examples={lesson.examples} onAudioPlay={handleAudioPlay} />
       </div>
       <NextLessonButton lessonName="DAILY_TEST" disabled={!hasPlayedAudio} onClick={handleComplete} />
     </div>
