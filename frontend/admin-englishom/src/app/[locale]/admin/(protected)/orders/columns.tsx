@@ -48,8 +48,23 @@ export const ordersColumns: ColumnDef<Order>[] = [
   {
     header: 'Status',
     accessorKey: 'paymentStatus',
-    cell: ({ getValue }) => {
-      const status = getValue() as string;
+    cell: ({ row }) => {
+      const status = row.original.paymentStatus;
+      const isFree = row.original.isFree;
+      const paymentId = row.original.paymentId;
+      const isManual = isFree || paymentId?.startsWith('ADMIN_ASSIGNED') || (status === 'COMPLETED' && row.original.amount === 0);
+      
+      if (isManual) {
+        return (
+          <Badge
+            variant="outline"
+            className="border-purple-300 text-purple-600 dark:border-purple-700 dark:text-purple-400"
+          >
+            Manual / يدوي
+          </Badge>
+        );
+      }
+      
       return (
         <Badge
           variant={status === 'COMPLETED' ? 'success' : 'info-yellow'}

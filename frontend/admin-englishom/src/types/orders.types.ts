@@ -4,9 +4,10 @@ export type Order = {
   _id: string;
   levelName: LessonsId;
   amount: number;
-  paymentStatus: 'COMPLETED';
+  paymentStatus: 'COMPLETED' | 'PENDING';
   paymentDate: string;
   paymentId: string;
+  isFree?: boolean;
   createdAt: string;
   updatedAt: string;
   __v: number;
