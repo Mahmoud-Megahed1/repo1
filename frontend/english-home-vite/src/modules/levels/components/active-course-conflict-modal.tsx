@@ -32,13 +32,13 @@ const ActiveCourseConflictModal: FC<Props> = ({
   const [confirmTerminate, setConfirmTerminate] = useState(false);
   const { mutate: terminate, isPending } = useTerminateActiveCourse();
 
-  const daysRemaining = Math.max(
-    0,
-    Math.ceil(
-      (new Date(activeCourse.accessExpiresAt).getTime() - Date.now()) /
-        (1000 * 60 * 60 * 24)
-    )
-  );
+  const expiresAtTime = activeCourse.accessExpiresAt ? new Date(activeCourse.accessExpiresAt).getTime() : NaN;
+  const daysRemaining = !isNaN(expiresAtTime)
+    ? Math.max(
+        0,
+        Math.ceil((expiresAtTime - Date.now()) / (1000 * 60 * 60 * 24))
+      )
+    : 0;
 
   const handleTerminate = () => {
     terminate(undefined, {
@@ -78,7 +78,9 @@ const ActiveCourseConflictModal: FC<Props> = ({
                 {t('Global.activeCourseConflict.expiresAt')}
               </span>
               <span className="text-sm">
-                {formatDate(activeCourse.accessExpiresAt)}
+                {activeCourse.accessExpiresAt && !isNaN(new Date(activeCourse.accessExpiresAt).getTime()) 
+                  ? formatDate(activeCourse.accessExpiresAt) 
+                  : '-'}
               </span>
             </div>
             <div className="flex items-center justify-between">

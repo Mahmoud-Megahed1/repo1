@@ -537,10 +537,13 @@ export class PaymobController {
     if (!activeOrder) {
       return { activeCourse: null };
     }
+    const paymentDate = activeOrder.paymentDate || (activeOrder as any).createdAt || new Date();
+    const accessExpiresAt = activeOrder.accessExpiresAt || new Date(new Date(paymentDate).getTime() + (60 + (activeOrder.carriedOverDays || 0)) * 24 * 60 * 60 * 1000);
+
     return {
       activeCourse: {
         levelName: activeOrder.levelName,
-        accessExpiresAt: activeOrder.accessExpiresAt,
+        accessExpiresAt: accessExpiresAt,
         paymentDate: activeOrder.paymentDate,
         orderId: activeOrder._id.toString(),
       },
