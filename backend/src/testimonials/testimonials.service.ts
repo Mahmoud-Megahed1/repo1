@@ -57,7 +57,8 @@ export class TestimonialsService {
 
   async create(createTestimonialDto: any): Promise<Testimonial> {
     const createdTestimonial = new this.testimonialModel(createTestimonialDto);
-    return createdTestimonial.save();
+    const saved = await createdTestimonial.save();
+    return saved.toObject() as any;
   }
 
   /**
@@ -90,7 +91,8 @@ export class TestimonialsService {
       isVisible: false,
     });
 
-    return testimonial.save();
+    const saved = await testimonial.save();
+    return saved.toObject() as any;
   }
 
   /**
@@ -106,6 +108,7 @@ export class TestimonialsService {
 
     const testimonial = await this.testimonialModel
       .findByIdAndUpdate(id, update, { new: true })
+      .lean()
       .exec();
 
     if (!testimonial) {
@@ -117,6 +120,7 @@ export class TestimonialsService {
   async update(id: string, updateTestimonialDto: any): Promise<Testimonial> {
     const updatedTestimonial = await this.testimonialModel
       .findByIdAndUpdate(id, updateTestimonialDto, { new: true })
+      .lean()
       .exec();
 
     if (!updatedTestimonial) {
