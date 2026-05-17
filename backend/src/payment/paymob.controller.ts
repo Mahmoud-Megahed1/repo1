@@ -12,6 +12,7 @@ import {
   Query,
   UseGuards,
   UnauthorizedException,
+  HttpException,
 } from '@nestjs/common';
 import { PaymobService } from './paymob.service';
 import { PaymentRequestDto } from './dto/orderData';
@@ -350,6 +351,9 @@ export class PaymobController {
 
       return { clientURL };
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       this.logger.error(
         `Payment processing failed: ${error.message}`,
         error.stack,
