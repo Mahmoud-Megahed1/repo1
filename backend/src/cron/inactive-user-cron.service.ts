@@ -227,7 +227,7 @@ export class InactiveUserCronService {
       .replaceAll('{{absentDays}}', absentDays.toString())
       .replaceAll(
         '{{loginUrl}}',
-        'https://englishom.com/ar/app/levels',
+        'https://englishom.com',
       );
 
     await this.sendEmailWithRetry({
