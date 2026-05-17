@@ -1,4 +1,5 @@
 'use client';
+import { useTranslations } from 'next-intl';
 
 import {
     Form,
@@ -23,6 +24,7 @@ interface Props {
 }
 
 const TestimonialForm: FC<Props> = ({ form, id, onSubmit }) => {
+    const t = useTranslations('Admin.testimonials');
     return (
         <Form {...form}>
             <form
@@ -35,9 +37,9 @@ const TestimonialForm: FC<Props> = ({ form, id, onSubmit }) => {
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Student Name</FormLabel>
+                            <FormLabel>{t('formName')}</FormLabel>
                             <FormControl>
-                                <Input placeholder="e.g. John Doe" {...field} />
+                                <Input placeholder={t('formNamePlaceholder')} {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -48,9 +50,9 @@ const TestimonialForm: FC<Props> = ({ form, id, onSubmit }) => {
                     name="role"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Role / Title</FormLabel>
+                            <FormLabel>{t('formRole')}</FormLabel>
                             <FormControl>
-                                <Input placeholder="e.g. Graduate" {...field} />
+                                <Input placeholder={t('formRolePlaceholder')} {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -62,7 +64,7 @@ const TestimonialForm: FC<Props> = ({ form, id, onSubmit }) => {
                     name="rating"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Rating (1-5)</FormLabel>
+                            <FormLabel>{t('formRating')}</FormLabel>
                             <FormControl>
                                 <Input type="number" min={1} max={5} {...field} />
                             </FormControl>
@@ -76,11 +78,11 @@ const TestimonialForm: FC<Props> = ({ form, id, onSubmit }) => {
                     name="order"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Display Order</FormLabel>
+                            <FormLabel>{t('formOrder')}</FormLabel>
                             <FormControl>
                                 <Input type="number" {...field} />
                             </FormControl>
-                            <FormDescription>Lower numbers appear first.</FormDescription>
+                            <FormDescription>{t('formOrderDescription')}</FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
@@ -92,10 +94,10 @@ const TestimonialForm: FC<Props> = ({ form, id, onSubmit }) => {
                         name="content"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Testimonial Content</FormLabel>
+                                <FormLabel>{t('formContent')}</FormLabel>
                                 <FormControl>
                                     <Textarea
-                                        placeholder="Student's feedback..."
+                                        placeholder={t('formContentPlaceholder')}
                                         className="min-h-[100px]"
                                         {...field}
                                     />
@@ -112,9 +114,9 @@ const TestimonialForm: FC<Props> = ({ form, id, onSubmit }) => {
                     render={({ field }) => (
                         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                             <div className="space-y-0.5">
-                                <FormLabel className="text-base">Visibility</FormLabel>
+                                <FormLabel className="text-base">{t('formVisibility')}</FormLabel>
                                 <FormDescription>
-                                    Show this testimonial on the public website.
+                                    {t('formVisibilityDescription')}
                                 </FormDescription>
                             </div>
                             <FormControl>

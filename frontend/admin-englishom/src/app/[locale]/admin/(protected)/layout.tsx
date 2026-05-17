@@ -1,4 +1,5 @@
 'use client';
+import { useTranslations } from 'next-intl';
 import {
   useHeaderTitle,
   withHeaderTitleProvider,
@@ -48,11 +49,12 @@ const useAdminLayoutSetup = () => {
     'lesson',
     parseAsStringEnum<LessonIdEnum>(Object.values(LessonIdEnum)),
   );
+  const t = useTranslations('Global.sidebar');
   const ITEMS = useMemo(
     () => [
       {
         href: '/admin/cms?lesson=READ',
-        label: 'CMS',
+        label: t('cms'),
         isActive: pathname === '/admin/cms/',
         type: 'group' as const,
         isHidden: false,
@@ -65,7 +67,7 @@ const useAdminLayoutSetup = () => {
           }))
           .concat([
             {
-              label: 'Levels',
+              label: t('levels'),
               href: '/admin/cms/levels',
               icon: PenBox,
               isActive: pathname.startsWith('/admin/cms/levels'),
@@ -75,7 +77,7 @@ const useAdminLayoutSetup = () => {
           ]),
       },
     ],
-    [pathname, lessonsItems, lesson],
+    [pathname, lessonsItems, lesson, t],
   );
   const SIDEBAR_ITEMS: SidebarProps['items'] & {
     isHidden?: boolean;
@@ -83,58 +85,58 @@ const useAdminLayoutSetup = () => {
     () => [
       {
         href: '/admin/cms/chat-rules',
-        label: 'Chat Rules',
+        label: t('chatRules'),
         icon: Bot,
         isHidden: false,
       },
       {
         href: '/admin/testimonials',
-        label: 'Testimonials',
+        label: t('testimonials'),
         icon: MessageSquare,
         isHidden: false,
       },
       {
         href: '/admin/overview',
-        label: 'Overview',
+        label: t('overview'),
         isActive: true,
         isHidden: adminRole === 'view' || adminRole === 'operator',
       },
       {
         href: '/admin/ai-settings',
-        label: 'AI Settings',
+        label: t('aiSettings'),
         icon: Bot,
         isHidden: false,
       },
       {
         href: '/admin/settings',
-        label: 'Settings',
+        label: t('settings'),
         icon: Settings,
         isHidden: adminRole !== 'super' && adminRole !== 'manager',
       },
       {
         href: '/admin/users',
-        label: 'Users',
+        label: t('users'),
         isHidden: adminRole === 'view' || adminRole === 'operator',
       },
       {
         href: '/admin/orders',
-        label: 'Orders',
+        label: t('orders'),
         isHidden: adminRole !== 'super' && adminRole !== 'manager',
       },
       {
         href: '/admin/admins',
-        label: 'Admins',
+        label: t('admins'),
         isHidden: adminRole !== 'super',
       },
       {
         href: '/admin/cms/themes',
-        label: 'Themes',
+        label: t('themes'),
         icon: Palette,
         isHidden: false,
       },
       ...ITEMS,
     ],
-    [ITEMS, adminRole],
+    [ITEMS, adminRole, t],
   );
   const { title, setTitle } = useHeaderTitle();
   const { items, setItems } = useSidebarItems();

@@ -1,4 +1,5 @@
 'use client';
+import { useTranslations } from 'next-intl';
 import GoBack from '@/components/shared/go-back';
 import Spinner from '@/components/shared/spinner';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,7 @@ import TestimonialForm from '@/app/[locale]/admin/(protected)/testimonials/form'
 import { TestimonialFormValues, testimonialSchema } from '@/app/[locale]/admin/(protected)/testimonials/form/schema';
 
 const UpdateTestimonial = () => {
+    const t = useTranslations('Admin.testimonials');
     const router = useRouter();
     const params = useParams();
     const testimonialId = params.id as string;
@@ -80,10 +82,10 @@ const UpdateTestimonial = () => {
                 queryKey: ['testimonial', testimonialId],
             });
             router.push('/admin/testimonials');
-            toast.success('Testimonial updated successfully');
+            toast.success(t('updatedSuccess'));
         },
         onError: () => {
-            toast.error('Failed to update testimonial');
+            toast.error(t('updatedError'));
         }
     });
 
@@ -100,15 +102,15 @@ const UpdateTestimonial = () => {
             <header className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <GoBack />
-                    <h1 className="capitalize heading">Update Testimonial</h1>
+                    <h1 className="capitalize heading">{t('update')}</h1>
                 </div>
                 <Button form={id} disabled={isPending}>
                     {isPending ? (
                         <span className="flex items-center justify-center gap-2">
-                            <Spinner /> Updating...
+                            <Spinner /> {t('updating')}
                         </span>
                     ) : (
-                        'Update Testimonial'
+                        t('update')
                     )}
                 </Button>
             </header>

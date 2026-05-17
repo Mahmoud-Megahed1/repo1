@@ -250,6 +250,16 @@ type Global = {
     levels: string;
     admin: string;
     lessons: Record<LessonsId, string>;
+    chatRules: string;
+    testimonials: string;
+    overview: string;
+    aiSettings: string;
+    settings: string;
+    users: string;
+    orders: string;
+    admins: string;
+    themes: string;
+    cms: string;
   };
   formErrors: {
     required: string;
@@ -262,6 +272,39 @@ type Global = {
 };
 
 type Admin = {
+  testimonials: {
+    title: string;
+    add: string;
+    searchPlaceholder: string;
+    student: string;
+    visible: string;
+    hidden: string;
+    pendingReview: string;
+    approve: string;
+    reject: string;
+    edit: string;
+    show: string;
+    hide: string;
+    delete: string;
+    addedSuccess: string;
+    addedError: string;
+    adding: string;
+    update: string;
+    updating: string;
+    updatedSuccess: string;
+    updatedError: string;
+    formName: string;
+    formNamePlaceholder: string;
+    formRole: string;
+    formRolePlaceholder: string;
+    formRating: string;
+    formOrder: string;
+    formOrderDescription: string;
+    formContent: string;
+    formContentPlaceholder: string;
+    formVisibility: string;
+    formVisibilityDescription: string;
+  };
   themes: {
     title: string;
     add: string;

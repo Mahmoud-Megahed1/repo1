@@ -1,4 +1,5 @@
 'use client';
+import { useTranslations } from 'next-intl';
 import CustomPagination from '@/components/shared/custom-pagination';
 import { Link } from '@/components/shared/smooth-navigation';
 import { Button } from '@/components/ui/button';
@@ -11,6 +12,7 @@ import { useTestimonials, withTestimonialsProvider } from '../_components/testim
 import TestimonialsList from './testimonials-list';
 
 const Testimonials = () => {
+    const t = useTranslations('Admin.testimonials');
     const {
         queryResult: { data, isFetching, isLoading, refetch },
         dispatch,
@@ -33,7 +35,7 @@ const Testimonials = () => {
         <div className="flex flex-col gap-6 pb-6">
             <header className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                    <h1 className="heading">Testimonials ({data?.data.totalDocs || 0})</h1>
+                    <h1 className="heading">{t('title')} ({data?.data.totalDocs || 0})</h1>
                     <button
                         className={cn({
                             'animate-spin opacity-60': isFetching,
@@ -48,7 +50,7 @@ const Testimonials = () => {
                     <Button className="shrink-0 gap-1 [&_svg]:size-5" asChild>
                         <Link href={'/admin/testimonials/add'}>
                             <CirclePlusIcon />
-                            <span className="sr-only md:not-sr-only">Add Testimonial</span>
+                            <span className="sr-only md:not-sr-only">{t('add')}</span>
                         </Link>
                     </Button>
                     <SearchInput />
@@ -89,6 +91,7 @@ const SearchInput: FC<React.ComponentProps<typeof Input>> = ({
     className,
     ...props
 }) => {
+    const t = useTranslations('Admin.testimonials');
     const { params, dispatch } = useTestimonials();
     const handleSearch = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,7 +105,7 @@ const SearchInput: FC<React.ComponentProps<typeof Input>> = ({
     return (
         <Input
             type="search"
-            placeholder="Search by name or content"
+            placeholder={t('searchPlaceholder')}
             className={cn('md:w-[400px]', className)}
             onChange={handleSearch}
             defaultValue={params.query}

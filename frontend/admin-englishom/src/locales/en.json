@@ -327,7 +327,17 @@
         "DAILY_TEST": "Daily Test",
         "PHRASAL_VERBS": "Phrasal Verbs",
         "IDIOMS": "Idioms"
-      }
+      },
+      "chatRules": "Chat Rules",
+      "testimonials": "Testimonials",
+      "overview": "Overview",
+      "aiSettings": "AI Settings",
+      "settings": "Settings",
+      "users": "Users",
+      "orders": "Orders",
+      "admins": "Admins",
+      "themes": "Themes",
+      "cms": "CMS"
     },
     "formErrors": {
       "required": "Required",
@@ -354,6 +364,39 @@
     "somethingWentWrong": "Something went wrong"
   },
   "Admin": {
+    "testimonials": {
+      "title": "Testimonials",
+      "add": "Add Testimonial",
+      "searchPlaceholder": "Search by name or content",
+      "student": "Student",
+      "visible": "Visible",
+      "hidden": "Hidden",
+      "pendingReview": "Pending Review",
+      "approve": "Approve",
+      "reject": "Reject",
+      "edit": "Edit",
+      "show": "Show",
+      "hide": "Hide",
+      "delete": "Delete",
+      "addedSuccess": "Testimonial added successfully",
+      "addedError": "Failed to add testimonial",
+      "adding": "Adding...",
+      "update": "Update Testimonial",
+      "updating": "Updating...",
+      "updatedSuccess": "Testimonial updated successfully",
+      "updatedError": "Failed to update testimonial",
+      "formName": "Student Name",
+      "formNamePlaceholder": "e.g. John Doe",
+      "formRole": "Role / Title",
+      "formRolePlaceholder": "e.g. Graduate",
+      "formRating": "Rating (1-5)",
+      "formOrder": "Display Order",
+      "formOrderDescription": "Lower numbers appear first.",
+      "formContent": "Testimonial Content",
+      "formContentPlaceholder": "Student's feedback...",
+      "formVisibility": "Visibility",
+      "formVisibilityDescription": "Show this testimonial on the public website."
+    },
     "themes": {
       "title": "Themes",
       "add": "Add Theme",

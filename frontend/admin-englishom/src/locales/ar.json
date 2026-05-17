@@ -327,7 +327,17 @@
         "DAILY_TEST": "الاختبار اليومي",
         "PHRASAL_VERBS": "الأفعال المركبة",
         "IDIOMS": "التعبيرات الاصطلاحية"
-      }
+      },
+      "chatRules": "قواعد الدردشة",
+      "testimonials": "التقييمات",
+      "overview": "نظرة عامة",
+      "aiSettings": "إعدادات الذكاء الاصطناعي",
+      "settings": "الإعدادات",
+      "users": "المستخدمين",
+      "orders": "الطلبات",
+      "admins": "المسؤولين",
+      "themes": "السمات",
+      "cms": "إدارة المحتوى"
     },
     "formErrors": {
       "required": "مطلوب",
@@ -353,6 +363,39 @@
     "somethingWentWrong": "حدث خطأ ما"
   },
   "Admin": {
+    "testimonials": {
+      "title": "التقييمات",
+      "add": "إضافة تقييم",
+      "searchPlaceholder": "البحث بالاسم أو المحتوى",
+      "student": "طالب",
+      "visible": "مرئي",
+      "hidden": "مخفي",
+      "pendingReview": "قيد المراجعة",
+      "approve": "قبول",
+      "reject": "رفض",
+      "edit": "تعديل",
+      "show": "إظهار",
+      "hide": "إخفاء",
+      "delete": "حذف",
+      "addedSuccess": "تمت إضافة التقييم بنجاح",
+      "addedError": "فشل في إضافة التقييم",
+      "adding": "جاري الإضافة...",
+      "update": "تحديث التقييم",
+      "updating": "جاري التحديث...",
+      "updatedSuccess": "تم تحديث التقييم بنجاح",
+      "updatedError": "فشل في تحديث التقييم",
+      "formName": "اسم الطالب",
+      "formNamePlaceholder": "مثل: أحمد محمد",
+      "formRole": "الوظيفة / اللقب",
+      "formRolePlaceholder": "مثل: خريج",
+      "formRating": "التقييم (1-5)",
+      "formOrder": "ترتيب العرض",
+      "formOrderDescription": "الأرقام الأقل تظهر أولاً.",
+      "formContent": "محتوى التقييم",
+      "formContentPlaceholder": "رأي الطالب...",
+      "formVisibility": "الرؤية",
+      "formVisibilityDescription": "إظهار هذا التقييم في الموقع العام."
+    },
     "themes": {
       "title": "السمات",
       "add": "إضافة سمة",

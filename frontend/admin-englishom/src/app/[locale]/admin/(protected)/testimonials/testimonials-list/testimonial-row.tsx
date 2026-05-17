@@ -1,4 +1,5 @@
 'use client';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -28,6 +29,7 @@ interface Props {
 }
 
 const TestimonialRow: FC<Props> = ({ testimonial }) => {
+    const t = useTranslations('Admin.testimonials');
     const queryClient = useQueryClient();
 
     const { mutate: deleteMutate, isPending: isDeleting } = useMutation({
@@ -82,7 +84,7 @@ const TestimonialRow: FC<Props> = ({ testimonial }) => {
                     {testimonial.name}
                     {testimonial.userId && (
                         <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
-                            Student
+                            {t('student')}
                         </span>
                     )}
                 </span>
@@ -97,11 +99,11 @@ const TestimonialRow: FC<Props> = ({ testimonial }) => {
                             'text-destructive': !testimonial.isVisible,
                         })}
                     >
-                        {testimonial.isVisible ? 'Visible' : 'Hidden'}
+                        {testimonial.isVisible ? t('visible') : t('hidden')}
                     </span>
                     {testimonial.status === 'pending' && (
                         <span className="w-fit rounded-full bg-orange-100 px-2 py-0.5 text-[10px] font-semibold text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">
-                            Pending Review
+                            {t('pendingReview')}
                         </span>
                     )}
                 </div>
@@ -121,21 +123,21 @@ const TestimonialRow: FC<Props> = ({ testimonial }) => {
                                         disabled={isUpdatingStatus}
                                         className="gap-2 cursor-pointer text-teal-600 focus:text-teal-600"
                                     >
-                                        <Eye className="size-4" /> Approve
+                                        <Eye className="size-4" /> {t('approve')}
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                         onClick={() => updateStatus('rejected')}
                                         disabled={isUpdatingStatus}
                                         className="gap-2 cursor-pointer text-orange-600 focus:text-orange-600"
                                     >
-                                        <EyeOff className="size-4" /> Reject
+                                        <EyeOff className="size-4" /> {t('reject')}
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
                                 </>
                             )}
                             <DropdownMenuItem asChild>
                                 <Link href={`/admin/testimonials/update/${testimonial._id}`} className="flex items-center gap-2 cursor-pointer">
-                                    <Pencil className="size-4" /> Edit
+                                    <Pencil className="size-4" /> {t('edit')}
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -144,7 +146,7 @@ const TestimonialRow: FC<Props> = ({ testimonial }) => {
                                 className="gap-2 cursor-pointer"
                             >
                                 {testimonial.isVisible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                                {testimonial.isVisible ? 'Hide' : 'Show'}
+                                {testimonial.isVisible ? t('hide') : t('show')}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
@@ -153,7 +155,7 @@ const TestimonialRow: FC<Props> = ({ testimonial }) => {
                                 className="gap-2 text-destructive focus:text-destructive cursor-pointer"
                             >
                                 <Trash2 className="size-4" />
-                                Delete
+                                {t('delete')}
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

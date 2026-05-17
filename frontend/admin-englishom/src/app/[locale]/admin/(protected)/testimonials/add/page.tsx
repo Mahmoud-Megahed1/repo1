@@ -1,4 +1,5 @@
 'use client';
+import { useTranslations } from 'next-intl';
 import GoBack from '@/components/shared/go-back';
 import Spinner from '@/components/shared/spinner';
 import { Button } from '@/components/ui/button';
@@ -13,6 +14,7 @@ import TestimonialForm from '../form';
 import { TestimonialFormValues, testimonialSchema } from '../form/schema';
 
 const AddTestimonial = () => {
+    const t = useTranslations('Admin.testimonials');
     const router = useRouter();
     const id = useId();
     const form = useForm<TestimonialFormValues>({
@@ -34,10 +36,10 @@ const AddTestimonial = () => {
                 queryKey: ['testimonials'],
             });
             router.push('/admin/testimonials');
-            toast.success('Testimonial added successfully');
+            toast.success(t('addedSuccess'));
         },
         onError: () => {
-            toast.error('Failed to add testimonial');
+            toast.error(t('addedError'));
         }
     });
 
@@ -50,15 +52,15 @@ const AddTestimonial = () => {
             <header className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <GoBack />
-                    <h1 className="capitalize heading">Add Testimonial</h1>
+                    <h1 className="capitalize heading">{t('add')}</h1>
                 </div>
                 <Button form={id} disabled={isPending}>
                     {isPending ? (
                         <span className="flex items-center justify-center gap-2">
-                            <Spinner /> Adding...
+                            <Spinner /> {t('adding')}
                         </span>
                     ) : (
-                        'Add Testimonial'
+                        t('add')
                     )}
                 </Button>
             </header>
