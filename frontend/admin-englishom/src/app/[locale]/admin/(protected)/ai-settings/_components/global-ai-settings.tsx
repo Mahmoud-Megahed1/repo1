@@ -19,8 +19,10 @@ import { FileText, Loader2, MessageSquare, Edit, Save, X } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
-export default function GlobalAISettings({ t }: { t: any }) {
+export default function GlobalAISettings() {
+    const t = useTranslations('Admin.aiSettings');
     const [currentTheme, setCurrentTheme] = useState<Theme | null>(null);
     const [uploading, setUploading] = useState(false);
     const [isEditingKnowledge, setIsEditingKnowledge] = useState(false);

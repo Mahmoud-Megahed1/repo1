@@ -3,10 +3,12 @@
 import { Button } from '@/components/ui/button';
 import { BookOpen, Settings } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import GlobalAISettings from './global-ai-settings';
 import LessonAIInstructions from './lesson-ai-instructions';
 
-export default function SettingsTabs({ t }: { t: any }) {
+export default function SettingsTabs() {
+    const t = useTranslations('Admin.aiSettings');
     const [activeTab, setActiveTab] = useState<'global' | 'lessons'>('global');
 
     return (
@@ -35,7 +37,7 @@ export default function SettingsTabs({ t }: { t: any }) {
             </div>
 
             <div className="animate-in fade-in zoom-in-95 duration-200">
-                {activeTab === 'global' ? <GlobalAISettings t={t} /> : <LessonAIInstructions t={t} />}
+                {activeTab === 'global' ? <GlobalAISettings /> : <LessonAIInstructions />}
             </div>
         </div>
     );

@@ -28,8 +28,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useTranslations } from 'next-intl';
 
-export default function LessonAIInstructions({ t }: { t: any }) {
+export default function LessonAIInstructions() {
+  const t = useTranslations('Admin.aiSettings');
   const [selectedLevel, setSelectedLevel] = useState<LevelId>(LEVELS_ID[0]);
   const [selectedDay, setSelectedDay] = useState<string>('1');
   const [selectedLessonType, setSelectedLessonType] = useState<LessonsId>(

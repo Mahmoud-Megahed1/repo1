@@ -24,7 +24,7 @@ export default function AISettingsPage() {
                     {t('manageBehavior')}
                 </p>
             </div>
-            <SettingsTabs t={t} />
+            <SettingsTabs />
         </div>
     );
 }
