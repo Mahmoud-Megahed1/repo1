@@ -83,29 +83,30 @@ const PurchaseAgreementModal: FC<Props> = ({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-2">
-            {/* Link to read full agreement */}
-            <Button
-              variant="link"
-              className="h-auto p-0 text-primary underline"
-              onClick={() => setShowFullAgreement(true)}
-            >
-              {t('Global.purchaseAgreement.readFullAgreement')}
-            </Button>
-
-            {/* Checkbox */}
+          <div className="space-y-4 py-4">
+            {/* Checkbox with embedded link */}
             <div className="flex items-start gap-3 rounded-lg border bg-muted/30 p-4">
               <Checkbox
                 id="purchase-agreement"
                 checked={isAccepted}
                 onCheckedChange={(checked) => setIsAccepted(!!checked)}
-                className="mt-0.5"
+                className="mt-1"
               />
               <label
                 htmlFor="purchase-agreement"
-                className="text-sm leading-relaxed cursor-pointer"
+                className="text-sm leading-relaxed"
               >
-                {t('Global.purchaseAgreement.checkboxLabel')}
+                {t('Global.purchaseAgreement.checkboxLabel')}{' '}
+                <button
+                  type="button"
+                  className="text-primary hover:underline font-medium p-0 h-auto"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowFullAgreement(true);
+                  }}
+                >
+                  {t('Global.purchaseAgreement.checkboxLink')}
+                </button>
               </label>
             </div>
           </div>

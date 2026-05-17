@@ -1183,9 +1183,10 @@ export default {
     cancel: 'Cancel',
     purchaseAgreement: {
       title: 'Confirm Course Purchase',
-      description: 'Please agree to the terms before proceeding',
+      description: 'Please agree to the terms to continue:',
       readFullAgreement: '📄 Read the full agreement',
-      checkboxLabel: 'I confirm that I have read and agreed to the terms of the agreement',
+      checkboxLabel: 'I confirm that I have read and agreed to the',
+      checkboxLink: 'Purchase and Enrollment Agreement for Training Course on Englishom.com',
       proceedToPayment: 'Confirm & Purchase',
       fullAgreementTitle: 'Purchase and Enrollment Agreement for Training Course on Englishom.com',
       understood: 'Understood',

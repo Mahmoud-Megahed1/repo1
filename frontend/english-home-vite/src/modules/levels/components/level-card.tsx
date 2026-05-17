@@ -175,7 +175,7 @@ const useComponentVariant = ({
               {t('Global.price')}
             </span>
             {originalPrice && originalPrice > price && (
-              <span className="inline-flex items-center gap-1 text-muted-foreground line-through text-sm">
+              <span className="inline-flex items-center gap-1 text-muted-foreground line-through decoration-red-500 decoration-2 text-sm">
                 <RiyalSymbol className="size-3" />
                 {originalPrice}
               </span>
@@ -279,7 +279,7 @@ const useComponentVariant = ({
               {t('Global.price')}
             </span>
             {originalPrice && originalPrice > price && (
-              <span className="inline-flex items-center gap-1 text-muted-foreground line-through text-sm">
+              <span className="inline-flex items-center gap-1 text-muted-foreground line-through decoration-red-500 decoration-2 text-sm">
                 <RiyalSymbol className="size-3" />
                 {originalPrice}
               </span>

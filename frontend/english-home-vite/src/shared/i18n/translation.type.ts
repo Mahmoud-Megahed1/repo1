@@ -912,6 +912,7 @@ export type TranslationType = {
       description: string;
       readFullAgreement: string;
       checkboxLabel: string;
+      checkboxLink: string;
       proceedToPayment: string;
       fullAgreementTitle: string;
       understood: string;

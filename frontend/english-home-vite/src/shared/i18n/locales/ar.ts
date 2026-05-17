@@ -1158,9 +1158,10 @@ export default {
     cancel: 'إلغاء',
     purchaseAgreement: {
       title: 'تأكيد شراء الدورة',
-      description: 'يرجى الموافقة على الشروط السابقة',
+      description: 'يرجى الموافقة على الشروط للمتابعة:',
       readFullAgreement: '📄 اقرأ نص الاتفاقية كاملاً',
-      checkboxLabel: 'أنا أقر بأنني قرأت ووافقت على بنود الاتفاقية',
+      checkboxLabel: 'أقر بأنني قرأت ووافقت على',
+      checkboxLink: 'عقد اتفاقية شراء والتحاق بدورة تدريبية في منصة Englishom.com',
       proceedToPayment: 'تأكيد وشراء',
       fullAgreementTitle: 'عقد اتفاقية شراء والتحاق بدورة تدريبية في منصة Englishom.com',
       understood: 'فهمت',
