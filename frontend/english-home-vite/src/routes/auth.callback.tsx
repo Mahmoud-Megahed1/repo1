@@ -12,7 +12,13 @@ function RouteComponent() {
   useEffect(() => {
     if (token) {
       localStorage.setItem('token', token);
-      navigate({ to: '/app', replace: true });
+      const redirectUrl = localStorage.getItem('redirectUrl');
+      if (redirectUrl) {
+        localStorage.removeItem('redirectUrl');
+        window.location.href = redirectUrl;
+      } else {
+        navigate({ to: '/app', replace: true });
+      }
     } else {
       navigate({ to: '/login', replace: true });
     }

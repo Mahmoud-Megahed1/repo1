@@ -16,7 +16,13 @@ function Signup() {
   const { status } = useLoggedUser();
   useEffect(() => {
     if (status === 'success') {
-      navigate({ to: '/app' });
+      const redirectUrl = localStorage.getItem('redirectUrl');
+      if (redirectUrl) {
+        localStorage.removeItem('redirectUrl');
+        window.location.href = redirectUrl;
+      } else {
+        navigate({ to: '/app' });
+      }
       return;
     }
   }, [status, navigate]);

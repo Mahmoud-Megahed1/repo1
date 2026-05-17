@@ -227,7 +227,7 @@ export class InactiveUserCronService {
       .replaceAll('{{absentDays}}', absentDays.toString())
       .replaceAll(
         '{{loginUrl}}',
-        'https://englishom.com',
+        'https://englishom.com/ar/app/levels',
       );
 
     await this.sendEmailWithRetry({
@@ -247,7 +247,7 @@ export class InactiveUserCronService {
       .replaceAll('{{userName}}', user.firstName || 'طالبنا العزيز')
       .replaceAll(
         '{{supportUrl}}',
-        'https://wa.me/qr/NLKCDGU2XBMEE1', // Redirect to WhatsApp support
+        'https://englishom.com/ar/contact', // Redirect to contact page instead of raw wa.me
       );
 
     await this.sendEmailWithRetry({

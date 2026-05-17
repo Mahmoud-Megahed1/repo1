@@ -47,6 +47,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = useCallback(() => {
     localStorage.removeItem('token');
+    localStorage.removeItem('redirectUrl');
     queryClient.invalidateQueries({ queryKey: ['getMe'] });
     const href: RouteWithoutLocale<RouteType> = `/login`;
     window.location.href = `/${locale}${href}`;

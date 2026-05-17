@@ -30,7 +30,7 @@ const DefaultErrorComponent = ({ error }: { error?: Error }) => {
     if (statusCode === 401) {
       window.location.href = `/${i18next.language}/login`;
     } else {
-      window.location.href = `/${i18next.language}/app`;
+      window.location.href = `/${i18next.language}/`;
     }
   };
 

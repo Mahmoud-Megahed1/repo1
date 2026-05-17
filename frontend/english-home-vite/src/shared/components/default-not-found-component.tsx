@@ -27,7 +27,7 @@ const DefaultNotFoundComponent: FC<React.HTMLAttributes<HTMLDivElement>> = ({
         {t('Global.notFoundDescription')}
       </p>
       <Button className="mt-4 flex items-center gap-2" asChild>
-        <Link to="/app">
+        <Link to="/">
           <Home className="h-4 w-4" />
           {t('Global.goToHome')}
         </Link>

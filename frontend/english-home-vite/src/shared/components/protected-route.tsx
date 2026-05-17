@@ -18,6 +18,12 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     }
     if (isError && error && error?.status === 401) {
       localStorage.removeItem('token');
+      if (
+        window.location.pathname !== `/${locale}/login` &&
+        window.location.pathname !== `/login`
+      ) {
+        localStorage.setItem('redirectUrl', window.location.pathname + window.location.search + window.location.hash);
+      }
       navigate({ to: '/login' });
     }
   }, [user, isError, navigate, locale, isOTPRoute, error]);
