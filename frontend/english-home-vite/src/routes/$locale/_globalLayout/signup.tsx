@@ -21,7 +21,7 @@ function Signup() {
         localStorage.removeItem('redirectUrl');
         window.location.href = redirectUrl;
       } else {
-        navigate({ to: '/app' });
+        navigate({ to: '/app/levels' });
       }
       return;
     }
