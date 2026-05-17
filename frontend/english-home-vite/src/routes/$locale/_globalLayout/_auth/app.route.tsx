@@ -9,6 +9,7 @@ import { SidebarInset, SidebarProvider } from '@ui/sidebar';
 import BookLoader from '@components/ui/book-loader';
 
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const Route = createFileRoute('/$locale/_globalLayout/_auth/app')({
   component: RouteComponent,
@@ -27,6 +28,33 @@ export function RouteComponent() {
   const sidebarItems = useSidebarStore((state) => state.items);
   const setSidebarItems = useSidebarStore((state) => state.setItems);
   const { user } = useAuth();
+  const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    // Re-translate the sidebar items whenever translation function 't' or language changes
+    const currentItems = useSidebarStore.getState().items;
+    if (currentItems.length > 0) {
+      const updatedItems = currentItems.map((item) => {
+        let key = '';
+        if (item.id === 'Home' || item.id === 'Levels' || item.id === 'Report') {
+          key = `Global.sidebarItems.${item.id.toLowerCase()}`;
+        } else {
+          key = `Global.sidebarItems.${item.id}`;
+        }
+        return {
+          ...item,
+          title: t(key as never) as string,
+        };
+      });
+      
+      const hasChanged = updatedItems.some(
+        (item, index) => item.title !== currentItems[index]?.title
+      );
+      if (hasChanged) {
+        setSidebarItems(updatedItems);
+      }
+    }
+  }, [i18n.language, t, setSidebarItems, sidebarItems]);
 
   useEffect(() => {
     // Admin specific sidebar items can be added here if needed in the future

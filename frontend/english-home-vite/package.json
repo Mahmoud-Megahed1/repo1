@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build",
+    "build": "npm run generate:locales && vite build",
     "lint": "eslint . --fix",
     "start": "vite preview",
     "format": "prettier --write src",
