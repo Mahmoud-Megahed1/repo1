@@ -441,8 +441,8 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    if (daysToGrant <= 0) {
-      throw new BadRequestException('Days to grant must be a positive number');
+    if (typeof daysToGrant !== 'number' || daysToGrant === 0) {
+      throw new BadRequestException('Days to modify must be a non-zero number');
     }
 
     const newGrantedDays = (user.adminGrantedDays || 0) + daysToGrant;
@@ -452,7 +452,7 @@ export class UserService {
       { adminGrantedDays: newGrantedDays },
     );
 
-    this.logger.log(`Admin ${adminId} granted ${daysToGrant} extra days to user ${userId}`);
+    this.logger.log(`Admin ${adminId} modified days by ${daysToGrant} for user ${userId}. New total granted: ${newGrantedDays}`);
 
     return updatedUser;
   }

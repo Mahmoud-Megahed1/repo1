@@ -258,10 +258,62 @@ export class DashboardService {
             isCompleted = false;
           }
 
+          // Calculate daysLeft and expiration
+          let daysLeft = 0;
+          let isExpired = true;
+          let purchaseDate = null;
+          let expiresAt = null;
+
+          const orderForLevel = completedOrders
+            .filter((o) => o.levelName === levelName)
+            .sort((a, b) => {
+              const dateA = a.paymentDate || (a as any).createdAt || new Date(0);
+              const dateB = b.paymentDate || (b as any).createdAt || new Date(0);
+              return dateB.getTime() - dateA.getTime();
+            })[0];
+
+          if (orderForLevel) {
+            purchaseDate = orderForLevel.paymentDate || (orderForLevel as any).createdAt || new Date();
+            let expiresDate = orderForLevel.accessExpiresAt;
+            
+            if (!expiresDate) {
+              expiresDate = new Date(purchaseDate);
+              const extraDays = orderForLevel.carriedOverDays || 0;
+              expiresDate.setDate(expiresDate.getDate() + 60 + extraDays);
+            }
+
+            // Include admin granted days and paused days dynamically
+            const adminGrantedDays = user.adminGrantedDays || 0;
+            const totalPausedDays = user.totalPausedDays || 0;
+            if (adminGrantedDays !== 0 || totalPausedDays > 0) {
+              expiresDate = new Date(expiresDate.getTime() + (adminGrantedDays + totalPausedDays) * 24 * 60 * 60 * 1000);
+            }
+
+            expiresAt = expiresDate.toISOString();
+            purchaseDate = new Date(purchaseDate).toISOString();
+
+            // Check if explicitly expired by admin or if date has passed
+            const now = new Date();
+            if ((orderForLevel as any).accessStatus === 'EXPIRED') {
+              isExpired = true;
+              daysLeft = 0;
+            } else if (expiresDate > now) {
+              isExpired = false;
+              daysLeft = Math.ceil((expiresDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+            } else {
+              isExpired = true;
+              daysLeft = 0;
+            }
+          }
+
           return {
             levelName,
             currentDay,
             isCompleted,
+            daysLeft,
+            isExpired,
+            purchaseDate,
+            expiresAt,
           };
         }),
       );

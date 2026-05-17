@@ -266,8 +266,8 @@ export class UserController {
     @Body('days') days: number,
     @CurrentUser() admin: User | Admin,
   ) {
-    if (!days || days <= 0) {
-      throw new BadRequestException('Days must be a positive number');
+    if (typeof days !== 'number' || days === 0) {
+      throw new BadRequestException('Days must be a non-zero number');
     }
     const user = await this.userService.grantExtraDays(id, days, admin._id.toString());
     return cleanResponse(user);

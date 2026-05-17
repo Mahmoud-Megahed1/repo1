@@ -106,7 +106,7 @@ const TerminateCourseButton = ({ course }: { course: Course }) => {
   });
 
   // Only show for non-expired active courses
-  if (course.isExpired || course.isCompleted) return null;
+  if (course.isExpired) return null;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

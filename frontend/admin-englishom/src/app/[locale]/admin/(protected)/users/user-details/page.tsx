@@ -253,8 +253,8 @@ const UserDetails = () => {
           </div>
         </div>
         {/* Admin Granted Days Info */}
-        {(userDetails.adminGrantedDays ?? 0) > 0 && (
-          <div className="flex items-center gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 dark:border-blue-800 dark:bg-blue-950/30">
+        {(userDetails.adminGrantedDays ?? 0) !== 0 && (
+          <div className="flex items-center gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 dark:border-blue-800 dark:bg-blue-950/30 mb-4">
             <Calendar className="text-blue-500" size={20} />
             <div>
               <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
@@ -346,7 +346,7 @@ const LEVELS_OPTIONS = LEVELS_ID.map((level) => ({
 }));
 
 const grantDaysSchema = z.object({
-  days: z.coerce.number().min(1, 'Must grant at least 1 day').max(365, 'Cannot grant more than 365 days at once'),
+  days: z.coerce.number().min(-365, 'Must be between -365 and 365').max(365, 'Cannot grant more than 365 days at once'),
 });
 
 const GrantDaysForm: FC<{ userId: string }> = ({ userId }) => {
@@ -390,7 +390,7 @@ const GrantDaysForm: FC<{ userId: string }> = ({ userId }) => {
               className="flex flex-col gap-4 p-1"
             >
               <p className="text-sm text-muted-foreground">
-                Grant extra subscription days to the user. This will extend their current subscription or give them new active days.
+                Grant extra subscription days to the user. This will extend their current subscription. Enter a negative number to subtract days.
               </p>
               <InputFormField
                 control={form.control}
