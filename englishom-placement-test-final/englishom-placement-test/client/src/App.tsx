@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import PublicQuestionInput from "@/pages/PublicQuestionInput";
-import { Route, Switch } from "wouter";
+import { Route, Switch, Router as WouterRouter } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { TestProvider } from "./contexts/TestContext";
@@ -16,17 +16,19 @@ import QuestionInputPanel from "./pages/QuestionInputPanel";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/test"} component={Test} />
-      <Route path={"/results"} component={Results} />
-      <Route path={"/admin"} component={AdminDashboard} />
-      <Route path={"/questions"} component={QuestionInputPanel} />
-      <Route path={"/add-questions"} component={PublicQuestionInput} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
+    <WouterRouter base="/test">
+      <Switch>
+        <Route path={"/"} component={Home} />
+        <Route path={"/test"} component={Test} />
+        <Route path={"/results"} component={Results} />
+        <Route path={"/admin"} component={AdminDashboard} />
+        <Route path={"/questions"} component={QuestionInputPanel} />
+        <Route path={"/add-questions"} component={PublicQuestionInput} />
+        <Route path={"/404"} component={NotFound} />
+        {/* Final fallback route */}
+        <Route component={NotFound} />
+      </Switch>
+    </WouterRouter>
   );
 }
 
