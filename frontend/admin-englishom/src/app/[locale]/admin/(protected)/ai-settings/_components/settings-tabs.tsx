@@ -6,7 +6,7 @@ import { useState } from 'react';
 import GlobalAISettings from './global-ai-settings';
 import LessonAIInstructions from './lesson-ai-instructions';
 
-export default function SettingsTabs() {
+export default function SettingsTabs({ t }: { t: any }) {
     const [activeTab, setActiveTab] = useState<'global' | 'lessons'>('global');
 
     return (
@@ -20,7 +20,7 @@ export default function SettingsTabs() {
                         }`}
                 >
                     <Settings className="h-4 w-4" />
-                    Global Settings
+                    {t('globalSettings')}
                 </button>
                 <button
                     onClick={() => setActiveTab('lessons')}
@@ -30,12 +30,12 @@ export default function SettingsTabs() {
                         }`}
                 >
                     <BookOpen className="h-4 w-4" />
-                    Lesson Instructions
+                    {t('lessonInstructions')}
                 </button>
             </div>
 
             <div className="animate-in fade-in zoom-in-95 duration-200">
-                {activeTab === 'global' ? <GlobalAISettings /> : <LessonAIInstructions />}
+                {activeTab === 'global' ? <GlobalAISettings t={t} /> : <LessonAIInstructions t={t} />}
             </div>
         </div>
     );

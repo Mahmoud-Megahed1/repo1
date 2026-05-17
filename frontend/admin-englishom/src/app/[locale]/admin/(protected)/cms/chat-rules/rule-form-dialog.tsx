@@ -33,6 +33,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 const ruleSchema = z.object({
     keywords: z.string().min(1, 'At least one keyword required'),
@@ -51,6 +52,7 @@ interface Props {
 }
 
 export function RuleFormDialog({ open, onOpenChange, ruleToEdit }: Props) {
+    const t = useTranslations('Admin.chatRules');
     const queryClient = useQueryClient();
 
     const form = useForm<FormValues>({
@@ -96,13 +98,13 @@ export function RuleFormDialog({ open, onOpenChange, ruleToEdit }: Props) {
             return createChatRule(payload);
         },
         onSuccess: () => {
-            toast.success(ruleToEdit ? 'Rule updated' : 'Rule created');
+            toast.success(ruleToEdit ? t('ruleUpdated') : t('ruleCreated'));
             queryClient.invalidateQueries({ queryKey: ['chat-rules'] });
             onOpenChange(false);
         },
         onError: (err: unknown) => {
-            toast.error('Error', {
-                description: (err as any).response?.data?.message || 'Something went wrong',
+            toast.error(t('error'), {
+                description: (err as any).response?.data?.message || t('somethingWentWrong'),
             });
         },
     });
@@ -111,7 +113,7 @@ export function RuleFormDialog({ open, onOpenChange, ruleToEdit }: Props) {
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>{ruleToEdit ? 'Edit Rule' : 'Add New Rule'}</DialogTitle>
+                    <DialogTitle>{ruleToEdit ? t('editRule') : t('addNewRule')}</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit((v) => mutate(v))} className="space-y-4">
@@ -120,12 +122,12 @@ export function RuleFormDialog({ open, onOpenChange, ruleToEdit }: Props) {
                             name="keywords"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Keywords (comma separated)</FormLabel>
+                                    <FormLabel>{t('keywordsLabel')}</FormLabel>
                                     <FormControl>
-                                        <Input {...field} placeholder="price, cost, how much" />
+                                        <Input {...field} placeholder={t('keywordsPlaceholder')} />
                                     </FormControl>
                                     <FormDescription>
-                                        For &apos;exact&apos;, match is strict. For &apos;contains&apos;, any of these words triggers response.
+                                        {t('keywordsDescription')}
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
@@ -137,9 +139,9 @@ export function RuleFormDialog({ open, onOpenChange, ruleToEdit }: Props) {
                             name="response"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Bot Response</FormLabel>
+                                    <FormLabel>{t('responseLabel')}</FormLabel>
                                     <FormControl>
-                                        <Textarea {...field} placeholder="The price is $10..." rows={4} />
+                                        <Textarea {...field} placeholder={t('responsePlaceholder')} rows={4} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -152,16 +154,16 @@ export function RuleFormDialog({ open, onOpenChange, ruleToEdit }: Props) {
                                 name="matchType"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
-                                        <FormLabel>Match Type</FormLabel>
+                                        <FormLabel>{t('matchTypeLabel')}</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Select type" />
+                                                    <SelectValue placeholder={t('selectType')} />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="contains">Contains (Partial)</SelectItem>
-                                                <SelectItem value="exact">Exact (Full String)</SelectItem>
+                                                <SelectItem value="contains">{t('containsLabel')}</SelectItem>
+                                                <SelectItem value="exact">{t('exactLabel')}</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage />
@@ -174,7 +176,7 @@ export function RuleFormDialog({ open, onOpenChange, ruleToEdit }: Props) {
                                 name="priority"
                                 render={({ field }) => (
                                     <FormItem className="w-24">
-                                        <FormLabel>Priority</FormLabel>
+                                        <FormLabel>{t('priorityLabel')}</FormLabel>
                                         <FormControl>
                                             <Input {...field} type="number" min={0} />
                                         </FormControl>
@@ -190,9 +192,9 @@ export function RuleFormDialog({ open, onOpenChange, ruleToEdit }: Props) {
                             render={({ field }) => (
                                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                                     <div className="space-y-0.5">
-                                        <FormLabel>Active Status</FormLabel>
+                                        <FormLabel>{t('activeStatus')}</FormLabel>
                                         <FormDescription>
-                                            Enable or disable this rule immediately.
+                                            {t('activeDescription')}
                                         </FormDescription>
                                     </div>
                                     <FormControl>
@@ -206,7 +208,7 @@ export function RuleFormDialog({ open, onOpenChange, ruleToEdit }: Props) {
                         />
 
                         <Button type="submit" className="w-full" disabled={isPending}>
-                            {isPending ? 'Saving...' : 'Save Rule'}
+                            {isPending ? t('saving') : t('saveRule')}
                         </Button>
                     </form>
                 </Form>

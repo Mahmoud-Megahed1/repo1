@@ -6,9 +6,9 @@ import { Order } from '@/types/orders.types';
 import { LevelId } from '@/types/user.types';
 import { ColumnDef } from '@tanstack/react-table';
 
-export const ordersColumns: ColumnDef<Order>[] = [
+export const ordersColumns = (t: any): ColumnDef<Order>[] => [
   {
-    header: 'User',
+    header: t('user'),
     accessorKey: 'user',
     cell: ({ getValue }) => {
       const user = getValue() as Order['user'];
@@ -23,7 +23,7 @@ export const ordersColumns: ColumnDef<Order>[] = [
     },
   },
   {
-    header: 'Level',
+    header: t('level'),
     accessorKey: 'levelName',
     cell: ({ getValue }) => {
       const level = getValue() as string;
@@ -31,7 +31,7 @@ export const ordersColumns: ColumnDef<Order>[] = [
     },
   },
   {
-    header: 'Amount',
+    header: t('amount'),
     accessorKey: 'amount',
     cell: ({ getValue }) => {
       const amount = getValue() as number;
@@ -46,7 +46,7 @@ export const ordersColumns: ColumnDef<Order>[] = [
     },
   },
   {
-    header: 'Status',
+    header: t('status'),
     accessorKey: 'paymentStatus',
     cell: ({ row }) => {
       const status = row.original.paymentStatus;
@@ -60,7 +60,7 @@ export const ordersColumns: ColumnDef<Order>[] = [
             variant="outline"
             className="border-purple-300 text-purple-600 dark:border-purple-700 dark:text-purple-400"
           >
-            Manual / يدوي
+            {t('manual')}
           </Badge>
         );
       }
@@ -70,13 +70,13 @@ export const ordersColumns: ColumnDef<Order>[] = [
           variant={status === 'COMPLETED' ? 'success' : 'info-yellow'}
           className="capitalize"
         >
-          {status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()}
+          {status === 'COMPLETED' ? t('completed') : status === 'REFUNDED' ? t('refunded') : status}
         </Badge>
       );
     },
   },
   {
-    header: 'Created At',
+    header: t('createdAt'),
     accessorKey: 'createdAt',
     cell: ({ getValue }) => formatDate(getValue() as string),
   },

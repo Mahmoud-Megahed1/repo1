@@ -24,14 +24,18 @@ import {
 import { toast } from 'sonner';
 import { FC } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { useTranslations } from 'next-intl';
 
-const UserRow: FC<User> = ({
+type Props = User & { t?: any };
+
+const UserRow: FC<Props> = ({
   _id: id,
   lastActivity,
   status,
   lastName,
   firstName,
   isVoluntaryPaused,
+  t,
 }) => {
   const isSuper = true;
   const queryClient = useQueryClient();
@@ -47,7 +51,7 @@ const UserRow: FC<User> = ({
     mutationKey: ['adminPauseUser'],
     mutationFn: adminPauseUser,
     onSuccess() {
-      toast.success('Account frozen successfully for 20 days');
+      toast.success(t?.('accountFrozen') || 'Account frozen successfully for 20 days');
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
   });
@@ -56,7 +60,7 @@ const UserRow: FC<User> = ({
     mutationKey: ['adminResumeUser'],
     mutationFn: adminResumeUser,
     onSuccess() {
-      toast.success('Account resumed successfully');
+      toast.success(t?.('accountResumed') || 'Account resumed successfully');
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
   });
@@ -76,11 +80,11 @@ const UserRow: FC<User> = ({
               'text-yellow-500': status === 'suspended',
             })}
           >
-            {status}
+            {t?.(status) || status}
           </span>
           {isVoluntaryPaused && (
             <Badge className="bg-blue-100 text-blue-600 hover:bg-blue-100 border-none px-2 py-0 h-5 text-[10px] font-bold">
-              FROZEN
+              {t?.('frozen') || 'FROZEN'}
             </Badge>
           )}
         </div>
@@ -90,7 +94,7 @@ const UserRow: FC<User> = ({
             variant={'outline'}
             className="border border-gray-500/20 bg-white/80 dark:bg-secondary dark:hover:bg-secondary-foreground/10"
           >
-            <Link href={`/admin/users/user-details?id=${id}`}>Details</Link>
+            <Link href={`/admin/users/user-details?id=${id}`}>{t?.('details') || 'Details'}</Link>
           </Button>
           <PermissionWrapper permission={isSuper ? 'Edit' : 'Hidden'}>
             <DropdownMenu>
@@ -111,7 +115,7 @@ const UserRow: FC<User> = ({
                   disabled={isPending}
                 >
                   <VerifiedIcon className="size-6" />
-                  Activate
+                  {t?.('activate') || 'Activate'}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator
                   className={cn({
@@ -127,7 +131,7 @@ const UserRow: FC<User> = ({
                     className="gap-2 text-blue-600 focus:text-blue-600"
                   >
                     <Play className="size-6" />
-                    Resume Subscription
+                    {t?.('resumeSubscription') || 'Resume Subscription'}
                   </DropdownMenuItem>
                 ) : (
                   <DropdownMenuItem
@@ -136,7 +140,7 @@ const UserRow: FC<User> = ({
                     className="gap-2 text-indigo-600 focus:text-indigo-600"
                   >
                     <Snowflake className="size-6" />
-                    Freeze Account (20d)
+                    {t?.('freezeAccount') || 'Freeze Account (20d)'}
                   </DropdownMenuItem>
                 )}
 
@@ -151,7 +155,7 @@ const UserRow: FC<User> = ({
                   })}
                 >
                   <BadgeInfo className="size-6" />
-                  Suspend
+                  {t?.('suspend') || 'Suspend'}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator
                   className={cn({
@@ -171,7 +175,7 @@ const UserRow: FC<User> = ({
                   )}
                 >
                   <BadgeX className="size-6" />
-                  Block
+                  {t?.('block') || 'Block'}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

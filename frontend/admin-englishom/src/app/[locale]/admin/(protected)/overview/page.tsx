@@ -1,4 +1,5 @@
 'use client';
+import { useTranslations } from 'next-intl';
 import { DataTable } from '@/components/shared/data-table';
 import { LEVELS_LABELS } from '@/constants';
 import { cn, omit } from '@/lib/utils';
@@ -7,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { withAccess } from '../_components/with-access';
 import LevelsChart from './chart';
-import { recentOrdersColumns } from './columns';
+import { getRecentOrdersColumns } from './columns';
 function camelCaseToTitleCase(input: string): string {
   return input
     .replace(/([A-Z])/g, ' $1') // insert space before capital letters
@@ -15,6 +16,7 @@ function camelCaseToTitleCase(input: string): string {
 }
 
 const Overview = () => {
+  const t = useTranslations('Admin.overview');
   const { data, isLoading, isError } = useQuery({
     queryKey: ['analytics'],
     queryFn: getOverview,
@@ -42,7 +44,7 @@ const Overview = () => {
                 notation: 'compact',
                 compactDisplay: 'short',
               }).format(value)}
-              title={camelCaseToTitleCase(key).replace('Total', '')}
+              title={t(key as any)}
             />
           ),
         )}
@@ -61,13 +63,13 @@ const Overview = () => {
           })}
         >
           <div className="flex flex-1 flex-col gap-2">
-            <h2 className="subheading">Recent Orders</h2>
+            <h2 className="subheading">{t('recentOrders')}</h2>
             <section className="box flex">
               {isLoading ? (
                 <Loader2 className="mx-auto animate-spin" />
               ) : (
                 <DataTable
-                  columns={recentOrdersColumns}
+                  columns={getRecentOrdersColumns(t)}
                   data={analytics.recentActivity.recentOrders || []}
                 />
               )}

@@ -20,7 +20,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function GlobalAISettings() {
+export default function GlobalAISettings({ t }: { t: any }) {
     const [currentTheme, setCurrentTheme] = useState<Theme | null>(null);
     const [uploading, setUploading] = useState(false);
     const [isEditingKnowledge, setIsEditingKnowledge] = useState(false);
@@ -57,7 +57,7 @@ export default function GlobalAISettings() {
             return updateTheme(currentTheme._id, data);
         },
         onSuccess: () => {
-            toast.success('Settings updated successfully');
+            toast.success(t('savedSuccessfully') || 'Settings updated successfully');
             queryClient.invalidateQueries({ queryKey: ['themes'] });
         },
         onError: () => {
@@ -135,16 +135,16 @@ export default function GlobalAISettings() {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <MessageSquare className="h-5 w-5" />
-                            Chat Visibility
+                            {t('chatVisibility')}
                         </CardTitle>
                         <CardDescription>
-                            Control which AI features are visible to students.
+                            {t('controlFeatures')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                         <div className="flex items-center justify-between space-x-2">
                             <Label htmlFor="showSupportChat" className="cursor-pointer">
-                                Enable Global Support Chat
+                                {t('enableGlobalSupportChat')}
                             </Label>
                             <Switch
                                 id="showSupportChat"
@@ -155,7 +155,7 @@ export default function GlobalAISettings() {
 
                         <div className="flex items-center justify-between space-x-2">
                             <Label htmlFor="showAIReviewChat" className="cursor-pointer">
-                                Enable Lesson Review AI
+                                {t('enableLessonReviewAI')}
                             </Label>
                             <Switch
                                 id="showAIReviewChat"
@@ -173,15 +173,15 @@ export default function GlobalAISettings() {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <FileText className="h-5 w-5" />
-                            Knowledge Base
+                            {t('knowledgeBase')}
                         </CardTitle>
                         <CardDescription>
-                            Upload curriculum documents (PDF/Word) for the AI to learn from.
+                            {t('uploadDocumentDesc')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="knowledge-upload">Upload Document</Label>
+                            <Label htmlFor="knowledge-upload">{t('uploadDocument')}</Label>
                             <Input
                                 id="knowledge-upload"
                                 type="file"
@@ -201,7 +201,7 @@ export default function GlobalAISettings() {
                         <div className="mt-4 rounded-md bg-muted p-4 space-y-3">
                             <div className="flex items-center justify-between">
                                 <h4 className="text-sm font-semibold">
-                                    Knowledge Context
+                                    {t('knowledgeContext')}
                                 </h4>
                                 <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
                                     {(currentTheme.aiKnowledgeContext || '').length.toLocaleString()} characters
@@ -253,7 +253,7 @@ export default function GlobalAISettings() {
                                             }}
                                         >
                                             <Edit className="mr-2 h-4 w-4" />
-                                            Edit Context
+                                            {t('editContext')}
                                         </Button>
                                         <Button
                                             variant="destructive"
@@ -265,7 +265,7 @@ export default function GlobalAISettings() {
                                                 }
                                             }}
                                         >
-                                            Clear All
+                                            {t('clearAll')}
                                         </Button>
                                     </div>
                                 </>

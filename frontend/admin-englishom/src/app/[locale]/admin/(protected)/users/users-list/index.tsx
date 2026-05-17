@@ -7,8 +7,9 @@ import UserRow from './user-row';
 type Props = React.HTMLAttributes<HTMLDivElement> & {
   users: User[];
   isLoading?: boolean;
+  t: any;
 };
-const UsersList: FC<Props> = ({ className, isLoading, users }) => {
+const UsersList: FC<Props> = ({ className, isLoading, users, t }) => {
   const isEmpty = users.length === 0;
   return (
     <ScrollArea
@@ -26,21 +27,22 @@ const UsersList: FC<Props> = ({ className, isLoading, users }) => {
         <main className="h-full overflow-auto font-bold">
           <div className="flex w-full items-center gap-2">
             <div className="grid w-full grid-cols-4 gap-2 px-3 pb-4 pt-2">
-              <span>Name</span>
-              <span>Last Activity</span>
-              <span>Status</span>
-              <span>Actions</span>
+              <span>{t('name')}</span>
+              <span>{t('lastActivity')}</span>
+              <span>{t('status')}</span>
+              <span>{t('actions')}</span>
             </div>
           </div>
           <div className="flex flex-col gap-6">
             {isEmpty ? (
-              <h4 className="self-center text-3xl">Not found</h4>
+              <h4 className="self-center text-3xl">{t('notFound')}</h4>
             ) : (
               users.map((user) => (
                 <UserRow
                   key={user._id}
                   {...user}
                   lastActivity={formatDate(user.lastActivity)}
+                  t={t}
                 />
               ))
             )}

@@ -20,8 +20,10 @@ import { withAccess } from '../_components/with-access';
 import { ordersColumns } from './columns';
 import { exportOrdersToExcel } from './export-orders';
 import { useOrders, withOrdersProvider } from './orders-provider';
+import { useTranslations } from 'next-intl';
 
 const Orders = () => {
+  const t = useTranslations('Admin.orders');
   const {
     queryResult: { data, isFetching, isLoading, refetch },
     dispatch,
@@ -85,7 +87,7 @@ const Orders = () => {
     <div className="flex flex-col gap-6 pb-6">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <h1 className="heading">Orders ({data?.data.total || 0})</h1>
+          <h1 className="heading">{t('title')} ({data?.data.total || 0})</h1>
           <button
             className={cn({
               'animate-spin opacity-60': isFetching,
@@ -100,7 +102,7 @@ const Orders = () => {
           <DropdownMenuTrigger asChild>
             <Button disabled={isReportFetching} className="gap-2">
               <Download className="size-4" />
-              Export Excel
+              {t('exportExcel')}
               <ChevronDown className="size-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -123,15 +125,15 @@ const Orders = () => {
 
       <div className="w-[200px]">
         <CustomSelect
-          label="Period"
+          label={t('period')}
           placeholder="Filter by period"
           onValueChange={onPeriodChange}
           value={period || 'all'}
           options={[
-            { value: 'all', label: 'All Time' },
+            { value: 'all', label: t('allTime') },
             { value: 'daily', label: 'Daily' },
-            { value: 'weekly', label: 'Weekly' },
-            { value: 'monthly', label: 'Monthly' },
+            { value: 'weekly', label: t('lastWeek') },
+            { value: 'monthly', label: t('lastMonth') },
             { value: 'yearly', label: 'Yearly' },
           ]}
         />
@@ -145,7 +147,7 @@ const Orders = () => {
         ) : (
           <ScrollArea className="box h-[calc(100vh-300px)] md:h-[calc(100vh-204px)]">
             <DataTable
-              columns={ordersColumns}
+              columns={ordersColumns(t)}
               data={orders}
               className={cn({
                 'animate-pulse duration-1000': isFetching,

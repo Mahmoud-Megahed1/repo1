@@ -8,8 +8,10 @@ import { useQuery } from '@tanstack/react-query';
 import { getChatRules } from '@/services/chat-rules';
 import { columns } from './columns';
 import { RuleFormDialog } from './rule-form-dialog';
+import { useTranslations } from 'next-intl';
 
 export default function ChatRulesPage() {
+    const t = useTranslations('Admin.chatRules');
     const [open, setOpen] = useState(false);
     const { data: rules, isLoading } = useQuery({
         queryKey: ['chat-rules'],
@@ -19,17 +21,17 @@ export default function ChatRulesPage() {
     return (
         <div className="flex flex-col gap-6 p-6">
             <div className="flex items-center justify-between">
-                <h1 className="heading">Chatbot Rules CMS</h1>
+                <h1 className="heading">{t('title')}</h1>
                 <Button onClick={() => setOpen(true)}>
-                    <Plus className="mr-2 size-4" /> Add Rule
+                    <Plus className="mr-2 size-4" /> {t('addRule')}
                 </Button>
             </div>
 
             <div className="box">
                 {isLoading ? (
-                    <div>Loading rules...</div>
+                    <div>{t('loading')}</div>
                 ) : (
-                    <DataTable columns={columns} data={rules || []} />
+                    <DataTable columns={columns(t)} data={rules || []} />
                 )}
             </div>
 

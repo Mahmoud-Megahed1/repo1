@@ -21,12 +21,15 @@ import {
 } from 'lucide-react';
 import { FC, useCallback } from 'react';
 
-const AdminRow: FC<Admin> = ({
+type Props = Admin & { t?: any };
+
+const AdminRow: FC<Props> = ({
   _id: id,
   adminRole,
   isActive,
   lastName,
   firstName,
+  t,
 }) => {
   const isSuper = true;
   const queryClient = useQueryClient();
@@ -61,7 +64,7 @@ const AdminRow: FC<Admin> = ({
         <span>
           {firstName} {lastName}
         </span>
-        <span>{adminRole}</span>
+        <span>{t?.(adminRole) || adminRole}</span>
         <span
           className={cn({
             'text-teal-500': isActive,
@@ -69,7 +72,7 @@ const AdminRow: FC<Admin> = ({
             'text-foreground': isPending,
           })}
         >
-          {isPending ? 'Loading...' : isActive ? 'Active' : 'Inactive'}
+          {isPending ? t?.('loading') || 'Loading...' : isActive ? t?.('active') || 'Active' : t?.('inactive') || 'Inactive'}
         </span>
         <div className="flex items-center gap-3">
           <Button
@@ -78,7 +81,7 @@ const AdminRow: FC<Admin> = ({
             className="border border-gray-500/20 bg-white/80 dark:bg-secondary dark:hover:bg-secondary-foreground/10"
           >
             <Link href={`/admin/admins/update?id=${id}`}>
-              Edit
+              {t?.('edit') || 'Edit'}
             </Link>
           </Button>
           {adminRole !== 'super' && (
@@ -97,7 +100,7 @@ const AdminRow: FC<Admin> = ({
                       className="gap-2"
                     >
                       <ShieldXIcon className="size-6" />
-                      Inactivate
+                      {t?.('inactivate') || 'Inactivate'}
                     </DropdownMenuItem>
                   ) : (
                     <DropdownMenuItem
@@ -105,7 +108,7 @@ const AdminRow: FC<Admin> = ({
                       className="gap-2 text-teal-500 focus:text-teal-500"
                     >
                       <VerifiedIcon className="size-6" />
-                      Activate
+                      {t?.('activate') || 'Activate'}
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator />
@@ -117,7 +120,7 @@ const AdminRow: FC<Admin> = ({
                     disabled={isPendingDelete}
                   >
                     <Trash2 className="size-6" />
-                    Delete
+                    {t?.('delete') || 'Delete'}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

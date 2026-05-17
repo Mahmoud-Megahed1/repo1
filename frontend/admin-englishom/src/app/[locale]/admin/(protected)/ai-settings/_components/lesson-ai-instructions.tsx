@@ -29,7 +29,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-export default function LessonAIInstructions() {
+export default function LessonAIInstructions({ t }: { t: any }) {
   const [selectedLevel, setSelectedLevel] = useState<LevelId>(LEVELS_ID[0]);
   const [selectedDay, setSelectedDay] = useState<string>('1');
   const [selectedLessonType, setSelectedLessonType] = useState<LessonsId>(
@@ -123,7 +123,7 @@ export default function LessonAIInstructions() {
     <div className="space-y-8" ref={formRef}>
       <Card>
         <CardHeader>
-          <CardTitle>Lesson AI Instructions</CardTitle>
+          <CardTitle>{t('lessonInstructions')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">

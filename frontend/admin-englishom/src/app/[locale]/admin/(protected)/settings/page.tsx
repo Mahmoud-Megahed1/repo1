@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { getSettings, updateSettings } from '@/services/settings';
 import { Loader2, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 const settingsSchema = z.object({
   repurchaseDiscounts: z.array(
@@ -19,6 +20,7 @@ const settingsSchema = z.object({
 });
 
 const SettingsPage = () => {
+  const t = useTranslations('Admin.settings');
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: ['globalSettings'],
@@ -29,7 +31,7 @@ const SettingsPage = () => {
     mutationFn: updateSettings,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['globalSettings'] });
-      toast.success('Settings updated successfully');
+      toast.success(t('savedSuccessfully'));
     },
     onError: () => {
       toast.error('Failed to update settings');
@@ -59,15 +61,14 @@ const SettingsPage = () => {
   return (
     <div className="flex flex-col gap-6 p-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Global Settings</h1>
+        <h1 className="text-2xl font-bold">{t('globalSettings')}</h1>
       </div>
 
       <div className="box flex max-w-2xl flex-col gap-6 p-6">
         <div>
-          <h2 className="text-lg font-bold">Repurchase Discounts</h2>
+          <h2 className="text-lg font-bold">{t('repurchaseDiscounts')}</h2>
           <p className="text-sm text-muted-foreground">
-            Configure the percentage discount applied automatically when a user purchases subsequent courses.
-            The first item is for the 2nd course, the second item is for the 3rd course, and so on.
+            {t('configureDiscount')}
           </p>
         </div>
 
@@ -82,7 +83,7 @@ const SettingsPage = () => {
                   render={({ field }) => (
                     <FormItem className="flex items-end gap-4">
                       <div className="flex-1">
-                        <FormLabel>Course {index + 2} Discount (%)</FormLabel>
+                        <FormLabel>{t('courseDiscount', { number: index + 2 })} (%)</FormLabel>
                         <FormControl>
                           <Input type="number" {...field} />
                         </FormControl>
@@ -109,11 +110,11 @@ const SettingsPage = () => {
               onClick={() => append({ value: 0 })}
             >
               <Plus size={16} className="mr-2" />
-              Add Discount Level
+              {t('addDiscountLevel')}
             </Button>
 
             <Button type="submit" disabled={isPending} className="mt-4 self-end">
-              {isPending ? 'Saving...' : 'Save Settings'}
+              {isPending ? 'Saving...' : t('saveSettings')}
             </Button>
           </form>
         </Form>

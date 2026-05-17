@@ -8,10 +8,12 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { CirclePlusIcon, RefreshCcw } from 'lucide-react';
 import { FC, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import { useAdmins } from '../_components/admins-provider';
 import AdminsList from './admins-list';
 
 const Admins = () => {
+  const t = useTranslations('Admin.admins');
   const isSuper = true;
   const {
     queryResult: { data, isFetching, isLoading, refetch },
@@ -48,7 +50,7 @@ const Admins = () => {
     <div className="flex flex-col gap-6 pb-6">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <h1 className="heading">Admins ({admins.length})</h1>
+          <h1 className="heading">{t('title')} ({admins.length})</h1>
           <button
             className={cn({
               'animate-spin opacity-60': isFetching,
@@ -64,7 +66,7 @@ const Admins = () => {
             <Button className="shrink-0 gap-1 [&_svg]:size-5" asChild>
               <Link href={'/admin/admins/add'}>
                 <CirclePlusIcon />
-                <span className="sr-only md:not-sr-only">Add Admin</span>
+                <span className="sr-only md:not-sr-only">{t('addAdmin')}</span>
               </Link>
             </Button>
           </PermissionWrapper>
@@ -74,27 +76,27 @@ const Admins = () => {
       <div className="mt-4 flex flex-col gap-4">
         <div className="flex flex-wrap items-center gap-4">
           <CustomSelect
-            label="Role"
-            placeholder="Filter by role"
+            label={t('role')}
+            placeholder={t('filterByRole')}
             onValueChange={onRoleChange}
             options={[
-              { value: 'all', label: 'All' },
-              { value: 'super', label: 'Super Admin' },
-              { value: 'manager', label: 'Manager' },
-              { value: 'operator', label: 'Operator' },
-              { value: 'view', label: 'Viewer' },
+              { value: 'all', label: t('all') },
+              { value: 'super', label: t('superAdmin') },
+              { value: 'manager', label: t('manager') },
+              { value: 'operator', label: t('operator') },
+              { value: 'view', label: t('viewer') },
             ]}
             value={adminRole}
           />
           <CustomSelect
-            placeholder="Filter by status"
-            label="Status"
+            placeholder={t('filterByStatus')}
+            label={t('status')}
             onValueChange={onStatusChange}
             value={isActive}
             options={[
-              { value: 'all', label: 'All' },
-              { value: 'active', label: 'Active' },
-              { value: 'inactive', label: 'Inactive' },
+              { value: 'all', label: t('all') },
+              { value: 'active', label: t('active') },
+              { value: 'inactive', label: t('inactive') },
             ]}
           />
           <Button
@@ -103,10 +105,11 @@ const Admins = () => {
             onClick={resetFilters}
             disabled={isFetching}
           >
-            Reset Filters
+            {t('resetFilters')}
           </Button>
         </div>
         <AdminsList
+          t={t}
           admins={admins}
           isLoading={isLoading}
           className={cn({
@@ -140,6 +143,7 @@ const SearchInput: FC<React.ComponentProps<typeof Input>> = ({
   className,
   ...props
 }) => {
+  const t = useTranslations('Admin.admins');
   const { params, dispatch } = useAdmins();
   const handleSearch = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,7 +157,7 @@ const SearchInput: FC<React.ComponentProps<typeof Input>> = ({
   return (
     <Input
       type="search"
-      placeholder="Search by name or email"
+      placeholder={t('searchPlaceholder')}
       className={cn('md:w-[400px]', className)}
       onChange={handleSearch}
       defaultValue={params.query}

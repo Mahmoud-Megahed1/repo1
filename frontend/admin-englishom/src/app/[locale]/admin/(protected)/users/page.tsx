@@ -5,11 +5,12 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { RefreshCcw } from 'lucide-react';
 import { FC, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import { useUsers } from '../_components/users-provider';
 import UsersList from './users-list';
 
 const Users = () => {
-  // const isSuper = true;
+  const t = useTranslations('Admin.users');
   const {
     queryResult: { data, isFetching, isLoading, refetch },
     dispatch,
@@ -30,7 +31,7 @@ const Users = () => {
     <div className="flex flex-col gap-6 pb-6">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <h1 className="heading">Users ({users.length})</h1>
+          <h1 className="heading">{t('title')} ({users.length})</h1>
           <button
             className={cn({
               'animate-spin opacity-60': isFetching,
@@ -47,6 +48,7 @@ const Users = () => {
       </header>
       <div className="mt-4 flex flex-col gap-4">
         <UsersList
+          t={t}
           users={users}
           isLoading={isLoading}
           className={cn({
@@ -80,6 +82,7 @@ const SearchInput: FC<React.ComponentProps<typeof Input>> = ({
   className,
   ...props
 }) => {
+  const t = useTranslations('Admin.users');
   const { params, dispatch } = useUsers();
   const handleSearch = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +96,7 @@ const SearchInput: FC<React.ComponentProps<typeof Input>> = ({
   return (
     <Input
       type="search"
-      placeholder="Search by name or email"
+      placeholder={t('searchPlaceholder')}
       className={cn('md:w-[400px]', className)}
       onChange={handleSearch}
       defaultValue={params.query}

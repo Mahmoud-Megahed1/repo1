@@ -6,23 +6,23 @@ import { Analytics } from '@/types/admins.types';
 import { LevelId } from '@/types/user.types';
 import { ColumnDef } from '@tanstack/react-table';
 
-export const recentOrdersColumns: ColumnDef<
+export const getRecentOrdersColumns = (t: any): ColumnDef<
   Analytics['recentActivity']['recentOrders'][number]
->[] = [
+>[] => [
   {
-    header: 'Name',
+    header: t('name'),
     accessorKey: 'username',
     cell: ({ getValue }) => getValue(),
   },
   {
-    header: 'Level',
+    header: t('level'),
     accessorKey: 'levelName',
     cell: ({ getValue }) => {
       return LEVELS_LABELS[getValue() as LevelId];
     },
   },
   {
-    header: 'Status',
+    header: t('status'),
     accessorKey: 'paymentStatus',
     cell: ({ getValue }) => {
       const status = getValue() as string;
@@ -31,18 +31,18 @@ export const recentOrdersColumns: ColumnDef<
           variant={status === 'COMPLETED' ? 'success' : 'info-yellow'}
           className="capitalize"
         >
-          {status.charAt(0).toUpperCase() + status.slice(1).toLocaleLowerCase()}
+          {status === 'COMPLETED' ? t('completed') : status}
         </Badge>
       );
     },
   },
   {
-    header: 'Date',
+    header: t('date'),
     accessorKey: 'paymentDate',
     cell: ({ getValue }) => formatDate(getValue() as string),
   },
   {
-    header: 'Amount',
+    header: t('amount'),
     accessorKey: 'amount',
   },
 ];

@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+import { useTranslations } from 'next-intl';
 import SettingsTabs from './_components/settings-tabs';
 
 export async function generateMetadata({
@@ -13,15 +14,17 @@ export async function generateMetadata({
 }
 
 export default function AISettingsPage() {
+    const t = useTranslations('Admin.aiSettings');
+
     return (
         <div className="space-y-6">
             <div>
-                <h2 className="text-2xl font-bold tracking-tight">AI Settings</h2>
+                <h2 className="text-2xl font-bold tracking-tight">{t('title')}</h2>
                 <p className="text-muted-foreground">
-                    Manage AI behavior and instructions for lessons.
+                    {t('manageBehavior')}
                 </p>
             </div>
-            <SettingsTabs />
+            <SettingsTabs t={t} />
         </div>
     );
 }
