@@ -31,7 +31,9 @@ import {
   Mail,
   RefreshCcw,
   User,
+  Star,
 } from 'lucide-react';
+import TestimonialForm from '@modules/insights/components/testimonial-form';
 import { useEffect, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -195,6 +197,27 @@ function RouteComponent() {
             ))}
           </ul>
         </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="flex flex-col flex-wrap justify-between gap-4 sm:flex-row sm:items-center">
+          <div className="flex items-center gap-4">
+            <div className="rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 p-3 shadow-lg">
+              <Star className="h-6 w-6 text-white" />
+            </div>
+            <div className="space-y-1">
+              <CardTitle className="text-xl font-bold">
+                {t('Global.testimonial.title')}
+              </CardTitle>
+              <CardDescription>
+                {t('Global.testimonial.description')}
+              </CardDescription>
+            </div>
+          </div>
+          <div className="mx-auto flex flex-col text-center sm:mx-0 sm:text-end">
+            <TestimonialForm />
+          </div>
+        </CardHeader>
       </Card>
     </div>
   );
