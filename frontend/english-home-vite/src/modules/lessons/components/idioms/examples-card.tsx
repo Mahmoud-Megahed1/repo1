@@ -51,7 +51,7 @@ const ExamplesCard: FC<Props> = ({ examples, onAudioPlay }) => {
         </ul>
         )}
         {/* Two-column layout: Image left, Text content right */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:items-start">
           {/* Left side: Image + Navigation */}
           <div className="space-y-3">
             <img
