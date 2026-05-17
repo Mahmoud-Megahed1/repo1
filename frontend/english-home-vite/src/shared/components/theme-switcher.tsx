@@ -1,18 +1,39 @@
 import { Moon, Sun } from 'lucide-react';
-
-import { Button } from '@ui/button';
 import { useTheme } from './contexts/theme-context';
+import { cn } from '@lib/utils';
 
 export default function ThemeSwitcher() {
   const { setTheme, theme } = useTheme();
+  
+  const isDark = theme === 'dark';
+
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(isDark ? 'light' : 'dark');
   };
+
   return (
-    <Button variant="outline" size="icon" onClick={toggleTheme}>
-      <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-      <span className="sr-only">Toggle theme</span>
-    </Button>
+    <button
+      onClick={toggleTheme}
+      className={cn(
+        "relative flex h-10 w-[76px] shrink-0 items-center rounded-full p-1 transition-colors duration-300",
+        isDark ? "bg-[#2d2d2d]" : "bg-[#F1E4D6]"
+      )}
+      aria-label="Toggle theme"
+    >
+      <div
+        className={cn(
+          "absolute left-1 h-8 w-8 rounded-full transition-transform duration-300 ease-in-out rtl:right-1 rtl:left-auto",
+          isDark 
+            ? "rtl:-translate-x-9 ltr:translate-x-9 translate-x-9 bg-[#F1E4D6]" 
+            : "translate-x-0 bg-[#43303F]"
+        )}
+      />
+      <div className="relative z-10 flex h-full w-1/2 items-center justify-center">
+        <Sun className={cn("h-4 w-4 transition-colors", isDark ? "text-zinc-400" : "text-[#F1E4D6]")} />
+      </div>
+      <div className="relative z-10 flex h-full w-1/2 items-center justify-center">
+        <Moon className={cn("h-4 w-4 transition-colors", isDark ? "text-[#2d2d2d]" : "text-[#43303F]")} />
+      </div>
+    </button>
   );
 }
