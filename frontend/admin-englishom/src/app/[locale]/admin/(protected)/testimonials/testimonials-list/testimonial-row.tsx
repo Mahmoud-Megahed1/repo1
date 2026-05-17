@@ -8,7 +8,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { deleteTestimonial, updateTestimonial } from '@/services/testimonials';
+import { deleteTestimonial, updateTestimonial, updateTestimonialStatus } from '@/services/testimonials';
 import { Testimonial } from '@/types/testimonials.types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -61,9 +61,9 @@ const TestimonialRow: FC<Props> = ({ testimonial }) => {
     const { mutate: updateStatus, isPending: isUpdatingStatus } = useMutation({
         mutationKey: ['updateStatus'],
         mutationFn: (status: 'approved' | 'rejected') =>
-            updateTestimonial({
+            updateTestimonialStatus({
                 id: testimonial._id,
-                data: { status, isVisible: status === 'approved' },
+                status,
             }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['testimonials'] });

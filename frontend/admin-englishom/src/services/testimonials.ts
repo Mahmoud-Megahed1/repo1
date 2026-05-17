@@ -25,6 +25,16 @@ export const updateTestimonial = ({
     return client.patch<Testimonial>(`/testimonials/admin/${id}`, data);
 };
 
+export const updateTestimonialStatus = ({
+    id,
+    status,
+}: {
+    id: string;
+    status: 'approved' | 'rejected' | 'pending';
+}) => {
+    return client.patch<Testimonial>(`/testimonials/admin/${id}/status`, { status });
+};
+
 export const deleteTestimonial = (id: string) => {
     return client.delete<{ message: string }>(`/testimonials/admin/${id}`);
 };

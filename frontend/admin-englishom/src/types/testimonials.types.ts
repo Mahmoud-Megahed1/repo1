@@ -7,6 +7,13 @@ export interface Testimonial {
     isVisible: boolean;
     order: number;
     avatar?: string;
+    userId?: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+    };
+    status?: 'pending' | 'approved' | 'rejected';
     createdAt: string;
     updatedAt: string;
 }
