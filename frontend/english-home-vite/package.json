@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "npm run generate:locales && vite build",
+    "postbuild": "node scripts/setup-symlinks.js",
     "lint": "eslint . --fix",
     "start": "vite preview",
     "format": "prettier --write src",
