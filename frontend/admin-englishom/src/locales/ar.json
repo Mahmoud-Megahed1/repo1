@@ -364,12 +364,12 @@
   },
   "Admin": {
     "overview": {
-      "users": "المستخدمين",
-      "activeUsers": "المستخدمين النشطين",
-      "blockedUsers": "المستخدمين المحظورين",
-      "suspendedUsers": "المستخدمين الموقوفين",
-      "subscribedUsers": "المشتركين",
-      "revenue": "الإيرادات",
+      "totalUsers": "المستخدمين",
+      "totalActiveUsers": "المستخدمين النشطين",
+      "totalBlockedUsers": "المستخدمين المحظورين",
+      "totalSuspendedUsers": "المستخدمين الموقوفين",
+      "totalSubscribedUsers": "المستخدمين المشتركين",
+      "totalRevenue": "الأرباح",
       "recentOrders": "الطلبات الأخيرة",
       "amount": "المبلغ",
       "date": "التاريخ",

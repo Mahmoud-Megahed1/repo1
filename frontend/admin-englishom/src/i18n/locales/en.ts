@@ -383,12 +383,12 @@ const en: TranslationSchema = {
   },
   Admin: {
     overview: {
-      users: 'Users',
-      activeUsers: 'Active Users',
-      blockedUsers: 'Blocked Users',
-      suspendedUsers: 'Suspended Users',
-      subscribedUsers: 'Subscribed Users',
-      revenue: 'Revenue',
+      totalUsers: 'Users',
+      totalActiveUsers: 'Active Users',
+      totalBlockedUsers: 'Blocked Users',
+      totalSuspendedUsers: 'Suspended Users',
+      totalSubscribedUsers: 'Subscribed Users',
+      totalRevenue: 'Revenue',
       recentOrders: 'Recent Orders',
       amount: 'Amount',
       date: 'Date',

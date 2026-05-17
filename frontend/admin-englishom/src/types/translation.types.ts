@@ -273,12 +273,12 @@ type Global = {
 
 type Admin = {
   overview: {
-    users: string;
-    activeUsers: string;
-    blockedUsers: string;
-    suspendedUsers: string;
-    subscribedUsers: string;
-    revenue: string;
+    totalUsers: string;
+    totalActiveUsers: string;
+    totalBlockedUsers: string;
+    totalSuspendedUsers: string;
+    totalSubscribedUsers: string;
+    totalRevenue: string;
     recentOrders: string;
     amount: string;
     date: string;
