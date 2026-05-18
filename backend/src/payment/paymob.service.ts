@@ -128,13 +128,13 @@ export class PaymobService {
     );
 
     try {
-      // Convert whole currency amounts to cents for the payment provider
+      // Convert whole currency amounts to cents for the payment provider and ensure it's an integer
       const paymentProviderRequest = {
         ...paymentRequest,
-        amount: paymentRequest.amount * 100, // Convert to cents for payment provider
+        amount: Math.round(paymentRequest.amount * 100), // Convert to cents and round to integer
         items: paymentRequest.items.map((item) => ({
           ...item,
-          amount: item.amount * 100, // Convert to cents for payment provider
+          amount: Math.round(item.amount * 100), // Convert to cents and round to integer
         })),
       };
 
