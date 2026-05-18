@@ -13,6 +13,8 @@ import { Badge } from '@ui/badge';
 import { AlertTriangle, Clock, XCircle } from 'lucide-react';
 import { useTerminateActiveCourse } from '../mutations';
 import { formatDate } from '@lib/utils';
+import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
 
 type Props = {
   open: boolean;
@@ -31,6 +33,7 @@ const ActiveCourseConflictModal: FC<Props> = ({
   const { t } = useTranslation();
   const [confirmTerminate, setConfirmTerminate] = useState(false);
   const { mutate: terminate, isPending } = useTerminateActiveCourse();
+  const queryClient = useQueryClient();
 
   const expiresAtTime = activeCourse.accessExpiresAt ? new Date(activeCourse.accessExpiresAt).getTime() : NaN;
   const daysRemaining = !isNaN(expiresAtTime)
@@ -43,6 +46,9 @@ const ActiveCourseConflictModal: FC<Props> = ({
   const handleTerminate = () => {
     terminate(undefined, {
       onSuccess: () => {
+        toast.success(t('Global.activeCourseConflict.terminateSuccess', 'Course terminated successfully. You can now enroll in a new course.'));
+        queryClient.invalidateQueries({ queryKey: ['user'] });
+        queryClient.invalidateQueries({ queryKey: ['active-course'] });
         setConfirmTerminate(false);
         onOpenChange(false);
       },

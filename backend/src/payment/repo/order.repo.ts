@@ -295,7 +295,6 @@ export class OrderRepo extends AbstractRepo<Order> implements OrderService {
           amount,
           paymentStatus: PaymentStatus.PENDING,
           paymentDate: new Date(),
-          accessStatus: OrderAccessStatus.ACTIVE,
         },
         session,
       );
@@ -319,7 +318,7 @@ export class OrderRepo extends AbstractRepo<Order> implements OrderService {
     // Convert userId to ObjectId
     const userIdObjectId = toObjectId(userId);
 
-    const filter: any = { userId: userIdObjectId };
+    const filter: any = { userId: userIdObjectId, paymentStatus: PaymentStatus.COMPLETED };
     if (levelName) {
       filter.levelName = levelName;
     }
