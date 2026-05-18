@@ -33,11 +33,17 @@ export class LevelAccessService {
       totalPausedDays += currentPauseDuration;
     }
 
-    const expiresAt = new Date(purchaseDate.getTime() + (this.ACCESS_DAYS + carriedOverDays + totalPausedDays + (user.adminGrantedDays || 0)) * 24 * 60 * 60 * 1000);
+    let expiresAt = order.accessExpiresAt ? new Date(order.accessExpiresAt) : new Date(purchaseDate.getTime() + (this.ACCESS_DAYS + carriedOverDays + totalPausedDays + (user.adminGrantedDays || 0)) * 24 * 60 * 60 * 1000);
     const now = new Date();
-    const daysElapsed = Math.max(0, Math.floor((now.getTime() - purchaseDate.getTime()) / (1000 * 60 * 60 * 24)));
-    const daysLeft = Math.max(0, (this.ACCESS_DAYS + carriedOverDays + totalPausedDays + (user.adminGrantedDays || 0)) - daysElapsed);
-    const isExpired = daysLeft <= 0;
+    
+    let isExpired = false;
+    let daysElapsed = Math.max(0, Math.floor((now.getTime() - purchaseDate.getTime()) / (1000 * 60 * 60 * 24)));
+    let daysLeft = Math.max(0, Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+
+    if (order.accessStatus === 'EXPIRED' || daysLeft <= 0) {
+      isExpired = true;
+      daysLeft = 0;
+    }
 
     return {
       levelName: order.levelName,

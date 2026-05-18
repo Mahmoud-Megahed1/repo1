@@ -570,7 +570,10 @@ export class PaymobController {
     // Mark the order as EXPIRED
     await this.paymobService.orderRepo.orderModel.findByIdAndUpdate(
       activeOrder._id,
-      { accessStatus: OrderAccessStatus.EXPIRED },
+      { 
+        accessStatus: OrderAccessStatus.EXPIRED,
+        accessExpiresAt: new Date()
+      },
     );
 
     this.logger.log(
