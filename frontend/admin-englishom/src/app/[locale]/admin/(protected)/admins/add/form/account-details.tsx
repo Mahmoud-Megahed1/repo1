@@ -3,15 +3,17 @@ import { FormInputsType } from '@/types/global.types';
 import { UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
 import { schema } from './schema';
+import { useTranslations } from 'next-intl';
 type Props = {
   form: UseFormReturn<z.infer<typeof schema>>;
   formInputs: FormInputsType[];
 };
 
 const AccountDetailsForm = ({ form, formInputs }: Props) => {
+  const t = useTranslations('Admin.adminForm');
   return (
     <div className="box flex flex-col gap-4">
-      <h2 className="subheading">بيانات الحساب</h2>
+      <h2 className="subheading">{t('accountDetails')}</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {formInputs.map(({ name, ...props }) => (
           <InputFormField
@@ -26,30 +28,62 @@ const AccountDetailsForm = ({ form, formInputs }: Props) => {
   );
 };
 
+export function getFormInputs(t: (key: string) => string): FormInputsType[] {
+  return [
+    {
+      label: t('firstName'),
+      name: 'firstName',
+      placeholder: t('firstName'),
+      required: true,
+    },
+    {
+      label: t('lastName'),
+      name: 'lastName',
+      placeholder: t('lastName'),
+      required: true,
+    },
+    {
+      label: t('email'),
+      name: 'email',
+      placeholder: t('email'),
+      type: 'email',
+      id: 'email',
+    },
+    {
+      label: t('password'),
+      name: 'password',
+      placeholder: t('password'),
+      required: true,
+      type: 'password',
+    },
+  ];
+}
+
+// Keep FORM_INPUTS for backward compatibility but with English defaults
 export const FORM_INPUTS: FormInputsType[] = [
   {
-    label: 'الاسم الأول',
+    label: 'First Name',
     name: 'firstName',
-    placeholder: 'الاسم الأول',
+    placeholder: 'First Name',
     required: true,
   },
   {
-    label: 'اسم العائلة',
+    label: 'Last Name',
     name: 'lastName',
-    placeholder: 'اسم العائلة',
+    placeholder: 'Last Name',
     required: true,
   },
   {
-    label: 'البريد الإلكتروني',
+    label: 'Email',
     name: 'email',
-    placeholder: 'البريد الإلكتروني',
+    placeholder: 'Email',
     type: 'email',
     id: 'email',
   },
   {
-    label: 'كلمة المرور',
+    label: 'Password',
     name: 'password',
-    placeholder: 'كلمة المرور',
+    placeholder: 'Password',
     required: true,
     type: 'password',
   },

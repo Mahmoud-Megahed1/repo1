@@ -12,8 +12,11 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import AdminForm from './form';
 import { schema } from './form/schema';
+import { getFormInputs } from './form/account-details';
+import { useTranslations } from 'next-intl';
 
 const AddAdmin = () => {
+  const t = useTranslations('Admin.adminForm');
   const router = useRouter();
   const id = useId();
   const form = useForm<z.infer<typeof schema>>({
@@ -29,7 +32,7 @@ const AddAdmin = () => {
         queryKey: ['admins'],
       });
       router.push('/admin/admins');
-      toast.success('تم إضافة المشرف بنجاح');
+      toast.success(t('adminAdded'));
     },
   });
   function onSubmit(values: z.infer<typeof schema>) {
@@ -41,19 +44,19 @@ const AddAdmin = () => {
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <GoBack />
-          <h1 className="capitalize heading">إضافة مشرف</h1>
+          <h1 className="capitalize heading">{t('addAdmin')}</h1>
         </div>
         <Button form={id} disabled={isPending}>
           {isPending ? (
             <span className="flex items-center justify-center gap-2">
-              <Spinner /> جاري الإضافة...
+              <Spinner /> {t('addingAdmin')}
             </span>
           ) : (
-            'إضافة مشرف'
+            t('addAdmin')
           )}
         </Button>
       </header>
-      <AdminForm id={id} form={form} onSubmit={form.handleSubmit(onSubmit)} />
+      <AdminForm id={id} form={form} formInputs={getFormInputs(t)} onSubmit={form.handleSubmit(onSubmit)} />
     </div>
   );
 };

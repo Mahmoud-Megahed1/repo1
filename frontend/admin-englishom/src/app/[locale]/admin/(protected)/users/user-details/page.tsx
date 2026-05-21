@@ -25,8 +25,10 @@ import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { coursesColumns } from './columns';
+import { useTranslations } from 'next-intl';
 
 const UserDetails = () => {
+  const t = useTranslations('Admin.userDetails');
   const [id] = useQueryState('id', parseAsString.withDefault(''));
   const { data, isLoading, isError } = useQuery({
     queryKey: ['userDetails', id],
@@ -36,8 +38,8 @@ const UserDetails = () => {
   const userDetails = data?.data.user;
   const rawCourses = data?.data.levelsDetails || [];
   const courses = rawCourses.map(c => ({ ...c, userId: userDetails?._id || '' }));
-  if (isLoading) return 'جاري التحميل...';
-  if (!userDetails || isError) return 'لم يتم العثور على المستخدم أو حدث خطأ';
+  if (isLoading) return t('loading');
+  if (!userDetails || isError) return t('userNotFound');
   return (
     <div className="flex flex-col gap-4">
       <section className="box flex min-h-32 flex-col justify-between gap-8 md:flex-row md:items-center">
@@ -74,7 +76,7 @@ const UserDetails = () => {
                 !userDetails.isVerified,
             })}
           >
-            {userDetails.isVerified ? '✔ موثق' : '❌ غير موثق'}
+            {userDetails.isVerified ? t('verified') : t('unverified')}
           </Badge>
         </div>
       </section>
@@ -82,25 +84,25 @@ const UserDetails = () => {
         <div className="box flex flex-col gap-8">
           <div className="flex items-center gap-2">
             <User2 className="text-blue-500" />
-            <h2 className="text-lg font-bold">المعلومات الشخصية</h2>
+            <h2 className="text-lg font-bold">{t('personalInfo')}</h2>
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                الاسم الأول
+                {t('firstName')}
               </span>
               <span className="font-bold">{userDetails.firstName}</span>
             </div>
             <DropdownMenuSeparator className="bg-muted-foreground/30" />
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                اسم العائلة
+                {t('lastName')}
               </span>
               <span className="font-bold">{userDetails.lastName}</span>
             </div>
             <DropdownMenuSeparator className="bg-muted-foreground/30" />
             <div className="flex flex-col">
-              <span className="font-medium text-muted-foreground">البريد الإلكتروني</span>
+              <span className="font-medium text-muted-foreground">{t('email')}</span>
               <span className="font-bold">{userDetails.email}</span>
             </div>
           </div>
@@ -108,12 +110,12 @@ const UserDetails = () => {
         <div className="box flex flex-col gap-8">
           <div className="flex items-center gap-2">
             <IdCard className="text-cyan-700" />
-            <h2 className="text-lg font-bold">حالة الحساب</h2>
+            <h2 className="text-lg font-bold">{t('accountStatus')}</h2>
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                الحالة الحالية
+                {t('currentStatus')}
               </span>
               <Badge
                 className={cn('mt-2 w-fit capitalize', {
@@ -131,7 +133,7 @@ const UserDetails = () => {
             <DropdownMenuSeparator className="bg-muted-foreground/30" />
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                حالة التوثيق
+                {t('verificationStatus')}
               </span>
               <Badge
                 className={cn('mt-2 w-fit capitalize', {
@@ -140,13 +142,13 @@ const UserDetails = () => {
                     !userDetails.isVerified,
                 })}
               >
-                {userDetails.isVerified ? '✔ موثق' : '❌ غير موثق'}
+                {userDetails.isVerified ? t('verified') : t('unverified')}
               </Badge>
             </div>
             <DropdownMenuSeparator className="bg-muted-foreground/30" />
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                تاريخ التسجيل
+                {t('registrationDate')}
               </span>
               <span className="font-bold">
                 {formatDate(userDetails.createdAt)}
@@ -157,12 +159,12 @@ const UserDetails = () => {
         <div className="box flex flex-col gap-8">
           <div className="flex items-center gap-2">
             <Activity className="text-purple-700" />
-            <h2 className="text-lg font-bold">النشاط</h2>
+            <h2 className="text-lg font-bold">{t('activity')}</h2>
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                آخر نشاط
+                {t('lastActivity')}
               </span>
               <span className="flex items-center gap-2 font-bold">
                 <Calendar size={16} className="text-purple-700" />
@@ -172,7 +174,7 @@ const UserDetails = () => {
             <DropdownMenuSeparator className="bg-muted-foreground/30" />
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                الوقت الدقيق
+                {t('exactTime')}
               </span>
               <span className="font-bold">
                 {formatDate(userDetails.lastActivity)}
@@ -187,30 +189,30 @@ const UserDetails = () => {
         <div className="box flex flex-col gap-6 px-8 py-6">
           <div className="flex items-center gap-2">
             <Calendar className="text-blue-500" />
-            <h2 className="text-lg font-bold">تفاصيل تجميد الاشتراك</h2>
+            <h2 className="text-lg font-bold">{t('freezeDetails')}</h2>
           </div>
           <div className="grid grid-cols-2 gap-6">
             <div className="flex flex-col gap-1">
-              <span className="text-sm text-muted-foreground">حالة التجميد</span>
+              <span className="text-sm text-muted-foreground">{t('freezeStatus')}</span>
               <div className="flex items-center gap-2">
                 <Badge variant={userDetails.isVoluntaryPaused ? "default" : "secondary"} className={cn(userDetails.isVoluntaryPaused && "bg-blue-600")}>
-                  {userDetails.isVoluntaryPaused ? "مجمد حالياً" : "نشط"}
+                  {userDetails.isVoluntaryPaused ? t('frozenNow') : t('active')}
                 </Badge>
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="text-sm text-muted-foreground">رصيد التجميد</span>
-              <span className="font-bold text-lg">{20 - (userDetails.totalPausedDays || 0)} / 20 أيام متبقية</span>
+              <span className="text-sm text-muted-foreground">{t('pauseBalance')}</span>
+              <span className="font-bold text-lg">{20 - (userDetails.totalPausedDays || 0)} / 20 {t('daysRemaining')}</span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="text-sm text-muted-foreground">محاولات التجميد</span>
-              <span className="font-bold text-lg">{userDetails.voluntaryPauseAttempts || 0} / 2 محاولات مستخدمة</span>
+              <span className="text-sm text-muted-foreground">{t('freezeAttempts')}</span>
+              <span className="font-bold text-lg">{userDetails.voluntaryPauseAttempts || 0} / 2 {t('attemptsUsed')}</span>
             </div>
             {userDetails.isVoluntaryPaused && (
               <div className="flex flex-col gap-1">
-                <span className="text-sm text-muted-foreground">تاريخ الاستئناف المجدول</span>
+                <span className="text-sm text-muted-foreground">{t('scheduledResume')}</span>
                 <span className="font-bold text-lg text-blue-600">
-                  {userDetails.pauseScheduledEndDate ? formatDate(userDetails.pauseScheduledEndDate) : "غير متوفر"}
+                  {userDetails.pauseScheduledEndDate ? formatDate(userDetails.pauseScheduledEndDate) : t('notAvailable')}
                 </span>
               </div>
             )}
@@ -218,27 +220,27 @@ const UserDetails = () => {
         </div>
 
         <div className="box flex flex-col gap-4 px-8 py-6">
-          <h2 className="text-lg font-bold">سجل التجميد</h2>
+          <h2 className="text-lg font-bold">{t('pauseHistory')}</h2>
           <ScrollArea className="h-[150px]">
             {(userDetails.pauseHistory?.length ?? 0) > 0 ? (
               <div className="space-y-3">
                 {userDetails.pauseHistory?.map((entry, idx) => (
                   <div key={idx} className="flex items-start justify-between border-b border-muted pb-2 text-sm">
                     <div className="flex flex-col">
-                      <span className="font-bold">{entry.reason || (entry.isVoluntary ? "إيقاف إرادي" : "تلقائي من النظام")}</span>
+                      <span className="font-bold">{entry.reason || (entry.isVoluntary ? t('voluntaryPause') : t('systemAutomatic'))}</span>
                       <span className="text-xs text-muted-foreground">
                         {formatDate(entry.start)} - {formatDate(entry.end)}
                       </span>
                     </div>
                     <Badge variant="outline" className="text-[10px]">
-                      {entry.isVoluntary ? "يدوي" : "تلقائي"}
+                      {entry.isVoluntary ? t('manual') : t('automatic')}
                     </Badge>
                   </div>
                 ))}
               </div>
             ) : (
               <div className="flex h-full items-center justify-center text-sm text-muted-foreground italic">
-                لا يوجد سجل تجميد متاح
+                {t('noPauseHistory')}
               </div>
             )}
           </ScrollArea>
@@ -246,7 +248,7 @@ const UserDetails = () => {
       </section>
       <section className="box flex flex-col gap-8 px-8 py-6">
         <div className="flex items-center justify-between">
-          <h2 className="subheading">الدورات</h2>
+          <h2 className="subheading">{t('courses')}</h2>
           <div className="flex items-center gap-2">
             <GrantDaysForm userId={userDetails._id} />
             <AddCourseForm userId={userDetails._id} />
@@ -258,10 +260,10 @@ const UserDetails = () => {
             <Calendar className="text-blue-500" size={20} />
             <div>
               <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                أيام إضافية ممنوحة:
+                {t('adminGrantedDays')}
               </span>
               <span className="ml-2 font-bold text-blue-900 dark:text-blue-100">
-                {userDetails.adminGrantedDays} أيام
+                {userDetails.adminGrantedDays} {t('days')}
               </span>
             </div>
           </div>
@@ -286,6 +288,7 @@ type Props = {
   userId: string;
 };
 const AddCourseForm: FC<Props> = ({ userId }) => {
+  const t = useTranslations('Admin.userDetails');
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const { mutate, isPending } = useMutation({
@@ -311,12 +314,12 @@ const AddCourseForm: FC<Props> = ({ userId }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>إضافة دورة</Button>
+        <Button>{t('addCourse')}</Button>
       </DialogTrigger>
       <DialogContent className="p-0">
         <ScrollArea className="flex max-h-[90vh] flex-col px-5 py-6">
           <DialogHeader className="mb-4 px-1">
-            <DialogTitle className="text-xl">إضافة دورة</DialogTitle>
+            <DialogTitle className="text-xl">{t('addCourse')}</DialogTitle>
           </DialogHeader>
           <Form {...form}>
             <form
@@ -327,10 +330,10 @@ const AddCourseForm: FC<Props> = ({ userId }) => {
                 control={form.control}
                 name="level_name"
                 options={LEVELS_OPTIONS}
-                placeholder="اختر الدورة"
+                placeholder={t('selectCourse')}
               />
               <Button disabled={isPending} className="ms-auto">
-                {isPending ? 'جاري الإضافة...' : 'إضافة'}
+                {isPending ? t('adding') : t('add')}
               </Button>
             </form>
           </Form>
@@ -350,6 +353,7 @@ const grantDaysSchema = z.object({
 });
 
 const GrantDaysForm: FC<{ userId: string }> = ({ userId }) => {
+  const t = useTranslations('Admin.userDetails');
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const { mutate, isPending } = useMutation({
@@ -377,12 +381,12 @@ const GrantDaysForm: FC<{ userId: string }> = ({ userId }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">منح أيام إضافية</Button>
+        <Button variant="outline">{t('grantExtraDays')}</Button>
       </DialogTrigger>
       <DialogContent className="p-0">
         <ScrollArea className="flex max-h-[90vh] flex-col px-5 py-6">
           <DialogHeader className="mb-4 px-1">
-            <DialogTitle className="text-xl">منح أيام إضافية</DialogTitle>
+            <DialogTitle className="text-xl">{t('grantExtraDays')}</DialogTitle>
           </DialogHeader>
           <Form {...form}>
             <form
@@ -390,16 +394,16 @@ const GrantDaysForm: FC<{ userId: string }> = ({ userId }) => {
               className="flex flex-col gap-4 p-1"
             >
               <p className="text-sm text-muted-foreground">
-                امنح المستخدم أيام اشتراك إضافية. سيؤدي هذا إلى تمديد اشتراكه الحالي. أدخل رقماً سالباً لخصم أيام.
+                {t('grantDaysDescription')}
               </p>
               <InputFormField
                 control={form.control}
                 name="days"
-                label="عدد الأيام"
+                label={t('numberOfDays')}
                 type="number"
               />
               <Button disabled={isPending} className="ms-auto">
-                {isPending ? 'جاري المنح...' : 'منح'}
+                {isPending ? t('granting') : t('grant')}
               </Button>
             </form>
           </Form>

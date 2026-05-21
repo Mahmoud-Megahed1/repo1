@@ -12,12 +12,14 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import AdminForm from '../add/form';
-import { FORM_INPUTS } from '../add/form/account-details';
+import { getFormInputs } from '../add/form/account-details';
 import { schema } from '../add/form/schema';
+import { useTranslations } from 'next-intl';
 
 const updateSchema = schema.partial();
 
 const UpdateAdmin = () => {
+  const t = useTranslations('Admin.adminForm');
   const router = useRouter();
   const [id] = useQueryState('id', parseAsString.withDefault(''));
   const formId = useId();
@@ -40,7 +42,7 @@ const UpdateAdmin = () => {
         queryKey: ['admins'],
       });
       router.push('/admin/admins');
-      toast.success('تم تحديث المشرف بنجاح');
+      toast.success(t('adminUpdated'));
     },
   });
 
@@ -71,30 +73,30 @@ const UpdateAdmin = () => {
     }
   }, [data?.data, form]);
 
-  if (isLoading) return 'جاري التحميل...';
-  if (!data?.data) return 'لم يتم العثور على المشرف';
+  if (isLoading) return t('loading');
+  if (!data?.data) return t('adminNotFound');
 
   return (
     <div className="flex flex-col gap-6 pb-6">
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <GoBack />
-          <h1 className="capitalize heading">تحديث المشرف</h1>
+          <h1 className="capitalize heading">{t('updateAdmin')}</h1>
         </div>
         <Button form={formId} disabled={isPending}>
           {isPending ? (
             <span className="flex items-center justify-center gap-2">
-              <Spinner /> جاري التحديث...
+              <Spinner /> {t('updatingAdmin')}
             </span>
           ) : (
-            'تحديث المشرف'
+            t('updateAdmin')
           )}
         </Button>
       </header>
       <AdminForm
         id={formId}
         form={form as never}
-        formInputs={FORM_INPUTS.map((item) => {
+        formInputs={getFormInputs(t).map((item) => {
           // Keep email disabled as it typically serves as identifier
           if (item.name === 'email') return { ...item, disabled: true };
           return item;
