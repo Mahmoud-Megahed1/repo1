@@ -452,6 +452,12 @@ export class UserService {
       { adminGrantedDays: newGrantedDays },
     );
 
+    // Reactivate the most recent order so the dynamic expiry calculation takes effect
+    const recentOrder = await this.orderRepo.findMostRecentOrder(userId);
+    if (recentOrder) {
+      await this.orderRepo.reactivateOrder(recentOrder._id.toString());
+    }
+
     this.logger.log(`Admin ${adminId} modified days by ${daysToGrant} for user ${userId}. New total granted: ${newGrantedDays}`);
 
     return updatedUser;

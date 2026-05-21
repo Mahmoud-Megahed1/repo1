@@ -37,7 +37,7 @@ export function HeroSection() {
           </Badge>
 
           {/* Pre-title */}
-          <p className={`mx-auto mb-4 max-w-3xl text-base sm:text-lg md:text-xl ${dynamicTheme?.assets?.backgroundImage ? 'text-zinc-200 drop-shadow-md' : 'text-muted-foreground'}`}>
+          <p className={`mx-auto mb-4 max-w-3xl text-lg sm:text-xl md:text-2xl ${dynamicTheme?.assets?.backgroundImage ? 'text-zinc-200 drop-shadow-md' : 'text-muted-foreground'}`}>
             {t('Landing.hero.preTitle')}
           </p>
 

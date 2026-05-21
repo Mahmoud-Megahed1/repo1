@@ -238,6 +238,21 @@ export class OrderRepo extends AbstractRepo<Order> implements OrderService {
     );
   }
 
+  /**
+   * Reactivate an order (used when admin grants extra days to an expired order)
+   */
+  async reactivateOrder(orderId: string, session?: ClientSession): Promise<Order | null> {
+    const orderIdObjectId = toObjectId(orderId);
+    return await this.orderModel.findByIdAndUpdate(
+      orderIdObjectId,
+      {
+        $unset: { accessExpiresAt: 1 },
+        $set: { accessStatus: OrderAccessStatus.ACTIVE },
+      },
+      { new: true, session: session || null },
+    );
+  }
+
   async deleteOrdersForLevel(
     userId: string | Types.ObjectId,
     levelName: string,
