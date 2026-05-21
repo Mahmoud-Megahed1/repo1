@@ -125,11 +125,11 @@ const CreateLevelDialog: FC<{ existingLevelNames: string[] }> = ({
       <DialogTrigger asChild>
         <Button className="gap-2">
           <Plus className="size-4" />
-          Add New Level
+          إضافة مستوى جديد
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[90%] overflow-auto">
-        <DialogTitle>Create New Level</DialogTitle>
+        <DialogTitle>إنشاء مستوى جديد</DialogTitle>
         <Form {...form}>
           <form
             className="grid grid-cols-2 gap-4"
@@ -210,7 +210,7 @@ const CreateLevelDialog: FC<{ existingLevelNames: string[] }> = ({
               lang="en"
             />
             <Button className="col-span-full" disabled={isPending}>
-              {isPending ? 'Creating...' : 'Create Level'}
+              {isPending ? 'جاري الإنشاء...' : 'إنشاء مستوى'}
             </Button>
           </form>
         </Form>
@@ -290,7 +290,7 @@ const LevelItem: FC<LevelType> = ({
       </CardHeader>
       <CardContent>
         <div className="flex items-center gap-3">
-          <span>Price: </span>
+          <span>السعر: </span>
           {originalPrice && originalPrice > price && (
             <span lang="en" className="inline-flex items-center gap-1 text-muted-foreground line-through">
               <RiyalSymbol className="size-3" />
@@ -306,11 +306,11 @@ const LevelItem: FC<LevelType> = ({
       <CardFooter className="mt-auto flex w-full items-center justify-between">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button>Update</Button>
+            <Button>تحديث</Button>
           </DialogTrigger>
           <DialogContent className="max-h-[90%] overflow-auto">
             <DialogTitle>
-              Update Level{' '}
+              تحديث المستوى{' '}
               <Badge className="w-fit py-1">{LEVELS_LABELS[level_name]}</Badge>
             </DialogTitle>
             <Form {...form}>
@@ -373,7 +373,7 @@ const LevelItem: FC<LevelType> = ({
                   lang="en"
                 />
                 <Button className="col-span-full" disabled={isPending}>
-                  {isPending ? 'Saving...' : 'Save'}
+                  {isPending ? 'جاري الحفظ...' : 'حفظ'}
                 </Button>
               </form>
             </Form>
@@ -384,7 +384,7 @@ const LevelItem: FC<LevelType> = ({
             htmlFor={`${level_name}-available`}
             className="text-muted-foreground"
           >
-            Availability
+            التوفر
           </Label>
           <Switch
             id={`${level_name}-available`}

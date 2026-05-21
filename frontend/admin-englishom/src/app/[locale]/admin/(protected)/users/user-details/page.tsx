@@ -157,12 +157,12 @@ const UserDetails = () => {
         <div className="box flex flex-col gap-8">
           <div className="flex items-center gap-2">
             <Activity className="text-purple-700" />
-            <h2 className="text-lg font-bold">Activity</h2>
+            <h2 className="text-lg font-bold">النشاط</h2>
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                Last Activity
+                آخر نشاط
               </span>
               <span className="flex items-center gap-2 font-bold">
                 <Calendar size={16} className="text-purple-700" />
@@ -172,7 +172,7 @@ const UserDetails = () => {
             <DropdownMenuSeparator className="bg-muted-foreground/30" />
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                Exact Time
+                الوقت الدقيق
               </span>
               <span className="font-bold">
                 {formatDate(userDetails.lastActivity)}
@@ -187,30 +187,30 @@ const UserDetails = () => {
         <div className="box flex flex-col gap-6 px-8 py-6">
           <div className="flex items-center gap-2">
             <Calendar className="text-blue-500" />
-            <h2 className="text-lg font-bold">Subscription Freeze Details</h2>
+            <h2 className="text-lg font-bold">تفاصيل تجميد الاشتراك</h2>
           </div>
           <div className="grid grid-cols-2 gap-6">
             <div className="flex flex-col gap-1">
-              <span className="text-sm text-muted-foreground">Freeze Status</span>
+              <span className="text-sm text-muted-foreground">حالة التجميد</span>
               <div className="flex items-center gap-2">
                 <Badge variant={userDetails.isVoluntaryPaused ? "default" : "secondary"} className={cn(userDetails.isVoluntaryPaused && "bg-blue-600")}>
-                  {userDetails.isVoluntaryPaused ? "Currently Frozen" : "Active"}
+                  {userDetails.isVoluntaryPaused ? "مجمد حالياً" : "نشط"}
                 </Badge>
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="text-sm text-muted-foreground">Pause Balance</span>
-              <span className="font-bold text-lg">{20 - (userDetails.totalPausedDays || 0)} / 20 Days Left</span>
+              <span className="text-sm text-muted-foreground">رصيد التجميد</span>
+              <span className="font-bold text-lg">{20 - (userDetails.totalPausedDays || 0)} / 20 أيام متبقية</span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="text-sm text-muted-foreground">Freeze Attempts</span>
-              <span className="font-bold text-lg">{userDetails.voluntaryPauseAttempts || 0} / 2 Attempts Used</span>
+              <span className="text-sm text-muted-foreground">محاولات التجميد</span>
+              <span className="font-bold text-lg">{userDetails.voluntaryPauseAttempts || 0} / 2 محاولات مستخدمة</span>
             </div>
             {userDetails.isVoluntaryPaused && (
               <div className="flex flex-col gap-1">
-                <span className="text-sm text-muted-foreground">Scheduled Resume</span>
+                <span className="text-sm text-muted-foreground">تاريخ الاستئناف المجدول</span>
                 <span className="font-bold text-lg text-blue-600">
-                  {userDetails.pauseScheduledEndDate ? formatDate(userDetails.pauseScheduledEndDate) : "N/A"}
+                  {userDetails.pauseScheduledEndDate ? formatDate(userDetails.pauseScheduledEndDate) : "غير متوفر"}
                 </span>
               </div>
             )}
@@ -218,27 +218,27 @@ const UserDetails = () => {
         </div>
 
         <div className="box flex flex-col gap-4 px-8 py-6">
-          <h2 className="text-lg font-bold">Pause History</h2>
+          <h2 className="text-lg font-bold">سجل التجميد</h2>
           <ScrollArea className="h-[150px]">
             {(userDetails.pauseHistory?.length ?? 0) > 0 ? (
               <div className="space-y-3">
                 {userDetails.pauseHistory?.map((entry, idx) => (
                   <div key={idx} className="flex items-start justify-between border-b border-muted pb-2 text-sm">
                     <div className="flex flex-col">
-                      <span className="font-bold">{entry.reason || (entry.isVoluntary ? "Voluntary" : "System")}</span>
+                      <span className="font-bold">{entry.reason || (entry.isVoluntary ? "إيقاف إرادي" : "تلقائي من النظام")}</span>
                       <span className="text-xs text-muted-foreground">
                         {formatDate(entry.start)} - {formatDate(entry.end)}
                       </span>
                     </div>
                     <Badge variant="outline" className="text-[10px]">
-                      {entry.isVoluntary ? "Manual" : "Auto"}
+                      {entry.isVoluntary ? "يدوي" : "تلقائي"}
                     </Badge>
                   </div>
                 ))}
               </div>
             ) : (
               <div className="flex h-full items-center justify-center text-sm text-muted-foreground italic">
-                No pause history available
+                لا يوجد سجل تجميد متاح
               </div>
             )}
           </ScrollArea>
@@ -246,7 +246,7 @@ const UserDetails = () => {
       </section>
       <section className="box flex flex-col gap-8 px-8 py-6">
         <div className="flex items-center justify-between">
-          <h2 className="subheading">Courses</h2>
+          <h2 className="subheading">الدورات</h2>
           <div className="flex items-center gap-2">
             <GrantDaysForm userId={userDetails._id} />
             <AddCourseForm userId={userDetails._id} />
@@ -258,10 +258,10 @@ const UserDetails = () => {
             <Calendar className="text-blue-500" size={20} />
             <div>
               <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                Admin Granted Days:
+                أيام إضافية ممنوحة:
               </span>
               <span className="ml-2 font-bold text-blue-900 dark:text-blue-100">
-                {userDetails.adminGrantedDays} days
+                {userDetails.adminGrantedDays} أيام
               </span>
             </div>
           </div>
@@ -311,12 +311,12 @@ const AddCourseForm: FC<Props> = ({ userId }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add Course</Button>
+        <Button>إضافة دورة</Button>
       </DialogTrigger>
       <DialogContent className="p-0">
         <ScrollArea className="flex max-h-[90vh] flex-col px-5 py-6">
           <DialogHeader className="mb-4 px-1">
-            <DialogTitle className="text-xl">Add Course</DialogTitle>
+            <DialogTitle className="text-xl">إضافة دورة</DialogTitle>
           </DialogHeader>
           <Form {...form}>
             <form
@@ -327,10 +327,10 @@ const AddCourseForm: FC<Props> = ({ userId }) => {
                 control={form.control}
                 name="level_name"
                 options={LEVELS_OPTIONS}
-                placeholder="Select Course"
+                placeholder="اختر الدورة"
               />
               <Button disabled={isPending} className="ms-auto">
-                {isPending ? 'Adding...' : 'Add'}
+                {isPending ? 'جاري الإضافة...' : 'إضافة'}
               </Button>
             </form>
           </Form>
@@ -377,12 +377,12 @@ const GrantDaysForm: FC<{ userId: string }> = ({ userId }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Grant Extra Days</Button>
+        <Button variant="outline">منح أيام إضافية</Button>
       </DialogTrigger>
       <DialogContent className="p-0">
         <ScrollArea className="flex max-h-[90vh] flex-col px-5 py-6">
           <DialogHeader className="mb-4 px-1">
-            <DialogTitle className="text-xl">Grant Extra Days</DialogTitle>
+            <DialogTitle className="text-xl">منح أيام إضافية</DialogTitle>
           </DialogHeader>
           <Form {...form}>
             <form
@@ -390,16 +390,16 @@ const GrantDaysForm: FC<{ userId: string }> = ({ userId }) => {
               className="flex flex-col gap-4 p-1"
             >
               <p className="text-sm text-muted-foreground">
-                Grant extra subscription days to the user. This will extend their current subscription. Enter a negative number to subtract days.
+                امنح المستخدم أيام اشتراك إضافية. سيؤدي هذا إلى تمديد اشتراكه الحالي. أدخل رقماً سالباً لخصم أيام.
               </p>
               <InputFormField
                 control={form.control}
                 name="days"
-                label="Number of Days"
+                label="عدد الأيام"
                 type="number"
               />
               <Button disabled={isPending} className="ms-auto">
-                {isPending ? 'Granting...' : 'Grant'}
+                {isPending ? 'جاري المنح...' : 'منح'}
               </Button>
             </form>
           </Form>
