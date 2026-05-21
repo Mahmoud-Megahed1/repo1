@@ -1,4 +1,5 @@
 import { LEVELS_LABELS } from '@/constants';
+import { Label } from '@/components/ui/label';
 import { LevelId } from '@/types/user.types';
 import { ColumnDef } from '@tanstack/react-table';
 
