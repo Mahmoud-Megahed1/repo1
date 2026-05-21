@@ -12,3 +12,4 @@ coverage
 backend_prod.env
 *.env
 backend_prod.env
+oxo/

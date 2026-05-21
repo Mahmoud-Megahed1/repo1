@@ -36,18 +36,25 @@ export function HeroSection() {
             🚀 {t('Global.englishom')} {currentYear}
           </Badge>
 
+          {/* Pre-title */}
+          <p className={`mx-auto mb-4 max-w-3xl text-sm sm:text-base md:text-lg ${dynamicTheme?.assets?.backgroundImage ? 'text-zinc-200 drop-shadow-md' : 'text-muted-foreground'}`}>
+            {t('Landing.hero.preTitle')}
+          </p>
+
           {/* Main Title */}
-          <h1 className={`mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl ${dynamicTheme?.assets?.backgroundImage ? 'text-white drop-shadow-md' : ''}`}>
+          <h1 className={`mb-6 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl ${dynamicTheme?.assets?.backgroundImage ? 'text-white drop-shadow-md' : ''}`}>
             {t('Landing.hero.title')}{' '}
             <span className="from-primary to-primary/60 bg-gradient-to-r bg-clip-text text-transparent">
-              {t('Global.englishom')}
+              {t('Landing.hero.titleHighlight')}
             </span>
           </h1>
 
           {/* Subtitle */}
-          <h2 className={`mb-6 text-xl font-semibold sm:text-2xl ${dynamicTheme?.assets?.backgroundImage ? 'text-zinc-200 drop-shadow-md' : 'text-muted-foreground'}`}>
-            {t('Landing.hero.subtitle')}
-          </h2>
+          {t('Landing.hero.subtitle') && (
+            <h2 className={`mb-6 text-lg font-semibold sm:text-xl md:text-2xl ${dynamicTheme?.assets?.backgroundImage ? 'text-zinc-200 drop-shadow-md' : 'text-muted-foreground'}`}>
+              {t('Landing.hero.subtitle')}
+            </h2>
+          )}
 
           {/* Description */}
           <p className={`mx-auto mb-8 max-w-2xl text-lg ${dynamicTheme?.assets?.backgroundImage ? 'text-zinc-100 drop-shadow-md' : 'text-muted-foreground'}`}>

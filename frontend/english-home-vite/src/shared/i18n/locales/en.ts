@@ -17,10 +17,12 @@ export default {
       },
     },
     hero: {
-      title: 'Master English with',
-      subtitle: 'Interactive Learning Platform',
+      preTitle: 'We develop comprehensive technical solutions and interactive software environments to facilitate language learning and skills development through our integrated platforms.',
+      title: 'EDUCATIONAL SYSTEMS PROGRAMMING &',
+      titleHighlight: 'LANGUAGE SOLUTIONS PLATFORM',
+      subtitle: '',
       description:
-        'Transform your English skills with our comprehensive learning platform. Practice speaking, listening, reading, and writing through engaging daily lessons.',
+        'Develop your skills in English with our comprehensive educational platform. Practice speaking, listening, reading, and writing through interactive daily lessons.',
       cta: 'Start Learning Now',
       watchDemo: 'Watch Demo',
     },
