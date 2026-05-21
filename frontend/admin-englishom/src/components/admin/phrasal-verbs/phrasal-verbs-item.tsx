@@ -1,14 +1,5 @@
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import AudioPlayer from '@/components/ui/audio-player';
+import DeleteButton from '@/components/shared/delete-button';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import useDeleteLesson from '@/hooks/use-delete-lesson';
@@ -16,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { PhrasalVerb } from '@/types/lessons.types';
 import { LevelId } from '@/types/user.types';
 import { useLocale, useTranslations } from 'next-intl';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,7 +24,6 @@ const PhrasalVerbItem: FC<Props> = ({
   const locale = useLocale() as 'en' | 'ar';
   const t = useTranslations('Global');
   const definition = locale === 'ar' ? definitionAr : definitionEn;
-  const [open, setOpen] = useState(false);
   // Default values to prevent crash if data is missing during migration
   const safeExamples = examples || [];
   const safeUseCases = useCases || { en: [], ar: [] };
@@ -43,9 +33,6 @@ const PhrasalVerbItem: FC<Props> = ({
     id,
     levelId: levelId as LevelId,
     lessonName: 'PHRASAL_VERBS',
-    onSuccess() {
-      setOpen(false);
-    },
   });
 
   return (
@@ -94,42 +81,7 @@ const PhrasalVerbItem: FC<Props> = ({
           </div>
         ))}
       </div>
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogTrigger asChild>
-          <Button
-            variant="destructive"
-            className="ms-auto mt-4 w-fit"
-            size="sm"
-          >
-            Delete
-          </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="border-none">
-              Cancel
-            </AlertDialogCancel>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => {
-                setOpen(false);
-                mutate();
-              }}
-              disabled={isPending}
-            >
-              {isPending ? 'Deleting...' : 'Delete'}
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteButton onDelete={() => mutate()} isPending={isPending} />
     </li>
   );
 };

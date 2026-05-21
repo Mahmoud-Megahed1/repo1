@@ -5,10 +5,12 @@ import useLesson from '@/hooks/use-lesson';
 import useLessonQueryParams from '@/hooks/use-lesson-query-params';
 import { cn } from '@/lib/utils';
 import { FC } from 'react';
+import { useTranslations } from 'next-intl';
 import FormDialog from './form-dialog';
 import QuestionAnswerItem, { QuestionAnswerItemSkeleton } from './q-and-a-item';
 
 const QuestionAnswer: FC = () => {
+  const t = useTranslations('Admin.cms');
   const [{ levelId, day }, setParams] = useLessonQueryParams();
   const {
     isLoading,

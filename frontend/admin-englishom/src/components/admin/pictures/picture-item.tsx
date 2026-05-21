@@ -1,20 +1,11 @@
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import DeleteButton from '@/components/shared/delete-button';
 import { Skeleton } from '@/components/ui/skeleton';
 import useDeleteLesson from '@/hooks/use-delete-lesson';
 import { cn } from '@/lib/utils';
 import { PictureLesson } from '@/types/lessons.types';
 import { LevelId } from '@/types/user.types';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 type Props = {
   picture: PictureLesson;
@@ -27,16 +18,11 @@ const PictureItem: FC<Props> = ({
   day,
   levelId,
 }) => {
-  const [open, setOpen] = useState(false);
-
   const { mutate, isPending } = useDeleteLesson({
     day,
     id,
     levelId,
     lessonName: 'PICTURES',
-    onSuccess() {
-      setOpen(false);
-    },
   });
   return (
     <li
@@ -82,42 +68,7 @@ const PictureItem: FC<Props> = ({
           label="English captions"
         />
       </audio>
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogTrigger asChild>
-          <Button
-            variant="destructive"
-            className="ms-auto mt-auto w-fit"
-            size="sm"
-          >
-            Delete
-          </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="border-none">
-              Cancel
-            </AlertDialogCancel>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => {
-                setOpen(false);
-                mutate();
-              }}
-              disabled={isPending}
-            >
-              {isPending ? 'Deleting...' : 'Delete'}
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteButton onDelete={() => mutate()} isPending={isPending} />
     </li>
   );
 };

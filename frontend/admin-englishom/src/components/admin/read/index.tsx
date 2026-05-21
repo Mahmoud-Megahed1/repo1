@@ -1,13 +1,13 @@
-'use client';
-
 import LevelAndDaySelector from '@/components/shared/level-and-day-selector';
 import useLesson from '@/hooks/use-lesson';
 import useLessonQueryParams from '@/hooks/use-lesson-query-params';
 import { FC } from 'react';
 import FormDialog from './form-dialog';
 import ReadItem, { ReadItemSkeleton } from './read-item';
+import { useTranslations } from 'next-intl';
 
 const Read: FC = () => {
+  const t = useTranslations('Admin.cms');
   const [{ levelId, day }, setParams] = useLessonQueryParams();
   const { isLoading, lesson, isEmpty, isFetching } = useLesson({
     day,
@@ -35,7 +35,7 @@ const Read: FC = () => {
 
       {isEmpty && (
         <div className="flex h-full items-center justify-center">
-          <h2 className="text-2xl font-bold">No Reads</h2>
+          <h2 className="text-2xl font-bold">{t('noData')}</h2>
         </div>
       )}
     </div>

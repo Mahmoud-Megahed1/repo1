@@ -4,11 +4,13 @@ import LevelAndDaySelector from '@/components/shared/level-and-day-selector';
 import useLesson from '@/hooks/use-lesson';
 import useLessonQueryParams from '@/hooks/use-lesson-query-params';
 import { FC } from 'react';
+import { useTranslations } from 'next-intl';
 import FormDialog from './form-dialog';
 import DailyTestItem, { DailyTestItemSkeleton } from './daily-test-item';
 import { cn } from '@/lib/utils';
 
 const DailyTest: FC = () => {
+  const t = useTranslations('Admin.cms');
   const [{ levelId, day }, setParams] = useLessonQueryParams();
   const {
     isLoading,
@@ -53,7 +55,7 @@ const DailyTest: FC = () => {
       </ul>
       {isEmpty && (
         <div className="flex h-full items-center justify-center">
-          <h2 className="text-2xl font-bold">No Daily Test</h2>
+          <h2 className="text-2xl font-bold">{t('noData')}</h2>
         </div>
       )}
     </div>

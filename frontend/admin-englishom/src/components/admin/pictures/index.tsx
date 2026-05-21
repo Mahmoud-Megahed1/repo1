@@ -5,10 +5,12 @@ import useLesson from '@/hooks/use-lesson';
 import useLessonQueryParams from '@/hooks/use-lesson-query-params';
 import { cn } from '@/lib/utils';
 import { FC } from 'react';
+import { useTranslations } from 'next-intl';
 import FormDialog from './form-dialog';
 import PictureItem, { PictureItemSkeleton } from './picture-item';
 
 const Pictures: FC = () => {
+  const t = useTranslations('Admin.cms');
   const [{ levelId: levelId, day }, setParams] = useLessonQueryParams();
   const {
     isLoading,
@@ -53,7 +55,7 @@ const Pictures: FC = () => {
       </ul>
       {isEmpty && (
         <div className="flex h-full items-center justify-center">
-          <h2 className="text-2xl font-bold">No Pictures</h2>
+          <h2 className="text-2xl font-bold">{t('noData')}</h2>
         </div>
       )}
     </div>

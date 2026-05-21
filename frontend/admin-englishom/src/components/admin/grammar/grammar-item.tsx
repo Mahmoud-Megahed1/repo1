@@ -1,21 +1,12 @@
 import RichTextViewer from '@/components/shared/rich-text-viewer';
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+import DeleteButton from '@/components/shared/delete-button';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import useDeleteLesson from '@/hooks/use-delete-lesson';
 import { GrammarLesson } from '@/types/lessons.types';
 import { LevelId } from '@/types/user.types';
 import { useLocale, useTranslations } from 'next-intl';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 type Props = {
   grammar: GrammarLesson;
@@ -39,7 +30,6 @@ const GrammarItem: FC<Props> = ({
   levelId,
 }) => {
   const locale = useLocale() as 'en' | 'ar';
-  const [open, setOpen] = useState(false);
   const tGlobal = useTranslations('Global');
   const { mutate, isPending } = useDeleteLesson({
     day,
@@ -96,42 +86,7 @@ const GrammarItem: FC<Props> = ({
           </section>
         )}
       </div>
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogTrigger asChild>
-          <Button
-            variant="destructive"
-            className="ms-auto mt-4 w-fit"
-            size="sm"
-          >
-            Delete
-          </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this
-              grammar lesson.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="border-none">
-              Cancel
-            </AlertDialogCancel>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => {
-                setOpen(false);
-                mutate();
-              }}
-              disabled={isPending}
-            >
-              {isPending ? 'Deleting...' : 'Delete'}
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteButton onDelete={() => mutate()} isPending={isPending} />
     </div>
   );
 };

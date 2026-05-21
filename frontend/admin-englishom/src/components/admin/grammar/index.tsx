@@ -4,10 +4,12 @@ import LevelAndDaySelector from '@/components/shared/level-and-day-selector';
 import useLesson from '@/hooks/use-lesson';
 import useLessonQueryParams from '@/hooks/use-lesson-query-params';
 import { FC } from 'react';
+import { useTranslations } from 'next-intl';
 import FormDialog from './form-dialog';
 import GrammarItem, { GrammarItemSkeleton } from './grammar-item';
 
 const Grammar: FC = () => {
+  const t = useTranslations('Admin.cms');
   const [{ levelId, day }, setParams] = useLessonQueryParams();
   const { isLoading, lesson, isEmpty, isFetching } = useLesson({
     day,
@@ -37,7 +39,7 @@ const Grammar: FC = () => {
       )}
       {isEmpty && (
         <div className="flex h-full items-center justify-center">
-          <h2 className="text-2xl font-bold">No Grammar</h2>
+          <h2 className="text-2xl font-bold">{t('noData')}</h2>
         </div>
       )}
     </div>

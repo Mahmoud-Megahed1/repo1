@@ -465,6 +465,23 @@
       "adminNotFound": "Admin not found",
       "loading": "Loading..."
     },
+    "cms": {
+      "create": "Create",
+      "createLesson": "Create Lesson",
+      "creating": "Creating...",
+      "fillForm": "Fill in the form to create a new lesson.",
+      "delete": "Delete",
+      "deleting": "Deleting...",
+      "day": "Day",
+      "level": "Level",
+      "noData": "No Data",
+      "definition": "Definition",
+      "examples": "Examples",
+      "loading": "Loading...",
+      "confirmTitle": "Are you absolutely sure?",
+      "confirmDescription": "This action cannot be undone. This will permanently delete this item.",
+      "cancel": "Cancel"
+    },
     "admins": {
       "title": "Admins",
       "addAdmin": "Add Admin",

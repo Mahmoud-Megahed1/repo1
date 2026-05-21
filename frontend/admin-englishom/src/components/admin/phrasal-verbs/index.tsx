@@ -5,10 +5,12 @@ import useLesson from '@/hooks/use-lesson';
 import useLessonQueryParams from '@/hooks/use-lesson-query-params';
 import { cn } from '@/lib/utils';
 import { FC } from 'react';
+import { useTranslations } from 'next-intl';
 import FormDialog from './form-dialog';
 import PhrasalVerbItem, { PhrasalVerbSkeleton } from './phrasal-verbs-item';
 
 const PhrasalVerbs: FC = () => {
+  const t = useTranslations('Admin.cms');
   const [{ levelId, day }, setParams] = useLessonQueryParams();
   const {
     isLoading,
@@ -52,7 +54,7 @@ const PhrasalVerbs: FC = () => {
       </ul>
       {isEmpty && (
         <div className="flex h-full items-center justify-center">
-          <h2 className="text-2xl font-bold">No Phrasal Verbs</h2>
+          <h2 className="text-2xl font-bold">{t('noData')}</h2>
         </div>
       )}
     </div>

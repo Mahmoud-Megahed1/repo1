@@ -1,22 +1,13 @@
 import EarSound from '@/components/shared/ear-sound';
+import DeleteButton from '@/components/shared/delete-button';
 import RichTextViewer from '@/components/shared/rich-text-viewer';
-import {
-    AlertDialog,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import useDeleteLesson from '@/hooks/use-delete-lesson';
 import { cn } from '@/lib/utils';
 import { ListenLesson } from '@/types/lessons.types';
 import { LevelId } from '@/types/user.types';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 type Props = {
     listen: ListenLesson;
@@ -29,15 +20,11 @@ const ListenItem: FC<Props> = ({
     day,
     levelId,
 }) => {
-    const [open, setOpen] = useState(false);
     const { mutate, isPending } = useDeleteLesson({
         day,
         id,
         levelId,
         lessonName: 'LISTEN',
-        onSuccess() {
-            setOpen(false);
-        },
     });
 
     return (
@@ -91,43 +78,7 @@ const ListenItem: FC<Props> = ({
                     </div>
                 )}
             </div>
-
-            <AlertDialog open={open} onOpenChange={setOpen}>
-                <AlertDialogTrigger asChild>
-                    <Button
-                        variant="destructive"
-                        className="ms-auto mt-auto w-fit"
-                        size="sm"
-                    >
-                        Delete
-                    </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            This action cannot be undone. This will permanently delete this
-                            listen exercise and remove the data from the servers.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel className="border-none">
-                            Cancel
-                        </AlertDialogCancel>
-                        <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => {
-                                setOpen(false);
-                                mutate();
-                            }}
-                            disabled={isPending}
-                        >
-                            {isPending ? 'Deleting...' : 'Delete'}
-                        </Button>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+      <DeleteButton onDelete={() => mutate()} isPending={isPending} />
         </li>
     );
 };
