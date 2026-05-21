@@ -469,7 +469,7 @@ export default {
     footer: {
       brand: {
         description:
-          'Transform your English skills with our comprehensive learning platform.',
+          'We design, program, and develop interactive systems and advanced technical solutions for the education and language sectors.',
       },
       quickLinks: {
         title: 'Quick Links',
