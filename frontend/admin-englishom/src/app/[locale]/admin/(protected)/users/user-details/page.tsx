@@ -36,8 +36,8 @@ const UserDetails = () => {
   const userDetails = data?.data.user;
   const rawCourses = data?.data.levelsDetails || [];
   const courses = rawCourses.map(c => ({ ...c, userId: userDetails?._id || '' }));
-  if (isLoading) return 'Loading...';
-  if (!userDetails || isError) return 'User not found or error occurred';
+  if (isLoading) return 'جاري التحميل...';
+  if (!userDetails || isError) return 'لم يتم العثور على المستخدم أو حدث خطأ';
   return (
     <div className="flex flex-col gap-4">
       <section className="box flex min-h-32 flex-col justify-between gap-8 md:flex-row md:items-center">
@@ -74,7 +74,7 @@ const UserDetails = () => {
                 !userDetails.isVerified,
             })}
           >
-            {userDetails.isVerified ? '✔ Verified' : '❌ Unverified'}
+            {userDetails.isVerified ? '✔ موثق' : '❌ غير موثق'}
           </Badge>
         </div>
       </section>
@@ -82,25 +82,25 @@ const UserDetails = () => {
         <div className="box flex flex-col gap-8">
           <div className="flex items-center gap-2">
             <User2 className="text-blue-500" />
-            <h2 className="text-lg font-bold">Personal Info</h2>
+            <h2 className="text-lg font-bold">المعلومات الشخصية</h2>
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                First Name
+                الاسم الأول
               </span>
               <span className="font-bold">{userDetails.firstName}</span>
             </div>
             <DropdownMenuSeparator className="bg-muted-foreground/30" />
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                Last Name
+                اسم العائلة
               </span>
               <span className="font-bold">{userDetails.lastName}</span>
             </div>
             <DropdownMenuSeparator className="bg-muted-foreground/30" />
             <div className="flex flex-col">
-              <span className="font-medium text-muted-foreground">Email</span>
+              <span className="font-medium text-muted-foreground">البريد الإلكتروني</span>
               <span className="font-bold">{userDetails.email}</span>
             </div>
           </div>
@@ -108,12 +108,12 @@ const UserDetails = () => {
         <div className="box flex flex-col gap-8">
           <div className="flex items-center gap-2">
             <IdCard className="text-cyan-700" />
-            <h2 className="text-lg font-bold">Account Status</h2>
+            <h2 className="text-lg font-bold">حالة الحساب</h2>
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                Current Status
+                الحالة الحالية
               </span>
               <Badge
                 className={cn('mt-2 w-fit capitalize', {
@@ -131,7 +131,7 @@ const UserDetails = () => {
             <DropdownMenuSeparator className="bg-muted-foreground/30" />
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                Verification Status
+                حالة التوثيق
               </span>
               <Badge
                 className={cn('mt-2 w-fit capitalize', {
@@ -140,13 +140,13 @@ const UserDetails = () => {
                     !userDetails.isVerified,
                 })}
               >
-                {userDetails.isVerified ? '✔ Verified' : '❌ Unverified'}
+                {userDetails.isVerified ? '✔ موثق' : '❌ غير موثق'}
               </Badge>
             </div>
             <DropdownMenuSeparator className="bg-muted-foreground/30" />
             <div className="flex flex-col">
               <span className="font-medium text-muted-foreground">
-                Registration Date
+                تاريخ التسجيل
               </span>
               <span className="font-bold">
                 {formatDate(userDetails.createdAt)}

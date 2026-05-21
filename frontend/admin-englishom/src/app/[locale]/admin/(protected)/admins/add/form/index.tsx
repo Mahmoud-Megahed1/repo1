@@ -31,15 +31,15 @@ const AdminForm = ({
         <section className="flex flex-1 flex-col gap-4">
           <AccountDetailsForm form={form} formInputs={formInputs} />
           <div className="box flex flex-col gap-4">
-            <h2 className="subheading">Account Type</h2>
+            <h2 className="subheading">نوع الحساب</h2>
             <RadioFormField
               control={form.control}
               name={'adminRole'}
               options={[
-                { value: 'super', label: 'Super Admin' },
-                { value: 'manager', label: 'Manager' },
-                { value: 'operator', label: 'Operator' },
-                { value: 'view', label: 'Viewer' },
+                { value: 'super', label: 'مشرف أعلى' },
+                { value: 'manager', label: 'مدير' },
+                { value: 'operator', label: 'مشغل' },
+                { value: 'view', label: 'مشاهد' },
               ]}
             />
           </div>

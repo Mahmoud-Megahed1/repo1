@@ -29,7 +29,7 @@ const AddAdmin = () => {
         queryKey: ['admins'],
       });
       router.push('/admin/admins');
-      toast.success('Admin added successfully');
+      toast.success('تم إضافة المشرف بنجاح');
     },
   });
   function onSubmit(values: z.infer<typeof schema>) {
@@ -41,15 +41,15 @@ const AddAdmin = () => {
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <GoBack />
-          <h1 className="capitalize heading">Add Admin</h1>
+          <h1 className="capitalize heading">إضافة مشرف</h1>
         </div>
         <Button form={id} disabled={isPending}>
           {isPending ? (
             <span className="flex items-center justify-center gap-2">
-              <Spinner /> Adding...
+              <Spinner /> جاري الإضافة...
             </span>
           ) : (
-            'Add Admin'
+            'إضافة مشرف'
           )}
         </Button>
       </header>

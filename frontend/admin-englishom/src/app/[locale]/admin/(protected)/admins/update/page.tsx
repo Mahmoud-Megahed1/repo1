@@ -40,7 +40,7 @@ const UpdateAdmin = () => {
         queryKey: ['admins'],
       });
       router.push('/admin/admins');
-      toast.success('Admin updated successfully');
+      toast.success('تم تحديث المشرف بنجاح');
     },
   });
 
@@ -71,23 +71,23 @@ const UpdateAdmin = () => {
     }
   }, [data?.data, form]);
 
-  if (isLoading) return 'Loading...';
-  if (!data?.data) return 'Admin not found';
+  if (isLoading) return 'جاري التحميل...';
+  if (!data?.data) return 'لم يتم العثور على المشرف';
 
   return (
     <div className="flex flex-col gap-6 pb-6">
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <GoBack />
-          <h1 className="capitalize heading">Update Admin</h1>
+          <h1 className="capitalize heading">تحديث المشرف</h1>
         </div>
         <Button form={formId} disabled={isPending}>
           {isPending ? (
             <span className="flex items-center justify-center gap-2">
-              <Spinner /> Updating...
+              <Spinner /> جاري التحديث...
             </span>
           ) : (
-            'Update Admin'
+            'تحديث المشرف'
           )}
         </Button>
       </header>

@@ -11,7 +11,7 @@ type Props = {
 const AccountDetailsForm = ({ form, formInputs }: Props) => {
   return (
     <div className="box flex flex-col gap-4">
-      <h2 className="subheading">Account Details</h2>
+      <h2 className="subheading">بيانات الحساب</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {formInputs.map(({ name, ...props }) => (
           <InputFormField
@@ -28,28 +28,28 @@ const AccountDetailsForm = ({ form, formInputs }: Props) => {
 
 export const FORM_INPUTS: FormInputsType[] = [
   {
-    label: 'First Name',
+    label: 'الاسم الأول',
     name: 'firstName',
-    placeholder: 'First Name',
+    placeholder: 'الاسم الأول',
     required: true,
   },
   {
-    label: 'Last Name',
+    label: 'اسم العائلة',
     name: 'lastName',
-    placeholder: 'Last Name',
+    placeholder: 'اسم العائلة',
     required: true,
   },
   {
-    label: 'Email',
+    label: 'البريد الإلكتروني',
     name: 'email',
-    placeholder: 'Email',
+    placeholder: 'البريد الإلكتروني',
     type: 'email',
     id: 'email',
   },
   {
-    label: 'Password',
+    label: 'كلمة المرور',
     name: 'password',
-    placeholder: 'Password',
+    placeholder: 'كلمة المرور',
     required: true,
     type: 'password',
   },
