@@ -37,7 +37,7 @@ export function LandingHeader() {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Temporarily hidden until certification is issued
           <nav className="hidden items-center space-x-6 md:flex">
             <Link
               to={'/#features' as never}
@@ -82,11 +82,12 @@ export function LandingHeader() {
               {t('Landing.header.navigation.contact')}
             </Link>
           </nav>
+          */}
 
           {/* Desktop CTA Buttons */}
           <div className="hidden items-center space-x-4 md:flex">
             <Button asChild>
-              <Link to="/signup">{t('Landing.hero.cta')}</Link>
+              <Link to="/signup">{t('Landing.header.cta.signup')}</Link>
             </Button>
             <ThemeSwitcher />
             <Button variant="ghost" asChild>
@@ -114,6 +115,7 @@ export function LandingHeader() {
         {isMobileMenuOpen && (
           <div className="bg-background absolute left-0 w-full border-t md:hidden">
             <div className="container space-y-4 py-4">
+              {/* Mobile Menu Links - Temporarily hidden until certification is issued
               <Link
                 to={'/#features' as never}
                 className="hover:text-primary block text-sm font-medium transition-colors"
@@ -156,7 +158,8 @@ export function LandingHeader() {
               >
                 {t('Landing.header.navigation.contact')}
               </Link>
-              <div className="space-y-3 border-t pt-4">
+              */}
+              <div className="space-y-3 pt-4">
                 <div className="flex items-center justify-between gap-2">
                   <Button variant="ghost" asChild>
                     <LanguageSwitcher>
@@ -171,7 +174,7 @@ export function LandingHeader() {
                     <Link to="/login">{t('Landing.header.cta.login')}</Link>
                   </Button>
                   <Button asChild className="justify-start">
-                    <Link to="/signup">{t('Landing.hero.cta')}</Link>
+                    <Link to="/signup">{t('Landing.header.cta.signup')}</Link>
                   </Button>
                 </div>
               </div>
