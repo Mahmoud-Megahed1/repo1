@@ -1,4 +1,4 @@
-import { eq, desc, and, like, isNull, count, sql } from "drizzle-orm";
+import { eq, desc, and, like, isNull, count, sql, inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, blogPosts, blogCategories, blogComments, blogTags, blogPostTags, blogMedia, blogCta, blogAnalytics, postRatings, InsertPostRating } from "../drizzle/schema";
 import { ENV } from './_core/env';
@@ -620,7 +620,7 @@ export async function getPostsByTag(tagId: number, limit: number = 10, offset: n
   return db
     .select()
     .from(blogPosts)
-    .where(and(sql`${blogPosts.id} IN (${sql.raw(postIds.join(','))})`, eq(blogPosts.status, "published")))
+    .where(and(inArray(blogPosts.id, postIds), eq(blogPosts.status, "published")))
     .orderBy(desc(blogPosts.publishedAt));
 }
 
@@ -639,7 +639,7 @@ export async function getPostTags(postId: number) {
   return db
     .select()
     .from(blogTags)
-    .where(sql`${blogTags.id} IN (${sql.raw(ids.join(','))})`);
+    .where(inArray(blogTags.id, ids));
 }
 
 export async function addTagToPost(postId: number, tagId: number) {
