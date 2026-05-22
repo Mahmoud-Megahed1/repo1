@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChevronDown, BookOpen, Mic, TrendingUp, Award, MessageCircle, Zap, Users, Smartphone, Lock, Headphones } from "lucide-react";
+import { ChevronDown, BookOpen, Mic, TrendingUp, Award, MessageCircle, Zap, Users, Smartphone, Lock, Headphones, Tablet, Laptop } from "lucide-react";
 import { useState } from "react";
 
 /**
@@ -37,13 +37,21 @@ export default function Home() {
       color: "from-cyan-500 to-cyan-600"
     },
     {
-      icon: Smartphone,
+      icon: ({ className }: { className?: string }) => (
+        <div className="flex items-center justify-center gap-1 w-full h-full">
+          <Smartphone className="w-1/3 h-auto text-white" />
+          <Tablet className="w-1/3 h-auto text-white" />
+          <Laptop className="w-1/3 h-auto text-white" />
+        </div>
+      ),
       title: "مرونة الأجهزة الكاملة",
       description: "تعلم من أي مكان على جوالك أو آيباد أو لابتوب. المنصة متوافقة تماماً مع جميع الأجهزة والشاشات.",
       color: "from-purple-500 to-purple-600"
     },
     {
-      icon: Lock,
+      icon: ({ className }: { className?: string }) => (
+        <img src="/tamara.svg" alt="Tamara" className="w-full h-full p-1 object-contain filter brightness-0 invert" />
+      ),
       title: "خدمة التقسيط بـ تمارا",
       description: "ادفع على دفعات مريحة باستخدام خدمة تمارا. لا حاجة للقلق بشأن الدفع الكامل مقدماً.",
       color: "from-pink-500 to-pink-600"

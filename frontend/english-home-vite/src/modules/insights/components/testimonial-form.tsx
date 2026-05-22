@@ -14,7 +14,7 @@ import { Star, MessageSquarePlus } from 'lucide-react';
 import { cn } from '@lib/utils';
 import { useSubmitTestimonial } from '../testimonial-mutations';
 
-const TestimonialForm: FC = () => {
+const TestimonialForm: FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
@@ -39,10 +39,12 @@ const TestimonialForm: FC = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
-          <MessageSquarePlus className="size-4" />
-          {t('Global.testimonial.submitButton')}
-        </Button>
+        {children || (
+          <Button variant="outline" className="gap-2">
+            <MessageSquarePlus className="size-4" />
+            {t('Global.testimonial.submitButton')}
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader className="text-center">
