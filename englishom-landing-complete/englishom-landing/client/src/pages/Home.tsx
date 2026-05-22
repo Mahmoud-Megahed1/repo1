@@ -37,21 +37,13 @@ export default function Home() {
       color: "from-cyan-500 to-cyan-600"
     },
     {
-      icon: ({ className }: { className?: string }) => (
-        <div className="relative w-full h-full flex items-center justify-center scale-125">
-          <Laptop className="w-8 h-8 text-white absolute -left-2 z-10 drop-shadow-md" />
-          <Tablet className="w-6 h-6 text-white absolute right-1 z-20 drop-shadow-md" />
-          <Smartphone className="w-4 h-4 text-white absolute -right-2 z-30 drop-shadow-md" />
-        </div>
-      ),
+      icon: "devices",
       title: "مرونة الأجهزة الكاملة",
       description: "تعلم من أي مكان على جوالك أو آيباد أو لابتوب. المنصة متوافقة تماماً مع جميع الأجهزة والشاشات.",
       color: "from-purple-500 to-purple-600"
     },
     {
-      icon: ({ className }: { className?: string }) => (
-        <img src="/tamara.png" alt="Tamara" className="w-full h-full object-contain filter brightness-0 invert scale-[1.7]" />
-      ),
+      icon: "tamara",
       title: "خدمة التقسيط بـ تمارا",
       description: "ادفع على دفعات مريحة باستخدام خدمة تمارا. لا حاجة للقلق بشأن الدفع الكامل مقدماً.",
       color: "from-pink-500 to-pink-600"
@@ -218,11 +210,21 @@ export default function Home() {
           
           <div className="grid md:grid-cols-2 gap-8">
             {features.map((feature, index) => {
-              const Icon = feature.icon;
+              const isCustomIcon = feature.icon === "devices" || feature.icon === "tamara";
               return (
                 <Card key={index} className="bg-black/50 border-gray-700 hover:border-gray-600 transition-all hover:shadow-xl hover:shadow-blue-500/10 p-8 group">
-                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} p-3 mb-6 group-hover:scale-110 transition-transform`}>
-                    <Icon className="w-full h-full text-white" />
+                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} mb-6 group-hover:scale-110 transition-transform flex items-center justify-center ${isCustomIcon ? 'p-2 overflow-visible' : 'p-3'}`}>
+                    {feature.icon === "devices" ? (
+                      <div className="flex items-end justify-center gap-1">
+                        <Laptop className="w-7 h-7 text-white" />
+                        <Tablet className="w-5 h-5 text-white" />
+                        <Smartphone className="w-4 h-4 text-white" />
+                      </div>
+                    ) : feature.icon === "tamara" ? (
+                      <img src="/tamara-full.svg" alt="Tamara" className="w-20 h-10 object-contain filter brightness-0 invert" />
+                    ) : (
+                      <>{(() => { const Icon = feature.icon as React.ComponentType<{className?: string}>; return <Icon className="w-full h-full text-white" />; })()}</>
+                    )}
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-3 text-center">{feature.title}</h3>
                   <p className="text-gray-300 leading-relaxed text-center">{feature.description}</p>
