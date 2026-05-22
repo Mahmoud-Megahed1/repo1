@@ -12,7 +12,7 @@ import {
   getTestResultByAttemptId,
   logAnswer,
   updateTestAttemptStatus,
-  getQuestionById,
+  getQuestionsByIds,
 } from "./db";
 import { calculateCEFRLevel, analyzeStagePerformance, generateRecommendations } from "@shared/scoring";
 import { nanoid } from "nanoid";
@@ -98,8 +98,13 @@ export const testRouter = router({
       let totalCorrect = 0;
       const stageNames = ["vocabulary", "grammar", "reading", "listening", "writing"];
 
+      // Batch-fetch all questions in one query (fixes N+1 performance issue)
+      const questionIds = input.answers.map(a => a.questionId);
+      const questionsFromDb = await getQuestionsByIds(questionIds);
+      const questionMap = new Map(questionsFromDb.map(q => [q.id, q]));
+
       for (const answer of input.answers) {
-        const question = await getQuestionById(answer.questionId);
+        const question = questionMap.get(answer.questionId);
         const stageIndex = question ? question.stage - 1 : 0;
         const stageName = stageNames[stageIndex] || "vocabulary";
 

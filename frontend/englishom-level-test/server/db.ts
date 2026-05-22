@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { eq, and, sql, inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   InsertUser,
@@ -109,7 +109,7 @@ export async function getQuestionsByStage(stage: number, limit?: number) {
   let query = db
     .select()
     .from(questions)
-    .where(eq(questions.isActive, 1) && eq(questions.stage, stage));
+    .where(and(eq(questions.isActive, 1), eq(questions.stage, stage)));
 
   if (limit) {
     query = query.limit(limit) as typeof query;
@@ -128,7 +128,7 @@ export async function getRandomQuestionByStage(stage: number) {
   const result = await db
     .select()
     .from(questions)
-    .where(eq(questions.isActive, 1) && eq(questions.stage, stage))
+    .where(and(eq(questions.isActive, 1), eq(questions.stage, stage)))
     .orderBy(sql`RAND()`)
     .limit(1);
 
@@ -248,6 +248,16 @@ export async function getQuestionById(id: number) {
 
   const result = await db.select().from(questions).where(eq(questions.id, id)).limit(1);
   return result.length > 0 ? result[0] : null;
+}
+
+/**
+ * Batch fetch questions by IDs (avoids N+1 queries in submitTest)
+ */
+export async function getQuestionsByIds(ids: number[]) {
+  const db = await getDb();
+  if (!db || ids.length === 0) return [];
+
+  return db.select().from(questions).where(inArray(questions.id, ids));
 }
 
 /**
