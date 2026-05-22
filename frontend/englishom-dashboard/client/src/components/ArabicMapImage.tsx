@@ -161,12 +161,44 @@ const ArabicMapImage: React.FC<ArabicMapImageProps> = ({ className = '' }) => {
 
   return (
     <div className={`relative w-full h-full overflow-hidden bg-slate-900 ${className}`}>
-      {/* الخريطة الأساسية */}
-      <img
-        src="/manus-storage/arabic-map-neon_86333d8f.png"
-        alt="خريطة الدول العربية"
-        className="w-full h-full object-cover"
-      />
+      {/* الخريطة الأساسية (تم استبدال الصورة بخريطة SVG) */}
+      <svg
+        viewBox="0 0 100 100"
+        className="absolute inset-0 w-full h-full opacity-40 pointer-events-none"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <style>{`
+            .arab-country {
+              fill: #0f172a;
+              stroke: #334155;
+              stroke-width: 0.5;
+            }
+          `}</style>
+        </defs>
+        {/* السعودية */}
+        <polygon className="arab-country" points="45,30 70,25 75,50 60,60 40,55 35,40" />
+        {/* مصر */}
+        <polygon className="arab-country" points="30,15 40,12 42,40 35,45 28,35" />
+        {/* العراق */}
+        <polygon className="arab-country" points="50,20 65,18 68,35 55,38 48,30" />
+        {/* الإمارات والخليج */}
+        <polygon className="arab-country" points="68,35 78,33 80,48 70,50 65,42" />
+        {/* اليمن */}
+        <polygon className="arab-country" points="48,50 65,48 70,70 50,75 42,60" />
+        {/* عمّان والشام */}
+        <polygon className="arab-country" points="45,20 55,18 58,32 48,35 42,28" />
+        {/* لبنان وسوريا */}
+        <polygon className="arab-country" points="48,15 52,14 54,25 50,26 46,20" />
+        {/* الكويت والبحرين وقطر */}
+        <polygon className="arab-country" points="62,28 70,27 72,38 65,39 60,32" />
+        {/* السودان */}
+        <polygon className="arab-country" points="35,45 50,42 52,65 38,68 32,55" />
+        {/* ليبيا */}
+        <polygon className="arab-country" points="20,15 40,12 42,35 25,38 18,25" />
+        {/* تونس والجزائر والمغرب */}
+        <polygon className="arab-country" points="10,12 35,10 38,28 15,30 8,20" />
+      </svg>
 
       {/* طبقة النبضات */}
       <div className="absolute inset-0 w-full h-full">
