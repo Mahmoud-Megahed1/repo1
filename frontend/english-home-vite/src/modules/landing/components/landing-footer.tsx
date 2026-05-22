@@ -90,7 +90,7 @@ export function LandingFooter() {
             </ul>
           </div>
 
-          {/* Quick Links */}
+          {/* Quick Links - Temporarily hidden until certification is issued
           <div>
             <h3 className="mb-4 font-semibold">
               {t('Landing.footer.quickLinks.title')}
@@ -108,6 +108,7 @@ export function LandingFooter() {
               ))}
             </ul>
           </div>
+          */}
 
           {/* Learning */}
           <div>
