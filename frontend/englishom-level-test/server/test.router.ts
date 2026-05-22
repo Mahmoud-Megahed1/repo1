@@ -12,6 +12,7 @@ import {
   getTestResultByAttemptId,
   logAnswer,
   updateTestAttemptStatus,
+  getQuestionById,
 } from "./db";
 import { calculateCEFRLevel, analyzeStagePerformance, generateRecommendations } from "@shared/scoring";
 import { nanoid } from "nanoid";
@@ -98,8 +99,8 @@ export const testRouter = router({
       const stageNames = ["vocabulary", "grammar", "reading", "listening", "writing"];
 
       for (const answer of input.answers) {
-        // Determine stage (assuming 10 questions per stage)
-        const stageIndex = Math.floor((input.answers.indexOf(answer)) / 10);
+        const question = await getQuestionById(answer.questionId);
+        const stageIndex = question ? question.stage - 1 : 0;
         const stageName = stageNames[stageIndex] || "vocabulary";
 
         if (answer.isCorrect) {

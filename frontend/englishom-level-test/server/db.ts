@@ -242,6 +242,14 @@ export async function getAllQuestions() {
   return db.select().from(questions).where(eq(questions.isActive, 1));
 }
 
+export async function getQuestionById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const result = await db.select().from(questions).where(eq(questions.id, id)).limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
 /**
  * Create a new question
  */
