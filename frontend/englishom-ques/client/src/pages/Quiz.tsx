@@ -62,16 +62,13 @@ export default function Quiz() {
 
   const { mutate: submitResult, isPending: isSubmitting } = trpc.quiz.submitTestResult.useMutation({
     onSuccess: (data) => {
-      console.log('Result submitted successfully', data);
       if (data.score !== undefined) {
         setScore(data.score);
         correctAnswersRef.current = data.score;
         setResults(prev => prev ? { ...prev, score: data.score, accuracy: data.accuracy ?? 0 } : null);
       }
-      // Silent success for guests
     },
-    onError: (error) => {
-      console.log('Result submission error:', error);
+    onError: () => {
       // Silent error for guests
     },
   });
@@ -87,24 +84,9 @@ export default function Quiz() {
       // Just show the level selection screen, don't auto-load
     }
   }, []);
-  
-  // Log when questions are loaded
-  useEffect(() => {
-    if (questionsData?.length) {
-      console.log('Questions query success:', questionsData.length, 'questions loaded');
-    }
-  }, [questionsData]);
-  
-  useEffect(() => {
-    if (questionsError) {
-      console.log('Questions query error:', questionsError);
-    }
-  }, [questionsError]);
 
   useEffect(() => {
-    console.log('Questions data changed:', { questionsDataLength: questionsData?.length, state });
     if (questionsData && questionsData.length > 0 && state === "loading") {
-      console.log('Loading questions:', questionsData);
       setQuestions(questionsData);
       setTimeRemaining(questionsData[0].timePerQuestion);
       setState("quiz");
@@ -135,7 +117,6 @@ export default function Quiz() {
   }, [state, currentQuestionIndex, questions, answered]);
 
   const handleTimeExpired = () => {
-    console.log('Time expired for question:', currentQuestionIndex);
     if (!answered) {
       setAnswered(true);
       setResponseTimes([...responseTimes, questions[currentQuestionIndex].timePerQuestion]);
@@ -149,12 +130,6 @@ export default function Quiz() {
     const currentQuestion = questions[currentQuestionIndex];
     const responseTime = currentQuestion.timePerQuestion - timeRemaining;
 
-    // Debug logging
-    console.log('=== ANSWER SELECTED ===');
-    console.log('Question ID:', currentQuestion.id);
-    console.log('Question:', currentQuestion.question);
-    console.log('User Choice:', choice, 'Type:', typeof choice);
-
     setSelectedAnswer(choice);
     setAnswered(true);
     setResponseTimes([...responseTimes, responseTime]);
@@ -164,13 +139,11 @@ export default function Quiz() {
   };
 
   const moveToNextQuestion = () => {
-    console.log('Moving to next question. Current:', currentQuestionIndex, 'Total:', questions.length);
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
       setAnswered(false);
     } else {
-      console.log('Quiz finished!');
       finishQuiz();
     }
   };
@@ -178,10 +151,6 @@ export default function Quiz() {
   const finishQuiz = () => {
     const totalTime = Date.now() - (quizStartTime || Date.now());
     const avgResponseTime = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
-
-    console.log('=== QUIZ FINISHED ===');
-    console.log('Total Questions:', questions.length);
-    console.log('Response Times:', responseTimes);
 
     const result: QuizResult = {
       score: 0, // Will be updated by server response
