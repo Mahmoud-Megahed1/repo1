@@ -19,11 +19,11 @@ export default {
     },
     hero: {
       preTitle: 'We develop comprehensive technical solutions and interactive software environments to facilitate language acquisition and develop smart language solutions and systems.',
-      title: 'EDUCATIONAL SYSTEMS PROGRAMMING &',
+      title: 'SYSTEMS PROGRAMMING &',
       titleHighlight: 'LANGUAGE SOLUTIONS PLATFORM',
       subtitle: '',
       description:
-        'Develop your English skills with our comprehensive educational platform. Practice speaking, listening, reading, and writing through interactive daily updates and systems.',
+        'Develop your English skills with our comprehensive software platform. Practice speaking, listening, reading, and writing through interactive daily updates and systems.',
       cta: 'Explore the Programming Environment',
       watchDemo: 'Watch Demo',
     },
