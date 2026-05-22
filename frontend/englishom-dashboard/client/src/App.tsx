@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Switch, Router as WouterRouter } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
@@ -13,7 +13,8 @@ import AdminPublicStats from "./pages/AdminPublicStats";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
-    <Switch>
+    <WouterRouter base="/dashboard">
+      <Switch>
       <Route path={"\\"} component={Home} />
       <Route path={"/live"} component={PublicLive} />
       <Route path={"/dashboard"} component={LiveDashboard} />
@@ -23,6 +24,7 @@ function Router() {
       {/* Final fallback route */}
       <Route component={NotFound} />
     </Switch>
+    </WouterRouter>
   );
 }
 
