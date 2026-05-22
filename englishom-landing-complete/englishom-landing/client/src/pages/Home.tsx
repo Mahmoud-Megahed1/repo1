@@ -38,10 +38,10 @@ export default function Home() {
     },
     {
       icon: ({ className }: { className?: string }) => (
-        <div className="flex items-center justify-center gap-1 w-full h-full">
-          <Smartphone className="w-1/3 h-auto text-white" />
-          <Tablet className="w-1/3 h-auto text-white" />
-          <Laptop className="w-1/3 h-auto text-white" />
+        <div className="relative w-full h-full flex items-center justify-center scale-125">
+          <Laptop className="w-8 h-8 text-white absolute -left-2 z-10 drop-shadow-md" />
+          <Tablet className="w-6 h-6 text-white absolute right-1 z-20 drop-shadow-md" />
+          <Smartphone className="w-4 h-4 text-white absolute -right-2 z-30 drop-shadow-md" />
         </div>
       ),
       title: "مرونة الأجهزة الكاملة",
@@ -50,7 +50,7 @@ export default function Home() {
     },
     {
       icon: ({ className }: { className?: string }) => (
-        <img src="/tamara.svg" alt="Tamara" className="w-full h-full p-1 object-contain filter brightness-0 invert" />
+        <img src="/tamara.png" alt="Tamara" className="w-full h-full object-contain filter brightness-0 invert scale-[1.7]" />
       ),
       title: "خدمة التقسيط بـ تمارا",
       description: "ادفع على دفعات مريحة باستخدام خدمة تمارا. لا حاجة للقلق بشأن الدفع الكامل مقدماً.",
