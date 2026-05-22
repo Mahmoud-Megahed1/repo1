@@ -49,7 +49,7 @@ export default {
         levels: {
           title: 'Multiple Levels',
           description:
-            'Choose from beginner to advanced levels with structured 50-day learning programs for each level.',
+            'Choose from beginner to advanced levels with structured 50-day software programs for each level.',
         },
         daily: {
           title: 'Daily Practice',
