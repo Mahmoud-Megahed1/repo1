@@ -1,0 +1,1 @@
+ALTER TABLE `questions` ADD `timePerQuestion` int DEFAULT 10 NOT NULL;

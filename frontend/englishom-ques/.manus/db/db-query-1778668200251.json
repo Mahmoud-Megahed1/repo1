@@ -1,0 +1,55 @@
+{
+  "query": "SELECT id, question, correctAnswer, choiceA, choiceB, choiceC, choiceD FROM questions LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway06.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2swA4tT294zrk84.root --database K9zcGqZStPdpJb7EpmeNSf --execute SELECT id, question, correctAnswer, choiceA, choiceB, choiceC, choiceD FROM questions LIMIT 5;",
+  "rows": [
+    {
+      "id": "1",
+      "question": "What is the correct spelling of the word meaning \"to move quickly\"?",
+      "correctAnswer": "B",
+      "choiceA": "runn",
+      "choiceB": "run",
+      "choiceC": "rune",
+      "choiceD": "rund"
+    },
+    {
+      "id": "2",
+      "question": "Which sentence is grammatically correct?",
+      "correctAnswer": "B",
+      "choiceA": "She go to school every day",
+      "choiceB": "She goes to school every day",
+      "choiceC": "She going to school every day",
+      "choiceD": "She gone to school every day"
+    },
+    {
+      "id": "3",
+      "question": "What does \"hello\" mean?",
+      "correctAnswer": "B",
+      "choiceA": "goodbye",
+      "choiceB": "a greeting",
+      "choiceC": "thank you",
+      "choiceD": "please"
+    },
+    {
+      "id": "4",
+      "question": "Choose the correct form of the verb: \"I ___ to the store yesterday\"",
+      "correctAnswer": "C",
+      "choiceA": "go",
+      "choiceB": "goes",
+      "choiceC": "went",
+      "choiceD": "going"
+    },
+    {
+      "id": "5",
+      "question": "What is the opposite of \"hot\"?",
+      "correctAnswer": "B",
+      "choiceA": "warm",
+      "choiceB": "cold",
+      "choiceC": "cool",
+      "choiceD": "freezing"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tquestion\tcorrectAnswer\tchoiceA\tchoiceB\tchoiceC\tchoiceD\n1\tWhat is the correct spelling of the word meaning \"to move quickly\"?\tB\trunn\trun\trune\trund\n2\tWhich sentence is grammatically correct?\tB\tShe go to school every day\tShe goes to school every day\tShe going to school every day\tShe gone to school every day\n3\tWhat does \"hello\" mean?\tB\tgoodbye\ta greeting\tthank you\tplease\n4\tChoose the correct form of the verb: \"I ___ to the store yesterday\"\tC\tgo\tgoes\twent\tgoing\n5\tWhat is the opposite of \"hot\"?\tB\twarm\tcold\tcool\tfreezing\n",
+  "stderr": "",
+  "execution_time_ms": 1966
+}

@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE `questions` ADD `timePerQuestion` int DEFAULT 10 NOT NULL;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway06.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2swA4tT294zrk84.root --database K9zcGqZStPdpJb7EpmeNSf --execute ALTER TABLE `questions` ADD `timePerQuestion` int DEFAULT 10 NOT NULL;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 2964
+}
