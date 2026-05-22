@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1777308010753,
+      "tag": "0000_glorious_cable",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1777308381510,
+      "tag": "0001_swift_zaladane",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1777308613283,
+      "tag": "0002_absurd_electro",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1777357709784,
+      "tag": "0003_broad_bulldozer",
+      "breakpoints": true
+    }
+  ]
+}
