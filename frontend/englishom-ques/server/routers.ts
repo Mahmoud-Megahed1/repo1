@@ -73,10 +73,6 @@ export const appRouter = router({
         totalTimeSpent: z.number().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        // Skip database save for guest users
-        if (!ctx.user) {
-          return { success: true, newBadges: [] };
-        }
 
         const db = await getDb();
         if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database unavailable" });
@@ -103,51 +99,53 @@ export const appRouter = router({
           const totalQuestions = input.answers.length;
           const accuracy = totalQuestions > 0 ? Math.round((correctAnswersCount / totalQuestions) * 100) : 0;
 
-          await db.insert(testResults).values({
-            userId: ctx.user.id,
-            level: input.level,
-            totalQuestions: totalQuestions,
-            correctAnswers: correctAnswersCount,
-            accuracy: accuracy,
-            averageResponseTime: input.averageResponseTime,
-          });
+          if (ctx.user) {
+            await db.insert(testResults).values({
+              userId: ctx.user.id,
+              level: input.level,
+              totalQuestions: totalQuestions,
+              correctAnswers: correctAnswersCount,
+              accuracy: accuracy,
+              averageResponseTime: input.averageResponseTime,
+            });
 
-          // Update user progress
-          await updateUserProgress(
-            ctx.user.id,
-            accuracy,
-            input.level,
-            input.totalTimeSpent || 0,
-            correctAnswersCount,
-            totalQuestions
-          );
-
-          // Check for new achievements
-          const userStats = await getUserProgress(ctx.user.id);
-          const existingAchievements = await getUserAchievements(ctx.user.id);
-          const existingBadgeTypes = existingAchievements.map(a => a.badgeType);
-
-          if (userStats) {
-            const newBadges = checkNewBadges(
-              {
-                accuracy: accuracy,
-                totalQuizzes: userStats.totalQuizzesTaken,
-                bestLevel: userStats.bestLevel || input.level,
-                averageResponseTime: input.averageResponseTime || 0,
-                totalTimeSpent: userStats.totalTimeSpent,
-              },
-              existingBadgeTypes
+            // Update user progress
+            await updateUserProgress(
+              ctx.user.id,
+              accuracy,
+              input.level,
+              input.totalTimeSpent || 0,
+              correctAnswersCount,
+              totalQuestions
             );
 
-            for (const badgeType of newBadges) {
-              const badgeInfo = getBadgeInfo(badgeType);
-              if (badgeInfo) {
-                await addAchievement(
-                  ctx.user.id,
-                  badgeType,
-                  badgeInfo.name,
-                  badgeInfo.description
-                );
+            // Check for new achievements
+            const userStats = await getUserProgress(ctx.user.id);
+            const existingAchievements = await getUserAchievements(ctx.user.id);
+            const existingBadgeTypes = existingAchievements.map(a => a.badgeType);
+
+            if (userStats) {
+              const newBadges = checkNewBadges(
+                {
+                  accuracy: accuracy,
+                  totalQuizzes: userStats.totalQuizzesTaken,
+                  bestLevel: userStats.bestLevel || input.level,
+                  averageResponseTime: input.averageResponseTime || 0,
+                  totalTimeSpent: userStats.totalTimeSpent,
+                },
+                existingBadgeTypes
+              );
+
+              for (const badgeType of newBadges) {
+                const badgeInfo = getBadgeInfo(badgeType);
+                if (badgeInfo) {
+                  await addAchievement(
+                    ctx.user.id,
+                    badgeType,
+                    badgeInfo.name,
+                    badgeInfo.description
+                  );
+                }
               }
             }
           }
