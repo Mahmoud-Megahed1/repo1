@@ -16,14 +16,12 @@ interface Question {
   imageUrl?: string;
   audioUrl?: string;
   options: string[];
-  correctAnswer: string;
   timeLimit?: number;
 }
 
 interface Answer {
   questionId: number;
   userAnswer: string;
-  isCorrect: boolean;
   timeSpent: number;
 }
 
@@ -124,13 +122,11 @@ export default function Test() {
     if (!currentQuestion) return;
     setSoundAlertPlayed(false);
 
-    const isCorrect = answer === currentQuestion.correctAnswer;
     setAnswers([
       ...answers,
       {
         questionId: currentQuestion.id,
         userAnswer: answer || "",
-        isCorrect,
         timeSpent: (currentQuestion.timeLimit || STAGE_TIMERS[currentStage - 1]) - timeLeft,
       },
     ]);
@@ -284,16 +280,11 @@ export default function Test() {
                 ))}
               </div>
 
-              {/* Feedback */}
+              {/* Feedback Removed for Test Integrity */}
               {isAnswered && (
-                <Alert className={selectedAnswer === currentQuestion.correctAnswer ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}>
-                  <AlertCircle className={selectedAnswer === currentQuestion.correctAnswer ? "text-green-600" : "text-red-600"} />
-                  <AlertDescription className={selectedAnswer === currentQuestion.correctAnswer ? "text-green-800" : "text-red-800"}>
-                    {selectedAnswer === currentQuestion.correctAnswer
-                      ? language === "ar" ? "إجابة صحيحة! ✓" : "Correct! ✓"
-                      : language === "ar" ? `الإجابة الصحيحة: ${currentQuestion.correctAnswer}` : `Correct answer: ${currentQuestion.correctAnswer}`}
-                  </AlertDescription>
-                </Alert>
+                <div className="text-center p-4 bg-muted/50 rounded-lg text-muted-foreground">
+                  {language === "ar" ? "تم حفظ إجابتك. يرجى الانتقال للسؤال التالي." : "Answer recorded. Please proceed to the next question."}
+                </div>
               )}
             </CardContent>
           </Card>

@@ -1,0 +1,221 @@
+version: '3.8'
+
+# ============================================================================
+# EnglishOM Blog System - Production Docker Compose Configuration
+# ============================================================================
+# Optimized for production deployment with SSL, monitoring, and backups
+# Usage: docker-compose -f docker-compose.prod.yml up -d
+# ============================================================================
+
+services:
+  # ============================================================================
+  # MySQL Database Service (Production)
+  # ============================================================================
+  db:
+    image: mysql:8.0
+    container_name: englishom-db-prod
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "127.0.0.1:3306:3306"  # Only accessible from localhost
+    volumes:
+      - ./drizzle:/docker-entrypoint-initdb.d:ro
+      - db_data_prod:/var/lib/mysql
+      - ./docker/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro
+      - ./backups:/backups
+    networks:
+      - englishom-network-prod
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --max_connections=500
+      --innodb_buffer_pool_size=2G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ============================================================================
+  # Node.js Application Service (Production)
+  # ============================================================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: production
+    container_name: englishom-app-prod
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: mysql://${DB_USER}:${DB_PASSWORD}@db:3306/${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET}
+      NODE_ENV: production
+      VITE_APP_ID: ${VITE_APP_ID}
+      OAUTH_SERVER_URL: ${OAUTH_SERVER_URL}
+      VITE_OAUTH_PORTAL_URL: ${VITE_OAUTH_PORTAL_URL}
+      OWNER_OPEN_ID: ${OWNER_OPEN_ID}
+      OWNER_NAME: ${OWNER_NAME}
+      BUILT_IN_FORGE_API_URL: ${BUILT_IN_FORGE_API_URL}
+      BUILT_IN_FORGE_API_KEY: ${BUILT_IN_FORGE_API_KEY}
+      VITE_FRONTEND_FORGE_API_KEY: ${VITE_FRONTEND_FORGE_API_KEY}
+      VITE_FRONTEND_FORGE_API_URL: ${VITE_FRONTEND_FORGE_API_URL}
+      VITE_ANALYTICS_ENDPOINT: ${VITE_ANALYTICS_ENDPOINT}
+      VITE_ANALYTICS_WEBSITE_ID: ${VITE_ANALYTICS_WEBSITE_ID}
+      VITE_APP_TITLE: ${VITE_APP_TITLE}
+      VITE_APP_LOGO: ${VITE_APP_LOGO}
+      PORT: 3000
+    expose:
+      - "3000"
+    networks:
+      - englishom-network-prod
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # ============================================================================
+  # Nginx Reverse Proxy Service (Production)
+  # ============================================================================
+  nginx:
+    image: nginx:alpine
+    container_name: englishom-nginx-prod
+    restart: always
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/ssl:/etc/nginx/ssl:ro
+      - nginx_cache_prod:/var/cache/nginx
+      - ./docker/certbot:/etc/letsencrypt:ro
+    networks:
+      - englishom-network-prod
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ============================================================================
+  # Certbot for SSL Certificates (Optional)
+  # ============================================================================
+  certbot:
+    image: certbot/certbot
+    container_name: englishom-certbot
+    restart: unless-stopped
+    volumes:
+      - ./docker/certbot:/etc/letsencrypt
+      - ./docker/certbot-www:/var/www/certbot
+    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew --quiet; sleep 12h & wait $${!}; done;"
+    networks:
+      - englishom-network-prod
+
+  # ============================================================================
+  # Backup Service (Optional)
+  # ============================================================================
+  backup:
+    image: mysql:8.0
+    container_name: englishom-backup
+    restart: daily
+    depends_on:
+      - db
+    environment:
+      MYSQL_PWD: ${DB_PASSWORD}
+    volumes:
+      - ./backups:/backups
+    command: >
+      bash -c "
+      while true; do
+        mysqldump -h db -u ${DB_USER} ${DB_NAME} | gzip > /backups/backup-$$(date +%Y%m%d-%H%M%S).sql.gz;
+        find /backups -name 'backup-*.sql.gz' -mtime +7 -delete;
+        sleep 86400;
+      done
+      "
+    networks:
+      - englishom-network-prod
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+networks:
+  englishom-network-prod:
+    driver: bridge
+
+volumes:
+  db_data_prod:
+    driver: local
+  nginx_cache_prod:
+    driver: local
+
+# ============================================================================
+# PRODUCTION DEPLOYMENT NOTES
+# ============================================================================
+#
+# 1. Security:
+#    - Use strong passwords for all services
+#    - Enable SSL/TLS certificates
+#    - Restrict database access to localhost
+#    - Use firewall rules to limit access
+#
+# 2. Performance:
+#    - Adjust MySQL buffer pool size based on available RAM
+#    - Enable Nginx caching for static assets
+#    - Use CDN for media files
+#    - Monitor resource usage regularly
+#
+# 3. Backups:
+#    - Automated daily backups are configured
+#    - Keep backups for at least 7 days
+#    - Test restore procedures regularly
+#    - Store backups in multiple locations
+#
+# 4. Monitoring:
+#    - Monitor logs: docker-compose logs -f
+#    - Monitor resources: docker stats
+#    - Set up alerts for errors
+#    - Use external monitoring tools
+#
+# 5. Updates:
+#    - Keep Docker images updated
+#    - Review security patches regularly
+#    - Test updates in staging first
+#    - Plan maintenance windows
+#
+# 6. SSL/TLS Setup:
+#    - Uncomment certbot service
+#    - Configure domain in default.conf
+#    - Run: docker-compose up -d certbot
+#    - Update nginx configuration for HTTPS
+#
+# ============================================================================

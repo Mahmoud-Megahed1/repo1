@@ -1,0 +1,176 @@
+version: '3.8'
+
+# ============================================================================
+# EnglishOM Blog System - Docker Compose Configuration
+# ============================================================================
+# This file defines all services needed to run the EnglishOM Blog System
+# Services: Node.js App, MySQL Database, Nginx Reverse Proxy
+# ============================================================================
+
+services:
+  # ============================================================================
+  # MySQL Database Service
+  # ============================================================================
+  db:
+    image: mysql:8.0
+    container_name: englishom-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_password_change_me}
+      MYSQL_DATABASE: ${DB_NAME:-englishom_blog}
+      MYSQL_USER: ${DB_USER:-englishom_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-user_password_change_me}
+      MYSQL_INITIATION_TIMEOUT: 60
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      # Mount SQL migration file
+      - ./drizzle:/docker-entrypoint-initdb.d:ro
+      # Persist database data
+      - db_data:/var/lib/mysql
+      # MySQL configuration
+      - ./docker/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro
+    networks:
+      - englishom-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${DB_USER:-englishom_user}", "-p${DB_PASSWORD:-user_password_change_me}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  # ============================================================================
+  # Node.js Application Service
+  # ============================================================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: production
+    container_name: englishom-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Database
+      DATABASE_URL: mysql://${DB_USER:-englishom_user}:${DB_PASSWORD:-user_password_change_me}@db:3306/${DB_NAME:-englishom_blog}
+      
+      # Security
+      JWT_SECRET: ${JWT_SECRET}
+      NODE_ENV: production
+      
+      # Manus OAuth
+      VITE_APP_ID: ${VITE_APP_ID}
+      OAUTH_SERVER_URL: ${OAUTH_SERVER_URL:-https://api.manus.im}
+      VITE_OAUTH_PORTAL_URL: ${VITE_OAUTH_PORTAL_URL:-https://portal.manus.im}
+      
+      # Owner Info
+      OWNER_OPEN_ID: ${OWNER_OPEN_ID}
+      OWNER_NAME: ${OWNER_NAME}
+      
+      # Manus Forge APIs
+      BUILT_IN_FORGE_API_URL: ${BUILT_IN_FORGE_API_URL:-https://api.manus.im}
+      BUILT_IN_FORGE_API_KEY: ${BUILT_IN_FORGE_API_KEY}
+      VITE_FRONTEND_FORGE_API_KEY: ${VITE_FRONTEND_FORGE_API_KEY}
+      VITE_FRONTEND_FORGE_API_URL: ${VITE_FRONTEND_FORGE_API_URL:-https://api.manus.im}
+      
+      # Analytics
+      VITE_ANALYTICS_ENDPOINT: ${VITE_ANALYTICS_ENDPOINT}
+      VITE_ANALYTICS_WEBSITE_ID: ${VITE_ANALYTICS_WEBSITE_ID}
+      
+      # Application
+      VITE_APP_TITLE: ${VITE_APP_TITLE:-EnglishOM Blog}
+      VITE_APP_LOGO: ${VITE_APP_LOGO}
+      
+      # Port
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount source code for development (optional)
+      - ./client:/app/client
+      - ./server:/app/server
+      - ./shared:/app/shared
+      # Exclude node_modules
+      - /app/node_modules
+    networks:
+      - englishom-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ============================================================================
+  # Nginx Reverse Proxy Service
+  # ============================================================================
+  nginx:
+    image: nginx:alpine
+    container_name: englishom-nginx
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Nginx configuration
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/default.conf:/etc/nginx/conf.d/default.conf:ro
+      # SSL certificates (if using HTTPS)
+      - ./docker/ssl:/etc/nginx/ssl:ro
+      # Static files cache
+      - nginx_cache:/var/cache/nginx
+    networks:
+      - englishom-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# ============================================================================
+# Docker Networks
+# ============================================================================
+networks:
+  englishom-network:
+    driver: bridge
+
+# ============================================================================
+# Docker Volumes
+# ============================================================================
+volumes:
+  db_data:
+    driver: local
+  nginx_cache:
+    driver: local
+
+# ============================================================================
+# USAGE INSTRUCTIONS
+# ============================================================================
+# 
+# 1. Create .env file with all required variables:
+#    cp .env.example .env
+#    # Edit .env with your values
+#
+# 2. Build and start all services:
+#    docker-compose up -d
+#
+# 3. Check service status:
+#    docker-compose ps
+#
+# 4. View logs:
+#    docker-compose logs -f app
+#    docker-compose logs -f db
+#    docker-compose logs -f nginx
+#
+# 5. Stop services:
+#    docker-compose down
+#
+# 6. Remove all data (WARNING: deletes database):
+#    docker-compose down -v
+#
+# ============================================================================

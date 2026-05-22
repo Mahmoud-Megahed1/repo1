@@ -1,0 +1,409 @@
+```text
+Build a fully integrated premium blog system inside my existing platform:
+
+DOMAIN:
+https://englishom.com/blog
+
+IMPORTANT:
+This is NOT a standalone blog.
+This is an integrated content system inside the EnglishOM platform.
+
+The blog must share:
+- The same design system
+- Same authentication
+- Same MongoDB database cluster
+- Same admin dashboard
+- Same branding
+- Same dark/light theme system
+- Same multilingual architecture
+
+==================================================
+ABOUT ENGLISHOM
+==================================================
+
+EnglishOM is a premium English learning platform focused on:
+- Beginner level A1
+- Daily practice
+- Self-training
+- Speaking from day one
+- Repetition-based learning
+- 20 new words daily
+- 10 daily tasks
+- 50-day learning journey
+- Practical English usage
+- Building confidence through consistency
+
+The course price is 999 SAR.
+The blog must feel premium, modern, trustworthy, and highly organized.
+
+==================================================
+IMPORTANT PHILOSOPHY
+==================================================
+
+The blog is NOT:
+- A traditional grammar blog
+- A news blog
+- An SEO spam blog
+- A generic WordPress-style blog
+
+The blog IS:
+- A learning support system
+- A trust-building platform
+- A daily motivation system
+- A self-training content ecosystem
+- A conversion funnel into the paid platform
+
+==================================================
+TECH STACK
+==================================================
+
+Current platform uses:
+- MongoDB (latest version)
+- Existing authentication system
+- Existing admin dashboard
+- Existing EnglishOM branding
+
+Build the blog system to integrate directly into the existing architecture.
+
+==================================================
+ROUTING STRUCTURE
+==================================================
+
+Use clean SEO-friendly URLs:
+
+/blog
+/blog/[slug]
+/blog/category/[slug]
+
+Additional platform routes:
+- /start
+- /journey
+- /a1-check
+
+DO NOT use:
+- /landingpage
+- /test
+- generic ugly URLs
+
+==================================================
+DESIGN SYSTEM
+==================================================
+
+Extract color palette and visual identity from:
+https://englishom.com
+
+Requirements:
+- Default DARK MODE
+- LIGHT MODE toggle
+- Arabic + English toggle
+- RTL support
+- LTR support
+- Save user preferences
+- Premium typography
+- Mobile-first responsive UI
+- Clean spacing
+- Minimal modern design
+- Fast loading
+
+Design inspiration:
+- Apple Education
+- Medium
+- Notion
+- Modern SaaS educational products
+
+Avoid:
+- Flashy gradients
+- Cheap course aesthetics
+- Popups everywhere
+- Clutter
+- Heavy animations
+- SEO spam layouts
+
+==================================================
+BLOG HOMEPAGE STRUCTURE
+==================================================
+
+Create a premium homepage with:
+
+1. Sticky Navbar
+2. Hero Section
+3. EnglishOM Method section
+4. Featured Articles
+5. Categories
+6. Daily Practice CTA
+7. Philosophy section
+8. Newsletter/email capture
+9. Footer
+10. Mobile sticky CTA
+
+==================================================
+NAVBAR
+==================================================
+
+Include:
+- EnglishOM logo
+- Home
+- Blog
+- EnglishOM Method
+- Daily Practice
+- Start Learning
+- AR/EN language toggle
+- Dark/Light mode toggle
+- CTA button:
+  “Start the 50-Day Journey”
+
+Sticky on scroll.
+
+==================================================
+HERO SECTION
+==================================================
+
+Headline examples:
+“Learn English Through Daily Practice”
+“20 Words Daily. 50 Days of Practice.”
+
+Subheadline:
+“EnglishOM helps beginners build real English habits through listening, speaking, repetition, and daily self-training.”
+
+Primary CTA:
+“Start Daily Practice”
+
+Secondary CTA:
+“Explore the Blog”
+
+==================================================
+ENGLISHOM METHOD SECTION
+==================================================
+
+Create a visual branded section showing:
+
+1. Learn 20 Daily Words
+2. Listen Every Day
+3. Speak Out Loud
+4. Practice Daily Tasks
+5. Complete the 50-Day Journey
+
+This section must feel unique and premium.
+
+==================================================
+BLOG CATEGORIES
+==================================================
+
+Create these categories:
+
+- Daily Practice
+- Words & Sentences
+- Listening & Speaking
+- Learning Mindset
+- The EnglishOM Method
+
+==================================================
+FEATURED ARTICLES
+==================================================
+
+Create article cards with:
+- Featured image
+- Reading time
+- Category
+- Short excerpt
+- Clean typography
+
+Example article titles:
+- Why Daily Practice Matters
+- Don’t Memorize Words Only
+- Speak English Every Day
+- Daily Repetition Builds Confidence
+- Start with Simple Sentences
+
+==================================================
+ARTICLE PAGE TEMPLATE
+==================================================
+
+Create a premium article page layout including:
+- Large readable title
+- Category label
+- Reading time
+- Author section
+- Share buttons
+- Related articles
+- CTA blocks
+- Comments section
+- Sticky mobile CTA
+
+Writing style support:
+- Short paragraphs
+- Comfortable reading
+- Large spacing
+- Mobile optimized
+
+==================================================
+CTA STRATEGY
+==================================================
+
+The blog should naturally guide users into the paid platform.
+
+DO NOT use aggressive sales tactics.
+
+Use smooth CTA examples:
+- Continue Your 50-Day Journey
+- Practice English Daily with EnglishOM
+- Start Speaking from Day One
+
+Buttons should lead users to:
+/start
+/journey
+/a1-check
+/pricing
+
+==================================================
+A1 READINESS CHECK
+==================================================
+
+The platform already includes a placement/readiness system.
+
+Create references and CTA integration for:
+https://englishom.com/a1-check
+
+Official naming:
+“EnglishOM A1 Readiness Check”
+
+Purpose:
+Determine whether the student is truly suitable for A1 level.
+
+The readiness system evaluates:
+- Vocabulary familiarity
+- Pronunciation
+- Writing
+- Functional understanding
+
+==================================================
+COMMENTS SYSTEM
+==================================================
+
+Create moderated comments system.
+
+Users can:
+- Share practice progress
+- Write sentences
+- Ask questions
+- Discuss learning
+
+Admin moderation required.
+
+==================================================
+ADMIN DASHBOARD INTEGRATION
+==================================================
+
+IMPORTANT:
+This blog must integrate into the EXISTING platform dashboard.
+
+Add a full Blog Management module inside admin panel.
+
+Include:
+- Posts management
+- Draft/Publish
+- Scheduling
+- Categories
+- Tags
+- Featured articles
+- SEO settings
+- Media manager
+- Comments moderation
+- CTA management
+- Analytics
+- Translation management
+
+==================================================
+ROLE SYSTEM
+==================================================
+
+Support:
+- Admin
+- Editor
+- Translator
+- SEO Manager
+
+==================================================
+MONGODB ARCHITECTURE
+==================================================
+
+Use same MongoDB cluster.
+
+Create scalable collections:
+- blog_posts
+- blog_categories
+- blog_comments
+- blog_translations
+- blog_tags
+- blog_media
+- blog_cta
+- blog_analytics
+
+Architecture must support:
+- Multi-language expansion
+- High scalability
+- SEO optimization
+- Fast querying
+
+==================================================
+MULTI-LANGUAGE SUPPORT
+==================================================
+
+The English learning content remains fixed.
+
+Future expansion:
+- Arabic users learning English
+- Spanish users learning English
+- Bengali users learning English
+
+The system must support:
+- Translation-ready content
+- RTL/LTR
+- Locale-based routing
+- Multi-language metadata
+
+==================================================
+SEO REQUIREMENTS
+==================================================
+
+Implement:
+- Semantic HTML
+- Metadata management
+- OpenGraph support
+- Canonical URLs
+- Structured schema markup
+- Optimized headings
+- Fast performance
+- Accessibility
+- Optimized image loading
+
+==================================================
+MOBILE EXPERIENCE
+==================================================
+
+Mobile UX is critical.
+
+Optimize for:
+- Fast loading
+- Thumb-friendly navigation
+- Sticky CTA
+- Smooth scrolling
+- Comfortable reading
+
+==================================================
+FINAL GOAL
+==================================================
+
+The final result must feel like:
+- A premium educational ecosystem
+- A modern self-training English platform
+- A trusted global learning brand
+- A clean SaaS education product
+
+NOT:
+- A cheap blog template
+- A generic WordPress blog
+- A spam SEO site
+
+The blog must feel like a core part of EnglishOM itself.
+```

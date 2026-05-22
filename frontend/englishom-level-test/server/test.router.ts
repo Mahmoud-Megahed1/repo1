@@ -20,7 +20,6 @@ import { nanoid } from "nanoid";
 const AnswerSchema = z.object({
   questionId: z.number(),
   userAnswer: z.string(),
-  isCorrect: z.boolean(),
   timeSpent: z.number(),
 });
 
@@ -44,7 +43,6 @@ export const testRouter = router({
         imageUrl: q.imageUrl,
         audioUrl: q.audioUrl,
         options: q.options ? JSON.parse(q.options) : [],
-        correctAnswer: q.correctAnswer,
         timeLimit: q.timeLimit,
       }));
     }),
@@ -107,8 +105,9 @@ export const testRouter = router({
         const question = questionMap.get(answer.questionId);
         const stageIndex = question ? question.stage - 1 : 0;
         const stageName = stageNames[stageIndex] || "vocabulary";
+        const isCorrect = question ? (question.correctAnswer === answer.userAnswer) : false;
 
-        if (answer.isCorrect) {
+        if (isCorrect) {
           totalCorrect++;
           stageScores[stageName].correct++;
         }
@@ -119,7 +118,7 @@ export const testRouter = router({
           testAttemptId: testAttempt.id,
           questionId: answer.questionId,
           userAnswer: answer.userAnswer,
-          isCorrect: answer.isCorrect ? 1 : 0,
+          isCorrect: isCorrect ? 1 : 0,
           timeSpentSeconds: answer.timeSpent,
         });
       }

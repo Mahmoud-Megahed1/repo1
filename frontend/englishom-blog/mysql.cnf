@@ -1,0 +1,140 @@
+# ============================================================================
+# MySQL Configuration for EnglishOM Blog
+# ============================================================================
+# Custom MySQL configuration for optimal performance and compatibility
+# ============================================================================
+
+[mysqld]
+
+# ============================================================================
+# Character Set and Collation
+# ============================================================================
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+default-character-set = utf8mb4
+
+# ============================================================================
+# Connection Settings
+# ============================================================================
+max_connections = 1000
+max_allowed_packet = 256M
+connect_timeout = 10
+wait_timeout = 28800
+interactive_timeout = 28800
+
+# ============================================================================
+# Performance Settings
+# ============================================================================
+# Buffer pool size (adjust based on available RAM)
+innodb_buffer_pool_size = 1G
+innodb_buffer_pool_instances = 4
+
+# Query cache (disabled in MySQL 8.0)
+# query_cache_type = 0
+# query_cache_size = 0
+
+# Sort buffer
+sort_buffer_size = 256K
+bulk_insert_buffer_size = 16M
+
+# Join buffer
+join_buffer_size = 256K
+
+# Read buffer
+read_buffer_size = 128K
+read_rnd_buffer_size = 256K
+
+# ============================================================================
+# InnoDB Settings
+# ============================================================================
+default-storage-engine = InnoDB
+innodb_file_per_table = 1
+innodb_flush_log_at_trx_commit = 2
+innodb_log_file_size = 512M
+innodb_flush_method = O_DIRECT
+innodb_lock_wait_timeout = 50
+
+# ============================================================================
+# Logging
+# ============================================================================
+# General query log (disable in production)
+general_log = 0
+general_log_file = /var/log/mysql/general.log
+
+# Slow query log
+slow_query_log = 1
+slow_query_log_file = /var/log/mysql/slow.log
+long_query_time = 2
+log_queries_not_using_indexes = 1
+
+# Binary logging (for replication/backup)
+log_bin = /var/log/mysql/mysql-bin.log
+binlog_format = ROW
+binlog_retention_days = 7
+server_id = 1
+
+# ============================================================================
+# Replication Settings (if needed)
+# ============================================================================
+# relay-log = /var/log/mysql/mysql-relay-bin
+# relay-log-index = /var/log/mysql/mysql-relay-bin.index
+# relay-log-info-repository = TABLE
+# master-info-repository = TABLE
+
+# ============================================================================
+# Security
+# ============================================================================
+# Skip name resolution
+skip-name-resolve
+
+# Disable symbolic links
+symbolic-links = 0
+
+# ============================================================================
+# Client Settings
+# ============================================================================
+[client]
+default-character-set = utf8mb4
+port = 3306
+socket = /var/run/mysqld/mysqld.sock
+
+# ============================================================================
+# MySQL Dump Settings
+# ============================================================================
+[mysqldump]
+quick
+quote-names
+max_allowed_packet = 256M
+default-character-set = utf8mb4
+
+# ============================================================================
+# MySQL Client Settings
+# ============================================================================
+[mysql]
+default-character-set = utf8mb4
+
+# ============================================================================
+# Notes
+# ============================================================================
+# 1. Adjust innodb_buffer_pool_size based on your server's RAM
+#    - For 4GB RAM: 2G
+#    - For 8GB RAM: 6G
+#    - For 16GB RAM: 12G
+#
+# 2. Adjust max_connections based on expected concurrent users
+#    - Default: 1000
+#    - For small deployments: 100-200
+#    - For large deployments: 1000+
+#
+# 3. Enable binary logging for backups and replication
+#    - Already enabled in this config
+#    - Requires disk space for log files
+#
+# 4. Monitor slow queries with:
+#    SELECT * FROM mysql.slow_log;
+#
+# 5. For production, consider:
+#    - Setting up automated backups
+#    - Configuring replication
+#    - Setting up monitoring
+#    - Regular maintenance tasks
