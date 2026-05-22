@@ -47,6 +47,7 @@ export function CtaSection() {
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
+            {/* Temporarily hidden until certification is issued
             <Button
               variant="outline"
               size="lg"
@@ -55,6 +56,7 @@ export function CtaSection() {
             >
               <Link to={`/#levels` as never}>{t('Landing.cta.secondary')}</Link>
             </Button>
+            */}
           </div>
         </div>
       </div>

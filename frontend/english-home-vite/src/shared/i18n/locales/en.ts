@@ -14,16 +14,17 @@ export default {
       },
       cta: {
         login: 'Login',
+        signup: 'Try the System Now',
       },
     },
     hero: {
-      preTitle: 'We develop comprehensive technical solutions and interactive software environments to facilitate language learning and skills development through our integrated platforms.',
+      preTitle: 'We develop comprehensive technical solutions and interactive software environments to facilitate language acquisition and develop smart language solutions and systems.',
       title: 'EDUCATIONAL SYSTEMS PROGRAMMING &',
       titleHighlight: 'LANGUAGE SOLUTIONS PLATFORM',
       subtitle: '',
       description:
-        'Develop your skills in English with our comprehensive educational platform. Practice speaking, listening, reading, and writing through interactive daily lessons.',
-      cta: 'Start Learning Now',
+        'Develop your English skills with our comprehensive educational platform. Practice speaking, listening, reading, and writing through interactive daily updates and systems.',
+      cta: 'Explore the Programming Environment',
       watchDemo: 'Watch Demo',
     },
     features: {
@@ -178,7 +179,7 @@ export default {
         'Join thousands of learners who have improved their language skills and unlocked new opportunities.',
       description:
         'Start today with our all-in-one learning platform, and unleash your potential step by step with confidence.',
-      primary: 'Start Learning Now',
+      primary: 'Explore the Programming Environment',
       secondary: 'View Pricing',
     },
     contact: {
