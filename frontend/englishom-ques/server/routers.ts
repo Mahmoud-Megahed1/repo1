@@ -5,7 +5,7 @@ import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { getDb, getUserProgress, updateUserProgress, getUserAchievements, addAchievement, getUserQuizHistory } from "./db";
 import { questions, testResults } from "../drizzle/schema";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { checkNewBadges, getBadgeInfo } from "../shared/achievements";
 
@@ -37,7 +37,17 @@ export const appRouter = router({
         
         try {
           const result = await db
-            .select()
+            .select({
+              id: questions.id,
+              question: questions.question,
+              choiceA: questions.choiceA,
+              choiceB: questions.choiceB,
+              choiceC: questions.choiceC,
+              choiceD: questions.choiceD,
+              level: questions.level,
+              category: questions.category,
+              timePerQuestion: questions.timePerQuestion,
+            })
             .from(questions)
             .where(eq(questions.level, input.level))
             .limit(input.limit);
@@ -55,9 +65,10 @@ export const appRouter = router({
     submitTestResult: publicProcedure
       .input(z.object({
         level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]),
-        totalQuestions: z.number(),
-        correctAnswers: z.number(),
-        accuracy: z.number(),
+        answers: z.array(z.object({
+          questionId: z.number(),
+          userAnswer: z.string(),
+        })),
         averageResponseTime: z.number().optional(),
         totalTimeSpent: z.number().optional(),
       }))
@@ -71,23 +82,44 @@ export const appRouter = router({
         if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database unavailable" });
         
         try {
+          // Grade the answers securely on the server
+          const questionIds = input.answers.map(a => a.questionId);
+          let correctAnswersCount = 0;
+          
+          if (questionIds.length > 0) {
+            const qs = await db.select({ id: questions.id, correctAnswer: questions.correctAnswer })
+              .from(questions)
+              .where(inArray(questions.id, questionIds));
+              
+            const correctMap = new Map(qs.map(q => [q.id, q.correctAnswer]));
+            
+            for (const ans of input.answers) {
+              if (correctMap.get(ans.questionId) === ans.userAnswer) {
+                correctAnswersCount++;
+              }
+            }
+          }
+          
+          const totalQuestions = input.answers.length;
+          const accuracy = totalQuestions > 0 ? Math.round((correctAnswersCount / totalQuestions) * 100) : 0;
+
           await db.insert(testResults).values({
             userId: ctx.user.id,
             level: input.level,
-            totalQuestions: input.totalQuestions,
-            correctAnswers: input.correctAnswers,
-            accuracy: input.accuracy,
+            totalQuestions: totalQuestions,
+            correctAnswers: correctAnswersCount,
+            accuracy: accuracy,
             averageResponseTime: input.averageResponseTime,
           });
 
           // Update user progress
           await updateUserProgress(
             ctx.user.id,
-            input.accuracy,
+            accuracy,
             input.level,
             input.totalTimeSpent || 0,
-            input.correctAnswers,
-            input.totalQuestions
+            correctAnswersCount,
+            totalQuestions
           );
 
           // Check for new achievements
@@ -98,7 +130,7 @@ export const appRouter = router({
           if (userStats) {
             const newBadges = checkNewBadges(
               {
-                accuracy: input.accuracy,
+                accuracy: accuracy,
                 totalQuizzes: userStats.totalQuizzesTaken,
                 bestLevel: userStats.bestLevel || input.level,
                 averageResponseTime: input.averageResponseTime || 0,
@@ -120,7 +152,13 @@ export const appRouter = router({
             }
           }
 
-          return { success: true, newBadges: [] };
+          return { 
+            success: true, 
+            newBadges: [],
+            score: correctAnswersCount,
+            accuracy: accuracy,
+            totalQuestions: totalQuestions
+          };
         } catch (error) {
           console.error("Failed to save test result:", error);
           throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });

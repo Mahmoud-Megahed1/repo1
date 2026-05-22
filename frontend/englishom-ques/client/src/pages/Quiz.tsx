@@ -20,7 +20,6 @@ interface QuizQuestion {
   choiceB: string;
   choiceC: string;
   choiceD: string;
-  correctAnswer: string;
   level: string;
   timePerQuestion: number;
 }
@@ -59,10 +58,16 @@ export default function Quiz() {
   const [results, setResults] = useState<QuizResult | null>(null);
   const [totalTimeSpent, setTotalTimeSpent] = useState(0);
   const [quizStartTime, setQuizStartTime] = useState<number | null>(null);
+  const [userAnswers, setUserAnswers] = useState<{questionId: number, userAnswer: string}[]>([]);
 
-  const { mutate: submitResult } = trpc.quiz.submitTestResult.useMutation({
-    onSuccess: () => {
-      console.log('Result submitted successfully');
+  const { mutate: submitResult, isPending: isSubmitting } = trpc.quiz.submitTestResult.useMutation({
+    onSuccess: (data) => {
+      console.log('Result submitted successfully', data);
+      if (data.score !== undefined) {
+        setScore(data.score);
+        correctAnswersRef.current = data.score;
+        setResults(prev => prev ? { ...prev, score: data.score, accuracy: data.accuracy ?? 0 } : null);
+      }
       // Silent success for guests
     },
     onError: (error) => {
@@ -100,7 +105,6 @@ export default function Quiz() {
     console.log('Questions data changed:', { questionsDataLength: questionsData?.length, state });
     if (questionsData && questionsData.length > 0 && state === "loading") {
       console.log('Loading questions:', questionsData);
-      console.log('First question correctAnswer:', questionsData[0].correctAnswer, 'Type:', typeof questionsData[0].correctAnswer);
       setQuestions(questionsData);
       setTimeRemaining(questionsData[0].timePerQuestion);
       setState("quiz");
@@ -143,31 +147,18 @@ export default function Quiz() {
     if (answered) return;
 
     const currentQuestion = questions[currentQuestionIndex];
-    const isCorrect = choice === currentQuestion.correctAnswer;
     const responseTime = currentQuestion.timePerQuestion - timeRemaining;
 
     // Debug logging
     console.log('=== ANSWER SELECTED ===');
     console.log('Question ID:', currentQuestion.id);
     console.log('Question:', currentQuestion.question);
-    console.log('Correct Answer (from DB):', currentQuestion.correctAnswer, 'Type:', typeof currentQuestion.correctAnswer);
     console.log('User Choice:', choice, 'Type:', typeof choice);
-    console.log('Are they equal?', choice === currentQuestion.correctAnswer);
-    console.log('Char codes - Choice:', choice.charCodeAt(0), 'Correct:', currentQuestion.correctAnswer.charCodeAt(0));
-    console.log('Full Question Object:', currentQuestion);
-    console.log('Current Score Before:', score);
 
     setSelectedAnswer(choice);
     setAnswered(true);
     setResponseTimes([...responseTimes, responseTime]);
-
-    if (isCorrect) {
-      correctAnswersRef.current += 1;
-      console.log('✅ CORRECT! Correct answers count:', correctAnswersRef.current);
-      setScore(correctAnswersRef.current);
-    } else {
-      console.log('❌ INCORRECT! Correct answers count stays at:', correctAnswersRef.current);
-    }
+    setUserAnswers([...userAnswers, { questionId: currentQuestion.id, userAnswer: choice }]);
 
     setTimeout(moveToNextQuestion, 1500);
   };
@@ -187,32 +178,26 @@ export default function Quiz() {
   const finishQuiz = () => {
     const totalTime = Date.now() - (quizStartTime || Date.now());
     const avgResponseTime = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
-    const finalScore = correctAnswersRef.current;
-    const accuracy = Math.round((finalScore / questions.length) * 100);
 
     console.log('=== QUIZ FINISHED ===');
-    console.log('Final Score (from ref):', finalScore);
     console.log('Total Questions:', questions.length);
-    console.log('Accuracy:', accuracy);
     console.log('Response Times:', responseTimes);
 
     const result: QuizResult = {
-      score: finalScore,
+      score: 0, // Will be updated by server response
       totalQuestions: questions.length,
-      accuracy,
+      accuracy: 0, // Will be updated by server response
       averageResponseTime: avgResponseTime / 1000,
       totalTimeSpent: Math.floor(totalTime / 1000),
     };
-    console.log('Final Result:', result);
     setResults(result);
     setState("results");
 
-    console.log('Submitting result:', { level: selectedLevel, totalQuestions: questions.length, correctAnswers: finalScore, accuracy });
     submitResult({
       level: selectedLevel as any,
-      totalQuestions: questions.length,
-      correctAnswers: finalScore,
-      accuracy,
+      answers: userAnswers,
+      averageResponseTime: avgResponseTime / 1000,
+      totalTimeSpent: Math.floor(totalTime / 1000),
     });
   };
 
@@ -226,6 +211,7 @@ export default function Quiz() {
     setSelectedAnswer(null);
     setAnswered(false);
     setResponseTimes([]);
+    setUserAnswers([]);
     setResults(null);
     setTotalTimeSpent(0);
     setQuizStartTime(null);
@@ -447,7 +433,6 @@ export default function Quiz() {
             <div className="space-y-3">
               {["A", "B", "C", "D"].map((choice) => {
                 const choiceText = currentQuestion[`choice${choice}` as keyof QuizQuestion];
-                const isCorrect = choice === currentQuestion.correctAnswer;
                 const isSelected = selectedAnswer === choice;
 
                 return (
@@ -456,13 +441,7 @@ export default function Quiz() {
                     onClick={() => handleAnswerSelect(choice)}
                     disabled={answered}
                     className={`w-full p-4 text-left rounded-lg border-2 transition-all ${
-                      answered
-                        ? isCorrect
-                          ? "border-green-500 bg-green-50 dark:bg-green-950"
-                          : isSelected
-                          ? "border-red-500 bg-red-50 dark:bg-red-950"
-                          : "border-border bg-muted"
-                        : isSelected
+                      isSelected
                         ? "border-accent bg-accent/10"
                         : "border-border hover:border-accent/50"
                     } ${answered ? "cursor-default" : "cursor-pointer"}`}
@@ -478,10 +457,7 @@ export default function Quiz() {
               })}
             </div>
 
-            {/* Score Display */}
-            <div className="text-center text-muted-foreground mt-6">
-              {t("quiz.score")}: <span className="font-bold text-foreground">{score}/{currentQuestionIndex + 1}</span>
-            </div>
+            {/* Score Display removed to prevent immediate feedback */}
           </Card>
         </div>
       </div>
@@ -489,7 +465,18 @@ export default function Quiz() {
   }
 
   // Results Screen
-  if (state === "results" && results) {
+  if (state === "results") {
+    if (isSubmitting || !results) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-background" dir={language === "ar" ? "rtl" : "ltr"}>
+          <Card className="p-8 flex flex-col items-center">
+            <div className="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p className="text-foreground text-center">Grading your test securely...</p>
+          </Card>
+        </div>
+      );
+    }
+
     return (
       <div className={`min-h-screen flex flex-col bg-background p-4 ${language === "ar" ? "rtl" : "ltr"}`}>
         {/* Header with Language and Theme Toggle */}
