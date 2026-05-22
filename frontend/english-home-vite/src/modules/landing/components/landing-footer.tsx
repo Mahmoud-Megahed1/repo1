@@ -218,7 +218,7 @@ export function LandingFooter() {
               <img
                 src="/tamara.svg"
                 alt="Tamara"
-                className="h-8 object-contain"
+                className="h-10 w-auto min-w-[70px] object-contain scale-110"
               />
             </div>
             <img
