@@ -550,10 +550,24 @@ export const appRouter = router({
         .query(async ({ ctx, input }) => db.getUserPostRating(input.postId, ctx.user.id)),
       update: protectedProcedure
         .input(z.object({ id: z.number(), rating: z.number().min(1).max(5).optional(), review: z.string().optional() }))
-        .mutation(async ({ input }) => db.updatePostRating(input.id, { rating: input.rating, review: input.review })),
+        .mutation(async ({ ctx, input }) => {
+          const rating = await db.getPostRatingById(input.id);
+          if (!rating) throw new TRPCError({ code: "NOT_FOUND", message: "Rating not found" });
+          if (rating.userId !== ctx.user.id && ctx.user.role !== "admin") {
+            throw new TRPCError({ code: "FORBIDDEN", message: "Cannot edit this rating" });
+          }
+          return db.updatePostRating(input.id, { rating: input.rating, review: input.review });
+        }),
       delete: protectedProcedure
         .input(z.object({ id: z.number() }))
-        .mutation(async ({ input }) => db.deletePostRating(input.id)),
+        .mutation(async ({ ctx, input }) => {
+          const rating = await db.getPostRatingById(input.id);
+          if (!rating) throw new TRPCError({ code: "NOT_FOUND", message: "Rating not found" });
+          if (rating.userId !== ctx.user.id && ctx.user.role !== "admin") {
+            throw new TRPCError({ code: "FORBIDDEN", message: "Cannot delete this rating" });
+          }
+          return db.deletePostRating(input.id);
+        }),
     }),
   }),
 });

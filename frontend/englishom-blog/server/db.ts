@@ -902,6 +902,27 @@ export async function getUserPostRating(postId: number, userId: number) {
   }
 }
 
+export async function getPostRatingById(id: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get rating: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db
+      .select()
+      .from(postRatings)
+      .where(eq(postRatings.id, id))
+      .limit(1);
+
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get rating by id:", error);
+    throw error;
+  }
+}
+
 export async function updatePostRating(id: number, rating: Partial<InsertPostRating>) {
   const db = await getDb();
   if (!db) {
