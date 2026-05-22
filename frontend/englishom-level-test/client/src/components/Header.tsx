@@ -18,7 +18,7 @@ export function Header() {
           onClick={() => navigate("/")}
         >
           <img 
-            src="/manus-storage/1327aa4b-2993-480a-9568-31db9052f325_69932338.jpg" 
+            src="/logo.jpeg" 
             alt="Englishom" 
             className="h-10 w-auto"
           />

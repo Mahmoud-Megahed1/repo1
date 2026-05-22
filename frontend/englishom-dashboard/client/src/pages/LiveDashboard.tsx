@@ -161,7 +161,7 @@ export default function LiveDashboard() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="rounded-lg shadow-lg shadow-cyan-500/50 bg-red-900 p-2">
-                <img src="/manus-storage/Clipboard_0_71485DC2_5de17af4.png" alt="Logo" className="h-12 w-12 object-contain" />
+                <img src="/logo.jpeg" alt="Logo" className="h-12 w-12 object-contain" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold neon-text">ENGLISHOM</h1>

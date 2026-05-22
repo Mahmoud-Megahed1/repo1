@@ -23,7 +23,7 @@ export default function Footer() {
           <div className="space-y-4">
             <a href="https://englishom.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <img 
-                src="/manus-storage/englishom-logo_46776b09.png" 
+                src="/logo.jpeg" 
                 alt="Englishom" 
                 className="w-10 h-10 rounded-lg"
               />

@@ -29,7 +29,7 @@ export default function Header() {
         {/* Logo */}
         <a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <img
-            src="/manus-storage/englishom-logo_92a7eafa.png"
+            src="/logo.jpeg"
             alt="EnglishOM"
             className="w-10 h-10 object-contain"
           />
