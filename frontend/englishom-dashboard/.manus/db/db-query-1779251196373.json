@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE `publicDashboardStats` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`wordsWrittenToday` int NOT NULL DEFAULT 0,\n\t`audioMinutesListened` int NOT NULL DEFAULT 0,\n\t`voiceRecordingsToday` int NOT NULL DEFAULT 0,\n\t`shieldsEarnedToday` int NOT NULL DEFAULT 0,\n\t`shieldCompletionRate` int NOT NULL DEFAULT 0,\n\t`recordedStoriesCount` int NOT NULL DEFAULT 0,\n\t`totalSpeakingSeconds` int NOT NULL DEFAULT 0,\n\t`passedStudentsCount` int NOT NULL DEFAULT 0,\n\t`quizSuccessRate` int NOT NULL DEFAULT 0,\n\t`citiesCount` int NOT NULL DEFAULT 53,\n\t`isPublished` int NOT NULL DEFAULT 1,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\t`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `publicDashboardStats_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway06.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2JAP3kMjuLYqEw7.root --database UFHn52nyyrwEkQDCosSJ7c --execute CREATE TABLE `publicDashboardStats` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`wordsWrittenToday` int NOT NULL DEFAULT 0,\n\t`audioMinutesListened` int NOT NULL DEFAULT 0,\n\t`voiceRecordingsToday` int NOT NULL DEFAULT 0,\n\t`shieldsEarnedToday` int NOT NULL DEFAULT 0,\n\t`shieldCompletionRate` int NOT NULL DEFAULT 0,\n\t`recordedStoriesCount` int NOT NULL DEFAULT 0,\n\t`totalSpeakingSeconds` int NOT NULL DEFAULT 0,\n\t`passedStudentsCount` int NOT NULL DEFAULT 0,\n\t`quizSuccessRate` int NOT NULL DEFAULT 0,\n\t`citiesCount` int NOT NULL DEFAULT 53,\n\t`isPublished` int NOT NULL DEFAULT 1,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\t`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `publicDashboardStats_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 2793
+}
