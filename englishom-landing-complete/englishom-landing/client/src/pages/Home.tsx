@@ -213,19 +213,21 @@ export default function Home() {
               const isCustomIcon = feature.icon === "devices" || feature.icon === "tamara";
               return (
                 <Card key={index} className="bg-black/50 border-gray-700 hover:border-gray-600 transition-all hover:shadow-xl hover:shadow-blue-500/10 p-8 group">
-                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} mb-6 group-hover:scale-110 transition-transform flex items-center justify-center ${isCustomIcon ? 'p-2 overflow-visible' : 'p-3'}`}>
-                    {feature.icon === "devices" ? (
-                      <div className="flex items-end justify-center gap-1">
-                        <Laptop className="w-7 h-7 text-white" />
-                        <Tablet className="w-5 h-5 text-white" />
-                        <Smartphone className="w-4 h-4 text-white" />
-                      </div>
-                    ) : feature.icon === "tamara" ? (
-                      <img src="/tamara-full.svg" alt="Tamara" className="w-20 h-10 object-contain filter brightness-0 invert" />
-                    ) : (
-                      <>{(() => { const Icon = feature.icon as React.ComponentType<{className?: string}>; return <Icon className="w-full h-full text-white" />; })()}</>
-                    )}
-                  </div>
+                  {feature.icon === "devices" ? (
+                    <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${feature.color} mb-6 group-hover:scale-110 transition-transform flex items-end justify-center pb-3 gap-2`}>
+                      <Laptop className="w-9 h-9 text-white opacity-90" />
+                      <Tablet className="w-7 h-7 text-white opacity-90" />
+                      <Smartphone className="w-5 h-5 text-white opacity-90" />
+                    </div>
+                  ) : feature.icon === "tamara" ? (
+                    <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${feature.color} mb-6 group-hover:scale-110 transition-transform flex items-center justify-center`}>
+                      <span className="text-white font-bold text-lg tracking-wide" style={{fontFamily: 'Poppins, sans-serif'}}>tamara</span>
+                    </div>
+                  ) : (
+                    <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} p-3 mb-6 group-hover:scale-110 transition-transform`}>
+                      {(() => { const Icon = feature.icon as React.ComponentType<{className?: string}>; return <Icon className="w-full h-full text-white" />; })()}
+                    </div>
+                  )}
                   <h3 className="text-2xl font-bold text-white mb-3 text-center">{feature.title}</h3>
                   <p className="text-gray-300 leading-relaxed text-center">{feature.description}</p>
                 </Card>
