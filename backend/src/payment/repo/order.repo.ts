@@ -257,7 +257,7 @@ export class OrderRepo extends AbstractRepo<Order> implements OrderService {
     userId: string | Types.ObjectId,
     levelName: string,
     session?: ClientSession,
-  ) {
+  ): Promise<any> {
     const userIdObjectId = toObjectId(userId as any);
     return await this.orderModel.deleteMany(
       { userId: userIdObjectId, levelName },

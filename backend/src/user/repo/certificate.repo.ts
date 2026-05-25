@@ -27,7 +27,7 @@ export class CertificateRepo extends AbstractRepo<Certification> {
     userId: string | Types.ObjectId,
     levelName: string,
     session?: ClientSession,
-  ) {
+  ): Promise<any> {
     // Convert userId to ObjectId if string
     const userIdObjectId = typeof userId === 'string' ? new Types.ObjectId(userId) : userId;
 

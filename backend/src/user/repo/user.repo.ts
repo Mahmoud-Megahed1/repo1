@@ -314,7 +314,7 @@ export class UserRepo extends AbstractRepo<User> {
     userId: string | Types.ObjectId,
     levelName: string,
     session?: ClientSession,
-  ) {
+  ): Promise<any> {
     const userIdObjectId = toObjectId(userId.toString());
     // 1. Find the Days associated with this level to get their IDs
     const days = await this.dayModel.find({ levelName }).select('_id');
@@ -449,7 +449,7 @@ export class UserRepo extends AbstractRepo<User> {
     userId: string | Types.ObjectId,
     levelName: string,
     session?: ClientSession,
-  ) {
+  ): Promise<any> {
     const userIdObjectId = toObjectId(userId.toString());
     // 1. Find Days of Level
     const days = await this.dayModel.find({ levelName }).select('_id');

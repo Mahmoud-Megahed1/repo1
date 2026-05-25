@@ -47,7 +47,7 @@ export class FileUploadService {
     @InjectConnection() private readonly connection: Connection,
   ) {
     // Initialize GridFS bucket (default bucket name 'uploads')
-    this.bucket = new GridFSBucket(this.connection.db, {
+    this.bucket = new GridFSBucket(this.connection.db as any, {
       bucketName: 'appFiles',
     });
     // Force HTTPS for base URL
