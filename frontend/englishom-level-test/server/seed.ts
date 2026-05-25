@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/mysql2";
+import { sql } from "drizzle-orm";
 import mysql from "mysql2/promise";
 import { questions } from "../drizzle/schema";
 
@@ -19,7 +20,7 @@ const sampleQuestions: Array<{
   {
     stage: 1,
     questionText: "What is this object?",
-    imageUrl: "https://via.placeholder.com/200?text=Apple",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg",
     options: ["Apple", "Orange", "Banana", "Grape", "Watermelon"],
     correctAnswer: "Apple",
     difficulty: "easy",
@@ -62,6 +63,9 @@ const sampleQuestions: Array<{
 
 async function seed() {
   try {
+    console.log("Emptying existing questions...");
+    await db.execute(sql`DELETE FROM questions`);
+    
     console.log("Seeding questions...");
     for (const q of sampleQuestions) {
       await db.insert(questions).values({
