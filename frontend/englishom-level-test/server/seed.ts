@@ -1,7 +1,9 @@
 import { drizzle } from "drizzle-orm/mysql2";
+import mysql from "mysql2/promise";
 import { questions } from "../drizzle/schema";
 
-const db = drizzle(process.env.DATABASE_URL!);
+const poolConnection = mysql.createPool(process.env.DATABASE_URL!);
+const db = drizzle(poolConnection);
 
 const sampleQuestions: Array<{
   stage: number;
