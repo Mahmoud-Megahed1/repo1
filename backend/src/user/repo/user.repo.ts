@@ -465,4 +465,82 @@ export class UserRepo extends AbstractRepo<User> {
       { session: session || null },
     );
   }
+
+  async getPublicDashboardStats() {
+    try {
+      const now = new Date();
+      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      // Total and Today Registrations
+      const [totalRegistrations, todayRegistrations] = await Promise.all([
+        this.userModel.countDocuments(),
+        this.userModel.countDocuments({ createdAt: { $gte: startOfToday } })
+      ]);
+
+      // Registrations by Country
+      const countryStats = await this.userModel.aggregate([
+        { $match: { role: 'USER' } },
+        {
+          $group: {
+            _id: { $ifNull: ['$country', 'Unknown'] },
+            count: { $sum: 1 }
+          }
+        },
+        { $sort: { count: -1 } }
+      ]);
+
+      const registrationsByCountry: Record<string, number> = {};
+      let topCountry = 'Unknown';
+      let topCountryCount = 0;
+
+      countryStats.forEach((stat, index) => {
+        const countryName = stat._id === 'unknown' ? 'Unknown' : stat._id;
+        registrationsByCountry[countryName] = stat.count;
+        if (index === 0) {
+          topCountry = countryName;
+          topCountryCount = stat.count;
+        }
+      });
+
+      // Last Registration
+      const lastUser = await this.userModel.findOne({ role: 'USER' }).sort({ createdAt: -1 }).select('country createdAt').lean() as any;
+      
+      let lastRegistration = { country: 'Unknown', time: 'Just now' };
+      if (lastUser) {
+        const diffMs = now.getTime() - new Date(lastUser.createdAt).getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMins / 60);
+        const diffDays = Math.floor(diffHours / 24);
+        
+        let timeStr = 'للتو'; // Arabic for "Just now"
+        if (diffMins > 0 && diffMins < 60) timeStr = `منذ ${diffMins} دقيقة`;
+        else if (diffHours > 0 && diffHours < 24) timeStr = `منذ ${diffHours} ساعة`;
+        else if (diffDays > 0) timeStr = `منذ ${diffDays} يوم`;
+
+        lastRegistration = {
+          country: lastUser.country && lastUser.country !== 'unknown' ? lastUser.country : 'Unknown',
+          time: timeStr
+        };
+      }
+
+      return {
+        totalRegistrations,
+        todayRegistrations,
+        topCountry,
+        topCountryCount,
+        lastRegistration,
+        registrationsByCountry
+      };
+    } catch (error) {
+      this.logger.error(`Error getting public dashboard stats: ${error.message}`, error.stack);
+      return {
+        totalRegistrations: 0,
+        todayRegistrations: 0,
+        topCountry: 'Unknown',
+        topCountryCount: 0,
+        lastRegistration: { country: 'Unknown', time: 'N/A' },
+        registrationsByCountry: {}
+      };
+    }
+  }
 }

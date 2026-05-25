@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Users, TrendingUp, Globe, Activity } from 'lucide-react';
+import { Users, TrendingUp, Globe, Activity, CheckCircle, Headphones, Mic, Shield } from 'lucide-react';
+import { trpc } from '@/lib/trpc';
 
 interface StatItem {
   id: string;
@@ -21,63 +22,51 @@ const LiveStats: React.FC<LiveStatsProps> = ({ language = 'ar' }) => {
 
   const isArabic = language === 'ar';
 
+  const { data: publicStats, isLoading: isTrpcLoading } = trpc.publicStats.get.useQuery(undefined, {
+    refetchInterval: 30000,
+  });
+
   useEffect(() => {
-    // Mock data
-    const mockStats: StatItem[] = [
+    if (!publicStats) return;
+
+    const realStats: StatItem[] = [
       {
-        id: 'active-now',
-        label: isArabic ? 'نشط الآن' : 'Active Now',
-        value: 2847,
+        id: 'words-written',
+        label: isArabic ? 'كلمات كُتبت اليوم' : 'Words Written Today',
+        value: publicStats.wordsWrittenToday || 0,
         icon: <Activity className="w-6 h-6" />,
         color: 'from-green-500 to-emerald-600',
-        trend: 12,
-        unit: isArabic ? 'مستخدم' : 'users',
+        unit: isArabic ? 'كلمة' : 'words',
       },
       {
-        id: 'total-users',
-        label: isArabic ? 'إجمالي المستخدمين' : 'Total Users',
-        value: 24981,
-        icon: <Users className="w-6 h-6" />,
+        id: 'passed-students',
+        label: isArabic ? 'الطلاب المجتازين' : 'Passed Students',
+        value: publicStats.passedStudentsCount || 0,
+        icon: <CheckCircle className="w-6 h-6" />,
         color: 'from-blue-500 to-cyan-600',
-        trend: 8,
-        unit: isArabic ? 'مسجل' : 'registered',
+        unit: isArabic ? 'طالب' : 'student',
       },
       {
-        id: 'daily-registrations',
-        label: isArabic ? 'التسجيلات اليوم' : 'Today\'s Registrations',
-        value: 342,
-        icon: <TrendingUp className="w-6 h-6" />,
+        id: 'audio-minutes',
+        label: isArabic ? 'دقائق الاستماع' : 'Audio Minutes',
+        value: publicStats.audioMinutesListened || 0,
+        icon: <Headphones className="w-6 h-6" />,
         color: 'from-purple-500 to-pink-600',
-        trend: 15,
-        unit: isArabic ? 'مستخدم جديد' : 'new users',
+        unit: isArabic ? 'دقيقة' : 'min',
       },
       {
-        id: 'countries',
-        label: isArabic ? 'الدول' : 'Countries',
-        value: 198,
-        icon: <Globe className="w-6 h-6" />,
+        id: 'shields-earned',
+        label: isArabic ? 'الدروع المكتسبة اليوم' : 'Shields Earned',
+        value: publicStats.shieldsEarnedToday || 0,
+        icon: <Shield className="w-6 h-6" />,
         color: 'from-orange-500 to-red-600',
-        trend: 3,
-        unit: isArabic ? 'دولة' : 'countries',
+        unit: isArabic ? 'درع' : 'shield',
       },
     ];
 
-    setStats(mockStats);
+    setStats(realStats);
     setIsLoading(false);
-
-    // Simulate real-time updates
-    const interval = setInterval(() => {
-      setStats((prevStats) =>
-        prevStats.map((stat) => ({
-          ...stat,
-          value: stat.value + Math.floor(Math.random() * 5) - 2,
-          trend: stat.trend ? stat.trend + Math.floor(Math.random() * 3) - 1 : undefined,
-        }))
-      );
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [isArabic]);
+  }, [publicStats, isArabic]);
 
   const StatCard: React.FC<{ stat: StatItem }> = ({ stat }) => (
     <div className={`bg-gradient-to-br ${stat.color} p-0.5 rounded-lg shadow-lg`}>
@@ -139,8 +128,8 @@ const LiveStats: React.FC<LiveStatsProps> = ({ language = 'ar' }) => {
         </p>
         <p className="text-gray-400 text-xs">
           {isArabic 
-            ? 'يتم تحديث هذه الإحصائيات في الوقت الفعلي. يتم تحديث البيانات كل 3 ثوان لعرض أحدث نشاط على المنصة.'
-            : 'These statistics are updated in real-time. Data is refreshed every 3 seconds to show the latest platform activity.'}
+            ? 'يتم تحديث هذه الإحصائيات في الوقت الفعلي من خلال لوحة التحكم الخاصة بالإدارة.'
+            : 'These statistics are updated in real-time through the admin control panel.'}
         </p>
       </div>
     </div>

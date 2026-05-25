@@ -30,34 +30,23 @@ interface DashboardStats {
     country: string;
     time: string;
   };
-  registrationsByCity: {
-    [key: string]: number;
-  };
+  registrationsByCountry: Record<string, number>;
 }
 
-const generateMockData = (seed = 0): DashboardStats => {
-  return {
-    totalRegistrations: 24981,
-    todayRegistrations: 342,
-    topCountry: 'مصر',
-    topCountryCount: 4300,
-    lastRegistration: {
-      country: 'السعودية',
-      time: 'للتو',
-    },
-    registrationsByCity: {
-      'Cairo': 4300,
-      'Istanbul': 3100,
-      'Amman': 2800,
-      'London': 2500,
-      'Paris': 2100,
-      'Riyadh': 5181,
-    },
-  };
+const emptyData: DashboardStats = {
+  totalRegistrations: 0,
+  todayRegistrations: 0,
+  topCountry: '...',
+  topCountryCount: 0,
+  lastRegistration: {
+    country: '...',
+    time: '...',
+  },
+  registrationsByCountry: {},
 };
 
 export default function LiveDashboard() {
-  const [stats, setStats] = useState<DashboardStats>(generateMockData(0));
+  const [stats, setStats] = useState<DashboardStats>(emptyData);
   const [isLoading, setIsLoading] = useState(false);
   const [language, setLanguage] = useState<'ar' | 'en'>('ar');
   const updateIntervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -66,13 +55,11 @@ export default function LiveDashboard() {
     const updateData = async () => {
       setIsLoading(true);
       try {
-        await new Promise(resolve => setTimeout(resolve, 300));
-        
-        setStats(prev => ({
-          ...prev,
-          totalRegistrations: prev.totalRegistrations + Math.floor(Math.random() * 5),
-          todayRegistrations: prev.todayRegistrations + Math.floor(Math.random() * 3),
-        }));
+        const response = await fetch('https://api.englishom.com/api/public-dashboard/stats');
+        if (response.ok) {
+          const data = await response.json();
+          setStats(data);
+        }
       } catch (error) {
         console.error('Failed to fetch dashboard stats:', error);
       } finally {
@@ -98,7 +85,7 @@ export default function LiveDashboard() {
       globalDataFlow: 'تدفق البيانات العالمي',
       liveRegistrations: 'إجمالي المسجلين',
       todayRegistrations: 'المسجلين اليوم',
-      topCity: 'أكثر المدن',
+      topCity: 'أكثر الدول',
       lastRegistration: 'آخر تسجيل',
       apiIntegration: 'نقاط ربط API',
       liveFeed: 'البث الحي',
@@ -110,7 +97,7 @@ export default function LiveDashboard() {
       signUp: 'انضم الآن',
       connected: 'متصل',
       updating: 'جاري التحديث...',
-      mockData: 'البيانات المعروضة حالياً: بيانات تجريبية',
+      mockData: 'البيانات المعروضة حالياً: بيانات حقيقية',
       autoUpdate: 'التحديث التلقائي: كل 30 ثانية',
       realTimeMetrics: 'مقاييس النظام الفعلية',
       liveUpdates: 'التحديثات الحية',
@@ -128,7 +115,7 @@ export default function LiveDashboard() {
       globalDataFlow: 'Global Data Flow',
       liveRegistrations: 'Total Registrations',
       todayRegistrations: 'Today Registrations',
-      topCity: 'Top Cities',
+      topCity: 'Top Countries',
       lastRegistration: 'Last Registration',
       apiIntegration: 'API Integration Points',
       liveFeed: 'Live Feed',
@@ -140,7 +127,7 @@ export default function LiveDashboard() {
       signUp: 'Join Now',
       connected: 'Connected',
       updating: 'Updating...',
-      mockData: 'Current data: Mock Data',
+      mockData: 'Current data: Real Data',
       autoUpdate: 'Auto Update: Every 30 seconds',
       copyright: '© 2026 - Live Dashboard | All Rights Reserved',
     },

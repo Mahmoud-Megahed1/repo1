@@ -101,6 +101,13 @@ export class DashboardService {
   }
 
   /**
+   * Get real-time public dashboard statistics (No Admin Auth required)
+   */
+  async getPublicLiveStats() {
+    return await this.userRepo.getPublicDashboardStats();
+  }
+
+  /**
    * Assign a course to a user manually (for cash payments or admin actions)
    * Only accessible by SUPER and MANAGER admins
    */

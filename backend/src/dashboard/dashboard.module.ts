@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
 import { DashboardController } from './dashboard.controller';
+import { PublicDashboardController } from './public-dashboard.controller';
 import { ConfigModule } from '../common/config/config.module';
 import { UserModule } from '../user/user.module';
 import { AdminModule } from '../admin/admin.module';
@@ -20,7 +21,7 @@ import { MailModule } from '../common/mail/mail.module';
     MailModule,
     // Assuming CourseModule is defined elsewhere
   ],
-  controllers: [DashboardController],
+  controllers: [DashboardController, PublicDashboardController],
   providers: [DashboardService],
 })
 export class DashboardModule {}
