@@ -4,6 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLocalization } from "@/contexts/LocalizationContext";
 import { toast } from "sonner";
+import { getLoginUrl } from "@/const";
 
 interface StarRatingProps {
   postId: number;
@@ -133,11 +134,14 @@ export default function StarRating({ postId, onRatingSubmit }: StarRatingProps) 
           </button>
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground text-center py-2">
+        <a
+          href={getLoginUrl()}
+          className="block w-full text-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+        >
           {language === "ar" 
-            ? "يرجى تسجيل الدخول لإضافة تقييم" 
-            : "Please log in to add a rating"}
-        </p>
+            ? "سجّل دخولك لإضافة تقييم" 
+            : "Sign in to add a rating"}
+        </a>
       )}
 
       {/* Ratings List */}
