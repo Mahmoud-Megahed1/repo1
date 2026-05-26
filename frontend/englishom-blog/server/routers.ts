@@ -346,19 +346,24 @@ export const appRouter = router({
             throw new TRPCError({ code: "NOT_FOUND", message: "Post not found" });
           }
 
+          const isAdmin = ctx.user.role === "admin";
+          const status = isAdmin ? "approved" : "pending";
+
           const comment = await db.createComment({
             postId: input.postId,
             userId: ctx.user.id,
             content: input.content,
             parentCommentId: input.parentCommentId,
-            status: "pending",
+            status: status,
           });
 
-          // Notify owner of new comment
-          await notifyOwner({
-            title: "New Comment Pending Approval",
-            content: `A new comment has been posted on "${post.titleEn}" and is awaiting approval.`,
-          });
+          // Notify owner of new comment only if it needs approval
+          if (status === "pending") {
+            await notifyOwner({
+              title: "New Comment Pending Approval",
+              content: `A new comment has been posted on "${post.titleEn}" and is awaiting approval.`,
+            });
+          }
 
           return comment;
         }),
