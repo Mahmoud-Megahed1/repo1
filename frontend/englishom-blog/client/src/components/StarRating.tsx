@@ -106,8 +106,6 @@ export default function StarRating({ postId, onRatingSubmit }: StarRatingProps) 
         )}
       </div>
 
-      </div>
-
       {/* Review Text Area (visible to all) */}
       <div className="space-y-3">
         {!user && (

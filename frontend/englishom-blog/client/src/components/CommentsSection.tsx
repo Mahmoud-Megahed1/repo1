@@ -152,7 +152,6 @@ export default function CommentsSection({ postId }: CommentsSectionProps) {
             </button>
           </div>
         </div>
-        </div>
       ) : (
         <div className="space-y-3 p-4 bg-card rounded-lg border border-border">
           {replyingTo && (
