@@ -597,14 +597,22 @@ export const appRouter = router({
         .input(z.object({ postId: z.number() }))
         .query(async ({ ctx, input }) => db.getUserPostRating(input.postId, ctx.user.id)),
       update: protectedProcedure
-        .input(z.object({ id: z.number(), rating: z.number().min(1).max(5).optional(), review: z.string().optional() }))
+        .input(z.object({ id: z.number(), rating: z.number().min(1).max(5).optional(), review: z.string().optional(), adminReply: z.string().optional() }))
         .mutation(async ({ ctx, input }) => {
           const rating = await db.getPostRatingById(input.id);
           if (!rating) throw new TRPCError({ code: "NOT_FOUND", message: "Rating not found" });
           if (rating.userId !== ctx.user.id && ctx.user.role !== "admin") {
             throw new TRPCError({ code: "FORBIDDEN", message: "Cannot edit this rating" });
           }
-          return db.updatePostRating(input.id, { rating: input.rating, review: input.review });
+          
+          const updateData: any = {};
+          if (input.rating !== undefined) updateData.rating = input.rating;
+          if (input.review !== undefined) updateData.review = input.review;
+          if (input.adminReply !== undefined && ctx.user.role === "admin") {
+            updateData.adminReply = input.adminReply;
+          }
+          
+          return db.updatePostRating(input.id, updateData);
         }),
       delete: protectedProcedure
         .input(z.object({ id: z.number() }))

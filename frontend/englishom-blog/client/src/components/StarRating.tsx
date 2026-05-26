@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Star } from "lucide-react";
+import { Star, Trash2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLocalization } from "@/contexts/LocalizationContext";
@@ -140,29 +140,100 @@ export default function StarRating({ postId, onRatingSubmit }: StarRatingProps) 
           </h4>
           <div className="space-y-3 max-h-64 overflow-y-auto">
             {allRatings.map((rating: any) => (
-              <div key={rating.id} className="p-3 bg-background rounded-lg">
+              <div key={rating.id} className="p-3 bg-background rounded-lg border border-border">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="flex gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        size={16}
-                        className={
-                          star <= rating.rating
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-gray-300"
-                        }
-                      />
-                    ))}
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={`https://ui-avatars.com/api/?name=${rating.user?.name || "User"}`}
+                      alt={rating.user?.name || "User"}
+                      className="w-8 h-8 rounded-full"
+                    />
+                    <div>
+                      <p className="font-semibold text-sm">{rating.user?.name || "Anonymous"}</p>
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            size={14}
+                            className={
+                              star <= rating.rating
+                                ? "fill-yellow-400 text-yellow-400"
+                                : "text-gray-300"
+                            }
+                          />
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(rating.createdAt).toLocaleDateString(
-                      language === "ar" ? "ar-SA" : "en-US"
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(rating.createdAt).toLocaleDateString(
+                        language === "ar" ? "ar-SA" : "en-US"
+                      )}
+                    </span>
+                    {(user?.role === "admin" || user?.id === rating.userId) && (
+                      <button
+                        onClick={async () => {
+                          if (confirm(language === "ar" ? "هل تريد حذف هذا التقييم؟" : "Delete this rating?")) {
+                            try {
+                              await trpc.blog.ratings.delete.useMutation().mutateAsync({ id: rating.id });
+                              toast.success(language === "ar" ? "تم الحذف" : "Deleted");
+                              // refetch needed
+                              window.location.reload();
+                            } catch (error) {
+                              toast.error("Error deleting rating");
+                            }
+                          }
+                        }}
+                        className="text-red-500 hover:bg-red-50 p-1 rounded"
+                      >
+                        <Trash2 size={14} />
+                      </button>
                     )}
-                  </span>
+                  </div>
                 </div>
                 {rating.review && (
-                  <p className="text-sm text-foreground">{rating.review}</p>
+                  <p className="text-sm text-foreground mt-2">{rating.review}</p>
+                )}
+                
+                {/* Admin Reply Section */}
+                {rating.adminReply && (
+                  <div className="mt-3 p-2 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-100 dark:border-blue-800">
+                    <p className="text-xs font-semibold text-blue-800 dark:text-blue-300 mb-1">
+                      {language === "ar" ? "رد الإدارة:" : "Admin Reply:"}
+                    </p>
+                    <p className="text-sm">{rating.adminReply}</p>
+                  </div>
+                )}
+                
+                {user?.role === "admin" && !rating.adminReply && (
+                  <div className="mt-3 flex gap-2">
+                    <input 
+                      type="text" 
+                      id={`reply-${rating.id}`}
+                      placeholder={language === "ar" ? "اكتب رداً..." : "Write a reply..."}
+                      className="text-sm p-1.5 border border-border rounded flex-1 focus:outline-none focus:ring-1"
+                    />
+                    <button
+                      onClick={async () => {
+                        const input = document.getElementById(`reply-${rating.id}`) as HTMLInputElement;
+                        if (!input.value.trim()) return;
+                        try {
+                          await trpc.blog.ratings.update.useMutation().mutateAsync({ 
+                            id: rating.id, 
+                            adminReply: input.value 
+                          });
+                          toast.success(language === "ar" ? "تم الرد" : "Replied");
+                          window.location.reload();
+                        } catch (error) {
+                          toast.error("Error replying");
+                        }
+                      }}
+                      className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded hover:bg-primary/90"
+                    >
+                      {language === "ar" ? "رد" : "Reply"}
+                    </button>
+                  </div>
                 )}
               </div>
             ))}

@@ -879,11 +879,23 @@ export async function getPostRatings(postId: number) {
   }
 
   try {
-    return await db
-      .select()
+    const results = await db
+      .select({
+        rating: postRatings,
+        user: {
+          name: users.name,
+          role: users.role,
+        }
+      })
       .from(postRatings)
+      .leftJoin(users, eq(postRatings.userId, users.id))
       .where(eq(postRatings.postId, postId))
       .orderBy(desc(postRatings.createdAt));
+      
+    return results.map(r => ({
+      ...r.rating,
+      user: r.user
+    }));
   } catch (error) {
     console.error("[Database] Failed to get ratings:", error);
     throw error;

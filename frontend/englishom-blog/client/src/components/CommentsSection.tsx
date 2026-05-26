@@ -193,7 +193,7 @@ export default function CommentsSection({ postId }: CommentsSectionProps) {
                     </div>
 
                     <div className="flex gap-2">
-                      {user?.role === "admin" && (
+                      {user?.role === "admin" && user?.id !== comment.userId && (
                         <button
                           onClick={() => {
                             setCommentText(`@${comment.user?.name || "Anonymous"} `);
