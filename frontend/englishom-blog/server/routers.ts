@@ -57,10 +57,15 @@ export const appRouter = router({
           
           return { success: true };
         } catch (error: any) {
+          console.error("====== BLOG LOGIN ERROR ======");
+          console.error("Email attempted:", input.email);
+          console.error("Password length:", input.password.length);
+          console.error("Error from backend:", error?.response?.data || error?.message);
+          console.error("==============================");
           if (error instanceof TRPCError) throw error;
           throw new TRPCError({ 
             code: "UNAUTHORIZED", 
-            message: error.response?.data?.message || "Invalid email or password" 
+            message: `[DEBUG BLOG] ${error.response?.data?.message || "Invalid email or password"}` 
           });
         }
       }),
