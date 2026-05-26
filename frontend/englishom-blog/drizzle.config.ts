@@ -5,8 +5,8 @@ dotenv.config();
 export default {
   schema: './drizzle/schema.ts',
   out: './drizzle/migrations',
-  driver: 'mysql2',
+  dialect: 'mysql',
   dbCredentials: {
-    uri: process.env.DATABASE_URL || 'mysql://root:@localhost:3306/englishom',
+    url: process.env.DATABASE_URL || 'mysql://root:@localhost:3306/englishom',
   },
 } satisfies Config;
