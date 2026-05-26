@@ -1,5 +1,4 @@
 import fs from 'fs';
-import path from 'path';
 import { execSync } from 'child_process';
 
 const frontendApps = [
@@ -10,11 +9,7 @@ const frontendApps = [
   'the-a1-code'
 ];
 
-const backendEnvContent = fs.readFileSync('/var/www/repo1/backend_prod.env', 'utf-8');
-const jwtMatch = backendEnvContent.match(/^JWT_SECRET=(.*)$/m);
-const jwtSecret = jwtMatch ? jwtMatch[1].trim() : "prod_secret_992837482_secure_token_englishom_2026";
-
-console.log("Found JWT_SECRET:", jwtSecret);
+const jwtSecret = "prod_secret_992837482_secure_token_englishom_2026";
 
 for (const app of frontendApps) {
   const envPath = `/var/www/repo1/frontend/${app}/.env`;
