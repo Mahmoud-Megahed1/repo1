@@ -7,6 +7,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Loader2 } from "lucide-react";
 import AdminPostsManager from "./AdminPostsManager";
 import AdminCategoriesManager from "./AdminCategoriesManager";
+import AdminCommentsManager from "./AdminCommentsManager";
 
 export default function AdminDashboard() {
   const { language } = useLocalization();
@@ -82,10 +83,7 @@ export default function AdminDashboard() {
           </TabsContent>
 
           <TabsContent value="comments" className="mt-8">
-            <div className="bg-card p-6 rounded-lg border border-border">
-              <h2 className="text-2xl font-bold mb-6">{t("admin.pendingComments", language)}</h2>
-              <p className="text-muted-foreground">Comments moderation coming soon...</p>
-            </div>
+            <AdminCommentsManager />
           </TabsContent>
 
           <TabsContent value="analytics" className="mt-8">
