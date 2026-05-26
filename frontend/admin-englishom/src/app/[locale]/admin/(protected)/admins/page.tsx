@@ -85,6 +85,9 @@ const Admins = () => {
               { value: 'manager', label: t('manager') },
               { value: 'operator', label: t('operator') },
               { value: 'view', label: t('viewer') },
+              { value: 'ques_admin', label: t('quesAdmin') },
+              { value: 'blog_admin', label: t('blogAdmin') },
+              { value: 'test_admin', label: t('testAdmin') },
             ]}
             value={adminRole}
           />

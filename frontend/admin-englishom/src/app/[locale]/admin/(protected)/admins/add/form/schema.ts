@@ -5,5 +5,5 @@ export const schema = z.object({
   lastName: z.string().min(3),
   email: z.string().min(5).email(),
   password: z.string().min(8).max(16),
-  adminRole: z.enum(['super', 'manager', 'operator', 'view']),
+  adminRole: z.enum(['super', 'manager', 'operator', 'view', 'ques_admin', 'blog_admin', 'test_admin']),
 });

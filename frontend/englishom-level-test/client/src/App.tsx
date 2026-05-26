@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Test from "./pages/Test";
 import TestResults from "./pages/TestResults";
 import Admin from "./pages/Admin";
+import AdminLogin from "./pages/AdminLogin";
 
 function Router() {
   return (
@@ -17,6 +18,7 @@ function Router() {
         <Route path={"/"} component={Home} />
         <Route path={"/test"} component={Test} />
         <Route path="/test/:sessionId" component={TestResults} />
+        <Route path="/admin/login" component={AdminLogin} />
         <Route path="/admin" component={Admin} />
         <Route path={"/404"} component={NotFound} />
         <Route component={NotFound} />

@@ -26,9 +26,14 @@ export default function AdminDashboard() {
       <div className="min-h-screen flex flex-col justify-center items-center">
         <h1 className="text-2xl font-bold mb-4">{t("common.error", language)}</h1>
         <p className="text-muted-foreground mb-6">Access denied</p>
-        <Button onClick={() => window.location.href = "/blog"}>
-          {t("blog.backToBlog", language)}
-        </Button>
+        <div className="flex gap-4">
+          <Button onClick={() => window.location.href = "/blog"} variant="outline">
+            {t("blog.backToBlog", language)}
+          </Button>
+          <Button onClick={() => window.location.href = "/blog/admin/login"} className="bg-accent text-accent-foreground">
+            تسجيل دخول المشرفين
+          </Button>
+        </div>
       </div>
     );
   }

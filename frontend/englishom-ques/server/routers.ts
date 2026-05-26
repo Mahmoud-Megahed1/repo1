@@ -3,11 +3,13 @@ import { COOKIE_NAME } from "@shared/const";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
-import { getDb, getUserProgress, updateUserProgress, getUserAchievements, addAchievement, getUserQuizHistory } from "./db";
+import { getDb, getUserProgress, updateUserProgress, getUserAchievements, addAchievement, getUserQuizHistory, upsertUser } from "./db";
 import { questions, testResults } from "../drizzle/schema";
 import { eq, inArray } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { checkNewBadges, getBadgeInfo } from "../shared/achievements";
+import axios from "axios";
+import { sdk } from "./_core/sdk";
 
 export const appRouter = router({
   system: systemRouter,
@@ -20,6 +22,44 @@ export const appRouter = router({
         success: true,
       } as const;
     }),
+    adminLogin: publicProcedure
+      .input(z.object({ email: z.string().email(), password: z.string() }))
+      .mutation(async ({ input, ctx }) => {
+        try {
+          const res = await axios.post("https://api.englishom.com/admin/auth/login", {
+            email: input.email,
+            password: input.password,
+          });
+          const { user } = res.data;
+          
+          if (user.adminRole !== "super" && user.adminRole !== "ques_admin" && user.adminRole !== "operator") {
+            throw new TRPCError({ code: "FORBIDDEN", message: "You don't have permission to access Ques Admin" });
+          }
+
+          // Ensure user is in our local DB as an admin
+          const openId = user._id || user.id;
+          await upsertUser({
+            openId: openId,
+            name: user.firstName ? `${user.firstName} ${user.lastName || ""}`.trim() : "Admin",
+            email: user.email,
+            role: "admin",
+          });
+
+          // Create session token using sdk
+          const sessionToken = await sdk.createSessionToken(openId, { name: user.firstName || "Admin" });
+          
+          const cookieOptions = getSessionCookieOptions(ctx.req);
+          ctx.res.cookie(COOKIE_NAME, sessionToken, cookieOptions);
+          
+          return { success: true };
+        } catch (error: any) {
+          if (error instanceof TRPCError) throw error;
+          throw new TRPCError({ 
+            code: "UNAUTHORIZED", 
+            message: error.response?.data?.message || "Invalid email or password" 
+          });
+        }
+      }),
   }),
 
   quiz: router({

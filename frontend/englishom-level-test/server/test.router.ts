@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure, router } from "./_core/trpc";
+import { publicProcedure, adminProcedure, router } from "./_core/trpc";
 import {
   getQuestionsByStage,
   getAllQuestions,
@@ -202,7 +202,7 @@ export const testRouter = router({
   /**
    * Get all questions
    */
-  getAllQuestions: publicProcedure.query(async () => {
+  getAllQuestions: adminProcedure.query(async () => {
     const allQuestions = await getAllQuestions();
     return allQuestions.map((q) => ({
       id: q.id,
@@ -218,7 +218,7 @@ export const testRouter = router({
   /**
    * Create a new question
    */
-  createQuestion: publicProcedure
+  createQuestion: adminProcedure
     .input(
       z.object({
         stage: z.number().min(1).max(5),
@@ -244,7 +244,7 @@ export const testRouter = router({
   /**
    * Update a question
    */
-  updateQuestion: publicProcedure
+  updateQuestion: adminProcedure
     .input(
       z.object({
         id: z.number(),
@@ -271,7 +271,7 @@ export const testRouter = router({
   /**
    * Delete a question
    */
-  deleteQuestion: publicProcedure
+  deleteQuestion: adminProcedure
     .input(
       z.object({
         id: z.number(),

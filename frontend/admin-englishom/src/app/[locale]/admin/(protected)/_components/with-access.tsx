@@ -1,6 +1,6 @@
 import NotFound from '@/app/[locale]/not-found';
 import { useAuth } from './auth-provider';
-type Role = 'super' | 'manager' | 'operator' | 'view';
+type Role = 'super' | 'manager' | 'operator' | 'view' | 'ques_admin' | 'blog_admin' | 'test_admin';
 export const withAccess = <P extends object>(
   Component: React.ComponentType<P>,
   role: Role[],

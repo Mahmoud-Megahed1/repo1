@@ -7,6 +7,8 @@ import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import * as db from "./db";
 import { notifyOwner } from "./_core/notification";
 import { storagePut } from "./storage";
+import axios from "axios";
+import { sdk } from "./_core/sdk";
 
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
   if (ctx.user.role !== "admin") {
@@ -26,6 +28,42 @@ export const appRouter = router({
         success: true,
       } as const;
     }),
+    adminLogin: publicProcedure
+      .input(z.object({ email: z.string().email(), password: z.string() }))
+      .mutation(async ({ input, ctx }) => {
+        try {
+          const res = await axios.post("https://api.englishom.com/admin/auth/login", {
+            email: input.email,
+            password: input.password,
+          });
+          const { user } = res.data;
+          
+          if (user.adminRole !== "super" && user.adminRole !== "blog_admin" && user.adminRole !== "operator") {
+            throw new TRPCError({ code: "FORBIDDEN", message: "You don't have permission to access Blog Admin" });
+          }
+
+          const openId = user._id || user.id;
+          await db.upsertUser({
+            openId: openId,
+            name: user.firstName ? `${user.firstName} ${user.lastName || ""}`.trim() : "Admin",
+            email: user.email,
+            role: "admin",
+          });
+
+          const sessionToken = await sdk.createSessionToken(openId, { name: user.firstName || "Admin" });
+          
+          const cookieOptions = getSessionCookieOptions(ctx.req);
+          ctx.res.cookie(COOKIE_NAME, sessionToken, cookieOptions);
+          
+          return { success: true };
+        } catch (error: any) {
+          if (error instanceof TRPCError) throw error;
+          throw new TRPCError({ 
+            code: "UNAUTHORIZED", 
+            message: error.response?.data?.message || "Invalid email or password" 
+          });
+        }
+      }),
   }),
 
   // ============================================================================

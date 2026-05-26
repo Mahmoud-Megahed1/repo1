@@ -103,9 +103,14 @@ export default function AdminDashboard() {
         <Card className="p-8 text-center">
           <h2 className="text-2xl font-bold text-foreground mb-4">Access Denied</h2>
           <p className="text-muted-foreground mb-6">You need admin privileges to access this page.</p>
-          <Button onClick={() => navigate("/")} className="bg-accent text-accent-foreground">
-            Back to Home
-          </Button>
+          <div className="flex gap-4 justify-center">
+            <Button onClick={() => navigate("/")} variant="outline">
+              Back to Home
+            </Button>
+            <Button onClick={() => navigate("/admin/login")} className="bg-accent text-accent-foreground">
+              Admin Login
+            </Button>
+          </div>
         </Card>
       </div>
     );

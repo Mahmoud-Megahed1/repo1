@@ -11,6 +11,7 @@ import BlogHome from "./pages/blog/BlogHome";
 import BlogArticle from "./pages/blog/BlogArticle";
 import BlogCategory from "./pages/blog/BlogCategory";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminLogin from "./pages/AdminLogin";
 import Favorites from "./pages/blog/Favorites";
 import { useAuth } from "@/_core/hooks/useAuth";
 
@@ -22,9 +23,11 @@ function Router() {
       {/* More specific routes first */}
       <Route path="/blog/favorites" component={Favorites} />
       <Route path="/blog/category/:slug" component={BlogCategory} />
+      <Route path="/blog/admin/login" component={AdminLogin} />
       <Route path="/blog/admin" component={AdminDashboard} />
       <Route path="/blog/:slug" component={BlogArticle} />
       <Route path="/blog" component={BlogHome} />
+      <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin" component={AdminDashboard} />
       {/* Home page last */}
       <Route path={""} component={Home} />

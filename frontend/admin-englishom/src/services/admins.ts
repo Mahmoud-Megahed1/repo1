@@ -33,7 +33,7 @@ type GetAdminsParams = {
   page?: number;
   limit?: number;
   isActive?: boolean;
-  adminRole?: 'super' | 'manager' | 'view' | 'operator';
+  adminRole?: 'super' | 'manager' | 'view' | 'operator' | 'ques_admin' | 'blog_admin' | 'test_admin';
   query?: string;
 };
 export const getAdmins = (params: GetAdminsParams) => {
@@ -52,7 +52,7 @@ export const updateAdmin = ({
   id: string;
   data: {
     isActive?: boolean;
-    adminRole?: 'super' | 'manager' | 'view' | 'operator';
+    adminRole?: 'super' | 'manager' | 'view' | 'operator' | 'ques_admin' | 'blog_admin' | 'test_admin';
     password?: string;
     firstName?: string;
     lastName?: string;
@@ -71,7 +71,7 @@ export const createAdmin = (data: {
   password: string;
   firstName: string;
   lastName: string;
-  adminRole: 'super' | 'manager' | 'view' | 'operator';
+  adminRole: 'super' | 'manager' | 'view' | 'operator' | 'ques_admin' | 'blog_admin' | 'test_admin';
 }) => {
   return client.post<Admin>('/admin/create-admin', { ...data });
 };

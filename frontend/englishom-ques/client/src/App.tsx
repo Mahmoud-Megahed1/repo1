@@ -8,6 +8,7 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import Home from "./pages/Home";
 import Quiz from "./pages/Quiz";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminLogin from "./pages/AdminLogin";
 import MyResults from "./pages/MyResults";
 
 function Router() {
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/ques" component={Quiz} />
       <Route path="/results" component={MyResults} />
       <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin/login" component={AdminLogin} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

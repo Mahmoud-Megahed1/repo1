@@ -52,7 +52,26 @@ export default function Admin() {
   const [editingId, setEditingId] = useState<number | null>(null);
 
   // Queries
-  const { data: questions = [], isLoading, refetch } = trpc.test.getAllQuestions.useQuery();
+  const { data: questions = [], isLoading, refetch, error } = trpc.test.getAllQuestions.useQuery();
+
+  if (error && (error.data?.code === "UNAUTHORIZED" || error.data?.code === "FORBIDDEN")) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center bg-background">
+        <Card className="p-8 text-center max-w-md w-full">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Access Denied</h2>
+          <p className="text-muted-foreground mb-6">You need admin privileges to access this page.</p>
+          <div className="flex gap-4 justify-center">
+            <Button onClick={() => window.location.href = "/test"} variant="outline">
+              Back to Home
+            </Button>
+            <Button onClick={() => window.location.href = "/test/admin/login"} className="bg-primary text-primary-foreground">
+              Admin Login
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   // Mutations
   const createMutation = trpc.test.createQuestion.useMutation({

@@ -85,7 +85,7 @@ export type Admin = {
   firstName: string;
   lastName: string;
   country: string;
-  adminRole: 'super' | 'manager' | 'view' | 'operator';
+  adminRole: 'super' | 'manager' | 'view' | 'operator' | 'ques_admin' | 'blog_admin' | 'test_admin';
   role: 'admin' | 'user';
   isActive: boolean;
   isVerified: boolean;
