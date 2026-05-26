@@ -86,11 +86,16 @@ export default function Quiz() {
   }, []);
 
   useEffect(() => {
-    if (questionsData && questionsData.length > 0 && state === "loading") {
-      setQuestions(questionsData);
-      setTimeRemaining(questionsData[0].timePerQuestion);
-      setState("quiz");
-      setQuizStartTime(Date.now());
+    if (questionsData && state === "loading") {
+      if (questionsData.length > 0) {
+        setQuestions(questionsData);
+        setTimeRemaining(questionsData[0].timePerQuestion);
+        setState("quiz");
+        setQuizStartTime(Date.now());
+      } else {
+        toast.error(t("admin.noQuestions"));
+        setState("level-select");
+      }
     }
   }, [questionsData, state]);
 

@@ -22,9 +22,10 @@ function Router() {
       {/* More specific routes first */}
       <Route path="/blog/favorites" component={Favorites} />
       <Route path="/blog/category/:slug" component={BlogCategory} />
+      <Route path="/blog/admin" component={AdminDashboard} />
       <Route path="/blog/:slug" component={BlogArticle} />
       <Route path="/blog" component={BlogHome} />
-      {user?.role === "admin" && <Route path="/admin" component={AdminDashboard} />}
+      <Route path="/admin" component={AdminDashboard} />
       {/* Home page last */}
       <Route path={""} component={Home} />
       <Route path={"/404"} component={NotFound} />
