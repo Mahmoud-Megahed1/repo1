@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react";
 import AdminPostsManager from "./AdminPostsManager";
 import AdminCategoriesManager from "./AdminCategoriesManager";
 import AdminCommentsManager from "./AdminCommentsManager";
+import AdminRatingsManager from "./AdminRatingsManager";
 
 export default function AdminDashboard() {
   const { language } = useLocalization();
@@ -45,11 +46,12 @@ export default function AdminDashboard() {
         <h1 className="text-4xl font-bold mb-8">{t("admin.dashboard", language)}</h1>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">{t("admin.dashboard", language)}</TabsTrigger>
             <TabsTrigger value="posts">{t("admin.posts", language)}</TabsTrigger>
             <TabsTrigger value="categories">{t("admin.categories", language)}</TabsTrigger>
             <TabsTrigger value="comments">{t("admin.comments", language)}</TabsTrigger>
+            <TabsTrigger value="ratings">{language === "ar" ? "التقييمات" : "Ratings"}</TabsTrigger>
             <TabsTrigger value="analytics">{t("admin.analytics", language)}</TabsTrigger>
           </TabsList>
 
@@ -84,6 +86,10 @@ export default function AdminDashboard() {
 
           <TabsContent value="comments" className="mt-8">
             <AdminCommentsManager />
+          </TabsContent>
+
+          <TabsContent value="ratings" className="mt-8">
+            <AdminRatingsManager />
           </TabsContent>
 
           <TabsContent value="analytics" className="mt-8">

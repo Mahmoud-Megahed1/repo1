@@ -586,7 +586,10 @@ export const appRouter = router({
     ratings: router({
       create: protectedProcedure
         .input(z.object({ postId: z.number(), rating: z.number().min(1).max(5), review: z.string().optional() }))
-        .mutation(async ({ ctx, input }) => db.createPostRating({ postId: input.postId, userId: ctx.user.id, rating: input.rating, review: input.review })),
+        .mutation(async ({ ctx, input }) => {
+          const status = ctx.user.role === "admin" ? "approved" : "pending";
+          return db.createPostRating({ postId: input.postId, userId: ctx.user.id, rating: input.rating, review: input.review, status });
+        }),
       getByPost: publicProcedure
         .input(z.object({ postId: z.number() }))
         .query(async ({ input }) => db.getPostRatings(input.postId)),
@@ -623,6 +626,16 @@ export const appRouter = router({
             throw new TRPCError({ code: "FORBIDDEN", message: "Cannot delete this rating" });
           }
           return db.deletePostRating(input.id);
+        }),
+      listPending: adminProcedure
+        .input(z.object({ limit: z.number().optional() }))
+        .query(async ({ input }) => {
+          return db.getPendingRatings(input.limit || 50);
+        }),
+      approve: adminProcedure
+        .input(z.object({ id: z.number() }))
+        .mutation(async ({ input }) => {
+          return db.updatePostRatingStatus(input.id, "approved");
         }),
     }),
   }),

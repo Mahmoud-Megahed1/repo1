@@ -889,7 +889,12 @@ export async function getPostRatings(postId: number) {
       })
       .from(postRatings)
       .leftJoin(users, eq(postRatings.userId, users.id))
-      .where(eq(postRatings.postId, postId))
+      .where(
+        and(
+          eq(postRatings.postId, postId),
+          eq(postRatings.status, "approved")
+        )
+      )
       .orderBy(desc(postRatings.createdAt));
       
     return results.map(r => ({
@@ -1006,4 +1011,40 @@ export async function deletePostRating(id: number) {
     console.error("[Database] Failed to delete rating:", error);
     throw error;
   }
+}
+
+export async function getPendingRatings(limit: number = 50) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const results = await db
+    .select({
+      rating: postRatings,
+      user: {
+        name: users.name,
+        role: users.role,
+      }
+    })
+    .from(postRatings)
+    .leftJoin(users, eq(postRatings.userId, users.id))
+    .where(eq(postRatings.status, "pending"))
+    .orderBy(desc(postRatings.createdAt))
+    .limit(limit);
+
+  return results.map(r => ({
+    ...r.rating,
+    user: r.user
+  }));
+}
+
+export async function updatePostRatingStatus(id: number, status: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  await db
+    .update(postRatings)
+    .set({ status, updatedAt: new Date() })
+    .where(eq(postRatings.id, id));
+    
+  return true;
 }

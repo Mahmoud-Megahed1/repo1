@@ -145,13 +145,19 @@ export default function StarRating({ postId, onRatingSubmit }: StarRatingProps) 
               <div key={rating.id} className="p-3 bg-background rounded-lg border border-border">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <img
-                      src={`https://ui-avatars.com/api/?name=${rating.user?.name || "User"}`}
-                      alt={rating.user?.name || "User"}
-                      className="w-8 h-8 rounded-full"
-                    />
+                    {user?.role === "admin" && (
+                      <img
+                        src={`https://ui-avatars.com/api/?name=${rating.user?.name || "User"}`}
+                        alt={rating.user?.name || "User"}
+                        className="w-8 h-8 rounded-full"
+                      />
+                    )}
                     <div>
-                      <p className="font-semibold text-sm">{rating.user?.name || "Anonymous"}</p>
+                      <p className="font-semibold text-sm">
+                        {user?.role === "admin" 
+                          ? (rating.user?.name || "Anonymous") 
+                          : (language === "ar" ? "مستخدم مجهول" : "Anonymous User")}
+                      </p>
                       <div className="flex gap-1">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star

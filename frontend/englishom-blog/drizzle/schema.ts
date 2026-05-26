@@ -334,6 +334,7 @@ export const postRatings = mysqlTable("post_ratings", {
   rating: int("rating").notNull(), // 1-5 stars
   review: text("review"),
   adminReply: text("adminReply"),
+  status: varchar("status", { length: 20 }).default("pending").notNull(),
   isHelpful: boolean("isHelpful"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
