@@ -13,8 +13,10 @@ export default function CommentsSection({ postId }: CommentsSectionProps) {
   const { user } = useAuth();
   const { language } = useLocalization();
   const [commentText, setCommentText] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
+  const [guestName, setGuestName] = useState("");
+  const [guestEmail, setGuestEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fetch comments
   const { data: comments, refetch } = trpc.blog.comments.list.useQuery({
@@ -25,13 +27,13 @@ export default function CommentsSection({ postId }: CommentsSectionProps) {
   const deleteComment = trpc.blog.comments.delete.useMutation();
 
   const handleSubmitComment = async () => {
-    if (!user) {
-      toast.error(language === "ar" ? "يجب تسجيل الدخول أولاً" : "Please log in first");
+    if (!commentText.trim()) {
+      toast.error(language === "ar" ? "يرجى كتابة تعليق" : "Please write a comment");
       return;
     }
 
-    if (!commentText.trim()) {
-      toast.error(language === "ar" ? "يرجى كتابة تعليق" : "Please write a comment");
+    if (!user && (!guestName.trim() || !guestEmail.trim())) {
+      toast.error(language === "ar" ? "الاسم والبريد الإلكتروني مطلوبان" : "Name and email are required");
       return;
     }
 
@@ -41,6 +43,8 @@ export default function CommentsSection({ postId }: CommentsSectionProps) {
         postId,
         content: commentText,
         parentCommentId: replyingTo || undefined,
+        guestName: !user ? guestName : undefined,
+        guestEmail: !user ? guestEmail : undefined,
       });
       toast.success(language === "ar" ? "تم إضافة التعليق" : "Comment added");
       setCommentText("");
@@ -148,13 +152,82 @@ export default function CommentsSection({ postId }: CommentsSectionProps) {
             </button>
           </div>
         </div>
+        </div>
       ) : (
-        <div className="p-4 bg-card rounded-lg border border-border text-center">
-          <p className="text-muted-foreground">
-            {language === "ar"
-              ? "يجب تسجيل الدخول لإضافة تعليق"
-              : "Please log in to add a comment"}
-          </p>
+        <div className="space-y-3 p-4 bg-card rounded-lg border border-border">
+          {replyingTo && (
+            <div className="flex items-center justify-between text-sm text-blue-600 bg-blue-50 dark:bg-blue-900/20 dark:text-blue-300 p-2 rounded-md mb-2">
+              <span>{language === "ar" ? "أنت تقوم بالرد على تعليق" : "Replying to a comment"}</span>
+              <button 
+                onClick={() => {
+                  setReplyingTo(null);
+                  setCommentText("");
+                }}
+                className="text-xs hover:underline"
+              >
+                {language === "ar" ? "إلغاء الرد" : "Cancel reply"}
+              </button>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input
+              type="text"
+              value={guestName}
+              onChange={(e) => setGuestName(e.target.value)}
+              placeholder={language === "ar" ? "الاسم (مطلوب)" : "Name (required)"}
+              className="w-full p-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              disabled={isSubmitting}
+            />
+            <input
+              type="email"
+              value={guestEmail}
+              onChange={(e) => setGuestEmail(e.target.value)}
+              placeholder={language === "ar" ? "البريد الإلكتروني (مطلوب)" : "Email (required)"}
+              className="w-full p-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              disabled={isSubmitting}
+            />
+          </div>
+
+          <textarea
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            placeholder={
+              language === "ar"
+                ? "اكتب تعليقك هنا..."
+                : "Write your comment here..."
+            }
+            className="w-full p-3 border border-border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+            rows={3}
+            disabled={isSubmitting}
+          />
+
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() => {
+                setCommentText("");
+                setReplyingTo(null);
+              }}
+              className="px-4 py-2 text-foreground hover:bg-background rounded-lg transition-colors"
+              disabled={isSubmitting}
+            >
+              {language === "ar" ? "إلغاء" : "Cancel"}
+            </button>
+            <button
+              onClick={handleSubmitComment}
+              disabled={isSubmitting || !commentText.trim() || !guestName.trim() || !guestEmail.trim()}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+            >
+              <Send size={16} />
+              {isSubmitting
+                ? language === "ar"
+                  ? "جاري الإرسال..."
+                  : "Sending..."
+                : language === "ar"
+                ? "إرسال"
+                : "Send"}
+            </button>
+          </div>
         </div>
       )}
 

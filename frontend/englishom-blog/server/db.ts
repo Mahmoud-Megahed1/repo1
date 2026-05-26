@@ -66,11 +66,10 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       updateSet.role = 'admin';
     }
 
-    if (!values.lastSignedIn) {
-      values.lastSignedIn = new Date();
-    }
-
-    if (Object.keys(updateSet).length === 0) {
+    if (Object.keys(updateSet).length > 0) {
+      updateSet.updatedAt = new Date();
+      updateSet.lastSignedIn = new Date();
+    } else {
       updateSet.lastSignedIn = new Date();
     }
 
@@ -81,6 +80,30 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     console.error("[Database] Failed to upsert user:", error);
     throw error;
   }
+}
+
+export async function getOrCreateGuestUser(name: string, email: string): Promise<number> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Try to find existing user by email
+  const existingUsers = await db.select().from(users).where(eq(users.email, email)).limit(1);
+  if (existingUsers.length > 0) {
+    return existingUsers[0].id;
+  }
+
+  // Create new guest user
+  const randomOpenId = `guest_${Math.random().toString(36).substring(2, 15)}_${Date.now()}`;
+  
+  const result: any = await db.insert(users).values({
+    openId: randomOpenId,
+    name: name,
+    email: email,
+    role: "user",
+    loginMethod: "guest",
+  });
+  
+  return result[0].insertId;
 }
 
 export async function getUserByOpenId(openId: string) {

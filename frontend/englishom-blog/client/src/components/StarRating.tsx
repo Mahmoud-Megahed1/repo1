@@ -17,6 +17,8 @@ export default function StarRating({ postId, onRatingSubmit }: StarRatingProps) 
   const [hoverRating, setHoverRating] = useState(0);
   const [selectedRating, setSelectedRating] = useState(0);
   const [review, setReview] = useState("");
+  const [guestName, setGuestName] = useState("");
+  const [guestEmail, setGuestEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fetch average rating
@@ -34,13 +36,13 @@ export default function StarRating({ postId, onRatingSubmit }: StarRatingProps) 
   const updateRating = trpc.blog.ratings.update.useMutation();
 
   const handleSubmit = async () => {
-    if (!user) {
-      toast.error(language === "ar" ? "يجب تسجيل الدخول أولاً" : "Please log in first");
+    if (selectedRating === 0) {
+      toast.error(language === "ar" ? "يرجى اختيار تقييم" : "Please select a rating");
       return;
     }
 
-    if (selectedRating === 0) {
-      toast.error(language === "ar" ? "يرجى اختيار تقييم" : "Please select a rating");
+    if (!user && (!guestName.trim() || !guestEmail.trim())) {
+      toast.error(language === "ar" ? "الاسم والبريد الإلكتروني مطلوبان" : "Name and email are required");
       return;
     }
 
@@ -50,6 +52,8 @@ export default function StarRating({ postId, onRatingSubmit }: StarRatingProps) 
         postId,
         rating: selectedRating,
         review,
+        guestName: !user ? guestName : undefined,
+        guestEmail: !user ? guestEmail : undefined,
       });
       toast.success(language === "ar" ? "شكراً لتقييمك" : "Thank you for rating");
       setSelectedRating(0);
@@ -102,47 +106,58 @@ export default function StarRating({ postId, onRatingSubmit }: StarRatingProps) 
         )}
       </div>
 
-      {/* Review Text Area */}
-      {user ? (
-        <div className="space-y-2">
-          <textarea
-            value={review}
-            onChange={(e) => setReview(e.target.value)}
-            placeholder={
-              language === "ar"
-                ? "أضف رأيك (اختياري)"
-                : "Add your review (optional)"
-            }
-            className="w-full p-2 border border-border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
-            rows={3}
-            disabled={isSubmitting}
-          />
+      </div>
 
-          {/* Submit Button */}
-          <button
-            onClick={handleSubmit}
-            disabled={isSubmitting || selectedRating === 0}
-            className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {isSubmitting
-              ? language === "ar"
-                ? "جاري الإرسال..."
-                : "Submitting..."
-              : language === "ar"
-              ? "إرسال التقييم"
-              : "Submit Rating"}
-          </button>
-        </div>
-      ) : (
-        <a
-          href={getLoginUrl()}
-          className="block w-full text-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+      {/* Review Text Area (visible to all) */}
+      <div className="space-y-3">
+        {!user && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input
+              type="text"
+              value={guestName}
+              onChange={(e) => setGuestName(e.target.value)}
+              placeholder={language === "ar" ? "الاسم (مطلوب)" : "Name (required)"}
+              className="w-full p-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              disabled={isSubmitting}
+            />
+            <input
+              type="email"
+              value={guestEmail}
+              onChange={(e) => setGuestEmail(e.target.value)}
+              placeholder={language === "ar" ? "البريد الإلكتروني (مطلوب)" : "Email (required)"}
+              className="w-full p-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              disabled={isSubmitting}
+            />
+          </div>
+        )}
+        <textarea
+          value={review}
+          onChange={(e) => setReview(e.target.value)}
+          placeholder={
+            language === "ar"
+              ? "أضف رأيك (اختياري)"
+              : "Add your review (optional)"
+          }
+          className="w-full p-2 border border-border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+          rows={3}
+          disabled={isSubmitting}
+        />
+
+        {/* Submit Button */}
+        <button
+          onClick={handleSubmit}
+          disabled={isSubmitting || selectedRating === 0}
+          className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {language === "ar" 
-            ? "سجّل دخولك لإضافة تقييم" 
-            : "Sign in to add a rating"}
-        </a>
-      )}
+          {isSubmitting
+            ? language === "ar"
+              ? "جاري الإرسال..."
+              : "Submitting..."
+            : language === "ar"
+            ? "إرسال التقييم"
+            : "Submit Rating"}
+        </button>
+      </div>
 
       {/* Ratings List */}
       {allRatings && allRatings.length > 0 && (

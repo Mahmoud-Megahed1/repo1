@@ -332,26 +332,39 @@ export const appRouter = router({
           return db.getApprovedComments(input.postId, input.limit, input.offset);
         }),
 
-      create: protectedProcedure
+      create: publicProcedure
         .input(
           z.object({
             postId: z.number(),
             content: z.string().min(1).max(5000),
             parentCommentId: z.number().optional(),
+            guestName: z.string().optional(),
+            guestEmail: z.string().email().optional(),
           })
         )
         .mutation(async ({ input, ctx }) => {
+          let userId: number;
+          let isAdmin = false;
+          
+          if (ctx.user) {
+            userId = ctx.user.id;
+            isAdmin = ctx.user.role === "admin";
+          } else {
+            if (!input.guestName || !input.guestEmail) {
+              throw new TRPCError({ code: "BAD_REQUEST", message: "Name and email are required for guests" });
+            }
+            userId = await db.getOrCreateGuestUser(input.guestName, input.guestEmail);
+          }
           const post = await db.getPostById(input.postId);
           if (!post) {
             throw new TRPCError({ code: "NOT_FOUND", message: "Post not found" });
           }
 
-          const isAdmin = ctx.user.role === "admin";
           const status = isAdmin ? "approved" : "pending";
 
           const comment = await db.createComment({
             postId: input.postId,
-            userId: ctx.user.id,
+            userId: userId,
             content: input.content,
             parentCommentId: input.parentCommentId,
             status: status,
@@ -584,11 +597,30 @@ export const appRouter = router({
         .mutation(async ({ input }) => db.updateNotificationStatus(input.id, input.status, input.failureReason)),
     }),
     ratings: router({
-      create: protectedProcedure
-        .input(z.object({ postId: z.number(), rating: z.number().min(1).max(5), review: z.string().optional() }))
+      create: publicProcedure
+        .input(z.object({ 
+          postId: z.number(), 
+          rating: z.number().min(1).max(5), 
+          review: z.string().optional(),
+          guestName: z.string().optional(),
+          guestEmail: z.string().email().optional(),
+        }))
         .mutation(async ({ ctx, input }) => {
-          const status = ctx.user.role === "admin" ? "approved" : "pending";
-          return db.createPostRating({ postId: input.postId, userId: ctx.user.id, rating: input.rating, review: input.review, status });
+          let userId: number;
+          let isAdmin = false;
+          
+          if (ctx.user) {
+            userId = ctx.user.id;
+            isAdmin = ctx.user.role === "admin";
+          } else {
+            if (!input.guestName || !input.guestEmail) {
+              throw new TRPCError({ code: "BAD_REQUEST", message: "Name and email are required for guests" });
+            }
+            userId = await db.getOrCreateGuestUser(input.guestName, input.guestEmail);
+          }
+
+          const status = isAdmin ? "approved" : "pending";
+          return db.createPostRating({ postId: input.postId, userId, rating: input.rating, review: input.review, status });
         }),
       getByPost: publicProcedure
         .input(z.object({ postId: z.number() }))
