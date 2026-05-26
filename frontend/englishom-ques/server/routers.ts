@@ -26,7 +26,7 @@ export const appRouter = router({
       .input(z.object({ email: z.string().email(), password: z.string() }))
       .mutation(async ({ input, ctx }) => {
         try {
-          const res = await axios.post("https://api.englishom.com/admin/auth/login", {
+          const res = await axios.post("https://api.englishom.com/api/admin/auth/login", {
             email: input.email,
             password: input.password,
           });
