@@ -53,11 +53,17 @@ export const appRouter = router({
           
           return { success: true };
         } catch (error: any) {
-          console.error("[Login Error]:", error?.response?.data || error?.message || error);
+          console.error("====== LOGIN ERROR DETAILS ======");
+          console.error("Error Message:", error?.message);
+          console.error("Error Response Data:", error?.response?.data);
+          console.error("Error Response Status:", error?.response?.status);
+          console.error("Error Stack:", error?.stack);
+          console.error("=================================");
+          
           if (error instanceof TRPCError) throw error;
           throw new TRPCError({ 
             code: "UNAUTHORIZED", 
-            message: error.response?.data?.message || "Invalid email or password" 
+            message: `[DEBUG] ${error?.response?.data?.message || error?.message || "Unknown error"}` 
           });
         }
       }),
