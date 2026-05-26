@@ -398,25 +398,51 @@ export async function getApprovedComments(postId: number, limit: number = 20, of
   const db = await getDb();
   if (!db) return [];
 
-  return db
-    .select()
+  const results = await db
+    .select({
+      comment: blogComments,
+      user: {
+        name: users.name,
+        role: users.role,
+        email: users.email
+      }
+    })
     .from(blogComments)
+    .leftJoin(users, eq(blogComments.userId, users.id))
     .where(and(eq(blogComments.postId, postId), eq(blogComments.status, "approved")))
     .orderBy(desc(blogComments.createdAt))
     .limit(limit)
     .offset(offset);
+
+  return results.map((r) => ({
+    ...r.comment,
+    user: r.user
+  }));
 }
 
 export async function getPendingComments(limit: number = 50) {
   const db = await getDb();
   if (!db) return [];
 
-  return db
-    .select()
+  const results = await db
+    .select({
+      comment: blogComments,
+      user: {
+        name: users.name,
+        role: users.role,
+        email: users.email
+      }
+    })
     .from(blogComments)
+    .leftJoin(users, eq(blogComments.userId, users.id))
     .where(eq(blogComments.status, "pending"))
     .orderBy(desc(blogComments.createdAt))
     .limit(limit);
+
+  return results.map((r) => ({
+    ...r.comment,
+    user: r.user
+  }));
 }
 
 export async function createComment(data: typeof blogComments.$inferInsert) {
