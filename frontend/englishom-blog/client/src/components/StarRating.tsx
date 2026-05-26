@@ -102,7 +102,7 @@ export default function StarRating({ postId, onRatingSubmit }: StarRatingProps) 
       </div>
 
       {/* Review Text Area */}
-      {user && (
+      {user ? (
         <div className="space-y-2">
           <textarea
             value={review}
@@ -132,6 +132,12 @@ export default function StarRating({ postId, onRatingSubmit }: StarRatingProps) 
               : "Submit Rating"}
           </button>
         </div>
+      ) : (
+        <p className="text-sm text-muted-foreground text-center py-2">
+          {language === "ar" 
+            ? "يرجى تسجيل الدخول لإضافة تقييم" 
+            : "Please log in to add a rating"}
+        </p>
       )}
 
       {/* Ratings List */}
