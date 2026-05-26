@@ -250,6 +250,15 @@ export default function CommentsSection({ postId }: CommentsSectionProps) {
                       <div>
                         <div className="flex items-center gap-2">
                           <p className="font-semibold">{comment.user?.name || "Anonymous"}</p>
+                          {user?.role === "admin" && comment.user?.email && (
+                            <a 
+                              href={`mailto:${comment.user.email}`}
+                              className="text-xs text-blue-600 hover:underline flex items-center"
+                              title={comment.user.email}
+                            >
+                              📧 {comment.user.email}
+                            </a>
+                          )}
                           {comment.user?.role === "admin" && (
                             <span className="px-2 py-0.5 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 text-[10px] uppercase font-bold rounded">
                               Admin
@@ -313,6 +322,15 @@ export default function CommentsSection({ postId }: CommentsSectionProps) {
                             <div>
                               <div className="flex items-center gap-2">
                                 <p className="font-semibold text-sm">{reply.user?.name || "Anonymous"}</p>
+                                {user?.role === "admin" && reply.user?.email && (
+                                  <a 
+                                    href={`mailto:${reply.user.email}`}
+                                    className="text-xs text-blue-600 hover:underline flex items-center"
+                                    title={reply.user.email}
+                                  >
+                                    📧 {reply.user.email}
+                                  </a>
+                                )}
                                 {reply.user?.role === "admin" && (
                                   <span className="px-2 py-0.5 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 text-[10px] uppercase font-bold rounded">
                                     Admin
