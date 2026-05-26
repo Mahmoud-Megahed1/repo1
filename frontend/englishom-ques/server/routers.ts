@@ -53,6 +53,7 @@ export const appRouter = router({
           
           return { success: true };
         } catch (error: any) {
+          console.error("[Login Error]:", error?.response?.data || error?.message || error);
           if (error instanceof TRPCError) throw error;
           throw new TRPCError({ 
             code: "UNAUTHORIZED", 
