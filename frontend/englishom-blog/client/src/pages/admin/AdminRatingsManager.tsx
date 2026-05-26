@@ -43,6 +43,11 @@ export default function AdminRatingsManager() {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <span className="font-semibold">{rating.user?.name || "Anonymous"}</span>
+                {rating.user?.email && (
+                  <a href={`mailto:${rating.user.email}`} className="text-xs text-blue-600 hover:underline">
+                    📧 {rating.user.email}
+                  </a>
+                )}
                 {rating.user?.role === "admin" && (
                   <span className="px-2 py-0.5 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 text-[10px] uppercase font-bold rounded">
                     Admin

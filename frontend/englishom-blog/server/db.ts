@@ -885,6 +885,7 @@ export async function getPostRatings(postId: number) {
         user: {
           name: users.name,
           role: users.role,
+          email: users.email,
         }
       })
       .from(postRatings)
@@ -1023,6 +1024,7 @@ export async function getPendingRatings(limit: number = 50) {
       user: {
         name: users.name,
         role: users.role,
+        email: users.email,
       }
     })
     .from(postRatings)
