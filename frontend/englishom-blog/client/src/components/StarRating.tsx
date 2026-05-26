@@ -29,6 +29,8 @@ export default function StarRating({ postId, onRatingSubmit }: StarRatingProps) 
   });
 
   const createRating = trpc.blog.ratings.create.useMutation();
+  const deleteRating = trpc.blog.ratings.delete.useMutation();
+  const updateRating = trpc.blog.ratings.update.useMutation();
 
   const handleSubmit = async () => {
     if (!user) {
@@ -176,9 +178,8 @@ export default function StarRating({ postId, onRatingSubmit }: StarRatingProps) 
                         onClick={async () => {
                           if (confirm(language === "ar" ? "هل تريد حذف هذا التقييم؟" : "Delete this rating?")) {
                             try {
-                              await trpc.blog.ratings.delete.useMutation().mutateAsync({ id: rating.id });
+                              await deleteRating.mutateAsync({ id: rating.id });
                               toast.success(language === "ar" ? "تم الحذف" : "Deleted");
-                              // refetch needed
                               window.location.reload();
                             } catch (error) {
                               toast.error("Error deleting rating");
@@ -219,7 +220,7 @@ export default function StarRating({ postId, onRatingSubmit }: StarRatingProps) 
                         const input = document.getElementById(`reply-${rating.id}`) as HTMLInputElement;
                         if (!input.value.trim()) return;
                         try {
-                          await trpc.blog.ratings.update.useMutation().mutateAsync({ 
+                          await updateRating.mutateAsync({ 
                             id: rating.id, 
                             adminReply: input.value 
                           });
