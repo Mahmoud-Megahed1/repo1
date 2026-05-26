@@ -45,7 +45,7 @@ export default function Header() {
             {t("nav.blog", language)}
           </a>
           {user?.role === "admin" && (
-            <a href="/admin" className="text-sm font-medium hover:text-primary transition-colors">
+            <a href="/blog/admin" className="text-sm font-medium hover:text-primary transition-colors">
               {t("admin.dashboard", language)}
             </a>
           )}
@@ -113,7 +113,7 @@ export default function Header() {
               {t("nav.blog", language)}
             </a>
             {user?.role === "admin" && (
-              <a href="/admin" className="px-4 py-2 rounded hover:bg-accent transition-colors">
+              <a href="/blog/admin" className="px-4 py-2 rounded hover:bg-accent transition-colors">
                 {t("admin.dashboard", language)}
               </a>
             )}
