@@ -104,6 +104,14 @@ export default function Admin() {
   });
 
   // Check authorization AFTER all hooks
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   if (error && (error.data?.code === "UNAUTHORIZED" || error.data?.code === "FORBIDDEN")) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center bg-background">
