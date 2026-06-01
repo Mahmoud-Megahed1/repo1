@@ -2,63 +2,48 @@
 
 @theme {
   --color-glass-bg: rgba(255, 255, 255, 0.05);
-  --color-glass-border: rgba(255, 255, 255, 0.1);
-  --color-glass-highlight: rgba(255, 255, 255, 0.2);
-  --color-primary: #3b82f6;
-  --color-secondary: #8b5cf6;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
-  --color-cyan: #06b6d4;
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-glass-highlight: rgba(255, 255, 255, 0.15);
   
   --font-tajawal: "Tajawal", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
   font-family: var(--font-tajawal);
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  background: linear-gradient(160deg, #0c1222 0%, #111827 50%, #0f172a 100%);
   color: white;
   min-height: 100vh;
 }
 
-/* Glassmorphism utilities */
-.glass {
-  background: var(--color-glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--color-glass-border);
-}
-
+/* Glassmorphism Card */
 .glass-card {
   background: var(--color-glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--color-glass-border);
   @apply rounded-2xl shadow-xl transition-all duration-300;
 }
 
 .glass-card:hover {
   border-color: var(--color-glass-highlight);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Custom cards */
+/* Custom Stat Cards */
 .card-cyan {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%);
-  border-color: rgba(6, 182, 212, 0.4);
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(6, 182, 212, 0.03) 100%);
+  border-color: rgba(6, 182, 212, 0.25);
 }
 .card-red {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%);
-  border-color: rgba(239, 68, 68, 0.4);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(239, 68, 68, 0.03) 100%);
+  border-color: rgba(239, 68, 68, 0.25);
 }
 .card-purple {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0.05) 100%);
-  border-color: rgba(139, 92, 246, 0.4);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12) 0%, rgba(139, 92, 246, 0.03) 100%);
+  border-color: rgba(139, 92, 246, 0.25);
 }
 .card-green {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
-  border-color: rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0.03) 100%);
+  border-color: rgba(16, 185, 129, 0.25);
 }
 
 /* Speedometer */
@@ -69,14 +54,75 @@ body {
 }
 .progress-bg {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.1);
-  stroke-width: 12;
+  stroke: rgba(255, 255, 255, 0.06);
+  stroke-width: 10;
 }
 .progress-fill {
   fill: none;
   stroke: url(#gradient);
-  stroke-width: 12;
+  stroke-width: 10;
   stroke-linecap: round;
-  transition: stroke-dashoffset 1s ease-out;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   stroke-dasharray: 565.48; /* 2 * PI * 90 */
+}
+
+/* Custom Range Sliders */
+.slider-cyan,
+.slider-red {
+  @apply w-full h-1.5 rounded-lg appearance-none cursor-pointer;
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+
+.slider-cyan::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: box-shadow 0.2s;
+}
+
+.slider-cyan::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.6);
+}
+
+.slider-red::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: box-shadow 0.2s;
+}
+
+.slider-red::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
+}
+
+/* Firefox */
+.slider-cyan::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.slider-red::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }

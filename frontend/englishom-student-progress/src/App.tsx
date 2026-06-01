@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Rocket, Zap, Target, TrendingUp, AlertTriangle, Clock } from 'lucide-react';
+import { Rocket, Zap, Target, TrendingUp, AlertTriangle, Clock, BarChart3, Calendar, Timer, Award, ArrowUp, ArrowDown, Minus, GraduationCap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const TOTAL_COURSE_DAYS = 50;
@@ -10,16 +10,13 @@ export default function App() {
   const [planDays, setPlanDays] = useState(10);
   const [studentDays, setStudentDays] = useState(15);
 
-  // AI BUGS FIXED:
-  // 1. Calculate velocity securely as numbers instead of formatting to strings
   const velocity = useMemo(() => {
     if (planDays === 0) return 1;
     return Number((studentDays / planDays).toFixed(2));
   }, [studentDays, planDays]);
 
-  // 2. Fix the Infinity issue when velocity is 0
   const expectedRemainingDays = useMemo(() => {
-    if (velocity <= 0) return TOTAL_COURSE_DAYS; // Safe fallback
+    if (velocity <= 0) return TOTAL_COURSE_DAYS;
     const remainingDaysAtCurrentPace = (TOTAL_COURSE_DAYS - studentDays) / velocity;
     return Math.ceil(remainingDaysAtCurrentPace);
   }, [studentDays, velocity]);
@@ -30,187 +27,261 @@ export default function App() {
   const progressValue = Math.min((studentDays / TOTAL_COURSE_DAYS) * 100, 100);
   const strokeDashoffset = CIRCLE_CIRCUMFERENCE - (progressValue / 100) * CIRCLE_CIRCUMFERENCE;
 
-  // 3. Fix type coercion in messages
   const statusInfo = useMemo(() => {
-    if (velocity >= 2) return { icon: <Zap className="text-yellow-400" size={32}/>, title: 'أداء خيالي!', msg: `أنت تسير بسرعة ${velocity}x! ستنهي الكورس في ${totalExpectedDays} يوم فقط!` };
-    if (velocity > 1.5) return { icon: <Rocket className="text-blue-400" size={32}/>, title: 'متفوق جداً!', msg: `أنت تسير بسرعة ${velocity}x من الخطة. استمر في هذا الزخم!` };
-    if (velocity > 1) return { icon: <TrendingUp className="text-green-400" size={32}/>, title: 'متفوق!', msg: `أنت تسير بسرعة ${velocity}x. تقدم رائع!` };
-    if (velocity === 1) return { icon: <Target className="text-purple-400" size={32}/>, title: 'على المسار الصحيح', msg: 'أنت تسير حسب الخطة تماماً. التزامك هو مفتاح النجاح!' };
-    if (velocity > 0.5) return { icon: <Clock className="text-orange-400" size={32}/>, title: 'متأخر قليلاً', msg: `أنت تسير بسرعة ${velocity}x. يمكنك زيادة السرعة قليلاً!` };
-    return { icon: <AlertTriangle className="text-red-400" size={32}/>, title: 'تحتاج للتسارع', msg: `أنت تسير ببطء (${velocity}x). حاول زيادة وتيرتك!` };
+    if (velocity >= 2) return { icon: <Zap className="text-yellow-400" size={28}/>, title: 'أداء خيالي!', msg: `أنت تسير بسرعة ${velocity}x — ستنهي الكورس في ${totalExpectedDays} يوم فقط!`, color: 'from-yellow-500/20 to-amber-500/10', border: 'border-yellow-500/30' };
+    if (velocity > 1.5) return { icon: <Rocket className="text-blue-400" size={28}/>, title: 'متفوق جداً!', msg: `أنت تسير بسرعة ${velocity}x من الخطة. استمر في هذا الزخم!`, color: 'from-blue-500/20 to-sky-500/10', border: 'border-blue-500/30' };
+    if (velocity > 1) return { icon: <TrendingUp className="text-emerald-400" size={28}/>, title: 'متفوق!', msg: `أنت تسير بسرعة ${velocity}x — تقدم رائع!`, color: 'from-emerald-500/20 to-green-500/10', border: 'border-emerald-500/30' };
+    if (velocity === 1) return { icon: <Target className="text-purple-400" size={28}/>, title: 'على المسار الصحيح', msg: 'أنت تسير حسب الخطة تماماً. التزامك هو مفتاح النجاح!', color: 'from-purple-500/20 to-violet-500/10', border: 'border-purple-500/30' };
+    if (velocity > 0.5) return { icon: <Clock className="text-orange-400" size={28}/>, title: 'متأخر قليلاً', msg: `أنت تسير بسرعة ${velocity}x — يمكنك زيادة السرعة قليلاً!`, color: 'from-orange-500/20 to-amber-500/10', border: 'border-orange-500/30' };
+    return { icon: <AlertTriangle className="text-red-400" size={28}/>, title: 'تحتاج للتسارع', msg: `أنت تسير ببطء (${velocity}x). حاول زيادة وتيرتك!`, color: 'from-red-500/20 to-rose-500/10', border: 'border-red-500/30' };
   }, [velocity, totalExpectedDays]);
 
   const difference = studentDays - planDays;
 
+  const getDifferenceIcon = () => {
+    if (difference > 0) return <ArrowUp className="w-5 h-5 text-emerald-400" />;
+    if (difference < 0) return <ArrowDown className="w-5 h-5 text-red-400" />;
+    return <Minus className="w-5 h-5 text-slate-400" />;
+  };
+
   return (
-    <div dir="rtl" className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-      <header className="mb-10 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400 mb-4">
-          لوحة أداء الطالب
-        </h1>
-        <p className="text-lg text-slate-300">تابع تقدمك وإنجازاتك في الكورس</p>
+    <div dir="rtl" className="min-h-screen flex flex-col">
+      {/* Header */}
+      <header className="border-b border-white/10 bg-white/5 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <a href="https://englishom.com" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <span className="text-white font-bold text-sm">E</span>
+              </div>
+              <span className="font-bold text-lg text-white">Englishom</span>
+            </a>
+            <span className="text-slate-500 text-sm">|</span>
+            <span className="text-slate-400 text-sm font-medium">لوحة أداء الطالب</span>
+          </div>
+          <nav className="hidden md:flex items-center gap-6">
+            <a href="https://englishom.com" className="text-sm text-slate-400 hover:text-white transition-colors">الرئيسية</a>
+            <a href="https://englishom.com/test" className="text-sm text-slate-400 hover:text-white transition-colors">اختبار المستوى</a>
+          </nav>
+        </div>
       </header>
 
-      <main className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Page Title */}
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-10 pb-6">
+        <div className="flex items-center gap-3 mb-2">
+          <GraduationCap className="w-8 h-8 text-blue-400" />
+          <h1 className="text-3xl md:text-4xl font-bold text-white">
+            لوحة أداء الطالب
+          </h1>
+        </div>
+        <p className="text-slate-400 text-base mr-11">تابع تقدمك وسرعة إنجازك في الكورس</p>
+      </div>
+
+      {/* Main Content */}
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Speedometer Section */}
-        <motion.section initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="lg:col-span-1 glass-card p-8 flex flex-col items-center justify-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
-          
-          <div className="relative w-64 h-64 flex items-center justify-center">
-            <svg viewBox="0 0 200 200" className="circular-progress absolute inset-0 w-full h-full">
-              <defs>
-                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#00d4ff" />
-                  <stop offset="100%" stopColor="#00ff88" />
-                </linearGradient>
-              </defs>
-              <circle cx="100" cy="100" r={CIRCLE_RADIUS} className="progress-bg" />
-              <circle 
-                cx="100" cy="100" r={CIRCLE_RADIUS} 
-                className="progress-fill" 
-                style={{ strokeDashoffset }} 
-              />
-            </svg>
-            <div className="flex flex-col items-center z-10">
-              <span className="text-5xl font-bold text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
-                {velocity}x
-              </span>
-              <span className="text-slate-400 text-sm mt-1 font-medium tracking-wide">سرعة الإنجاز</span>
-            </div>
-          </div>
-
-          <div className="mt-8 w-full space-y-4">
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-slate-400">إنجاز الطالب:</span>
-              <span className="font-bold text-lg text-white">{studentDays} <span className="text-xs text-slate-400 font-normal">يوم</span></span>
-            </div>
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-slate-400">الخطة:</span>
-              <span className="font-bold text-lg text-white">{planDays} <span className="text-xs text-slate-400 font-normal">يوم</span></span>
-            </div>
-            <div className="flex justify-between items-center text-sm pt-4 border-t border-slate-700/50">
-              <span className="text-slate-300 font-medium">التقدم الكلي:</span>
-              <span className="font-bold text-2xl text-emerald-400">{Math.round(progressValue)}%</span>
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Right Content */}
-        <div className="lg:col-span-2 space-y-8">
-          
-          {/* Cards Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <motion.div whileHover={{ y: -5 }} className="glass-card card-cyan p-4 flex flex-col justify-between relative overflow-hidden">
-              <div className="z-10">
-                <h3 className="text-sm font-semibold text-cyan-100">إنجاز الطالب</h3>
-                <p className="text-xs text-cyan-300/70 mt-1">الأيام المنجزة</p>
-              </div>
-              <div className="mt-4 flex items-baseline gap-1 z-10">
-                <span className="text-3xl font-bold text-cyan-400">{studentDays}</span>
-                <span className="text-sm text-cyan-400/80">يوم</span>
-              </div>
-            </motion.div>
-
-            <motion.div whileHover={{ y: -5 }} className="glass-card card-red p-4 flex flex-col justify-between relative overflow-hidden">
-              <div className="z-10">
-                <h3 className="text-sm font-semibold text-red-100">الخطة المتوقعة</h3>
-                <p className="text-xs text-red-300/70 mt-1">اليوم الحالي</p>
-              </div>
-              <div className="mt-4 flex items-baseline gap-1 z-10">
-                <span className="text-3xl font-bold text-red-400">{planDays}</span>
-                <span className="text-sm text-red-400/80">يوم</span>
-              </div>
-            </motion.div>
-
-            <motion.div whileHover={{ y: -5 }} className="glass-card card-purple p-4 flex flex-col justify-between relative overflow-hidden">
-              <div className="z-10">
-                <h3 className="text-sm font-semibold text-purple-100">التقدم الكلي</h3>
-                <p className="text-xs text-purple-300/70 mt-1">نسبة الإكمال</p>
-              </div>
-              <div className="mt-4 flex items-baseline gap-1 z-10">
-                <span className="text-3xl font-bold text-purple-400">{Math.round(progressValue)}</span>
-                <span className="text-sm text-purple-400/80">%</span>
-              </div>
-            </motion.div>
-
-            <motion.div whileHover={{ y: -5 }} className="glass-card card-green p-4 flex flex-col justify-between relative overflow-hidden">
-              <div className="z-10">
-                <h3 className="text-sm font-semibold text-emerald-100">الفرق</h3>
-                <p className="text-xs text-emerald-300/70 mt-1">التفوق على الخطة</p>
-              </div>
-              <div className="mt-4 flex items-baseline gap-1 z-10">
-                <span className="text-3xl font-bold text-emerald-400">{difference > 0 ? `+${difference}` : difference}</span>
-                <span className="text-sm text-emerald-400/80">يوم</span>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Motivational Message */}
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="glass-card p-6 flex items-start gap-4">
-            <div className="p-3 rounded-2xl bg-slate-800/50 shadow-inner">
-              {statusInfo.icon}
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-white mb-2">{statusInfo.title}</h3>
-              <p className="text-slate-300 leading-relaxed">{statusInfo.msg}</p>
-            </div>
-          </motion.div>
-
-          {/* Bottom Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Speedometer Section */}
+          <motion.section initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} className="lg:col-span-1 glass-card p-8 flex flex-col items-center justify-center relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
             
-            {/* Timeline */}
-            <div className="glass-card p-6">
-              <h3 className="text-lg font-bold mb-6 text-white border-b border-slate-700/50 pb-3">التوقعات الزمنية</h3>
-              <div className="space-y-5">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400">تاريخ الانتهاء المتوقع:</span>
-                  <span className="font-bold text-white">{expectedRemainingDays} <span className="text-sm font-normal text-slate-400">يوم</span></span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400">الأيام المتبقية:</span>
-                  <span className="font-bold text-white">{Math.max(0, TOTAL_COURSE_DAYS - studentDays)}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400">التوفير الزمني:</span>
-                  <span className="font-bold text-emerald-400">{timeSavedDays} <span className="text-sm font-normal">أيام</span></span>
-                </div>
+            <div className="relative w-56 h-56 flex items-center justify-center">
+              <svg viewBox="0 0 200 200" className="circular-progress absolute inset-0 w-full h-full">
+                <defs>
+                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#3b82f6" />
+                    <stop offset="100%" stopColor="#10b981" />
+                  </linearGradient>
+                </defs>
+                <circle cx="100" cy="100" r={CIRCLE_RADIUS} className="progress-bg" />
+                <circle 
+                  cx="100" cy="100" r={CIRCLE_RADIUS} 
+                  className="progress-fill" 
+                  style={{ strokeDashoffset }} 
+                />
+              </svg>
+              <div className="flex flex-col items-center z-10">
+                <span className="text-5xl font-bold text-white">
+                  {velocity}x
+                </span>
+                <span className="text-slate-400 text-xs mt-1.5 font-medium tracking-wider uppercase">سرعة الإنجاز</span>
               </div>
             </div>
 
-            {/* Controls (For Demo/Testing) */}
-            <div className="glass-card p-6">
-              <h3 className="text-lg font-bold mb-6 text-white border-b border-slate-700/50 pb-3">محاكي التحديثات (للتجربة)</h3>
-              <div className="space-y-6">
-                <div>
-                  <div className="flex justify-between mb-2">
-                    <label className="text-sm text-slate-300">إنجاز الطالب (أيام)</label>
-                    <span className="text-sm font-bold text-cyan-400">{studentDays}</span>
-                  </div>
-                  <input 
-                    type="range" min="0" max="60" value={studentDays} 
-                    onChange={(e) => setStudentDays(Number(e.target.value))}
-                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
-                  />
-                </div>
-                <div>
-                  <div className="flex justify-between mb-2">
-                    <label className="text-sm text-slate-300">الخطة الحالية (أيام)</label>
-                    <span className="text-sm font-bold text-red-400">{planDays}</span>
-                  </div>
-                  <input 
-                    type="range" min="0" max="50" value={planDays} 
-                    onChange={(e) => setPlanDays(Number(e.target.value))}
-                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-red-500"
-                  />
-                </div>
+            <div className="mt-8 w-full space-y-3">
+              <div className="flex justify-between items-center text-sm px-1">
+                <span className="text-slate-400 flex items-center gap-1.5">
+                  <BarChart3 className="w-3.5 h-3.5" />
+                  إنجاز الطالب
+                </span>
+                <span className="font-bold text-white">{studentDays} <span className="text-xs text-slate-500 font-normal">يوم</span></span>
+              </div>
+              <div className="flex justify-between items-center text-sm px-1">
+                <span className="text-slate-400 flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5" />
+                  الخطة
+                </span>
+                <span className="font-bold text-white">{planDays} <span className="text-xs text-slate-500 font-normal">يوم</span></span>
+              </div>
+              <div className="h-px bg-white/10 mx-1"></div>
+              <div className="flex justify-between items-center text-sm px-1">
+                <span className="text-slate-300 font-medium">التقدم الكلي</span>
+                <span className="font-bold text-xl text-emerald-400">{Math.round(progressValue)}%</span>
               </div>
             </div>
+          </motion.section>
+
+          {/* Right Content */}
+          <div className="lg:col-span-2 space-y-8">
             
+            {/* Stats Cards Row */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <motion.div whileHover={{ y: -4, transition: { duration: 0.2 } }} className="glass-card card-cyan p-5 flex flex-col justify-between relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-20 h-20 bg-cyan-400/10 rounded-full blur-2xl -ml-10 -mt-10 pointer-events-none"></div>
+                <div className="z-10">
+                  <div className="flex items-center gap-2 mb-1">
+                    <BarChart3 className="w-4 h-4 text-cyan-400/70" />
+                    <h3 className="text-sm font-semibold text-cyan-100">إنجاز الطالب</h3>
+                  </div>
+                  <p className="text-xs text-cyan-300/50">الأيام المنجزة</p>
+                </div>
+                <div className="mt-4 flex items-baseline gap-1 z-10">
+                  <span className="text-3xl font-bold text-cyan-400">{studentDays}</span>
+                  <span className="text-sm text-cyan-400/60">يوم</span>
+                </div>
+              </motion.div>
+
+              <motion.div whileHover={{ y: -4, transition: { duration: 0.2 } }} className="glass-card card-red p-5 flex flex-col justify-between relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-20 h-20 bg-red-400/10 rounded-full blur-2xl -ml-10 -mt-10 pointer-events-none"></div>
+                <div className="z-10">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Calendar className="w-4 h-4 text-red-400/70" />
+                    <h3 className="text-sm font-semibold text-red-100">الخطة المتوقعة</h3>
+                  </div>
+                  <p className="text-xs text-red-300/50">اليوم الحالي</p>
+                </div>
+                <div className="mt-4 flex items-baseline gap-1 z-10">
+                  <span className="text-3xl font-bold text-red-400">{planDays}</span>
+                  <span className="text-sm text-red-400/60">يوم</span>
+                </div>
+              </motion.div>
+
+              <motion.div whileHover={{ y: -4, transition: { duration: 0.2 } }} className="glass-card card-purple p-5 flex flex-col justify-between relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-20 h-20 bg-purple-400/10 rounded-full blur-2xl -ml-10 -mt-10 pointer-events-none"></div>
+                <div className="z-10">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Award className="w-4 h-4 text-purple-400/70" />
+                    <h3 className="text-sm font-semibold text-purple-100">التقدم الكلي</h3>
+                  </div>
+                  <p className="text-xs text-purple-300/50">نسبة الإكمال</p>
+                </div>
+                <div className="mt-4 flex items-baseline gap-1 z-10">
+                  <span className="text-3xl font-bold text-purple-400">{Math.round(progressValue)}</span>
+                  <span className="text-sm text-purple-400/60">%</span>
+                </div>
+              </motion.div>
+
+              <motion.div whileHover={{ y: -4, transition: { duration: 0.2 } }} className="glass-card card-green p-5 flex flex-col justify-between relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-20 h-20 bg-emerald-400/10 rounded-full blur-2xl -ml-10 -mt-10 pointer-events-none"></div>
+                <div className="z-10">
+                  <div className="flex items-center gap-2 mb-1">
+                    {getDifferenceIcon()}
+                    <h3 className="text-sm font-semibold text-emerald-100">الفرق</h3>
+                  </div>
+                  <p className="text-xs text-emerald-300/50">التفوق على الخطة</p>
+                </div>
+                <div className="mt-4 flex items-baseline gap-1 z-10">
+                  <span className="text-3xl font-bold text-emerald-400">{difference > 0 ? `+${difference}` : difference}</span>
+                  <span className="text-sm text-emerald-400/60">يوم</span>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Status Message */}
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className={`glass-card p-6 flex items-start gap-4 bg-gradient-to-l ${statusInfo.color} ${statusInfo.border}`}>
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10">
+                {statusInfo.icon}
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-white mb-1">{statusInfo.title}</h3>
+                <p className="text-slate-300 text-sm leading-relaxed">{statusInfo.msg}</p>
+              </div>
+            </motion.div>
+
+            {/* Bottom Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              
+              {/* Timeline */}
+              <div className="glass-card p-6">
+                <div className="flex items-center gap-2 mb-6 pb-3 border-b border-white/10">
+                  <Timer className="w-5 h-5 text-blue-400" />
+                  <h3 className="text-base font-bold text-white">التوقعات الزمنية</h3>
+                </div>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-400">الانتهاء المتوقع</span>
+                    <span className="font-bold text-white">{expectedRemainingDays} <span className="text-xs font-normal text-slate-500">يوم متبقي</span></span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-400">الأيام المتبقية من الكورس</span>
+                    <span className="font-bold text-white">{Math.max(0, TOTAL_COURSE_DAYS - studentDays)}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-400">التوفير الزمني</span>
+                    <span className="font-bold text-emerald-400">{timeSavedDays} <span className="text-xs font-normal">أيام</span></span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Controls (Demo) */}
+              <div className="glass-card p-6">
+                <div className="flex items-center gap-2 mb-6 pb-3 border-b border-white/10">
+                  <Target className="w-5 h-5 text-purple-400" />
+                  <h3 className="text-base font-bold text-white">محاكي التحديثات</h3>
+                </div>
+                <div className="space-y-6">
+                  <div>
+                    <div className="flex justify-between mb-2.5">
+                      <label className="text-sm text-slate-300">إنجاز الطالب (أيام)</label>
+                      <span className="text-sm font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded">{studentDays}</span>
+                    </div>
+                    <input 
+                      type="range" min="0" max="60" value={studentDays} 
+                      onChange={(e) => setStudentDays(Number(e.target.value))}
+                      className="slider-cyan"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex justify-between mb-2.5">
+                      <label className="text-sm text-slate-300">الخطة الحالية (أيام)</label>
+                      <span className="text-sm font-bold text-red-400 bg-red-500/10 px-2 py-0.5 rounded">{planDays}</span>
+                    </div>
+                    <input 
+                      type="range" min="0" max="50" value={planDays} 
+                      onChange={(e) => setPlanDays(Number(e.target.value))}
+                      className="slider-red"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+            </div>
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-white/10 bg-white/5 backdrop-blur-sm mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-slate-500">&copy; 2026 Englishom. جميع الحقوق محفوظة.</p>
+          <div className="flex items-center gap-6">
+            <a href="https://englishom.com" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">الرئيسية</a>
+            <a href="https://englishom.com/test" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">اختبار المستوى</a>
+            <a href="https://englishom.com/ar/contact" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">تواصل معنا</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
