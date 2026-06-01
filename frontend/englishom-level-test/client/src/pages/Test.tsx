@@ -33,8 +33,12 @@ const STAGES = [
   { id: 5, nameEn: "Writing", nameAr: "الكتابة", descriptionEn: "Speaking and pronunciation", descriptionAr: "التحدث والنطق" },
 ];
 
-const QUESTIONS_PER_STAGE = 10;
 const STAGE_TIMERS = [30, 30, 45, 60, 30];
+
+// Track how many questions each stage actually has
+interface StageQCount {
+  [stage: number]: number;
+}
 
 export default function Test() {
   const [, navigate] = useLocation();
@@ -51,13 +55,32 @@ export default function Test() {
   const [soundAlertPlayed, setSoundAlertPlayed] = useState(false);
   const [totalTestTime, setTotalTestTime] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [stageQCounts, setStageQCounts] = useState<StageQCount>({});
 
-  const totalQuestions = STAGES.length * QUESTIONS_PER_STAGE;
-  const currentQuestionNumber = (currentStage - 1) * QUESTIONS_PER_STAGE + currentQuestionIndex + 1;
-  const progressPercentage = (currentQuestionNumber / totalQuestions) * 100;
+  // Fetch ALL stages question counts
+  const { data: s1 = [] } = trpc.test.getStageQuestions.useQuery({ stage: 1 });
+  const { data: s2 = [] } = trpc.test.getStageQuestions.useQuery({ stage: 2 });
+  const { data: s3 = [] } = trpc.test.getStageQuestions.useQuery({ stage: 3 });
+  const { data: s4 = [] } = trpc.test.getStageQuestions.useQuery({ stage: 4 });
+  const { data: s5 = [] } = trpc.test.getStageQuestions.useQuery({ stage: 5 });
+
+  useEffect(() => {
+    setStageQCounts({
+      1: s1.length,
+      2: s2.length,
+      3: s3.length,
+      4: s4.length,
+      5: s5.length,
+    });
+  }, [s1.length, s2.length, s3.length, s4.length, s5.length]);
+
+  const totalQuestions = Object.values(stageQCounts).reduce((a, b) => a + b, 0);
+  const questionsBeforeCurrentStage = Array.from({ length: currentStage - 1 }, (_, i) => stageQCounts[i + 1] || 0).reduce((a, b) => a + b, 0);
+  const currentQuestionNumber = questionsBeforeCurrentStage + currentQuestionIndex + 1;
+  const progressPercentage = totalQuestions > 0 ? (currentQuestionNumber / totalQuestions) * 100 : 0;
 
   const { data: stageQuestions = [] } = trpc.test.getStageQuestions.useQuery(
-    { stage: currentStage, limit: QUESTIONS_PER_STAGE },
+    { stage: currentStage },
     { enabled: currentStage > 0 }
   );
 
@@ -135,7 +158,7 @@ export default function Test() {
   };
 
   const handleNext = async () => {
-    if (currentQuestionIndex < QUESTIONS_PER_STAGE - 1) {
+    if (currentQuestionIndex < stageQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
       setIsAnswered(false);
