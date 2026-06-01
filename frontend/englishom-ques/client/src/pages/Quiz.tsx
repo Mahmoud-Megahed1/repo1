@@ -54,11 +54,11 @@ export default function Quiz() {
   const [timeRemaining, setTimeRemaining] = useState(10);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [answered, setAnswered] = useState(false);
-  const [responseTimes, setResponseTimes] = useState<number[]>([]);
   const [results, setResults] = useState<QuizResult | null>(null);
   const [totalTimeSpent, setTotalTimeSpent] = useState(0);
   const [quizStartTime, setQuizStartTime] = useState<number | null>(null);
-  const [userAnswers, setUserAnswers] = useState<{questionId: number, userAnswer: string}[]>([]);
+  const userAnswersRef = useRef<{questionId: number, userAnswer: string}[]>([]);
+  const responseTimesRef = useRef<number[]>([]);
 
   const { mutate: submitResult, isPending: isSubmitting } = trpc.quiz.submitTestResult.useMutation({
     onSuccess: (data) => {
@@ -124,7 +124,7 @@ export default function Quiz() {
   const handleTimeExpired = () => {
     if (!answered) {
       setAnswered(true);
-      setResponseTimes([...responseTimes, questions[currentQuestionIndex].timePerQuestion]);
+      responseTimesRef.current.push(questions[currentQuestionIndex].timePerQuestion);
       setTimeout(moveToNextQuestion, 1000);
     }
   };
@@ -137,8 +137,8 @@ export default function Quiz() {
 
     setSelectedAnswer(choice);
     setAnswered(true);
-    setResponseTimes([...responseTimes, responseTime]);
-    setUserAnswers([...userAnswers, { questionId: currentQuestion.id, userAnswer: choice }]);
+    responseTimesRef.current.push(responseTime);
+    userAnswersRef.current.push({ questionId: currentQuestion.id, userAnswer: choice });
 
     setTimeout(moveToNextQuestion, 1500);
   };
@@ -155,13 +155,14 @@ export default function Quiz() {
 
   const finishQuiz = () => {
     const totalTime = Date.now() - (quizStartTime || Date.now());
-    const avgResponseTime = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
+    const times = responseTimesRef.current;
+    const avgResponseTime = times.length > 0 ? times.reduce((a, b) => a + b, 0) / times.length : 0;
 
     const result: QuizResult = {
       score: 0, // Will be updated by server response
       totalQuestions: questions.length,
       accuracy: 0, // Will be updated by server response
-      averageResponseTime: avgResponseTime / 1000,
+      averageResponseTime: avgResponseTime,
       totalTimeSpent: Math.floor(totalTime / 1000),
     };
     setResults(result);
@@ -169,8 +170,8 @@ export default function Quiz() {
 
     submitResult({
       level: selectedLevel as any,
-      answers: userAnswers,
-      averageResponseTime: avgResponseTime / 1000,
+      answers: userAnswersRef.current,
+      averageResponseTime: avgResponseTime,
       totalTimeSpent: Math.floor(totalTime / 1000),
     });
   };
@@ -184,8 +185,8 @@ export default function Quiz() {
     setTimeRemaining(10);
     setSelectedAnswer(null);
     setAnswered(false);
-    setResponseTimes([]);
-    setUserAnswers([]);
+    responseTimesRef.current = [];
+    userAnswersRef.current = [];
     setResults(null);
     setTotalTimeSpent(0);
     setQuizStartTime(null);
@@ -203,7 +204,7 @@ export default function Quiz() {
   };
 
   const calculateRemainingTime = () => {
-    const completedTime = responseTimes.reduce((sum, t) => sum + t, 0);
+    const completedTime = responseTimesRef.current.reduce((sum, t) => sum + t, 0);
     const currentQuestionTime = answered ? 0 : (questions[currentQuestionIndex]?.timePerQuestion || 10) - timeRemaining;
     const spent = completedTime + currentQuestionTime;
     const total = calculateTotalQuizTime();
