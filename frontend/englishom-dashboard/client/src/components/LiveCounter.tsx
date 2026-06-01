@@ -4,14 +4,14 @@ import { motion } from 'framer-motion';
 interface LiveCounterProps {
   label: string;
   value: number;
-  icon?: string;
+  icon?: React.ReactNode;
   delay?: number;
 }
 
 export default function LiveCounter({
   label,
   value,
-  icon = '📊',
+  icon = <span className="text-3xl">📊</span>,
   delay = 0,
 }: LiveCounterProps) {
   const [displayValue, setDisplayValue] = useState(0);

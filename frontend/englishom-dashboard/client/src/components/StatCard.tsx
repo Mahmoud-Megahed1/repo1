@@ -5,7 +5,7 @@ interface StatCardProps {
   label: string;
   value: string | number;
   subValue?: string;
-  icon?: string;
+  icon?: React.ReactNode;
   delay?: number;
 }
 
@@ -13,7 +13,7 @@ export default function StatCard({
   label,
   value,
   subValue,
-  icon = '📊',
+  icon = <span className="text-3xl">📊</span>,
   delay = 0,
 }: StatCardProps) {
   return (
