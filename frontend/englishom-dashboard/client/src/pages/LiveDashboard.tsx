@@ -486,17 +486,6 @@ export default function LiveDashboard() {
           </div>
         </motion.div>
 
-        {/* Social Media Feed Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.6 }}
-          className="mb-12"
-        >
-          <div className="cyber-border-strong rounded-xl p-6 bg-slate-900/50 backdrop-blur-sm">
-            <SocialMediaFeed />
-          </div>
-        </motion.div>
 
         {/* Additional Info */}
         <motion.div
