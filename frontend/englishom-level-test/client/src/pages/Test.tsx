@@ -44,7 +44,17 @@ export default function Test() {
   const [, navigate] = useLocation();
   const { language } = useLanguage();
   
-  const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const startTestMutation = trpc.test.startTest.useMutation();
+
+  useEffect(() => {
+    // Start a new session in the database when the test loads
+    startTestMutation.mutateAsync({}).then((res) => {
+      setSessionId(res.sessionId);
+    }).catch(err => {
+      console.error("Failed to start test session:", err);
+    });
+  }, []);
   const [currentStage, setCurrentStage] = useState(1);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Answer[]>([]);
@@ -191,7 +201,7 @@ export default function Test() {
     }
   };
 
-  if (!currentQuestion) {
+  if (!currentQuestion || !sessionId) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
