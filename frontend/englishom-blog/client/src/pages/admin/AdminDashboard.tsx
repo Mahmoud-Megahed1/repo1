@@ -9,6 +9,7 @@ import AdminPostsManager from "./AdminPostsManager";
 import AdminCategoriesManager from "./AdminCategoriesManager";
 import AdminCommentsManager from "./AdminCommentsManager";
 import AdminRatingsManager from "./AdminRatingsManager";
+import AdminViewsBreakdown from "./AdminViewsBreakdown";
 import { trpc } from "@/lib/trpc";
 
 export default function AdminDashboard() {
@@ -69,10 +70,12 @@ export default function AdminDashboard() {
                 <p className="text-sm text-muted-foreground mb-2">Total Comments</p>
                 <p className="text-3xl font-bold">{stats?.totalComments || 0}</p>
               </div>
-              <div className="bg-card p-6 rounded-lg border border-border">
-                <p className="text-sm text-muted-foreground mb-2">Total Views</p>
-                <p className="text-3xl font-bold">{stats?.totalViews || 0}</p>
-              </div>
+              <AdminViewsBreakdown>
+                <div className="bg-card p-6 rounded-lg border border-border cursor-pointer hover:border-primary/50 hover:bg-muted/50 transition-colors">
+                  <p className="text-sm text-muted-foreground mb-2">Total Views</p>
+                  <p className="text-3xl font-bold">{stats?.totalViews || 0}</p>
+                </div>
+              </AdminViewsBreakdown>
               <div className="bg-card p-6 rounded-lg border border-border">
                 <p className="text-sm text-muted-foreground mb-2">Pending Comments</p>
                 <p className="text-3xl font-bold">{stats?.pendingComments || 0}</p>

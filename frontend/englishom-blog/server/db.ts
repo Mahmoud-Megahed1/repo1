@@ -1088,3 +1088,36 @@ export async function getDashboardStats() {
     totalViews: Number(viewsResult.total || 0),
   };
 }
+
+export async function getViewsBreakdown() {
+  const db = await getDb();
+  if (!db) return [];
+
+  const results = await db
+    .select({
+      id: blogPosts.id,
+      titleEn: blogPosts.titleEn,
+      titleAr: blogPosts.titleAr,
+      viewsCount: blogPosts.viewsCount,
+    })
+    .from(blogPosts)
+    .orderBy(desc(blogPosts.viewsCount));
+
+  return results;
+}
+
+export async function resetAllViews() {
+  const db = await getDb();
+  if (!db) return false;
+
+  await db.update(blogPosts).set({ viewsCount: 0 });
+  return true;
+}
+
+export async function resetPostViews(postId: number) {
+  const db = await getDb();
+  if (!db) return false;
+
+  await db.update(blogPosts).set({ viewsCount: 0 }).where(eq(blogPosts.id, postId));
+  return true;
+}

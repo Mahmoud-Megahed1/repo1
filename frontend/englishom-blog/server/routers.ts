@@ -574,6 +574,19 @@ export const appRouter = router({
         .query(async () => {
           return db.getDashboardStats();
         }),
+      getViewsBreakdown: adminProcedure
+        .query(async () => {
+          return db.getViewsBreakdown();
+        }),
+      resetAllViews: adminProcedure
+        .mutation(async () => {
+          return db.resetAllViews();
+        }),
+      resetPostViews: adminProcedure
+        .input(z.object({ postId: z.number() }))
+        .mutation(async ({ input }) => {
+          return db.resetPostViews(input.postId);
+        }),
     }),
     email: router({
       subscribe: publicProcedure
