@@ -13,7 +13,7 @@ import AdminLogin from "./pages/AdminLogin";
 
 function Router() {
   return (
-    <WouterRouter base="/test">
+    <WouterRouter base="/test1">
       <Switch>
         <Route path={"/"} component={Home} />
         <Route path={"/test"} component={Test} />

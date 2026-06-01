@@ -17,6 +17,7 @@ import './styles/index.css';
 
 export const router = createRouter({
   routeTree,
+  basepath: '/landingpage1/',
   defaultPreload: 'intent',
   scrollRestoration: true,
   defaultNotFoundComponent: () => <DefaultNotFoundComponent />,

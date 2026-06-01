@@ -10,7 +10,7 @@ export const getLoginUrl = () => {
     return "/";
   }
 
-  const redirectUri = `${window.location.origin}/test/api/oauth/callback`;
+  const redirectUri = `${window.location.origin}/test1/api/oauth/callback`;
   const state = btoa(redirectUri);
 
   const url = new URL(`${oauthPortalUrl}/app-auth`);
