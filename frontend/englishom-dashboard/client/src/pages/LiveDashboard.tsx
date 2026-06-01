@@ -5,7 +5,6 @@ import ArabicMapImage from '@/components/ArabicMapImage';
 import StatCard from '@/components/StatCard';
 import LiveCounter from '@/components/LiveCounter';
 import EnglishomLogo from '@/components/EnglishomLogo';
-import SocialMediaFeed from '@/components/SocialMediaFeed';
 import LiveStats from '@/components/LiveStats';
 import Footer from '@/components/Footer';
 import { LiveWordsCounterByLevel } from '@/components/LiveWordsCounterByLevel';

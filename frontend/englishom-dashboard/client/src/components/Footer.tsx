@@ -95,11 +95,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-gray-400 text-sm">
                 <Mail size={16} className="text-cyan-400" />
-                <span>info@platform.com</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-400 text-sm">
-                <Phone size={16} className="text-cyan-400" />
-                <span>+966 50 123 4567</span>
+                <span>info@englishom.com</span>
               </div>
               <div className="flex items-center gap-2 text-gray-400 text-sm">
                 <MapPin size={16} className="text-cyan-400" />
@@ -116,11 +112,10 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
             </h3>
             <div className="flex gap-3 flex-wrap">
               {[
-                { icon: Facebook, href: 'https://facebook.com', label: 'Facebook', color: 'bg-blue-600' },
-                { icon: Twitter, href: 'https://twitter.com', label: 'Twitter', color: 'bg-black' },
-                { icon: Instagram, href: 'https://instagram.com', label: 'Instagram', color: 'bg-pink-600' },
-                { icon: Youtube, href: 'https://youtube.com', label: 'YouTube', color: 'bg-red-600' },
-                { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn', color: 'bg-blue-700' },
+                { icon: Facebook, href: 'https://www.facebook.com/share/19wWacNacT/', label: 'Facebook', color: 'bg-blue-600' },
+                { icon: Twitter, href: 'https://x.com/englishom28264', label: 'Twitter', color: 'bg-black' },
+                { icon: Instagram, href: 'https://www.instagram.com/englishom1', label: 'Instagram', color: 'bg-pink-600' },
+                { icon: Youtube, href: 'https://www.youtube.com/@EglishHOM', label: 'YouTube', color: 'bg-red-600' },
               ].map((social) => {
                 const Icon = social.icon;
                 return (
@@ -143,7 +138,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
               {[
                 {
                   label: 'TikTok',
-                  href: 'https://www.tiktok.com/@englishom',
+                  href: 'https://www.tiktok.com/@englishom1?_t=ZS-8zrqZgIC37K&_r=1',
                   svg: (
                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                       <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.68v13.67a2.4 2.4 0 1 1-4.77-2.3A2.4 2.4 0 0 1 9.1 13.66V9.58a6.8 6.8 0 0 0-6.8 6.8 6.81 6.81 0 0 0 6.8 6.8 6.8 6.8 0 0 0 6.8-6.8V11.1a8.5 8.5 0 0 0 5.78 2.25z" />
@@ -152,7 +147,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
                 },
                 {
                   label: 'Snapchat',
-                  href: 'https://www.snapchat.com/add/englishom',
+                  href: 'https://www.snapchat.com/add/englishom25',
                   svg: (
                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 11c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm-7 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm3.5 6c-2.21 0-4-1.79-4-4h8c0 2.21-1.79 4-4 4zm0-10c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" />
@@ -161,7 +156,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
                 },
                 {
                   label: 'Telegram',
-                  href: 'https://t.me/englishom',
+                  href: 'https://t.me/+xlzna51reL1hNzc0',
                   svg: (
                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5.5 8.5c-.3 2.5-1.5 8.5-2.1 11-.3 1.5-.9 2-1.8 2.1-1.5.2-2.6-1-4-2-2.3-1.5-3.6-2.4-5.8-3.8-1.9-1.2-.7-1.8 1-3 .7-.7 3.5-3.2 3.6-3.5.1-.3.1-.8-.2-1.1-.3-.3-.8-.2-1.1-.1l-4.5 2.8c-1-.3-2.2-.6-3.2-.5-.9.1-1.5.5-1.7 1.3-.3 1.2.5 2.5 1.5 3.5.5.5 1.8 1.5 3 2.5-1.3 1.2-2.5 2.2-3.5 3-.5.4-.8 1-.5 1.6.3.6.9.8 1.5.8.8 0 1.5-.3 2.2-.8 1.5-1.1 3-2.2 4.5-3.3 1.5 1.1 3 2.2 4.5 3.3.7.5 1.4.8 2.2.8.6 0 1.2-.2 1.5-.8.3-.6 0-1.2-.5-1.6-1-1-2.2-2-3.5-3 1.2-1 2.5-2 3-2.5 1-1 1.8-2.3 1.5-3.5z" />
@@ -170,7 +165,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
                 },
                 {
                   label: 'WhatsApp',
-                  href: 'https://wa.me/message/ENGLISHOM',
+                  href: 'https://wa.me/qr/NLKCDGU2XBMEE1',
                   svg: (
                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-4.869 1.171c-1.519.761-2.835 1.844-3.797 3.21C2.865 10.331 2.517 11.9 2.517 13.5c0 1.585.348 3.15 1.007 4.59l-1.07 3.899 3.993-1.068c1.429.779 3.031 1.188 4.782 1.188h.005c5.305 0 9.62-4.317 9.62-9.62 0-2.57-1.005-4.986-2.833-6.815-1.828-1.828-4.244-2.834-6.815-2.834" />
