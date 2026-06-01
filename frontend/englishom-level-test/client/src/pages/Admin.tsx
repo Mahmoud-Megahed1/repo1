@@ -164,13 +164,13 @@ export default function Admin() {
           </p>
           <div className="flex gap-4 justify-center">
             <Button
-              onClick={() => (window.location.href = "/test1")}
+              onClick={() => (window.location.href = "/test")}
               variant="outline"
             >
               Back to Home
             </Button>
             <Button
-              onClick={() => (window.location.href = "/test1/admin/login")}
+              onClick={() => (window.location.href = "/test/admin/login")}
               className="bg-primary text-primary-foreground"
             >
               Admin Login
@@ -348,7 +348,7 @@ export default function Admin() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => (window.location.href = "/test1")}
+              onClick={() => (window.location.href = "/test")}
             >
               ← Back to Test
             </Button>

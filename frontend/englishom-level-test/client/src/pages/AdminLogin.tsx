@@ -16,7 +16,7 @@ export default function AdminLogin() {
   const loginMutation = trpc.auth.adminLogin.useMutation({
     onSuccess: () => {
       toast.success("تم تسجيل الدخول بنجاح");
-      window.location.href = "/test1/admin"; // Force reload to apply cookie and clear TRPC cache
+      window.location.href = "/test/admin"; // Force reload to apply cookie and clear TRPC cache
     },
     onError: (error) => {
       toast.error(error.message || "خطأ في تسجيل الدخول");
