@@ -70,6 +70,9 @@ export default function Home() {
               size="lg"
               variant="outline"
               className="border-border text-foreground hover:bg-card"
+              onClick={() => {
+                document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               {t.home.learnMore}
             </Button>
@@ -111,7 +114,7 @@ export default function Home() {
               return (
                 <Card
                   key={index}
-                  className="bg-white border-2 border-gray-300 hover:border-primary/50 transition-all hover:shadow-2xl min-h-64 animate-pulse hover:animate-bounce"
+                  className="bg-white border-2 border-gray-300 hover:border-primary/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl min-h-64"
                 >
                   <CardHeader className="pb-3">
                     <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
@@ -239,25 +242,25 @@ export default function Home() {
             <div>
               <h4 className="font-semibold text-foreground mb-4">{language === "ar" ? "المنتج" : "Product"}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">{t.nav.features}</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">{language === "ar" ? "التسعير" : "Pricing"}</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">{t.nav.faq}</a></li>
+                <li><a href="#features" className="hover:text-foreground transition-colors">{t.nav.features}</a></li>
+                <li><a href="https://englishom.com/pricing" className="hover:text-foreground transition-colors">{language === "ar" ? "التسعير" : "Pricing"}</a></li>
+                <li><a href="https://englishom.com/#faq" className="hover:text-foreground transition-colors">{t.nav.faq}</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold text-foreground mb-4">{language === "ar" ? "الشركة" : "Company"}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">{t.nav.about}</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">{language === "ar" ? "المدونة" : "Blog"}</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">{language === "ar" ? "اتصل بنا" : "Contact"}</a></li>
+                <li><a href="https://englishom.com/#about" className="hover:text-foreground transition-colors">{t.nav.about}</a></li>
+                <li><a href="https://englishom.com/blog" className="hover:text-foreground transition-colors">{language === "ar" ? "المدونة" : "Blog"}</a></li>
+                <li><a href="https://englishom.com/contact" className="hover:text-foreground transition-colors">{language === "ar" ? "اتصل بنا" : "Contact"}</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold text-foreground mb-4">{language === "ar" ? "القانوني" : "Legal"}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">{language === "ar" ? "الخصوصية" : "Privacy"}</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">{language === "ar" ? "الشروط" : "Terms"}</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">{language === "ar" ? "ملفات تعريف الارتباط" : "Cookies"}</a></li>
+                <li><a href="https://englishom.com/privacy-policy" className="hover:text-foreground transition-colors">{language === "ar" ? "الخصوصية" : "Privacy"}</a></li>
+                <li><a href="https://englishom.com/terms-and-conditions" className="hover:text-foreground transition-colors">{language === "ar" ? "الشروط" : "Terms"}</a></li>
+                <li><a href="https://englishom.com/privacy-policy" className="hover:text-foreground transition-colors">{language === "ar" ? "ملفات تعريف الارتباط" : "Cookies"}</a></li>
               </ul>
             </div>
           </div>
