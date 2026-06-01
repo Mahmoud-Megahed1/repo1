@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/lib/translations";
 
@@ -51,7 +51,7 @@ export default function HeroSection() {
                   className="flex items-center gap-3 bg-[#F8F9FA] dark:bg-[#1a1a1a] p-4 rounded-lg transition-colors duration-300"
                 >
                   <div className="w-8 h-8 rounded-full bg-[#F5BB41] flex items-center justify-center flex-shrink-0">
-                    <span className="text-[#222222] font-bold text-sm">✓</span>
+                    <Check className="w-4 h-4 text-[#222222] stroke-[3]" />
                   </div>
                   <div>
                     <p className="font-bold text-[#222222] dark:text-white">
@@ -87,7 +87,7 @@ export default function HeroSection() {
 
             {/* Success Count */}
             <p className="text-sm text-[#666666] dark:text-[#CCCCCC] font-medium">
-              ✨ {t.hero.successCount}
+              <Sparkles className="w-4 h-4 inline-block mr-1" /> {t.hero.successCount}
             </p>
           </div>
 

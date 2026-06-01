@@ -1,4 +1,4 @@
-import { CheckCircle2 } from "lucide-react";
+import { Check, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/lib/translations";
 
@@ -90,7 +90,7 @@ export default function OutcomesSection() {
               {t.outcomes.whyChoosePoints.map((point, index) => (
                 <div key={index} className="flex items-start gap-3">
                   <div className="w-6 h-6 rounded-full bg-[#F5BB41] flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-[#222222] text-xs font-bold">✓</span>
+                    <Check className="w-3.5 h-3.5 text-[#222222] stroke-[3]" />
                   </div>
                   <p className="text-[#666666] dark:text-[#CCCCCC] font-medium">{point}</p>
                 </div>

@@ -42,6 +42,7 @@ export default function Footer() {
                 <li key={link.label}>
                   <a
                     href={link.href}
+                    {...(link.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                     className="hover:text-[#F5BB41] transition-colors duration-300"
                   >
                     {link.label}
@@ -59,6 +60,7 @@ export default function Footer() {
                 <li key={link.label}>
                   <a
                     href={link.href}
+                    {...(link.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                     className="hover:text-[#F5BB41] transition-colors duration-300"
                   >
                     {link.label}

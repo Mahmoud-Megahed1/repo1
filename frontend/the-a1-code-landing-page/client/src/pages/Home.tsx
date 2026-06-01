@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/lib/translations";
+import { Star } from "lucide-react";
 
 /**
  * Home Page - The A1 Code Landing Page
@@ -96,7 +97,7 @@ export default function Home() {
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <span key={i} className="text-[#F5BB41]">
-                      ⭐
+                      <Star className="w-5 h-5 fill-current" />
                     </span>
                   ))}
                 </div>

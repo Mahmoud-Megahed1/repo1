@@ -1,3 +1,4 @@
+import { Check, AlertTriangle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/lib/translations";
 
@@ -63,12 +64,12 @@ export default function TenStepEngine() {
         <div className={`mt-12 space-y-4 ${isRTL ? "text-right" : ""}`}>
           <div className="bg-[#E8F4F8] dark:bg-[#1F3A4A] rounded-lg p-6 border-l-4 border-[#1F6BF6]">
             <p className="text-[#1F6BF6] dark:text-[#F5BB41] font-bold">
-              ✓ {t.engine.note}
+              <Check className="w-5 h-5 inline-block mr-1" /> {t.engine.note}
             </p>
           </div>
           <div className="bg-[#FFF4E6] dark:bg-[#3A2F1F] rounded-lg p-6 border-l-4 border-[#F5BB41]">
             <p className="text-[#F5BB41] font-bold">
-              ⚠️ {t.engine.noteWarning}
+              <AlertTriangle className="w-5 h-5 inline-block mr-1" /> {t.engine.noteWarning}
             </p>
           </div>
         </div>
