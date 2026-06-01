@@ -1,17 +1,29 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
+import PublicQuestionInput from "@/pages/PublicQuestionInput";
 import { Route, Switch, Router as WouterRouter } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { TestProvider } from "./contexts/TestContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import Home from "./pages/Home";
-
+import Test from "./pages/Test";
+import Results from "./pages/Results";
+import AdminDashboard from "./pages/AdminDashboard";
+import QuestionInputPanel from "./pages/QuestionInputPanel";
 
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
-    <WouterRouter base="/landingpage1">
+    <WouterRouter base="/test1">
       <Switch>
         <Route path={"/"} component={Home} />
+        <Route path={"/test"} component={Test} />
+        <Route path={"/results"} component={Results} />
+        <Route path={"/admin"} component={AdminDashboard} />
+        <Route path={"/questions"} component={QuestionInputPanel} />
+        <Route path={"/add-questions"} component={PublicQuestionInput} />
         <Route path={"/404"} component={NotFound} />
         {/* Final fallback route */}
         <Route component={NotFound} />
@@ -29,12 +41,17 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider
-        defaultTheme="dark"
+        defaultTheme="light"
+        switchable
       >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+        <LanguageProvider>
+          <TestProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Router />
+            </TooltipProvider>
+          </TestProvider>
+        </LanguageProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
