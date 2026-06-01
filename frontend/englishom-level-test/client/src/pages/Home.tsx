@@ -114,16 +114,16 @@ export default function Home() {
               return (
                 <Card
                   key={index}
-                  className="bg-white border-2 border-gray-300 hover:border-primary/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl min-h-64"
+                  className="bg-card border-2 border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] min-h-64 h-full"
                 >
                   <CardHeader className="pb-3">
                     <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
                       <Icon className="w-6 h-6 text-primary" />
                     </div>
-                    <CardTitle className="text-2xl font-bold text-black">{feature.title}</CardTitle>
+                    <CardTitle className="text-2xl font-bold text-foreground">{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-base text-gray-700 leading-relaxed">{feature.description}</p>
+                    <p className="text-base text-muted-foreground leading-relaxed">{feature.description}</p>
                   </CardContent>
                 </Card>
               );
@@ -205,6 +205,32 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Pricing / Packages Section CTA */}
+      <section className="container py-20 md:py-32 bg-slate-50 dark:bg-slate-900/50">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          <div className="space-y-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+              {language === "ar" ? "هل تبحث عن خطة تعلم متكاملة؟" : "Looking for a complete learning plan?"}
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              {language === "ar"
+                ? "بعد تحديد مستواك، يمكنك الانضمام إلى إحدى باقاتنا المميزة للبدء في رحلة إتقان اللغة الإنجليزية مع مدرسين خبراء."
+                : "After finding your level, join one of our premium packages to start mastering English with expert tutors."}
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <Button
+              size="lg"
+              onClick={() => window.location.href = `https://englishom.com/${language === "ar" ? "ar" : "en"}/#courses`}
+              className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-6 text-base rounded-lg shadow-lg hover:shadow-green-500/25 transition-all"
+            >
+              {language === "ar" ? "استكشف الباقات والأسعار" : "Explore Pricing & Packages"}
+              <span className={language === "ar" ? "mr-2" : "ml-2"}>🚀</span>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="container py-20 md:py-32">
         <div className="max-w-2xl mx-auto bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 rounded-2xl p-12 text-center space-y-6">
@@ -249,7 +275,7 @@ export default function Home() {
             <div>
               <h4 className="font-semibold text-foreground mb-4">{language === "ar" ? "الشركة" : "Company"}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/#about`} className="hover:text-foreground transition-colors">{t.nav.about}</a></li>
+                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/about`} className="hover:text-foreground transition-colors">{t.nav.about}</a></li>
                 <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/blog`} className="hover:text-foreground transition-colors">{language === "ar" ? "المدونة" : "Blog"}</a></li>
                 <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/contact`} className="hover:text-foreground transition-colors">{language === "ar" ? "اتصل بنا" : "Contact"}</a></li>
               </ul>
@@ -258,8 +284,7 @@ export default function Home() {
               <h4 className="font-semibold text-foreground mb-4">{language === "ar" ? "القانوني" : "Legal"}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/privacy-policy`} className="hover:text-foreground transition-colors">{language === "ar" ? "الخصوصية" : "Privacy"}</a></li>
-                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/terms-and-conditions`} className="hover:text-foreground transition-colors">{language === "ar" ? "الشروط" : "Terms"}</a></li>
-                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/privacy-policy`} className="hover:text-foreground transition-colors">{language === "ar" ? "ملفات تعريف الارتباط" : "Cookies"}</a></li>
+                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/terms`} className="hover:text-foreground transition-colors">{language === "ar" ? "الشروط" : "Terms"}</a></li>
               </ul>
             </div>
           </div>
