@@ -140,7 +140,7 @@ export default function Admin() {
   // Check authorization AFTER all hooks
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div dir="ltr" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
         <div className="text-center">
           <Loader2 className="w-10 h-10 animate-spin text-primary mx-auto mb-4" />
           <p className="text-muted-foreground">Loading admin panel...</p>
@@ -154,7 +154,7 @@ export default function Admin() {
     (error.data?.code === "UNAUTHORIZED" || error.data?.code === "FORBIDDEN")
   ) {
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div dir="ltr" className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-50 to-slate-100">
         <Card className="p-8 text-center max-w-md w-full shadow-lg">
           <h2 className="text-2xl font-bold text-foreground mb-4">
             🔒 Access Denied
@@ -327,7 +327,7 @@ export default function Admin() {
     String.fromCharCode(65 + index); // A, B, C, D, E, F
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div dir="ltr" className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Top Bar */}
       <div className="bg-white border-b shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
