@@ -25,7 +25,7 @@ export default function AdminDashboard() {
 
   if (!user || user.role !== "admin") {
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center">
+      <div className="min-h-screen bg-background text-foreground flex flex-col justify-center items-center">
         <h1 className="text-2xl font-bold mb-4">{t("common.error", language)}</h1>
         <p className="text-muted-foreground mb-6">Access denied</p>
         <div className="flex gap-4">
