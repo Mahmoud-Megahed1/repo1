@@ -243,24 +243,23 @@ export default function Home() {
               <h4 className="font-semibold text-foreground mb-4">{language === "ar" ? "المنتج" : "Product"}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li><a href="#features" className="hover:text-foreground transition-colors">{t.nav.features}</a></li>
-                <li><a href="https://englishom.com/pricing" className="hover:text-foreground transition-colors">{language === "ar" ? "التسعير" : "Pricing"}</a></li>
-                <li><a href="https://englishom.com/#faq" className="hover:text-foreground transition-colors">{t.nav.faq}</a></li>
+                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/#faq`} className="hover:text-foreground transition-colors">{t.nav.faq}</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold text-foreground mb-4">{language === "ar" ? "الشركة" : "Company"}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="https://englishom.com/#about" className="hover:text-foreground transition-colors">{t.nav.about}</a></li>
-                <li><a href="https://englishom.com/blog" className="hover:text-foreground transition-colors">{language === "ar" ? "المدونة" : "Blog"}</a></li>
-                <li><a href="https://englishom.com/contact" className="hover:text-foreground transition-colors">{language === "ar" ? "اتصل بنا" : "Contact"}</a></li>
+                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/#about`} className="hover:text-foreground transition-colors">{t.nav.about}</a></li>
+                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/blog`} className="hover:text-foreground transition-colors">{language === "ar" ? "المدونة" : "Blog"}</a></li>
+                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/contact`} className="hover:text-foreground transition-colors">{language === "ar" ? "اتصل بنا" : "Contact"}</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold text-foreground mb-4">{language === "ar" ? "القانوني" : "Legal"}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="https://englishom.com/privacy-policy" className="hover:text-foreground transition-colors">{language === "ar" ? "الخصوصية" : "Privacy"}</a></li>
-                <li><a href="https://englishom.com/terms-and-conditions" className="hover:text-foreground transition-colors">{language === "ar" ? "الشروط" : "Terms"}</a></li>
-                <li><a href="https://englishom.com/privacy-policy" className="hover:text-foreground transition-colors">{language === "ar" ? "ملفات تعريف الارتباط" : "Cookies"}</a></li>
+                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/privacy-policy`} className="hover:text-foreground transition-colors">{language === "ar" ? "الخصوصية" : "Privacy"}</a></li>
+                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/terms-and-conditions`} className="hover:text-foreground transition-colors">{language === "ar" ? "الشروط" : "Terms"}</a></li>
+                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/privacy-policy`} className="hover:text-foreground transition-colors">{language === "ar" ? "ملفات تعريف الارتباط" : "Cookies"}</a></li>
               </ul>
             </div>
           </div>

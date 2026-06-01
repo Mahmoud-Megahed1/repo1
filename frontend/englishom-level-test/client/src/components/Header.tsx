@@ -29,10 +29,10 @@ export function Header() {
           <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t.nav.features}
           </a>
-          <a href="https://englishom.com/#about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/#about`} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t.nav.about}
           </a>
-          <a href="https://englishom.com/#faq" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/#faq`} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t.nav.faq}
           </a>
         </nav>
