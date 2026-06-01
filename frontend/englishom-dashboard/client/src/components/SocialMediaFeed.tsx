@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Heart, MessageCircle, Share2, ExternalLink } from 'lucide-react';
+import { Heart, MessageCircle, Share2, ExternalLink, Smartphone, Camera, Play, Circle } from 'lucide-react';
 
 interface SocialPost {
   id: string;
@@ -26,7 +26,7 @@ const SocialMediaFeed: React.FC = () => {
       {
         id: '1',
         platform: 'twitter',
-        content: 'تعلم اللغة الإنجليزية! 🚀 انضم إلى آلاف الطلاب الذين حققوا أحلامهم.',
+        content: 'تعلم اللغة الإنجليزية! انضم إلى آلاف الطلاب الذين حققوا أحلامهم.',
         author: '@englishom',
         timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
         likes: 1250,
@@ -37,7 +37,7 @@ const SocialMediaFeed: React.FC = () => {
       {
         id: '2',
         platform: 'instagram',
-        content: 'آخر درس: تحسين مهارات التحدث مع الخبراء 📚',
+        content: 'آخر درس: تحسين مهارات التحدث مع الخبراء',
         author: 'englishom',
         timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
         likes: 3450,
@@ -59,7 +59,7 @@ const SocialMediaFeed: React.FC = () => {
       {
         id: '4',
         platform: 'youtube',
-        content: 'فيديو جديد: أفضل 10 نصائح لتحسين نطقك الإنجليزي 🎥',
+        content: 'فيديو جديد: أفضل 10 نصائح لتحسين نطقك الإنجليزي',
         author: 'Platform',
         timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000),
         likes: 5600,
@@ -90,18 +90,18 @@ const SocialMediaFeed: React.FC = () => {
     }
   };
 
-  const getPlatformIcon = (platform: string) => {
+  const getPlatformIcon = (platform: string): React.ReactNode => {
     switch (platform) {
       case 'facebook':
-        return 'f';
+        return <span className="font-bold text-lg">f</span>;
       case 'twitter':
-        return '𝕇';
+        return <span className="font-bold text-lg">𝕏</span>;
       case 'instagram':
-        return '📷';
+        return <Camera className="w-5 h-5" />;
       case 'youtube':
-        return '▶';
+        return <Play className="w-5 h-5" />;
       default:
-        return '○';
+        return <Circle className="w-5 h-5" />;
     }
   };
 
@@ -135,7 +135,7 @@ const SocialMediaFeed: React.FC = () => {
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-cyan-400 mb-4 flex items-center gap-2">
-          <span className="text-3xl">📱</span>
+          <Smartphone className="w-7 h-7 text-cyan-400" />
           <span>{typeof window !== 'undefined' && document.documentElement.lang === 'ar' ? 'مشاركات وسائل التواصل' : 'Social Media Feed'}</span>
         </h2>
         

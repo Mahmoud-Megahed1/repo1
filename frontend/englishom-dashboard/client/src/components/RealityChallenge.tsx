@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Timer, Mic, FileText } from 'lucide-react';
 
 interface RealityChallengeProps {
   language?: 'ar' | 'en';
@@ -51,21 +52,23 @@ export const RealityChallenge: React.FC<RealityChallengeProps> = ({ language = '
       <div className="cyber-border-strong rounded-xl p-8 bg-gradient-to-br from-red-900/20 to-pink-900/20 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-2xl font-bold neon-text">
-            {language === 'ar' ? '⏳ تحدي واقع اليوم - الـ 25 ثانية' : '⏳ Today\'s Reality Challenge - 25 Seconds'}
+            <Timer className="w-6 h-6 text-cyan-400 inline-block mr-2" />
+            {language === 'ar' ? 'تحدي واقع اليوم - الـ 25 ثانية' : 'Today\'s Reality Challenge - 25 Seconds'}
           </h3>
           <motion.div
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 1.5, repeat: Infinity }}
             className="text-5xl"
           >
-            🎙️
+            <Mic className="w-10 h-10 text-red-400" />
           </motion.div>
         </div>
 
         <p className="text-cyan-400/80 mb-6">
+          <FileText className="w-5 h-5 text-cyan-400 inline-block mr-2" />
           {language === 'ar'
-            ? '📝 اكتب قصة يومك بصوتك: 25 ثانية من التحدث بالإنجليزية لوصف واقع يومك وتحسين مهارات التحدث.'
-            : '📝 Tell your daily story in your voice: 25 seconds of English speaking to describe your day and improve speaking skills.'}
+            ? 'اكتب قصة يومك بصوتك: 25 ثانية من التحدث بالإنجليزية لوصف واقع يومك وتحسين مهارات التحدث.'
+            : 'Tell your daily story in your voice: 25 seconds of English speaking to describe your day and improve speaking skills.'}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

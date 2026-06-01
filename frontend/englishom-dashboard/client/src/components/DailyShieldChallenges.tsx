@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Shield, Target } from 'lucide-react';
 
 interface DailyShieldChallengesProps {
   language?: 'ar' | 'en';
@@ -37,23 +38,24 @@ export const DailyShieldChallenges: React.FC<DailyShieldChallengesProps> = ({ la
     >
       <div className="cyber-border-strong rounded-xl p-8 bg-gradient-to-br from-orange-900/20 to-red-900/20 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-2xl font-bold neon-text">
-            {language === 'ar' ? '🛡️ تحديات الدروع اليومية' : '🛡️ Daily Shield Challenges'}
+          <h3 className="text-2xl font-bold neon-text flex items-center gap-2">
+            <Shield className="w-6 h-6" /> {language === 'ar' ? 'تحديات الدروع اليومية' : 'Daily Shield Challenges'}
           </h3>
           <motion.div
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
             className="text-5xl"
           >
-            🛡️
+            <Shield className="w-12 h-12 text-orange-400" />
           </motion.div>
         </div>
 
         <div className="mb-6">
-          <p className="text-cyan-400/80 mb-4">
+          <p className="text-cyan-400/80 mb-4 flex items-start gap-2">
+            <Target className="w-5 h-5 mt-0.5 flex-shrink-0" />
             {language === 'ar'
-              ? '🎯 الالتزام اليومي: جلسة استماع وحفظ لـ 7 أسئلة يومية لتهيئة الطالب وكسر رهبة الاختبارات المستقبلية.'
-              : '🎯 Daily Commitment: 7 daily questions for listening and memorization to prepare students and overcome test anxiety.'}
+              ? 'الالتزام اليومي: جلسة استماع وحفظ لـ 7 أسئلة يومية لتهيئة الطالب وكسر رهبة الاختبارات المستقبلية.'
+              : 'Daily Commitment: 7 daily questions for listening and memorization to prepare students and overcome test anxiety.'}
           </p>
         </div>
 

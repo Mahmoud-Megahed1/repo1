@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Award, Target, Lock } from 'lucide-react';
 
 interface GatewayQuizProps {
   language?: 'ar' | 'en';
@@ -52,21 +53,23 @@ export const GatewayQuiz: React.FC<GatewayQuizProps> = ({ language = 'ar' }) => 
       <div className="cyber-border-strong rounded-xl p-8 bg-gradient-to-br from-green-900/20 to-emerald-900/20 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-2xl font-bold neon-text">
-            {language === 'ar' ? '🎉 الاختبار النهائي والانتقال' : '🎉 The Gateway Quiz'}
+            <Award className="w-6 h-6 text-green-400 inline-block mr-2" />
+            {language === 'ar' ? 'الاختبار النهائي والانتقال' : 'The Gateway Quiz'}
           </h3>
           <motion.div
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
             className="text-5xl"
           >
-            🎯
+            <Target className="w-10 h-10 text-green-400" />
           </motion.div>
         </div>
 
         <p className="text-cyan-400/80 mb-6">
+          <Lock className="w-5 h-5 text-cyan-400 inline-block mr-2" />
           {language === 'ar'
-            ? '🔐 الاختبار النهائي: 15 سؤالاً للانتقال لليوم التالي - يثبت مدى جدية المنصة وكفاءة الطلاب.'
-            : '🔐 The Final Quiz: 15 questions to advance to the next day - proving platform seriousness and student competency.'}
+            ? 'الاختبار النهائي: 15 سؤالاً للانتقال لليوم التالي - يثبت مدى جدية المنصة وكفاءة الطلاب.'
+            : 'The Final Quiz: 15 questions to advance to the next day - proving platform seriousness and student competency.'}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

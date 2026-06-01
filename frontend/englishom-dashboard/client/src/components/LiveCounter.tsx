@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { ArrowUp } from 'lucide-react';
 
 interface LiveCounterProps {
   label: string;
@@ -64,14 +65,14 @@ export default function LiveCounter({
         transition={{ duration: 0.3 }}
         className="text-4xl font-bold bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent neon-text"
       >
-        {displayValue.toLocaleString('ar-SA')}
+        {displayValue.toLocaleString('en-US')}
       </motion.p>
       <motion.div
         animate={isAnimating ? { opacity: [0, 1, 0] } : {}}
         transition={{ duration: 0.6 }}
-        className="text-xs text-cyan-400 mt-2"
+        className="text-xs text-cyan-400 mt-2 flex items-center gap-1"
       >
-        {isAnimating && '⬆️ تحديث حي'}
+        {isAnimating && <><ArrowUp className="w-3 h-3" /> تحديث حي</>}
       </motion.div>
     </motion.div>
   );

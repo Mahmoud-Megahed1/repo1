@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, Youtube, MessageCircle } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, Youtube, MessageCircle, Home, Link, Smartphone, MessageSquare, Send } from 'lucide-react';
 
 interface FooterProps {
   language?: 'ar' | 'en';
@@ -58,7 +58,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
           {/* About Section */}
           <div>
             <h3 className="text-cyan-400 font-bold text-lg mb-4 flex items-center gap-2">
-              <span className="text-2xl">🏠</span>
+              <Home className="w-6 h-6 text-cyan-400" />
               {t.about}
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed">{t.aboutText}</p>
@@ -67,7 +67,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
           {/* Quick Links */}
           <div>
             <h3 className="text-cyan-400 font-bold text-lg mb-4 flex items-center gap-2">
-              <span className="text-2xl">🔗</span>
+              <Link className="w-6 h-6 text-cyan-400" />
               {t.quickLinks}
             </h3>
             <ul className="space-y-2">
@@ -89,7 +89,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
           {/* Contact Info */}
           <div>
             <h3 className="text-cyan-400 font-bold text-lg mb-4 flex items-center gap-2">
-              <span className="text-2xl">📞</span>
+              <Phone className="w-6 h-6 text-cyan-400" />
               {t.contactInfo}
             </h3>
             <div className="space-y-3">
@@ -111,7 +111,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
           {/* Social Media */}
           <div>
             <h3 className="text-cyan-400 font-bold text-lg mb-4 flex items-center gap-2">
-              <span className="text-2xl">📱</span>
+              <Smartphone className="w-6 h-6 text-cyan-400" />
               {t.followUs}
             </h3>
             <div className="flex gap-3 flex-wrap">

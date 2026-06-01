@@ -20,7 +20,7 @@ import { DailyShieldChallenges } from '@/components/DailyShieldChallenges';
 import { RealityChallenge } from '@/components/RealityChallenge';
 import { GatewayQuiz } from '@/components/GatewayQuiz';
 import { StatisticsTicker } from '@/components/StatisticsTicker';
-import { Users, Calendar, Clock, BookOpen, BarChart2, Zap, Plug, Radio, Globe, Camera, Play, Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
+import { Users, Calendar, Clock, BookOpen, BarChart2, Zap, Plug, Radio, Globe, Camera, Play, Facebook, Twitter, Instagram, Youtube, Sun, Moon } from 'lucide-react';
 
 interface DashboardStats {
   totalRegistrations: number;
@@ -168,7 +168,9 @@ export default function LiveDashboard() {
                       timeZone: 'Asia/Riyadh'
                     });
                     const hour = parseInt(riyadhTime.split(':')[0]);
-                    return (hour >= 6 && hour < 18) ? '☀️' : '🌙';
+                    return (hour >= 6 && hour < 18) 
+                      ? <Sun className="w-6 h-6 text-yellow-400" /> 
+                      : <Moon className="w-6 h-6 text-cyan-300" />;
                   })()}
                 </span>
                 <div className="text-right">
@@ -240,13 +242,13 @@ export default function LiveDashboard() {
         >
           <LiveCounter
             label={t.liveRegistrations}
-            value={stats.totalRegistrations === 0 ? 2540 : stats.totalRegistrations + 2540}
+            value={stats.totalRegistrations}
             icon={<Users className="w-8 h-8 text-cyan-400" />}
             delay={0.4}
           />
           <StatCard
             label={t.todayRegistrations}
-            value={stats.todayRegistrations === 0 ? 45 : stats.todayRegistrations + 45}
+            value={stats.todayRegistrations}
             icon={<Calendar className="w-8 h-8 text-cyan-400" />}
             delay={0.5}
           />
@@ -513,7 +515,7 @@ export default function LiveDashboard() {
             <div className="space-y-2 text-sm text-cyan-400/70">
               <p><code className="bg-slate-800 px-2 py-1 rounded">GET /api/trpc/dashboard.getStats</code></p>
               <p className="text-xs mt-2">{language === 'ar' ? 'الحصول على إحصائيات لوحة البيانات الحالية' : 'Get current dashboard statistics'}</p>
-              <p className="text-xs mt-4">{language === 'ar' ? '📝 للمبرمج: استبدل البيانات التجريبية بـ API الحقيقية' : '📝 For developers: Replace mock data with real API'}</p>
+              <p className="text-xs mt-4">{language === 'ar' ? 'للمبرمج: استبدل البيانات التجريبية بـ API الحقيقية' : 'For developers: Replace mock data with real API'}</p>
             </div>
           </div>
 
@@ -525,7 +527,7 @@ export default function LiveDashboard() {
             </h4>
             <div className="space-y-2 text-sm text-cyan-400/70">
               <p>{t.autoUpdate}</p>
-              <p>{language === 'ar' ? 'الحالة' : 'Status'}: {isLoading ? `⏳ ${t.updating}` : `✅ ${t.connected}`}</p>
+              <p>{language === 'ar' ? 'الحالة' : 'Status'}: {isLoading ? t.updating : t.connected}</p>
               <p className="text-xs mt-4">{t.mockData}</p>
             </div>
           </div>

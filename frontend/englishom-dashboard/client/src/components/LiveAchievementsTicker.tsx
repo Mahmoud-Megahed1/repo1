@@ -1,56 +1,57 @@
 import { useEffect, useState } from 'react';
+import { Award, Flame, Zap, Sparkles, Rocket, Trophy, FileText, Video, Megaphone } from 'lucide-react';
 
 interface Achievement {
   id: number;
   text: string;
-  emoji: string;
+  icon: React.ReactNode;
 }
 
 const achievements: Achievement[] = [
   {
     id: 1,
     text: 'أحمد م. من السعودية اجتاز لتوه اختبار المستوى المتوسط بنسبة 92%',
-    emoji: '🎉',
+    icon: <Award className="w-6 h-6 text-yellow-400" />,
   },
   {
     id: 2,
     text: 'سارة ع. أكملت الآن 10 أيام متتالية من التعلم المستمر',
-    emoji: '🔥',
+    icon: <Flame className="w-6 h-6 text-orange-500" />,
   },
   {
     id: 3,
     text: 'محمد من مصر اكمل 20 يوم متتالية في غضون 7 أيام، أسرع من الخطة',
-    emoji: '⚡',
+    icon: <Zap className="w-6 h-6 text-yellow-500" />,
   },
   {
     id: 4,
     text: 'عبدالجليل من عمان اجتاز لتوه اختبار الكفاءة في مستوى A1 بنسبة 91%',
-    emoji: '✨',
+    icon: <Sparkles className="w-6 h-6 text-cyan-400" />,
   },
   {
     id: 5,
     text: 'إلهام من العراق استطاعت اجتياز 21 يوم من الدراسة والإنجاز في 8 أيام',
-    emoji: '🚀',
+    icon: <Rocket className="w-6 h-6 text-purple-400" />,
   },
   {
     id: 6,
     text: 'علي من سوريا أتم أيام الكورس الـ 50 يوم بنجاح وحصل على الشهادة',
-    emoji: '🏆',
+    icon: <Trophy className="w-6 h-6 text-yellow-500" />,
   },
   {
     id: 7,
     text: 'مقال جديد في المدونة يتحدث عن عبارات المحادثة اليومية الأساسية',
-    emoji: '📝',
+    icon: <FileText className="w-6 h-6 text-cyan-400" />,
   },
   {
     id: 8,
     text: 'مقطع جديد في يوتيوب يشرح الطريق المثلى للتعامل مع المنصة',
-    emoji: '🎥',
+    icon: <Video className="w-6 h-6 text-red-500" />,
   },
   {
     id: 9,
     text: 'تغريدة جديدة اليوم تتحدث عن ما نظمناه لك عند التحاق بكورس الطلاقة في 50 يوم',
-    emoji: '📢',
+    icon: <Megaphone className="w-6 h-6 text-blue-400" />,
   },
 ];
 
@@ -92,7 +93,7 @@ export function LiveAchievementsTicker() {
         <div className="space-y-3">
           {current && (
             <div className="flex items-start gap-3 p-4 bg-slate-800/50 rounded-lg border border-yellow-500/20 animate-fadeIn">
-              <span className="text-2xl flex-shrink-0">{current.emoji}</span>
+              <span className="flex-shrink-0 mt-0.5">{current.icon}</span>
               <p className="text-sm text-gray-300 leading-relaxed">
                 {current.text}
               </p>

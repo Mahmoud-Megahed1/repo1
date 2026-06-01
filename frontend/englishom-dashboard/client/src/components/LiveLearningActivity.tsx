@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import { motion } from 'framer-motion';
+import { GraduationCap, Keyboard, Headphones, Mic } from 'lucide-react';
 
 interface LiveLearningActivityProps {
   language?: 'ar' | 'en';
@@ -23,19 +24,19 @@ export const LiveLearningActivity: React.FC<LiveLearningActivityProps> = ({ lang
     {
       label: language === 'ar' ? 'الكلمات المكتوبة اليوم' : 'Words Written Today',
       value: wordsWritten,
-      icon: '⌨️',
+      icon: <Keyboard className="w-8 h-8" />,
       color: 'from-blue-500 to-cyan-500',
     },
     {
       label: language === 'ar' ? 'دقائق الاستماع' : 'Audio Minutes Listened',
       value: audioMinutes,
-      icon: '🎧',
+      icon: <Headphones className="w-8 h-8" />,
       color: 'from-purple-500 to-pink-500',
     },
     {
       label: language === 'ar' ? 'التسجيلات الصوتية' : 'Voice Recordings Today',
       value: voiceRecordings,
-      icon: '🎙️',
+      icon: <Mic className="w-8 h-8" />,
       color: 'from-green-500 to-emerald-500',
     },
   ];
@@ -47,8 +48,8 @@ export const LiveLearningActivity: React.FC<LiveLearningActivityProps> = ({ lang
       transition={{ duration: 0.6 }}
       className="mb-12"
     >
-      <h3 className="text-2xl font-bold mb-6 neon-text">
-        {language === 'ar' ? '🎓 النشاط التعليمي الحي' : '🎓 Live Learning Activity'}
+      <h3 className="text-2xl font-bold mb-6 neon-text flex items-center gap-2">
+        <GraduationCap className="w-6 h-6" /> {language === 'ar' ? 'النشاط التعليمي الحي' : 'Live Learning Activity'}
       </h3>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
