@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
-import { ChevronLeft, Globe, Moon, Sun } from "lucide-react";
+import { ChevronLeft, Globe, Moon, Sun, Trophy, Star, Target, Twitter, MessageCircle, Facebook } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { formatTime } from "@/../../shared/timing";
 
@@ -521,13 +521,19 @@ export default function Quiz() {
             {/* Achievements Section */}
             {results.accuracy >= 90 && (
               <div className="mb-6 p-4 bg-accent/10 border border-accent rounded-lg animate-pulse">
-                <p className="text-sm font-semibold text-accent mb-2">🏆 {t("quiz.achievement")}</p>
+                <p className="text-sm font-semibold text-accent mb-2 flex items-center gap-2">
+                  <Trophy className="w-4 h-4" /> {t("quiz.achievement")}
+                </p>
                 <div className="flex gap-2 flex-wrap">
                   {results.accuracy === 100 && (
-                    <span className="text-xs bg-accent text-accent-foreground px-2 py-1 rounded">⭐ {t("quiz.perfectScore")}</span>
+                    <span className="text-xs bg-accent text-accent-foreground px-2 py-1 rounded flex items-center gap-1">
+                      <Star className="w-3 h-3" /> {t("quiz.perfectScore")}
+                    </span>
                   )}
                   {results.accuracy >= 90 && (
-                    <span className="text-xs bg-accent text-accent-foreground px-2 py-1 rounded">🎯 {t("quiz.highAccuracy")}</span>
+                    <span className="text-xs bg-accent text-accent-foreground px-2 py-1 rounded flex items-center gap-1">
+                      <Target className="w-3 h-3" /> {t("quiz.highAccuracy")}
+                    </span>
                   )}
                 </div>
               </div>
@@ -546,7 +552,7 @@ export default function Quiz() {
                   }}
                   className="gap-1"
                 >
-                  𝕏
+                  <Twitter className="w-4 h-4" />
                 </Button>
                 <Button
                   size="sm"
@@ -557,7 +563,7 @@ export default function Quiz() {
                   }}
                   className="gap-1"
                 >
-                  💬
+                  <MessageCircle className="w-4 h-4" />
                 </Button>
                 <Button
                   size="sm"
@@ -568,7 +574,7 @@ export default function Quiz() {
                   }}
                   className="gap-1"
                 >
-                  f
+                  <Facebook className="w-4 h-4" />
                 </Button>
               </div>
             </div>
