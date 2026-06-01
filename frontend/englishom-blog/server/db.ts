@@ -1073,3 +1073,20 @@ export async function updatePostRatingStatus(id: number, status: string) {
     
   return true;
 }
+
+export async function getDashboardStats() {
+  const db = await getDb();
+  if (!db) return { totalPosts: 0, totalComments: 0, totalViews: 0, pendingComments: 0 };
+
+  const [postsResult] = await db.select({ count: count() }).from(blogPosts);
+  const [commentsResult] = await db.select({ count: count() }).from(blogComments);
+  const [pendingCommentsResult] = await db.select({ count: count() }).from(blogComments).where(eq(blogComments.status, "pending"));
+  const [viewsResult] = await db.select({ total: sql<number>`sum(${blogPosts.viewsCount})` }).from(blogPosts);
+
+  return {
+    totalPosts: postsResult.count,
+    totalComments: commentsResult.count,
+    pendingComments: pendingCommentsResult.count,
+    totalViews: Number(viewsResult.total || 0),
+  };
+}

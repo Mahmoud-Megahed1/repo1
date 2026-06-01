@@ -9,10 +9,15 @@ import AdminPostsManager from "./AdminPostsManager";
 import AdminCategoriesManager from "./AdminCategoriesManager";
 import AdminCommentsManager from "./AdminCommentsManager";
 import AdminRatingsManager from "./AdminRatingsManager";
+import { trpc } from "@/lib/trpc";
 
 export default function AdminDashboard() {
   const { language } = useLocalization();
   const { user, loading } = useAuth();
+  
+  const { data: stats } = trpc.blog.analytics.getDashboardStats.useQuery(undefined, {
+    enabled: !!user && user.role === "admin"
+  });
   const [activeTab, setActiveTab] = useState("overview");
 
   if (loading) {
@@ -59,19 +64,19 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="bg-card p-6 rounded-lg border border-border">
                 <p className="text-sm text-muted-foreground mb-2">Total Posts</p>
-                <p className="text-3xl font-bold">0</p>
+                <p className="text-3xl font-bold">{stats?.totalPosts || 0}</p>
               </div>
               <div className="bg-card p-6 rounded-lg border border-border">
                 <p className="text-sm text-muted-foreground mb-2">Total Comments</p>
-                <p className="text-3xl font-bold">0</p>
+                <p className="text-3xl font-bold">{stats?.totalComments || 0}</p>
               </div>
               <div className="bg-card p-6 rounded-lg border border-border">
                 <p className="text-sm text-muted-foreground mb-2">Total Views</p>
-                <p className="text-3xl font-bold">0</p>
+                <p className="text-3xl font-bold">{stats?.totalViews || 0}</p>
               </div>
               <div className="bg-card p-6 rounded-lg border border-border">
                 <p className="text-sm text-muted-foreground mb-2">Pending Comments</p>
-                <p className="text-3xl font-bold">0</p>
+                <p className="text-3xl font-bold">{stats?.pendingComments || 0}</p>
               </div>
             </div>
           </TabsContent>

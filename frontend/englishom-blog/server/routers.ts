@@ -565,6 +565,10 @@ export const appRouter = router({
         .query(async ({ input }) => {
           return db.getPostAnalytics(input.postId, input.daysBack);
         }),
+      getDashboardStats: adminProcedure
+        .query(async () => {
+          return db.getDashboardStats();
+        }),
     }),
     email: router({
       subscribe: publicProcedure
