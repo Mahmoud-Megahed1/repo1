@@ -5,8 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { trpc } from "@/lib/trpc";
-import { CheckCircle2, AlertCircle, TrendingUp, Download, Share2, Award, Lightbulb, Zap } from "lucide-react";
+import { CheckCircle2, AlertCircle, TrendingUp, Download, Share2, Award, Lightbulb, Zap, Trophy, Star, Rocket, Sprout, BookOpen, Edit3, Book, Headphones, MessageCircle, ThumbsUp, Target, Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { toast } from "sonner";
 import { ar, en } from "@shared/translations";
 
 interface TestResult {
@@ -23,50 +24,50 @@ interface TestResult {
 }
 
 // Motivational messages based on score and CEFR level
-const getMotivationalMessage = (score: number, cefrLevel: string, language: string): { title: string; message: string; emoji: string } => {
+const getMotivationalMessage = (score: number, cefrLevel: string, language: string) => {
   const messages = {
     en: {
       excellent: {
-        title: "Outstanding Performance! 🌟",
+        title: "Outstanding Performance!",
         message: "You've achieved an exceptional score! Your English proficiency is impressive. Keep up this momentum and continue challenging yourself with advanced materials.",
-        emoji: "🏆"
+        icon: <Trophy className="w-12 h-12 text-yellow-500" />
       },
       great: {
-        title: "Great Job! 👏",
+        title: "Great Job!",
         message: "You're performing well and showing solid progress. With consistent practice, you'll reach the next level soon. Focus on your weak areas to accelerate your growth.",
-        emoji: "⭐"
+        icon: <Star className="w-12 h-12 text-yellow-400" />
       },
       good: {
-        title: "Good Start! 💪",
+        title: "Good Start!",
         message: "You have a solid foundation. This is a great starting point! Dedicate time to practice regularly, especially in the areas marked for improvement.",
-        emoji: "🚀"
+        icon: <Rocket className="w-12 h-12 text-blue-500" />
       },
       developing: {
-        title: "Keep Learning! 📚",
+        title: "Keep Learning!",
         message: "You're on the right path! English learning is a journey. Focus on consistent practice, and you'll see significant improvement in no time.",
-        emoji: "🌱"
+        icon: <Sprout className="w-12 h-12 text-green-500" />
       }
     },
     ar: {
       excellent: {
-        title: "أداء استثنائي! 🌟",
+        title: "أداء استثنائي!",
         message: "لقد حققت درجة استثنائية! مستوى كفاءتك في اللغة الإنجليزية مثير للإعجاب. استمر في هذا الزخم وواصل تحدي نفسك بمواد متقدمة.",
-        emoji: "🏆"
+        icon: <Trophy className="w-12 h-12 text-yellow-500" />
       },
       great: {
-        title: "عمل رائع! 👏",
+        title: "عمل رائع!",
         message: "أنت تؤدي بشكل جيد وتظهر تقدماً ملموساً. مع الممارسة المستمرة، ستصل إلى المستوى التالي قريباً. ركز على نقاط ضعفك لتسريع نموك.",
-        emoji: "⭐"
+        icon: <Star className="w-12 h-12 text-yellow-400" />
       },
       good: {
-        title: "بداية جيدة! 💪",
+        title: "بداية جيدة!",
         message: "لديك أساس قوي. هذه نقطة انطلاق رائعة! كرس الوقت للممارسة المنتظمة، خاصة في المجالات المحددة للتحسين.",
-        emoji: "🚀"
+        icon: <Rocket className="w-12 h-12 text-blue-500" />
       },
       developing: {
-        title: "استمر في التعلم! 📚",
+        title: "استمر في التعلم!",
         message: "أنت على الطريق الصحيح! تعلم اللغة الإنجليزية هو رحلة. ركز على الممارسة المستمرة، وستشهد تحسناً ملموساً قريباً.",
-        emoji: "🌱"
+        icon: <Sprout className="w-12 h-12 text-green-500" />
       }
     }
   };
@@ -222,11 +223,11 @@ export default function TestResults({ params }: { params: { sessionId: string } 
   const cefrTips = getCEFRTips(result.cefrLevel, language);
 
   const stageScores = [
-    { nameEn: "Vocabulary", nameAr: "المفردات", score: result.vocabularyScore, icon: "📚" },
-    { nameEn: "Grammar", nameAr: "القواعد", score: result.grammarScore, icon: "✏️" },
-    { nameEn: "Reading", nameAr: "القراءة", score: result.readingScore, icon: "📖" },
-    { nameEn: "Listening", nameAr: "الاستماع", score: result.listeningScore, icon: "🎧" },
-    { nameEn: "Writing", nameAr: "الكتابة", score: result.writingScore, icon: "🗣️" },
+    { nameEn: "Vocabulary", nameAr: "المفردات", score: result.vocabularyScore, icon: <BookOpen className="w-6 h-6 text-blue-500" /> },
+    { nameEn: "Grammar", nameAr: "القواعد", score: result.grammarScore, icon: <Edit3 className="w-6 h-6 text-green-500" /> },
+    { nameEn: "Reading", nameAr: "القراءة", score: result.readingScore, icon: <Book className="w-6 h-6 text-purple-500" /> },
+    { nameEn: "Listening", nameAr: "الاستماع", score: result.listeningScore, icon: <Headphones className="w-6 h-6 text-orange-500" /> },
+    { nameEn: "Writing", nameAr: "الكتابة", score: result.writingScore, icon: <MessageCircle className="w-6 h-6 text-red-500" /> },
   ];
 
   return (
@@ -241,11 +242,14 @@ export default function TestResults({ params }: { params: { sessionId: string } 
             <span className="font-bold text-lg text-foreground">Englishom {language === "ar" ? "النتائج" : "Results"}</span>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={() => window.print()}>
               <Download className="w-4 h-4 mr-2" />
-              {language === "ar" ? "تحميل" : "Download"}
+              {language === "ar" ? "تحميل (PDF)" : "Download (PDF)"}
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              toast.success(language === "ar" ? "تم نسخ رابط النتيجة!" : "Result link copied!");
+            }}>
               <Share2 className="w-4 h-4 mr-2" />
               {language === "ar" ? "مشاركة" : "Share"}
             </Button>
@@ -260,7 +264,7 @@ export default function TestResults({ params }: { params: { sessionId: string } 
           <Card className="bg-gradient-to-r from-primary/20 to-accent/20 border-primary/50 overflow-hidden">
             <CardContent className="pt-6">
               <div className="flex items-start gap-4">
-                <div className="text-5xl">{motivationalMsg.emoji}</div>
+                <div>{motivationalMsg.icon}</div>
                 <div>
                   <h2 className="text-2xl font-bold text-foreground mb-2">{motivationalMsg.title}</h2>
                   <p className="text-foreground/80 leading-relaxed">{motivationalMsg.message}</p>
@@ -333,7 +337,7 @@ export default function TestResults({ params }: { params: { sessionId: string } 
                   <div key={stage.nameEn} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-2xl">{stage.icon}</span>
+                        {stage.icon}
                         <span className="font-semibold text-foreground">{language === "ar" ? stage.nameAr : stage.nameEn}</span>
                       </div>
                       <span className="font-bold text-lg text-primary">{stage.score}%</span>
@@ -351,7 +355,7 @@ export default function TestResults({ params }: { params: { sessionId: string } 
             <Card className="bg-card border-border">
               <CardHeader>
                 <CardTitle className="text-foreground flex items-center gap-2">
-                  <span className="text-2xl">💪</span>
+                  <ThumbsUp className="w-6 h-6 text-green-500" />
                   {language === "ar" ? "نقاط القوة" : "Your Strengths"}
                 </CardTitle>
               </CardHeader>
@@ -375,7 +379,7 @@ export default function TestResults({ params }: { params: { sessionId: string } 
             <Card className="bg-card border-border">
               <CardHeader>
                 <CardTitle className="text-foreground flex items-center gap-2">
-                  <span className="text-2xl">🎯</span>
+                  <Target className="w-6 h-6 text-red-500" />
                   {language === "ar" ? "مجالات التحسين" : "Areas to Improve"}
                 </CardTitle>
               </CardHeader>
@@ -432,7 +436,7 @@ export default function TestResults({ params }: { params: { sessionId: string } 
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {cefrTips.map((tip, index) => (
                   <li key={index} className="flex items-start gap-3 p-3 bg-background/50 rounded-lg">
-                    <span className="text-lg">✨</span>
+                    <Sparkles className="w-5 h-5 text-accent mt-0.5" />
                     <span className="text-foreground text-sm">{tip}</span>
                   </li>
                 ))}
