@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Heart, MessageCircle, Share2, ExternalLink, Smartphone, Camera, Play, Circle } from 'lucide-react';
+import { Heart, MessageCircle, Share2, ExternalLink, Smartphone, Camera, Play, Circle, Facebook, Twitter } from 'lucide-react';
 
 interface SocialPost {
   id: string;
@@ -93,9 +93,9 @@ const SocialMediaFeed: React.FC = () => {
   const getPlatformIcon = (platform: string): React.ReactNode => {
     switch (platform) {
       case 'facebook':
-        return <span className="font-bold text-lg">f</span>;
+        return <Facebook className="w-5 h-5" />;
       case 'twitter':
-        return <span className="font-bold text-lg">𝕏</span>;
+        return <Twitter className="w-5 h-5" />;
       case 'instagram':
         return <Camera className="w-5 h-5" />;
       case 'youtube':

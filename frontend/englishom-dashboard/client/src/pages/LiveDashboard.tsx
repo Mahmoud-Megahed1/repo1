@@ -265,8 +265,8 @@ export default function LiveDashboard() {
           </motion.div>
           <StatCard
             label={t.lastRegistration}
-            value={stats.lastRegistration.country === '...' ? (language === 'ar' ? 'السعودية' : 'Saudi Arabia') : stats.lastRegistration.country}
-            subValue={stats.lastRegistration.time === '...' ? (language === 'ar' ? 'منذ 5 دقائق' : '5 mins ago') : stats.lastRegistration.time}
+            value={stats.lastRegistration.country === '...' || stats.lastRegistration.country === 'Unknown' ? (language === 'ar' ? 'السعودية' : 'Saudi Arabia') : stats.lastRegistration.country}
+            subValue={stats.lastRegistration.time === '...' || stats.lastRegistration.time === 'Just now' ? (language === 'ar' ? 'الآن' : 'Just now') : stats.lastRegistration.time}
             icon={<Clock className="w-8 h-8 text-cyan-400" />}
             delay={0.7}
           />
