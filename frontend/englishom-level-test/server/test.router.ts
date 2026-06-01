@@ -17,6 +17,25 @@ import {
 import { calculateCEFRLevel, analyzeStagePerformance, generateRecommendations } from "@shared/scoring";
 import { nanoid } from "nanoid";
 
+/**
+ * Normalize options to a valid JSON array string.
+ * Handles: JSON arrays, comma-separated strings, or raw text.
+ */
+function normalizeOptions(options: string): string {
+  // Already valid JSON array?
+  try {
+    const parsed = JSON.parse(options);
+    if (Array.isArray(parsed)) {
+      return JSON.stringify(parsed.map((o: string) => String(o).trim()).filter(Boolean));
+    }
+  } catch {
+    // Not valid JSON, treat as comma-separated
+  }
+  // Fallback: split by comma
+  const items = options.split(',').map(o => o.trim()).filter(Boolean);
+  return JSON.stringify(items);
+}
+
 const AnswerSchema = z.object({
   questionId: z.number(),
   userAnswer: z.string(),
@@ -248,10 +267,11 @@ export const testRouter = router({
       })
     )
     .mutation(async ({ input }) => {
+      const normalizedOptions = normalizeOptions(input.options);
       await createQuestion({
         stage: input.stage,
         questionText: input.questionText,
-        options: input.options,
+        options: normalizedOptions,
         correctAnswer: input.correctAnswer,
         difficulty: input.difficulty,
         timeLimit: input.timeLimit,
@@ -275,10 +295,11 @@ export const testRouter = router({
       })
     )
     .mutation(async ({ input }) => {
+      const normalizedOptions = normalizeOptions(input.options);
       await updateQuestion(input.id, {
         stage: input.stage,
         questionText: input.questionText,
-        options: input.options,
+        options: normalizedOptions,
         correctAnswer: input.correctAnswer,
         difficulty: input.difficulty,
         timeLimit: input.timeLimit,
