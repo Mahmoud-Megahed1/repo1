@@ -36,15 +36,24 @@ export const testRouter = router({
     )
     .query(async ({ input }) => {
       const questions = await getQuestionsByStage(input.stage, input.limit);
-      return questions.map((q) => ({
-        id: q.id,
-        stage: q.stage,
-        questionText: q.questionText,
-        imageUrl: q.imageUrl,
-        audioUrl: q.audioUrl,
-        options: q.options ? JSON.parse(q.options) : [],
-        timeLimit: q.timeLimit,
-      }));
+      return questions.map((q) => {
+        let parsedOptions = [];
+        try {
+          parsedOptions = q.options ? JSON.parse(q.options) : [];
+        } catch (e) {
+          console.warn(`[getStageQuestions] Failed to parse options for question ${q.id}:`, q.options);
+          parsedOptions = typeof q.options === 'string' ? [q.options] : [];
+        }
+        return {
+          id: q.id,
+          stage: q.stage,
+          questionText: q.questionText,
+          imageUrl: q.imageUrl,
+          audioUrl: q.audioUrl,
+          options: parsedOptions,
+          timeLimit: q.timeLimit,
+        };
+      });
     }),
 
   /**
@@ -204,15 +213,24 @@ export const testRouter = router({
    */
   getAllQuestions: adminProcedure.query(async () => {
     const allQuestions = await getAllQuestions();
-    return allQuestions.map((q) => ({
-      id: q.id,
-      stage: q.stage,
-      questionText: q.questionText,
-      options: q.options ? JSON.parse(q.options) : [],
-      correctAnswer: q.correctAnswer,
-      difficulty: q.difficulty,
-      timeLimit: q.timeLimit,
-    }));
+    return allQuestions.map((q) => {
+      let parsedOptions = [];
+      try {
+        parsedOptions = q.options ? JSON.parse(q.options) : [];
+      } catch (e) {
+        console.warn(`[getAllQuestions] Failed to parse options for question ${q.id}:`, q.options);
+        parsedOptions = typeof q.options === 'string' ? [q.options] : [];
+      }
+      return {
+        id: q.id,
+        stage: q.stage,
+        questionText: q.questionText,
+        options: parsedOptions,
+        correctAnswer: q.correctAnswer,
+        difficulty: q.difficulty,
+        timeLimit: q.timeLimit,
+      };
+    });
   }),
 
   /**
