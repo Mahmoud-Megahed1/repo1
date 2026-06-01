@@ -272,9 +272,9 @@ export default function MyResults() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-border">
-                        <th className="text-left py-2 px-2 font-semibold text-foreground">{t("myresults.level", language)}</th>
-                        <th className="text-left py-2 px-2 font-semibold text-foreground">{t("myresults.accuracy", language)}</th>
-                        <th className="text-left py-2 px-2 font-semibold text-foreground">{t("myresults.date", language)}</th>
+                        <th className="text-start py-2 px-2 font-semibold text-foreground">{t("myresults.level", language)}</th>
+                        <th className="text-start py-2 px-2 font-semibold text-foreground">{t("myresults.accuracy", language)}</th>
+                        <th className="text-start py-2 px-2 font-semibold text-foreground">{t("myresults.date", language)}</th>
                       </tr>
                     </thead>
                     <tbody>
