@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useLocation } from "wouter";
 import { getLoginUrl } from "@/const";
-import { BookOpen, Settings, LogOut, Moon, Sun, Globe } from "lucide-react";
+import { BookOpen, Settings, LogOut, Moon, Sun, Globe, Zap, BarChart } from "lucide-react";
 
 /**
  * Home page for EnglishOM Ques
@@ -169,7 +169,7 @@ export default function Home() {
 
             <Card className="p-6">
               <div className="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-2xl">⚡</span>
+                <Zap className="w-6 h-6 text-accent" />
               </div>
               <h4 className="text-lg font-semibold text-foreground mb-2">
                 {t("features.fast.title")}
@@ -181,7 +181,7 @@ export default function Home() {
 
             <Card className="p-6">
               <div className="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-2xl">📊</span>
+                <BarChart className="w-6 h-6 text-accent" />
               </div>
               <h4 className="text-lg font-semibold text-foreground mb-2">
                 {t("features.feedback.title")}
