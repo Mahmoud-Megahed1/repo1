@@ -462,7 +462,7 @@ export default function TestResults({ params }: { params: { sessionId: string } 
               >
                 {language === "ar" ? "أعد الاختبار" : "Retake Test"}
               </Button>
-              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" onClick={() => window.location.href = `https://englishom.com/${language === "ar" ? "ar" : "en"}/`}>
                 {language === "ar" ? "استكشف الدورات" : "Explore Courses"}
               </Button>
             </div>
