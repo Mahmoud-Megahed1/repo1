@@ -115,10 +115,15 @@ export const appRouter = router({
             throw new TRPCError({ code: "NOT_FOUND", message: "Post not found" });
           }
 
-          // Increment view count
-          await db.incrementPostViews(post.id);
-
           return post;
+        }),
+
+      // Increment view count separately
+      incrementView: publicProcedure
+        .input(z.object({ id: z.number() }))
+        .mutation(async ({ input }) => {
+          await db.incrementPostViews(input.id);
+          return { success: true };
         }),
 
       // Get featured posts
@@ -396,11 +401,11 @@ export const appRouter = router({
           return db.deleteComment(input.id);
         }),
 
-      // Admin only - get pending comments
-      listPending: adminProcedure
-        .input(z.object({ limit: z.number().default(50) }))
-        .query(async () => {
-          return db.getPendingComments();
+      // Admin only - get all comments
+      listAdmin: adminProcedure
+        .input(z.object({ limit: z.number().default(100) }))
+        .query(async ({ input }) => {
+          return db.getAllAdminComments(input.limit);
         }),
 
       // Admin only - approve comment
@@ -663,15 +668,20 @@ export const appRouter = router({
           }
           return db.deletePostRating(input.id);
         }),
-      listPending: adminProcedure
+      listAdmin: adminProcedure
         .input(z.object({ limit: z.number().optional() }))
         .query(async ({ input }) => {
-          return db.getPendingRatings(input.limit || 50);
+          return db.getAllAdminRatings(input.limit || 100);
         }),
       approve: adminProcedure
         .input(z.object({ id: z.number() }))
         .mutation(async ({ input }) => {
           return db.updatePostRatingStatus(input.id, "approved");
+        }),
+      reject: adminProcedure
+        .input(z.object({ id: z.number() }))
+        .mutation(async ({ input }) => {
+          return db.updatePostRatingStatus(input.id, "rejected");
         }),
     }),
   }),

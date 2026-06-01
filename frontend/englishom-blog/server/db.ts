@@ -443,7 +443,7 @@ export async function getApprovedComments(postId: number, limit: number = 20, of
   }));
 }
 
-export async function getPendingComments(limit: number = 50) {
+export async function getAllAdminComments(limit: number = 100) {
   const db = await getDb();
   if (!db) return [];
 
@@ -458,7 +458,6 @@ export async function getPendingComments(limit: number = 50) {
     })
     .from(blogComments)
     .leftJoin(users, eq(blogComments.userId, users.id))
-    .where(eq(blogComments.status, "pending"))
     .orderBy(desc(blogComments.createdAt))
     .limit(limit);
 
@@ -1037,7 +1036,7 @@ export async function deletePostRating(id: number) {
   }
 }
 
-export async function getPendingRatings(limit: number = 50) {
+export async function getAllAdminRatings(limit: number = 100) {
   const db = await getDb();
   if (!db) return [];
 
@@ -1052,7 +1051,6 @@ export async function getPendingRatings(limit: number = 50) {
     })
     .from(postRatings)
     .leftJoin(users, eq(postRatings.userId, users.id))
-    .where(eq(postRatings.status, "pending"))
     .orderBy(desc(postRatings.createdAt))
     .limit(limit);
 

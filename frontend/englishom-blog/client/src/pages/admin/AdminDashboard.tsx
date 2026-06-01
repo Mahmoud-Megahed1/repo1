@@ -51,13 +51,12 @@ export default function AdminDashboard() {
         <h1 className="text-4xl font-bold mb-8">{t("admin.dashboard", language)}</h1>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">{t("admin.dashboard", language)}</TabsTrigger>
             <TabsTrigger value="posts">{t("admin.posts", language)}</TabsTrigger>
             <TabsTrigger value="categories">{t("admin.categories", language)}</TabsTrigger>
             <TabsTrigger value="comments">{t("admin.comments", language)}</TabsTrigger>
             <TabsTrigger value="ratings">{language === "ar" ? "التقييمات" : "Ratings"}</TabsTrigger>
-            <TabsTrigger value="analytics">{t("admin.analytics", language)}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="mt-8">
@@ -95,13 +94,6 @@ export default function AdminDashboard() {
 
           <TabsContent value="ratings" className="mt-8">
             <AdminRatingsManager />
-          </TabsContent>
-
-          <TabsContent value="analytics" className="mt-8">
-            <div className="bg-card p-6 rounded-lg border border-border">
-              <h2 className="text-2xl font-bold mb-6">{t("admin.analytics", language)}</h2>
-              <p className="text-muted-foreground">Analytics dashboard coming soon...</p>
-            </div>
           </TabsContent>
         </Tabs>
       </div>

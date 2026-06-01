@@ -23,6 +23,18 @@ export default function BlogArticle() {
     slug: slug || "",
   });
 
+  const incrementViewMutation = trpc.blog.posts.incrementView.useMutation();
+
+  useEffect(() => {
+    if (post?.id) {
+      const viewKey = `viewed_post_${post.id}`;
+      if (!localStorage.getItem(viewKey)) {
+        incrementViewMutation.mutate({ id: post.id });
+        localStorage.setItem(viewKey, "true");
+      }
+    }
+  }, [post?.id]);
+
   // Fetch related posts
   const { data: relatedPosts } = trpc.blog.posts.related.useQuery(
     {
