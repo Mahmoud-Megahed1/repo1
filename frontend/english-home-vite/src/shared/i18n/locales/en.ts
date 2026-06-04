@@ -32,29 +32,29 @@ export default {
       subtitle: 'Everything you need to master English',
       items: {
         interactive: {
-          title: 'Interactive Lessons',
+          title: 'Interactive Content',
           description:
-            'Engage with dynamic content including audio and interactive exercises designed to keep you motivated.',
+            'Use smart simulation systems designed to train vocal muscle memory and enhance natural pronunciation without human intervention.',
         },
         speaking: {
-          title: 'Speaking Practice',
+          title: 'Conversation Simulation',
           description:
-            'Improve your pronunciation with our advanced speech recognition technology and get instant feedback.',
+            'Enhance natural pronunciation efficiency and vocal performance flow through advanced smart simulation systems, and get instant analysis and matching of your performance.',
         },
         progress: {
-          title: 'Track Progress',
+          title: 'KPI Monitoring',
           description:
-            'Monitor your learning journey with detailed analytics and celebrate your achievements along the way.',
+            'Track your technical practice path through detailed statistical reports, and automatically monitor the development of your efficiency rates via the smart dashboard.',
         },
         levels: {
-          title: 'Multiple Levels',
+          title: 'Technical Systems',
           description:
-            'Choose from beginner to advanced levels with structured 50-day software programs for each level.',
+            'Choose the right technical system for your practice, from the interactive foundation system to the full professional simulation system with algorithms and software paths organized for 50 days per system.',
         },
         daily: {
-          title: 'Daily Practice',
+          title: 'Daily Challenges',
           description:
-            'Build consistent learning habits with daily lessons, tests, and speaking exercises.',
+            'Build consistent practice habits with daily challenges, smart assessment tests, and speaking simulation exercises.',
         },
         certificate: {
           title: 'Digital Progress Reports',
