@@ -34,8 +34,9 @@ import {
   Star,
 } from 'lucide-react';
 import TestimonialForm from '@modules/insights/components/testimonial-form';
-import { useEffect, type FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import PurchaseAgreementModal from '@modules/levels/components/purchase-agreement-modal';
 
 export const Route = createFileRoute(
   '/$locale/_globalLayout/_auth/app/account'
@@ -346,25 +347,48 @@ const LevelCard: FC<Props> = (props = { variants: 'inProgress' } as Props) => {
         </div>
       )}
       {props.variants === 'expired' && (
-        <div className="flex flex-col gap-2 md:flex-row md:gap-3">
-          <div className="flex items-center justify-between gap-px md:flex-col md:items-baseline">
-            <span className="text-muted-foreground text-xs">
-              {t('Global.expiredOn')}
-            </span>
-            <span className="text-destructive text-sm font-semibold">
-              {formatDate(props.expiresAt, locale)}
-            </span>
-          </div>
-          <Button
-            variant={'destructive'}
-            onClick={() => mutate()}
-            disabled={isPending}
-          >
-            {isPending ? t('Global.processing') : t('Global.renew')}{' '}
-            <RefreshCcw />
-          </Button>
-        </div>
+        <ExpiredActions
+          expiresAt={props.expiresAt}
+          levelId={props.levelId}
+        />
       )}
+    </div>
+  );
+};
+
+const ExpiredActions: FC<{ expiresAt: string; levelId: LevelId }> = ({ expiresAt, levelId }) => {
+  const { t } = useTranslation();
+  const locale = useLocale();
+  const { mutate, isPending } = usePayment(levelId);
+  const [showAgreement, setShowAgreement] = useState(false);
+
+  return (
+    <div className="flex flex-col gap-2 md:flex-row md:gap-3">
+      <div className="flex items-center justify-between gap-px md:flex-col md:items-baseline">
+        <span className="text-muted-foreground text-xs">
+          {t('Global.expiredOn')}
+        </span>
+        <span className="text-destructive text-sm font-semibold">
+          {formatDate(expiresAt, locale)}
+        </span>
+      </div>
+      <Button
+        variant={'destructive'}
+        onClick={() => setShowAgreement(true)}
+        disabled={isPending}
+      >
+        {isPending ? t('Global.processing') : t('Global.renew')}{' '}
+        <RefreshCcw />
+      </Button>
+      <PurchaseAgreementModal
+        open={showAgreement}
+        onOpenChange={setShowAgreement}
+        onAccept={() => {
+          setShowAgreement(false);
+          mutate();
+        }}
+        isPending={isPending}
+      />
     </div>
   );
 };

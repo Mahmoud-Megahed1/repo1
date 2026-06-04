@@ -725,6 +725,8 @@
     "renewalPrice": "سعر التجديد (٢٥٪ من السعر الأصلي)",
     "upgradeDiscount": "خصم ترقية ١٥٪",
     "originalPrice": "السعر الأصلي",
+    "loyaltyDiscountApplied": "تم تطبيق خصم الولاء ({{discount}}%)",
+    "priceWithDiscount": "السعر بعد الخصم",
     "daysLeft": "أيام متبقية",
     "notFoundDescription": "الصفحة التي تبحث عنها غير موجودة.",
     "lockedLevel": {
