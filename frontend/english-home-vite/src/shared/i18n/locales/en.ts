@@ -118,8 +118,8 @@ export default {
       },
     },
     testimonials: {
-      title: 'What Our Students Say',
-      subtitle: 'Join thousands of successful English learners',
+      title: 'Subscribers\' Reviews',
+      subtitle: 'Join thousands of successful users developing their language through our software environment',
       items: {
         sarah: {
           name: 'Sarah Ahmed',
