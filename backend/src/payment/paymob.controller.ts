@@ -279,10 +279,20 @@ export class PaymobController {
 
       // 1. Renewal: User had THIS specific level but it expired → pays only 25% of the price
       const userCompletedOrders = await this.paymobService.orderRepo.findUserCompletedOrders(user._id.toString());
-      const hasExpiredSameCourse = userCompletedOrders.some(
-        (order) => order.levelName === paymentIntentionDto.level_name && 
-        ((order as any).accessStatus === OrderAccessStatus.EXPIRED || new Date((order as any).accessExpiresAt) <= new Date())
+      const sameLevelOrders = userCompletedOrders.filter(
+        (order) => order.levelName === paymentIntentionDto.level_name
       );
+      
+      // Check if user has an expired order for this same level
+      // An order is considered expired if:
+      // 1. accessStatus is explicitly EXPIRED, OR
+      // 2. accessExpiresAt exists and is in the past, OR
+      // 3. Legacy order: accessStatus and accessExpiresAt are both missing (old orders before these fields were added)
+      //    AND there is no currently ACTIVE order for this level
+      const activeOrderForLevel = await this.paymobService.orderRepo.findActiveCompletedOrder(
+        user._id.toString(), paymentIntentionDto.level_name
+      );
+      const hasExpiredSameCourse = sameLevelOrders.length > 0 && !activeOrderForLevel;
 
       if (hasExpiredSameCourse) {
         finalPrice = Math.round(course.price * 0.25); // Pay only 25% of original price
