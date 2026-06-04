@@ -173,11 +173,11 @@ export default {
       ],
     },
     cta: {
-      title: 'Ready to Start Your English Journey?',
+      title: 'Are you ready to start your English practice journey?',
       subtitle:
-        'Join thousands of learners who have improved their language skills and unlocked new opportunities.',
+        'Join thousands who have developed their language and opened new opportunities for themselves',
       description:
-        'Start today with our all-in-one learning platform, and unleash your potential step by step with confidence.',
+        'Start today with our comprehensive software platform, and unleash your potential with confidence step by step',
       primary: 'Explore the Programming Environment',
       secondary: 'View Pricing',
     },
@@ -253,27 +253,27 @@ export default {
     about: {
       title: 'About Us',
       subtitle:
-        'Learn about our story and vision in English language education',
+        'Learn about our story and vision in developing mental and technical English language practice solutions and technologies',
       sections: {
         story: {
           title: 'Our Story',
           description:
-            'Our idea began with a deep belief that speaking English is not a luxury, but a key to opening doors of opportunity in our connected world. We noticed that many learners struggle to overcome the fear barrier and start speaking fluently, even after years of studying grammar and vocabulary. From here, our vision was born to design a curriculum that breaks these barriers and focuses intensively on effective daily practice, transforming "I want to speak English" into "I speak English fluently".',
+            'Our idea began with a deep belief that English is not a luxury, but a key to opening doors of opportunity in our connected digital world. We noticed that many struggle to overcome the fear barrier and start speaking fluently, even after years of studying traditional grammar and vocabulary. From here, our vision was born to design a smart software environment that allows speaking fluently and easily to break all barriers, focusing intensively on effective daily digital practice',
         },
         team: {
           title: 'Our Team',
           description:
-            'Our team includes a group of linguistic experts, experienced teachers, and passionate developers, all committed to one mission: helping you speak fluently in the fastest and easiest ways. We combine the latest and simplest teaching methods, practical experience in language teaching, and genuine passion for empowering learners to communicate in English with ease.',
+            'Our team includes a group of passionate engineers and developers, in collaboration with linguistic consultants, all committed to one mission: building and developing smart systems that help you speak fluently in the fastest and easiest software ways. We combine the latest language processing technologies, technical expertise in developing language solutions, and genuine passion for empowering communication easily',
         },
         quality: {
           title: 'Our Commitment to Quality',
           description:
-            'We are committed to delivering the highest levels of quality in every aspect of our platform. From designing research-based curriculum, to selecting high competence, and providing continuous technical support, we work hard to ensure that your learning journey with us is effective, enjoyable, and barrier-free. Quality is not just a slogan, but the cornerstone of everything we do.',
+            'We are committed to delivering the highest levels of quality in every aspect of our software platform. From engineering interactive tracks based on proven algorithms, to providing continuous technical support, we work hard to ensure that your journey using the system is effective, enjoyable, and barrier-free. Technical quality is not just a slogan, but the cornerstone of everything we do',
         },
         join: {
           title: 'Join Us',
           description:
-            'Are you ready to break the language barrier and start speaking fluently? Join us today on your journey to mastering English. Discover the power of daily practice, and watch how your communication dreams become reality. Your English-speaking future starts here!',
+            'Are you ready to break the language barrier and start speaking fluently? Join us today on your journey towards exploring our smart system. Discover the power of daily practice through our advanced software solutions',
         },
       },
     },
@@ -481,8 +481,8 @@ export default {
         contact: 'Contact Us',
       },
       learning: {
-        title: 'Learning',
-        startLearning: 'Start Learning',
+        title: 'Training and Practice',
+        startLearning: 'Start Smart Practice',
         login: 'Login',
       },
       support: {
