@@ -57,9 +57,9 @@ export default {
             'Build consistent learning habits with daily lessons, tests, and speaking exercises.',
         },
         certificate: {
-          title: 'Certificates',
+          title: 'Digital Progress Reports',
           description:
-            'Earn certificates upon completing each level to showcase your English proficiency achievements.',
+            'Get a digital progress report showing your progress in the system and the completion of language level simulations.',
         },
       },
     },
