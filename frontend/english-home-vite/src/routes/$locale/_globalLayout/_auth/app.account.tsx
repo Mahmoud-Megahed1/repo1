@@ -255,7 +255,6 @@ const LevelCard: FC<Props> = (props = { variants: 'inProgress' } as Props) => {
         : Circle;
   const { t } = useTranslation();
   const locale = useLocale();
-  const { mutate, isPending } = usePayment(props.levelId);
 
   return (
     <div
