@@ -247,7 +247,7 @@ const useComponentVariant = ({
       content: (previousLevelCompleted && discountPercentage > 0) ? (
         <div className="space-y-2">
           <p className="flex items-center gap-2 rounded-md border-green-200 bg-green-100 px-3 py-1.5 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-300 text-sm font-semibold">
-            {t('Global.loyaltyDiscountApplied', `Loyalty Discount Applied (${discountPercentage}%)`)}
+            {t('Global.loyaltyDiscountApplied', { discount: discountPercentage })}
           </p>
           <p className="flex items-center">
             <span className="text-muted-foreground pe-2 text-sm">
@@ -384,15 +384,26 @@ const useComponentVariant = ({
         </div>
       ),
       cta: (
-        <Button
-          variant={'destructive'}
-          onClick={() => mutate()}
-          disabled={isPending}
-          className="w-full"
-        >
-          {isPending ? t('Global.processing') : t('Global.renewSubscription')}
-          <RefreshCw className="rtl:rotate-180" />
-        </Button>
+        <>
+          <Button
+            variant={'destructive'}
+            onClick={() => setShowAgreement(true)}
+            disabled={isPending}
+            className="w-full"
+          >
+            {isPending ? t('Global.processing') : t('Global.renewSubscription')}
+            <RefreshCw className="rtl:rotate-180" />
+          </Button>
+          <PurchaseAgreementModal
+            open={showAgreement}
+            onOpenChange={setShowAgreement}
+            onAccept={() => {
+              setShowAgreement(false);
+              mutate();
+            }}
+            isPending={isPending}
+          />
+        </>
       ),
     },
   };
