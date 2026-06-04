@@ -16,9 +16,11 @@ const FAQ = () => {
       <div className="container mx-auto px-4">
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-3xl font-bold">{t('Landing.fqa.title')}</h2>
-          <p className="text-muted-foreground mx-auto max-w-2xl">
-            {t('Landing.fqa.description')}
-          </p>
+          {t('Landing.fqa.description') && (
+            <p className="text-muted-foreground mx-auto max-w-2xl">
+              {t('Landing.fqa.description')}
+            </p>
+          )}
         </div>
 
         <div className="mx-auto max-w-3xl">

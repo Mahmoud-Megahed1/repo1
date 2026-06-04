@@ -25,8 +25,8 @@
       "watchDemo": "Watch Demo"
     },
     "features": {
-      "title": "Why Choose Englishom?",
-      "subtitle": "Everything you need to master English",
+      "title": "Why Englishom Technical Platform?",
+      "subtitle": "An integrated software environment and automated interactive tools for self-practicing and developing linguistic performance",
       "items": {
         "interactive": {
           "title": "Interactive Content",
@@ -131,27 +131,27 @@
     },
     "fqa": {
       "title": "Frequently Asked Questions",
-      "description": "Find answers to common questions about Englishome's learning approach and platform.",
+      "description": "",
       "questions": [
         {
-          "question": "How does the daily learning structure work?",
-          "answer": "Each day, you will complete a set of activities designed to build your skills progressively. This includes reading, listening, speaking, and writing exercises."
+          "question": "How does the daily training system work?",
+          "answer": "Every day, the system generates a set of interactive activities designed to build your skills progressively. This includes exercises and software simulations in reading, listening, speaking, and writing."
         },
         {
-          "question": "What levels are available?",
-          "answer": "We offer six levels from A1 (Beginner) to C2 (Proficient). Each level is designed to help you master the language step by step."
+          "question": "What tracks are available?",
+          "answer": "We offer six smart training tracks starting from the interactive foundation release system to the full professional simulation system. Each track is designed to help you develop your language skills step by step through our software solutions."
         },
         {
           "question": "Can I track my progress?",
-          "answer": "Yes! You can monitor your daily progress, achievements, and areas needing improvement through our analytics dashboard."
+          "answer": "Yes! You can monitor your daily performance and achievements through the smart analytics dashboard built into the platform."
         },
         {
           "question": "Is there a mobile app?",
-          "answer": "Yes! Our platform is accessible on both desktop and mobile devices, allowing you to learn anytime, anywhere."
+          "answer": "Yes! The system interface and our technical environment are fully compatible with computers and mobile phones, allowing you to use and practice anytime, anywhere."
         },
         {
-          "question": "What is the website's privacy policy?",
-          "answer": "We take your privacy seriously. Personal data is collected only when necessary and stored securely. We will not share your information with third parties without your consent."
+          "question": "What are the privacy standards and data security?",
+          "answer": "Englishom platform relies on a fully automated software engineering, where data processing is limited to instant and automated interaction of systems with user behavior; to monitor the efficiency of completing solutions, process audio recordings, and automatically issue performance reports without any human intervention.\nAll data and track outputs are digital and fully encrypted, and no external parties or human cadres have the authority to view them. The system management - including operation scheduling, freezing, self-suspension, unfreezing, and report extraction - falls entirely on the user directly via their independent dashboard, within the highest approved technical protection and security standards."
         }
       ]
     },
