@@ -1234,36 +1234,36 @@ export default {
   UserGuide: {
     title: 'Comprehensive User Guide: Your Daily Path to Fluency',
     subtitle:
-      'Welcome to the Englishom.com system! You are now part of a unique and intensive training system designed specifically to transform you from a learner to a confident English speaker in record time. There are no traditional teachers; you are your own teacher, and our system is your guide to success.',
+      'Welcome to the Englishom technical platform and system! You are now part of a unique and intensive training system designed specifically to transform you from a user to a confident English speaker in record time. There are no traditional teachers; you are your own guide, and our software system is your guide to success.',
     philosophy: {
-      title: 'System Philosophy: Why Our Method is the Best?',
+      title: 'System Philosophy: Why is our technical method the best?',
       description:
-        'We believe that fluency comes from muscle memory and speed of expression, not from memorizing grammar rules.',
+        'We believe that fluency comes from muscle memory and speed of expression, not from memorizing traditional grammar.',
       selfLearning: {
-        title: 'Self-Learning',
+        title: 'Self-Training and Evaluation',
         description:
-          'We rely on your self-comparison with professional recordings, which strengthens listening skills and makes you discover your mistakes yourself.',
+          'We rely on your self-comparison with integrated professional recordings, which strengthens listening skills and makes you discover your mistakes yourself through the system.',
       },
       challenge: {
         title: '25-Second Challenge',
         description:
-          'The goal is not linguistic perfection, but breaking the hesitation barrier and speaking with speed and confidence under pressure.',
+          'The goal is not linguistic perfection, but breaking the hesitation barrier and speaking with speed and confidence under the temporary pressure of the system.',
       },
       foundation: {
         title: 'Focus on Foundation',
         description:
-          'We focus on the most important 1000 words in English (for each level) to ensure building a solid foundation that allows you to speak in 80% of daily situations.',
+          'We focus the software on the most important 1000 words in English (for each track) to ensure building a solid foundation that allows you to speak in 80% of daily situations.',
       },
     },
     gettingStarted: {
-      title: 'Starting the Journey: Dashboard and Study Day',
+      title: 'Starting the Journey: Dashboard and Training Track',
       description:
-        'After logging in, you will find the Dashboard - your fluency command center. Our curriculum is built on 10 crucial daily tasks. Your mission is not just to complete them, but to absorb every step in sequence, leading to the mandatory daily test. Passing this test is the only proof of your mastery and the key that unlocks access to the next day.',
+        'After logging in, you will find the Dashboard - your fluency command center. Our smart program is built on 10 crucial daily tasks. Your mission is not just to complete them, but to absorb every step in sequence, leading to the mandatory daily evaluation challenge. Passing this evaluation is the only proof of your mastery, and the technical key that unlocks access to the next day in the system.',
       features: {
         dashboard: {
           title: 'Dashboard',
           description:
-            'Summary of your progress, number of remaining days in subscription.',
+            'Summary of your progress, number of remaining days in technical subscription.',
           action: 'Follow tasks in order from top to bottom.',
         },
         words: {
@@ -1274,28 +1274,28 @@ export default {
         },
         progress: {
           title: 'Overall Progress',
-          description: 'Number of completed levels.',
-          action: 'For clarification, where you are now.',
+          description: 'Number of tracks completed in your analytics board.',
+          action: 'For clarification on where you are now.',
         },
       },
     },
     dailyTasks: {
       title: 'Details of the Ten Daily Tasks (Mandatory Procedures)',
-      duration: '~1 hour of focused study',
+      duration: '~1 hour of digital focus',
       description:
-        'Every day, you will complete the following ten tasks in about one hour of focus. The order is very important:',
+        'Every day, you will complete the following ten tasks in about one hour of focus. The software order is very important:',
       tip: 'Success Tip',
       tasks: [
         {
-          title: 'Daily Text Reading (20 new words)',
+          title: 'Daily Text Reading (20 targeted words)',
           description:
-            'Understanding context and practical application of targeted words.',
+            'Understanding context and practical application of targeted words within the system.',
           tip: 'Read with focus and try to feel the meaning of the complete sentence.',
         },
         {
           title: 'Word Recognition with Images and Audio',
           description:
-            'Linking the word to visual and auditory meaning directly.',
+            'Linking the word to visual and auditory meaning directly through software.',
           tip: "Don't move on until you're sure you understand each word.",
         },
         {
@@ -1304,36 +1304,36 @@ export default {
           tip: 'Not just an educational step, but a qualitative leap.',
         },
         {
-          title: 'Writing',
+          title: 'Digital Writing',
           description:
-            'Writing plays a crucial and indirect role in enhancing fluency.',
+            'Writing plays a crucial and indirect role in enhancing fluency and solidifying words in your mental database.',
           tip: 'Writing transforms words you hear and read into active practice.',
         },
         {
           title: 'Recording Pronunciation and Comparison',
           description:
-            'Building muscle memory for correct pronunciation and improving clarity.',
+            'Building muscle memory for correct pronunciation and improving clarity through the recording tool.',
           tip: 'Important: Listen to the professional recording then record your voice and compare it accurately.',
         },
         {
           title: '25-Second Challenge (6 daily sentences)',
           description:
             'The cornerstone: Overcoming hesitation and achieving speed in expression.',
-          tip: 'Repeat sentences repeatedly until you memorize them well, then record them within 20 seconds!',
+          tip: 'Repeat sentences repeatedly until you memorize them well, then record them within 25 seconds!',
         },
         {
-          title: 'Questions and Answers (7 questions)',
-          description: 'Advance preparation for daily conversation scenarios.',
+          title: 'Questions, Answers, and Simulation (7 questions)',
+          description: 'Advance preparation for daily conversation scenarios via software simulation.',
           tip: 'Read the question and answer it aloud as if someone is asking you.',
         },
         {
-          title: 'Simple Grammar Rule',
-          description: 'Clarifying simple basic rules in sentence context.',
+          title: 'Simple Grammatical Structure',
+          description: 'Clarifying simple basic structures in sentence context.',
           tip: 'Focus on practical examples rather than memorizing theoretical explanation.',
         },
         {
           title: 'Phrasal Verbs',
-          description: 'Mastering common expressions used daily.',
+          description: 'Mastering common expressions used daily in conversations.',
           tip: 'Try to use the new phrasal verb in your own sentence immediately.',
         },
         {
@@ -1343,30 +1343,30 @@ export default {
           tip: 'Memorize the sentence containing the expression and use it in your daily conversations.',
         },
         {
-          title: 'Final Daily Test',
+          title: 'Final Daily Evaluation',
           description:
-            "Measuring your comprehension and understanding of 100% of the day's content.",
-          tip: 'Mandatory: You must pass the test successfully before the next study day opens.',
+            "Measuring your comprehension and understanding of 100% of the day's content and track.",
+          tip: 'Mandatory: You must pass the evaluation successfully before the next track opens.',
         },
       ],
     },
     quickFaq: {
-      title: 'Quick Questions About Features',
+      title: 'Quick Questions About Technical Features',
       questions: [
         {
           question: 'Why do I record my voice?',
           answer:
-            'To develop "muscle memory" for pronunciation and self-correct, which breaks the fear and hesitation barrier.',
+            'To develop "muscle memory" for pronunciation and self-correct programmatically, which breaks the fear and hesitation barrier.',
         },
         {
           question: 'What happens after 50 days?',
           answer:
-            'You will have completed training on the most important 1000 words, and you will be able to express yourself fluently and without stopping for a full 15 minutes!',
+            'You will have completed digital training on the most important 1000 words, and you will be able to express yourself fluently and without stopping for a full 15 minutes!',
         },
         {
           question: 'Must I complete all tasks?',
           answer:
-            'Yes, our system is built on daily accumulation. You cannot move to the next day without completing all tasks.',
+            'Yes, our system is built on daily algorithmic accumulation. You cannot move to the next track without completing all tasks and passing the evaluation.',
         },
         {
           question: 'Are there recommended external resources?',
