@@ -1,12 +1,15 @@
+require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
 async function updateCourses() {
-  const uri = 'mongodb://127.0.0.1:27017/englishom?directConnection=true';
+  const uri = process.env.DATABASE_URL || 'mongodb://127.0.0.1:27017/englishom?directConnection=true';
   const client = new MongoClient(uri);
 
   try {
     await client.connect();
-    const db = client.db('englishom');
+    // In production, the DB name is usually inferred from the URI, but we can explicitly use the default DB
+    // or parse it from the URI. MongoClient.db() with no arguments uses the DB from the connection string.
+    const db = client.db();
     const courses = db.collection('courses');
 
     const updates = [
