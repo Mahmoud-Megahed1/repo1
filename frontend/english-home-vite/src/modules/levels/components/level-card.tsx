@@ -72,6 +72,7 @@ const LevelCard: FC<LevelCardProps> = ({
   expiresAt,
   previousLevelCompleted = false,
 }) => {
+  const { t } = useTranslation();
   const {
     cta,
     iconBg,
@@ -117,6 +118,18 @@ const LevelCard: FC<LevelCardProps> = ({
         >
           {description}
         </CardDescription>
+        <ul className="space-y-2 py-2">
+          {(
+            (t(`Landing.levels.${levelId}.features`, {
+              returnObjects: true,
+            }) as string[]) || []
+          ).map((feature: string, index: number) => (
+            <li key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
+              <CircleCheck className="text-primary h-4 w-4 flex-shrink-0" />
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
         {content}
       </CardContent>
       <CardFooter className="mt-auto">{cta}</CardFooter>

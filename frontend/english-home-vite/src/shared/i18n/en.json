@@ -79,8 +79,7 @@
         "features": [
           "Business sector software and terminology",
           "Structural checking and composition tool",
-          "Advanced pronunciation challenges",
-          "Simulating natural speaking standards"
+          "Advanced pronunciation challenges"
         ]
       },
       "LEVEL_B2": {
@@ -89,14 +88,13 @@
           "Advanced text checking and composition",
           "Simulating extended technical discussions",
           "Natural language context systems",
-          "Technical audio compatibility analysis"
+          "Technical compatibility analysis for voice"
         ]
       },
       "LEVEL_C1": {
         "features": [
-          "Activating linguistic processing standards",
-          "Structural formulation checking tool",
-          "Automatic audio flow challenges",
+          "Structural checking tool",
+          "Automatic voice flow challenges",
           "Advanced linguistic analysis algorithms",
           "Programmatic fluency analysis for pronunciation"
         ]
@@ -745,7 +743,7 @@
     "account": "Account",
     "logout": "Logout",
     "startLearning": "Explore Track",
-    "unlock": "Unlock",
+    "unlock": "Explore Track",
     "processing": "Processing...",
     "price": "Price",
     "light": "Light",
@@ -837,7 +835,7 @@
     "dailyTime": "Daily Time",
     "progress": "Progress",
     "minPerDay": "min/Day",
-    "chooseYourLevel": "Choose Your Level",
+    "chooseYourLevel": "Choose Your Learning Track",
     "level": "Level {{level}}",
     "definition": "Definition",
     "definitions": "Definitions",
