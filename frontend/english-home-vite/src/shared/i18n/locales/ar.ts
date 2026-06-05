@@ -843,7 +843,7 @@ export default {
     account: 'الحساب',
     logout: 'تسجيل الخروج',
     startLearning: 'استكشف المسار',
-    unlock: 'استكشف المسار',
+    unlock: 'جرّب المسار',
     processing: 'جار المعالجة...',
     price: 'السعر',
     light: 'فاتح',

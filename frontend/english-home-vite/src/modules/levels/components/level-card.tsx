@@ -61,7 +61,6 @@ export type LevelCardProps = {
 
 const LevelCard: FC<LevelCardProps> = ({
   description,
-  icon: Icon,
   levelId,
   levelLabel,
   price,
@@ -75,13 +74,9 @@ const LevelCard: FC<LevelCardProps> = ({
   const { t } = useTranslation();
   const {
     cta,
-    iconBg,
     badge,
-    labelVariant,
     content,
     className,
-    descriptionClassName,
-    iconClassname,
   } = useComponentVariant({
     levelId,
     price,
@@ -91,48 +86,60 @@ const LevelCard: FC<LevelCardProps> = ({
     isCompleted,
     previousLevelCompleted,
   });
+
+  const getGradient = (id: string) => {
+    switch (id) {
+      case 'LEVEL_A1': return 'from-[#279B5A] via-[#279B5A]/20 to-transparent';
+      case 'LEVEL_A2': return 'from-[#E27625] via-[#E27625]/20 to-transparent';
+      case 'LEVEL_B1': return 'from-[#D4A346] via-[#D4A346]/20 to-transparent';
+      case 'LEVEL_B2': return 'from-[#D94579] via-[#D94579]/20 to-transparent';
+      case 'LEVEL_C1': return 'from-[#297BCE] via-[#297BCE]/20 to-transparent';
+      case 'LEVEL_C2': return 'from-[#8A21C6] via-[#8A21C6]/20 to-transparent';
+      default: return 'from-gray-600 via-gray-900/20 to-transparent';
+    }
+  };
+
   return (
-    <Card className={cn('relative', className)}>
-      {badge}
-      <CardHeader>
-        <div
-          className={cn(
-            accordionVariants({
-              variant: iconBg,
-              className: 'mx-auto w-fit',
-            })
-          )}
-        >
-          <Icon className={cn('size-16 text-white', iconClassname)} />
-        </div>
+    <Card className={cn('relative overflow-hidden border-none bg-[#1C1C1E] text-white', className)}>
+      <div className={cn("absolute inset-0 h-2/3 bg-gradient-to-b opacity-80 pointer-events-none", getGradient(levelId))} />
+      
+      {/* Top Days Badge */}
+      <div className="absolute top-4 rtl:left-4 ltr:right-4 z-10">
+        <span className="flex items-center gap-1 rounded-full bg-black/40 px-3 py-1 text-xs font-semibold backdrop-blur-md">
+          {t('Global.forSixtyDays')}
+        </span>
+      </div>
+
+      <CardHeader className="relative z-10 pt-10 text-center pb-2">
+        <div className="text-lg font-medium mb-1 drop-shadow-md">(Track {levelLabel})</div>
+        <CardTitle className="text-2xl font-bold drop-shadow-md">{title}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <CardTitle className="text-xl font-semibold">{title}</CardTitle>
-          </div>
-          <Badge variant={labelVariant}>{levelLabel}</Badge>
+
+      <CardContent className="relative z-10 space-y-6">
+        {/* Pricing Area */}
+        <div className="flex flex-col items-center justify-center pt-2">
+          {content}
         </div>
-        <CardDescription
-          className={cn('text-muted-foreground', descriptionClassName)}
-        >
-          {description}
-        </CardDescription>
-        <ul className="space-y-2 py-2">
-          {(
-            (t(`Landing.levels.${levelId}.features`, {
-              returnObjects: true,
-            }) as string[]) || []
-          ).map((feature: string, index: number) => (
-            <li key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
-              <CircleCheck className="text-primary h-4 w-4 flex-shrink-0" />
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
-        {content}
+
+        {/* Features List */}
+        <div className="w-fit mx-auto">
+          <ul className="space-y-2.5">
+            {(
+              (t(`Landing.levels.${levelId}.features`, {
+                returnObjects: true,
+              }) as string[]) || []
+            ).map((feature: string, index: number) => (
+              <li key={index} className="flex items-center gap-3 text-sm text-gray-200">
+                <svg className="w-4 h-4 text-white flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </CardContent>
-      <CardFooter className="mt-auto">{cta}</CardFooter>
+      <CardFooter className="relative z-10 mt-auto pt-4">
+        {cta}
+      </CardFooter>
     </Card>
   );
 };
@@ -182,28 +189,19 @@ const useComponentVariant = ({
       iconBg: 'amber',
       labelVariant: 'amber-gradient',
       content: (
-        <div className="space-y-2">
-          <p className="flex items-center gap-2">
-            <span className="text-muted-foreground pe-2 text-sm">
-              {t('Global.price')}
-            </span>
-            {originalPrice && originalPrice > price && (
-              <span className="inline-flex items-center gap-1 text-muted-foreground line-through decoration-red-500 decoration-2 text-sm">
-                <RiyalSymbol className="size-3" />
-                {originalPrice}
-              </span>
-            )}
-            <span className="inline-flex items-center gap-1 font-bold">
-              <RiyalSymbol className="size-4" />
-              {price}
-            </span>
-          </p>
-          <p className="flex items-center gap-1.5 text-sm font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2 py-0.5 rounded-full border border-green-200 dark:border-green-800">
-            <Clock size={14} />
-            {t('Global.forSixtyDays')}
-          </p>
+        <div className="flex flex-col items-center gap-0.5 drop-shadow-sm">
+          <div className="flex items-center gap-1.5 mt-2">
+            <span className="text-3xl font-bold font-sans text-white leading-none tracking-tight">{price}</span>
+            <RiyalSymbol className="size-5 text-white" />
+          </div>
+          {originalPrice && originalPrice > price && (
+            <div className="flex items-center gap-1 text-gray-300 line-through decoration-gray-400">
+              <span className="text-sm font-sans">{originalPrice}</span>
+              <RiyalSymbol className="size-3" />
+            </div>
+          )}
           {/* @ts-ignore JSX custom element */}
-          {price > 0 && <tamara-widget type="tamara-summary" amount={price} inline-type="2"></tamara-widget>}
+          {price > 0 && <div className="mt-2 w-full max-w-[200px] bg-white/10 rounded-md p-1 backdrop-blur-sm"><tamara-widget type="tamara-summary" amount={price} inline-type="2"></tamara-widget></div>}
         </div>
       ),
       cta: (
@@ -258,56 +256,33 @@ const useComponentVariant = ({
         </>
       ),
       content: (previousLevelCompleted && discountPercentage > 0) ? (
-        <div className="space-y-2">
-          <p className="flex items-center gap-2 rounded-md border-green-200 bg-green-100 px-3 py-1.5 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-300 text-sm font-semibold">
+        <div className="flex flex-col items-center gap-0.5 drop-shadow-sm">
+          <div className="flex items-center gap-1.5 mt-2">
+            <span className="text-3xl font-bold font-sans text-white leading-none tracking-tight">{discountedPrice}</span>
+            <RiyalSymbol className="size-5 text-white" />
+          </div>
+          <div className="flex items-center gap-1 text-gray-300 line-through decoration-gray-400">
+            <span className="text-sm font-sans">{price}</span>
+            <RiyalSymbol className="size-3" />
+          </div>
+          <p className="mt-2 flex items-center gap-2 rounded-md border-green-200 bg-green-100 px-2 py-1 text-green-800 text-xs font-semibold">
             {t('Global.loyaltyDiscountApplied', { discount: discountPercentage })}
-          </p>
-          <p className="flex items-center">
-            <span className="text-muted-foreground pe-2 text-sm">
-              {t('Global.originalPrice')}
-            </span>
-            <span className="inline-flex items-center gap-1 font-bold line-through opacity-50">
-              <RiyalSymbol className="size-4" />
-              {price}
-            </span>
-          </p>
-          <p className="flex flex-col">
-            <span className="text-muted-foreground pe-2 text-sm">
-              {t('Global.priceWithDiscount', 'Discounted Price')}
-            </span>
-            <span className="inline-flex items-center gap-1 font-bold text-green-600 dark:text-green-400 text-lg">
-              <RiyalSymbol className="size-4" />
-              {discountedPrice}
-            </span>
-          </p>
-          <p className="flex items-center gap-1.5 text-sm font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2 py-0.5 rounded-full border border-green-200 dark:border-green-800">
-            <Clock size={14} />
-            {t('Global.forSixtyDays')}
           </p>
         </div>
       ) : (
-        <div className="space-y-2">
-          <p className="flex items-center gap-2">
-            <span className="text-muted-foreground pe-2 text-sm">
-              {t('Global.price')}
-            </span>
-            {originalPrice && originalPrice > price && (
-              <span className="inline-flex items-center gap-1 text-muted-foreground line-through decoration-red-500 decoration-2 text-sm">
-                <RiyalSymbol className="size-3" />
-                {originalPrice}
-              </span>
-            )}
-            <span className="inline-flex items-center gap-1 font-bold">
-              <RiyalSymbol className="size-4" />
-              {price}
-            </span>
-          </p>
-          <p className="flex items-center gap-1.5 text-sm font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2 py-0.5 rounded-full border border-green-200 dark:border-green-800">
-            <Clock size={14} />
-            {t('Global.forSixtyDays')}
-          </p>
+        <div className="flex flex-col items-center gap-0.5 drop-shadow-sm">
+          <div className="flex items-center gap-1.5 mt-2">
+            <span className="text-3xl font-bold font-sans text-white leading-none tracking-tight">{price}</span>
+            <RiyalSymbol className="size-5 text-white" />
+          </div>
+          {originalPrice && originalPrice > price && (
+            <div className="flex items-center gap-1 text-gray-300 line-through decoration-gray-400">
+              <span className="text-sm font-sans">{originalPrice}</span>
+              <RiyalSymbol className="size-3" />
+            </div>
+          )}
           {/* @ts-ignore JSX custom element */}
-          {price > 0 && <tamara-widget type="tamara-summary" amount={price} inline-type="2"></tamara-widget>}
+          {price > 0 && <div className="mt-2 w-full max-w-[200px] bg-white/10 rounded-md p-1 backdrop-blur-sm"><tamara-widget type="tamara-summary" amount={price} inline-type="2"></tamara-widget></div>}
         </div>
       ),
     },
