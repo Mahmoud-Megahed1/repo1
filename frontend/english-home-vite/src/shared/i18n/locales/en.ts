@@ -469,7 +469,7 @@ export default {
     footer: {
       brand: {
         description:
-          'We design, program, and develop interactive systems and advanced technological solutions for processing audio and text entities, to enable rapid change and smart educational practice.',
+          'We design, program, and develop interactive systems and advanced technological solutions for processing audio data and smart texts to enhance self-directed linguistic practice.',
       },
       quickLinks: {
         title: 'Quick Links',
