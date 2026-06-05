@@ -89,6 +89,7 @@ export default {
           'Business sector software and terminology',
           'Structural checking and composition tool',
           'Advanced pronunciation challenges',
+          'Simulating natural speaking standards',
         ],
       },
       LEVEL_B2: {
@@ -102,6 +103,7 @@ export default {
       },
       LEVEL_C1: {
         features: [
+          'Activating language processing standards',
           'Structural formulation checking tool',
           'Automatic audio flow challenges',
           'Advanced linguistic analysis algorithms',
