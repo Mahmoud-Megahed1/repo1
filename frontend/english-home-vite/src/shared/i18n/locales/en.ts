@@ -831,6 +831,7 @@ export default {
     loading: 'Loading',
     notFound: 'Page Not Found',
     forFiftyDays: '50 days',
+    forDays: '{{count}} days',
     expired: 'Expired',
     completed: 'Completed',
     expiredOn: 'Expired on',

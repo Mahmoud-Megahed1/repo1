@@ -640,6 +640,7 @@ export type TranslationType = {
     loading: string;
     notFound: string;
     forFiftyDays: string;
+    forDays: string;
     expired: string;
     renew: string;
     completed: string;

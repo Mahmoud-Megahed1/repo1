@@ -816,6 +816,7 @@ export default {
     loading: 'جار التحميل',
     notFound: 'الصفحة غير موجودة',
     forFiftyDays: ' 50 يومًا',
+    forDays: ' {{count}} يومًا',
     expired: 'منتهي الصلاحية',
     completed: 'مكتمل',
     expiredOn: 'انتهت الصلاحية في',
