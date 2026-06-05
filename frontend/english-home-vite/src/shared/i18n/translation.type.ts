@@ -639,7 +639,7 @@ export type TranslationType = {
     chooseYourLevel: string;
     loading: string;
     notFound: string;
-    forSixtyDays: string;
+    forFiftyDays: string;
     expired: string;
     renew: string;
     completed: string;

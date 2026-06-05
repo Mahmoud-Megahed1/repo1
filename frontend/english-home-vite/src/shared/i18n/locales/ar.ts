@@ -815,7 +815,7 @@ export default {
     dailySpeakingSuccess: 'أحسنت! لقد أنجزت تدريب اليوم بنجاح',
     loading: 'جار التحميل',
     notFound: 'الصفحة غير موجودة',
-    forSixtyDays: ' 60 يومًا',
+    forFiftyDays: ' 50 يومًا',
     expired: 'منتهي الصلاحية',
     completed: 'مكتمل',
     expiredOn: 'انتهت الصلاحية في',

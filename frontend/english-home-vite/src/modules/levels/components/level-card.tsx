@@ -106,7 +106,7 @@ const LevelCard: FC<LevelCardProps> = ({
       {/* Top Days Badge */}
       <div className="absolute top-4 rtl:left-4 ltr:right-4 z-10">
         <span className="flex items-center gap-1 rounded-full bg-black/40 px-3 py-1 text-xs font-semibold backdrop-blur-md">
-          {t('Global.forSixtyDays')}
+          {t('Global.forFiftyDays')}
         </span>
       </div>
 
@@ -364,7 +364,7 @@ const useComponentVariant = ({
             </p>
             <p className="flex items-center gap-1.5 text-sm font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2 py-0.5 rounded-full border border-green-200 dark:border-green-800">
               <Clock size={14} />
-              {t('Global.forSixtyDays')}
+              {t('Global.forFiftyDays')}
             </p>
             {/* @ts-ignore JSX custom element */}
             {renewalPrice > 0 && <tamara-widget type="tamara-summary" amount={renewalPrice} inline-type="2"></tamara-widget>}
