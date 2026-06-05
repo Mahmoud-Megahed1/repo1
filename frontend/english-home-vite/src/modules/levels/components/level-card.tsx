@@ -299,10 +299,10 @@ const useComponentVariant = ({
         </div>
       ),
       content: (
-        <div className="flex w-full items-center justify-center pt-2">
-          <div className="flex w-full max-w-[280px] items-center justify-between rounded-lg border border-green-500/20 bg-[#0A2E16] px-3 py-2 text-green-400">
+        <div className="flex w-full items-center justify-center pt-2 px-1">
+          <div className="flex w-full max-w-[340px] flex-wrap items-center justify-between gap-x-4 gap-y-1 rounded-lg border border-green-500/20 bg-[#0A2E16] px-3 py-2 text-green-400">
             <div className="flex items-center gap-2">
-              <Clock size={16} />
+              <Clock size={16} className="shrink-0" />
               <span className="text-sm font-medium whitespace-nowrap">
                 {t('Global.validUntil')} {formatDate(oneDayBefore(expiresAt!), lang)}
               </span>
