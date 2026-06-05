@@ -299,15 +299,19 @@ const useComponentVariant = ({
         </div>
       ),
       content: (
-        <p className="flex items-center gap-2 rounded-md border-green-200 bg-green-100 px-3 py-2 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-300">
-          <Clock size={20} />
-          <span className="flex w-full flex-wrap items-center justify-between text-sm font-semibold">
-            {t('Global.validUntil')} {formatDate(oneDayBefore(expiresAt!), lang)}
-            <span className="text-xs">
+        <div className="flex w-full items-center justify-center pt-2">
+          <div className="flex w-full max-w-[280px] items-center justify-between rounded-lg border border-green-500/20 bg-[#0A2E16] px-3 py-2 text-green-400">
+            <div className="flex items-center gap-2">
+              <Clock size={16} />
+              <span className="text-sm font-medium whitespace-nowrap">
+                {t('Global.validUntil')} {formatDate(oneDayBefore(expiresAt!), lang)}
+              </span>
+            </div>
+            <span className="text-xs font-semibold whitespace-nowrap">
               {daysLeft} {t('Global.daysLeft')}
             </span>
-          </span>
-        </p>
+          </div>
+        </div>
       ),
       cta: (
         <Button variant={'success'} className="w-full" asChild>
