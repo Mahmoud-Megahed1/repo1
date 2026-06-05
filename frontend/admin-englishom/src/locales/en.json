@@ -209,7 +209,7 @@
     "goHome": "Go to Home Page"
   },
   "LevelsPage": {
-    "title": "Levels",
+    "title": "Learning Paths",
     "description": "Choose the level that suits you",
     "price": "Price",
     "startLearning": "Start Learning",
@@ -278,7 +278,7 @@
     ]
   },
   "DailyTestPage": {
-    "title": "Daily Test",
+    "title": "Final Daily Evaluation",
     "description": "Choose the correct answers",
     "pictureDescription": "Please enter the title of the image shown",
     "audioDescription": "Listen carefully and type out the audio",
@@ -313,7 +313,7 @@
     "logout": "Logout",
     "sidebar": {
       "home": "Home",
-      "levels": "Levels",
+      "levels": "Learning Paths",
       "admin": "Admin",
       "lessons": {
         "READ": "Reading",
@@ -324,7 +324,7 @@
         "SPEAK": "Speaking",
         "WRITE": "Writing",
         "TODAY": "Today's Scene",
-        "DAILY_TEST": "Daily Test",
+        "DAILY_TEST": "Final Daily Evaluation",
         "PHRASAL_VERBS": "Phrasal Verbs",
         "IDIOMS": "Idioms"
       },
