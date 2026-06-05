@@ -441,7 +441,7 @@ export class FileUploadService {
       const uploadStream = this.bucket.openUploadStream(key, {
         contentType,
         metadata: { logicalKey: key },
-      });
+      } as any);
       uploadStream.on('error', (err) => reject(err));
       uploadStream.on('finish', () => resolve());
       uploadStream.write(buffer);
@@ -588,7 +588,7 @@ export class FileUploadService {
       const uploadStream = this.bucket.openUploadStream(key, {
         contentType: file.mimetype,
         metadata: { ...metadata, logicalKey: key },
-      });
+      } as any);
       uploadStream.on('error', (err) => reject(err));
       uploadStream.on('finish', () => resolve());
       uploadStream.write(file.buffer);
@@ -640,7 +640,7 @@ export class FileUploadService {
           logicalKey: key,
           aiInstructions: data.aiInstructions // Store instructions in metadata for quick querying
         },
-      });
+      } as any);
       uploadStream.on('error', (err) => reject(err));
       uploadStream.on('finish', () => resolve());
       uploadStream.write(jsonBuffer);
