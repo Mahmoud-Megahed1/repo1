@@ -87,6 +87,7 @@ const LevelCard: FC<LevelCardProps> = ({
     variant,
     isCompleted,
     previousLevelCompleted,
+    daysCount,
   });
 
   const getGradient = (id: string) => {
@@ -154,6 +155,7 @@ const useComponentVariant = ({
   variant = 'locked',
   isCompleted = false,
   previousLevelCompleted = false,
+  daysCount = 50,
 }: {
   levelId: LevelId;
   price: number;
@@ -162,6 +164,7 @@ const useComponentVariant = ({
   variant?: 'unlocked' | 'locked' | 'coming-soon' | 'expired';
   isCompleted?: boolean;
   previousLevelCompleted?: boolean;
+  daysCount?: number;
 }) => {
   const { mutate, isPending } = usePayment(levelId);
   const { t, i18n } = useTranslation();
@@ -370,7 +373,7 @@ const useComponentVariant = ({
             </p>
             <p className="flex items-center gap-1.5 text-sm font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2 py-0.5 rounded-full border border-green-200 dark:border-green-800">
               <Clock size={14} />
-              {t('Global.forFiftyDays')}
+              {t('Global.forDays', { count: daysCount })}
             </p>
             {/* @ts-ignore JSX custom element */}
             {renewalPrice > 0 && <tamara-widget type="tamara-summary" amount={renewalPrice} inline-type="2"></tamara-widget>}
