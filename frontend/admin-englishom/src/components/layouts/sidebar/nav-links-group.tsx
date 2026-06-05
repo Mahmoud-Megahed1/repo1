@@ -1,4 +1,5 @@
-import { FC, useId } from 'react';
+import { usePathname } from '@/i18n/routing';
+import { FC, useId, useEffect, useState } from 'react';
 import NavLink from './nav-link';
 import { NavItem } from '.';
 import {
@@ -19,8 +20,41 @@ const NavLinksGroup: FC<Props> = ({
 }) => {
   const id = useId();
   const isAnyChildActive = children.some((child) => child.isActive);
+  const pathname = usePathname();
+  
+  // Use stable key for storage
+  const storageKey = `accordion-${href.split('?')[0]}`;
+  
+  const [value, setValue] = useState<string | undefined>(
+    isActive || isAnyChildActive ? id : undefined
+  );
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem(storageKey);
+    const lastPath = sessionStorage.getItem(`${storageKey}-path`);
+    
+    if (saved !== null && lastPath === pathname) {
+      // If we stayed on the same logical path (e.g. language switch), restore manual state
+      setValue(saved === 'open' ? id : undefined);
+    } else {
+      // Otherwise, default to open if active
+      setValue(isActive || isAnyChildActive ? id : undefined);
+      // Clean up storage if we navigated away
+      if (saved !== null && lastPath !== pathname) {
+        sessionStorage.removeItem(storageKey);
+        sessionStorage.removeItem(`${storageKey}-path`);
+      }
+    }
+  }, [isActive, isAnyChildActive, id, storageKey, pathname]);
+
+  const handleValueChange = (newValue: string) => {
+    setValue(newValue);
+    sessionStorage.setItem(storageKey, newValue ? 'open' : 'closed');
+    sessionStorage.setItem(`${storageKey}-path`, pathname);
+  };
+
   return (
-    <Accordion type="single" collapsible defaultValue={isActive || isAnyChildActive ? id : undefined}>
+    <Accordion type="single" collapsible value={value} onValueChange={handleValueChange}>
       <AccordionItem value={id} className="border-none">
         <AccordionTrigger className="px-3.5 py-3 hover:no-underline" asChild>
           <NavLink
