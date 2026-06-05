@@ -71,14 +71,14 @@ const PurchaseAgreementModal: FC<Props> = ({
       {/* Main Purchase Agreement Modal */}
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-md">
-          <DialogHeader className="text-center">
-            <div className="mx-auto mb-2 flex size-12 items-center justify-center rounded-full bg-primary/10">
+          <DialogHeader className="text-start sm:text-start">
+            <div className="mb-2 flex size-12 items-center justify-center rounded-full bg-primary/10">
               <ShieldCheck className="size-6 text-primary" />
             </div>
             <DialogTitle className="text-xl">
               {t('Global.purchaseAgreement.title')}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-start">
               {t('Global.purchaseAgreement.description')}
             </DialogDescription>
           </DialogHeader>
@@ -94,7 +94,7 @@ const PurchaseAgreementModal: FC<Props> = ({
               />
               <label
                 htmlFor="purchase-agreement"
-                className="text-sm leading-relaxed"
+                className="text-sm leading-relaxed text-start"
               >
                 {t('Global.purchaseAgreement.checkboxLabel')}{' '}
                 <button
@@ -133,13 +133,13 @@ const PurchaseAgreementModal: FC<Props> = ({
       {/* Full Agreement Text Modal */}
       <Dialog open={showFullAgreement} onOpenChange={setShowFullAgreement}>
         <DialogContent className="max-w-2xl max-h-[85vh]">
-          <DialogHeader>
+          <DialogHeader className="text-start sm:text-start">
             <DialogTitle>
               {t('Global.purchaseAgreement.fullAgreementTitle')}
             </DialogTitle>
           </DialogHeader>
           <ScrollArea className="h-[60vh] pe-4">
-            <div className="space-y-6 text-sm leading-relaxed">
+            <div className="space-y-6 text-sm leading-relaxed text-start">
               {/* Introduction */}
               <p className="text-muted-foreground font-medium">
                 {t('Global.purchaseAgreement.intro')}
