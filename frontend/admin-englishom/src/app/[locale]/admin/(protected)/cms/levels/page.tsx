@@ -130,7 +130,7 @@ const CreateLevelDialog: FC<{ existingLevelNames: string[] }> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="gap-2">
+        <Button className="gap-2" disabled={availableLevels.length === 0} title={availableLevels.length === 0 ? 'All levels created' : ''}>
           <Plus className="size-4" />
           {t('Admin.levels.addNewLevel')}
         </Button>
@@ -326,7 +326,7 @@ const LevelItem: FC<LevelType> = ({
           </span>
         </div>
       </CardContent>
-      <CardFooter className="mt-auto flex w-full items-center justify-between">
+      <CardFooter className="mt-auto flex w-full flex-wrap items-center justify-between gap-4">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button>{t('Admin.levels.update')}</Button>
@@ -411,10 +411,10 @@ const LevelItem: FC<LevelType> = ({
             </Form>
           </DialogContent>
         </Dialog>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <Label
             htmlFor={`${level_name}-available`}
-            className="text-muted-foreground"
+            className="whitespace-nowrap text-muted-foreground"
           >
             {t('Admin.levels.availability')}
           </Label>
