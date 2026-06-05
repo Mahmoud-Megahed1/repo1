@@ -73,7 +73,7 @@ const LevelCard: FC<LevelCardProps> = ({
   previousLevelCompleted = false,
   daysCount = 50,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const {
     cta,
     badge,
@@ -114,7 +114,7 @@ const LevelCard: FC<LevelCardProps> = ({
       </div>
 
       <CardHeader className="relative z-10 pt-10 text-center pb-2">
-        <div className="text-lg font-medium mb-1 drop-shadow-md">(Track {levelLabel})</div>
+        <div className="text-lg font-medium mb-1 drop-shadow-md">({i18n.language === 'ar' ? 'مسار' : 'Track'} {levelLabel})</div>
         <CardTitle className="text-2xl font-bold drop-shadow-md">{title}</CardTitle>
       </CardHeader>
 

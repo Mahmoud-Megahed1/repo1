@@ -90,6 +90,7 @@ export default {
           'Structural checking and composition tool',
           'Advanced pronunciation challenges',
           'Simulating natural speaking standards',
+          'Complex and extended dialogue systems',
         ],
       },
       LEVEL_B2: {
