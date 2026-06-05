@@ -97,7 +97,7 @@ export default {
         features: [
           'Professional practice standards',
           'Advanced text checking and composition',
-          'Simulating complex technical discussions',
+          'Simulating extended technical discussions',
           'Natural language context systems',
           'Technical audio compatibility analysis',
         ],
