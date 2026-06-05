@@ -5,7 +5,7 @@ export default {
     header: {
       navigation: {
         features: 'Features',
-        levels: 'Levels',
+        levels: 'Learning Paths',
         reviews: 'Reviews',
         faq: 'FAQ',
         ourVision: 'Our Vision',
@@ -447,7 +447,7 @@ export default {
                   'Pronounce words and sentences over and over. Use the voice recording feature to correct your pronunciation yourself.',
               },
               test: {
-                title: 'Daily Test',
+                title: 'Final Daily Evaluation',
                 description:
                   "The daily test is the true measure of your progress. Successfully passing it is your condition for moving to the next day's tasks, ensuring you only advance after mastering what you've learned.",
               },
@@ -469,12 +469,12 @@ export default {
     footer: {
       brand: {
         description:
-          'We design, program, and develop interactive systems and advanced technical solutions for the education and language sectors.',
+          'We design, program, and develop interactive systems and advanced technological solutions for processing audio and text entities, to enable rapid change and smart educational practice.',
       },
       quickLinks: {
         title: 'Quick Links',
         features: 'Features',
-        levels: 'Levels',
+        levels: 'Learning Paths',
         reviews: 'Reviews',
         ourVision: 'Our Vision',
         about: 'About Us',
@@ -959,7 +959,7 @@ export default {
     hide: 'Hide',
     sidebarItems: {
       home: 'Home',
-      levels: 'Levels',
+      levels: 'Learning Paths',
       report: 'My Report',
       READ: 'Reading',
       LISTEN: 'Listening',
@@ -969,7 +969,7 @@ export default {
       TODAY: "Today's Scene",
       Q_A: 'Q&A',
       SPEAK: 'Speaking',
-      DAILY_TEST: 'Daily Test',
+      DAILY_TEST: 'Final Daily Evaluation',
       PHRASAL_VERBS: 'Phrasal Verbs',
       IDIOMS: 'Idioms',
     },
