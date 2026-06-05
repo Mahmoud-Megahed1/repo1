@@ -267,7 +267,7 @@ const useComponentVariant = ({
             <span className="text-3xl font-bold font-sans text-white leading-none tracking-tight">{discountedPrice}</span>
             <RiyalSymbol className="size-5 text-white" />
           </div>
-          <div className="flex items-center gap-1 text-gray-300 line-through decoration-gray-400">
+          <div className="flex items-center gap-1 text-gray-300 line-through decoration-red-500">
             <span className="text-sm font-sans">{price}</span>
             <RiyalSymbol className="size-3" />
           </div>
@@ -282,7 +282,7 @@ const useComponentVariant = ({
             <RiyalSymbol className="size-5 text-white" />
           </div>
           {originalPrice && originalPrice > price && (
-            <div className="flex items-center gap-1 text-gray-300 line-through decoration-gray-400">
+            <div className="flex items-center gap-1 text-gray-300 line-through decoration-red-500">
               <span className="text-sm font-sans">{originalPrice}</span>
               <RiyalSymbol className="size-3" />
             </div>
@@ -358,7 +358,7 @@ const useComponentVariant = ({
               <span className="text-muted-foreground pe-2 text-sm">
                 <b>{t('Global.originalPrice')}:</b>
               </span>
-              <span className="inline-flex items-center gap-1 font-bold line-through opacity-50">
+              <span className="inline-flex items-center gap-1 font-bold line-through decoration-red-500 opacity-50">
                 <RiyalSymbol className="size-4" />
                 {price}
               </span>
