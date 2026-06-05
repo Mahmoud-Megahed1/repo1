@@ -43,7 +43,7 @@ export function useLevelById(levelId: LevelId) {
 
 export function useLocalizedLevels(locale = 'en') {
     const { data, ...rest } = useAllLevels();
-    const levelIcons: Record<LevelId, LucideIcon> = {
+    const levelIcons: Record<string, LucideIcon> = {
         LEVEL_A1: Book,
         LEVEL_A2: CircleUser,
         LEVEL_B1: CircleCheck,
@@ -65,7 +65,7 @@ export function useLocalizedLevels(locale = 'en') {
                 description: locale === 'ar' ? descriptionAr : descriptionEn,
                 levelId: level_name,
                 levelLabel: level_name.split('_')[1],
-                icon: levelIcons[level_name],
+                icon: levelIcons[level_name] || Book,
                 ...data,
             })
         ) || [];

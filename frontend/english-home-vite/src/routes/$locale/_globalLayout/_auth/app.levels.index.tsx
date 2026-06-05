@@ -20,13 +20,15 @@ export const Route = createFileRoute(
   },
 });
 
+import { LEVEL_IDS } from '@shared/constants';
+
 function RouteComponent() {
   const { open } = useSidebar();
   const locale = useLocale();
   const { localizedLevels, isLoading } = useLocalizedLevels(locale);
   const { levelsDetails } = useAuth();
   const { t } = useTranslation();
-  const levelOrder = ['LEVEL_A1', 'LEVEL_A2', 'LEVEL_B1', 'LEVEL_B2', 'LEVEL_C1', 'LEVEL_C2'] as const;
+  const levelOrder = LEVEL_IDS;
   const normalizedLevels =
     localizedLevels?.map(({ isAvailable, levelId, ...rest }) => {
       // Check if the previous level is completed (for upgrade discount)

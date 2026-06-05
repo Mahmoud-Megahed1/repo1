@@ -10,16 +10,28 @@ export const LEVELS_ID = [
   'LEVEL_B2',
   'LEVEL_C1',
   'LEVEL_C2',
+  'LEVEL_C3',
+  'LEVEL_C4',
+  'LEVEL_D1',
+  'LEVEL_D2',
+  'LEVEL_E1',
+  'LEVEL_E2',
 ] as const;
 
-export const LEVELS_LABELS = {
+export const LEVELS_LABELS: Record<string, string> = {
   LEVEL_A1: 'A1',
   LEVEL_A2: 'A2',
   LEVEL_B1: 'B1',
   LEVEL_B2: 'B2',
   LEVEL_C1: 'C1',
   LEVEL_C2: 'C2',
-} as const;
+  LEVEL_C3: 'C3',
+  LEVEL_C4: 'C4',
+  LEVEL_D1: 'D1',
+  LEVEL_D2: 'D2',
+  LEVEL_E1: 'E1',
+  LEVEL_E2: 'E2',
+};
 
 export const LESSONS_LINKS: Array<{
   href: string;
@@ -53,6 +65,12 @@ export enum LevelIdEnum {
   LEVEL_B2 = 'LEVEL_B2',
   LEVEL_C1 = 'LEVEL_C1',
   LEVEL_C2 = 'LEVEL_C2',
+  LEVEL_C3 = 'LEVEL_C3',
+  LEVEL_C4 = 'LEVEL_C4',
+  LEVEL_D1 = 'LEVEL_D1',
+  LEVEL_D2 = 'LEVEL_D2',
+  LEVEL_E1 = 'LEVEL_E1',
+  LEVEL_E2 = 'LEVEL_E2',
 }
 
 export enum LessonIdEnum {
