@@ -149,13 +149,22 @@ const useAdminLayoutSetup = () => {
       setTitle('Overview');
     } else {
       setItems(
-        visibleItems?.map((item) => ({
-          ...item,
-          isActive:
-            pathname === '/' && item.href === '/admin/overview'
-              ? true
-              : pathname.startsWith(item.href),
-        })),
+        visibleItems?.map((item) => {
+          const cleanHref = item.href.split('?')[0];
+          const isCMSGroup = item.type === 'group' && cleanHref === '/admin/cms';
+          let isActive = pathname.startsWith(cleanHref);
+
+          if (isCMSGroup) {
+            isActive = pathname === '/admin/cms' || pathname === '/admin/cms/' || pathname.startsWith('/admin/cms/levels');
+          } else if (pathname === '/' && cleanHref === '/admin/overview') {
+            isActive = true;
+          }
+
+          return {
+            ...item,
+            isActive,
+          };
+        }),
       );
 
       const activeItem = visibleItems?.find((item) =>

@@ -18,8 +18,9 @@ const NavLinksGroup: FC<Props> = ({
   item: { href, children, label, icon: Icon, isActive },
 }) => {
   const id = useId();
+  const isAnyChildActive = children.some((child) => child.isActive);
   return (
-    <Accordion type="single" collapsible>
+    <Accordion type="single" collapsible defaultValue={isActive || isAnyChildActive ? id : undefined}>
       <AccordionItem value={id} className="border-none">
         <AccordionTrigger className="px-3.5 py-3 hover:no-underline" asChild>
           <NavLink
