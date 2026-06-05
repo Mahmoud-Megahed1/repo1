@@ -55,56 +55,60 @@
       }
     },
     "levels": {
-      "title": "Choose Your Learning Path",
-      "subtitle": "Learning pathways specially designed for each level",
+      "title": "Choose the appropriate technical track for your practice",
+      "subtitle": "Customized programmatic tracks built according to smart flow algorithms",
       "LEVEL_A1": {
         "features": [
-          "The First Step",
-          "Speak to Start: We Are Waiting for Your Voice",
-          "Tasks That Can Only Be Completed by Speaking",
-          "Your Daily Routine in Your Own Voice",
-          "Instant Analysis of Your Pronunciation Accuracy"
+          "Initializing the first programming environment",
+          "Activating the voice simulation feature",
+          "Tracking mandatory audio updates",
+          "Processing and matching the voiceprint",
+          "Instant analysis of voice output accuracy"
         ]
       },
       "LEVEL_A2": {
         "features": [
-          "Direct Communication",
-          "Describing Places and Daily Situations",
-          "Past and Future",
-          "Advanced Pronunciation Analysis",
-          "Daily Life Scenarios"
+          "Simulating live verbal interaction",
+          "Algorithms for describing daily scenarios",
+          "Interactive time-framing systems",
+          "Advanced programmatic pronunciation processing",
+          "Interactive situations databases"
         ]
       },
       "LEVEL_B1": {
         "features": [
-          "Business English",
-          "Academic writing",
-          "Advanced speaking",
-          "Native-like fluency"
+          "Business sector software and terminology",
+          "Text structural checking and composition tool",
+          "Advanced and timed pronunciation challenges",
+          "Simulating natural speaking standards",
+          "Complex and extended dialogue systems"
         ]
       },
       "LEVEL_B2": {
         "features": [
-          "Professional skills",
-          "Advanced writing",
-          "Complex discussions",
-          "Cultural understanding"
+          "Professional practice standards",
+          "Advanced text checking and composition",
+          "Simulating complex technical discussions",
+          "Natural language context systems",
+          "Technical audio compatibility analysis"
         ]
       },
       "LEVEL_C1": {
         "features": [
-          "Language mastery",
-          "Academic writing",
-          "Fluent speaking",
-          "Critical analysis"
+          "Activating linguistic processing standards",
+          "Structural formulation checking tool",
+          "Automatic audio flow challenges",
+          "Advanced linguistic analysis algorithms",
+          "Programmatic fluency analysis for pronunciation"
         ]
       },
       "LEVEL_C2": {
         "features": [
-          "Complete fluency",
-          "Specialized writing",
-          "Advanced communication",
-          "Intellectual leadership"
+          "Comprehensive audio flow outputs",
+          "Complex specialized text processing",
+          "Complex interactive dialogue systems",
+          "Strategic formulation challenges",
+          "Comprehensive leadership speaking simulation"
         ]
       }
     },
@@ -741,7 +745,7 @@
     "goToHome": "Go to Home",
     "account": "Account",
     "logout": "Logout",
-    "startLearning": "Start Learning",
+    "startLearning": "Explore Track",
     "unlock": "Unlock",
     "processing": "Processing...",
     "price": "Price",
