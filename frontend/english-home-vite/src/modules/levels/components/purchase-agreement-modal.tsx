@@ -18,6 +18,7 @@ type Props = {
   onOpenChange: (open: boolean) => void;
   onAccept: () => void;
   isPending?: boolean;
+  daysCount?: number;
 };
 
 const PurchaseAgreementModal: FC<Props> = ({
@@ -25,6 +26,7 @@ const PurchaseAgreementModal: FC<Props> = ({
   onOpenChange,
   onAccept,
   isPending,
+  daysCount = 60,
 }) => {
   const { t } = useTranslation();
   const [isAccepted, setIsAccepted] = useState(false);
@@ -42,7 +44,7 @@ const PurchaseAgreementModal: FC<Props> = ({
     },
     {
       title: t('Global.purchaseAgreement.clause2Title'),
-      content: t('Global.purchaseAgreement.clause2Content'),
+      content: t('Global.purchaseAgreement.clause2Content', { days: daysCount }),
     },
     {
       title: t('Global.purchaseAgreement.clause3Title'),

@@ -250,6 +250,7 @@ const useComponentVariant = ({
               mutate();
             }}
             isPending={isPending}
+            daysCount={daysCount}
           />
           {activeCourse && (
             <ActiveCourseConflictModal
@@ -399,6 +400,7 @@ const useComponentVariant = ({
               mutate();
             }}
             isPending={isPending}
+            daysCount={daysCount}
           />
         </>
       ),
