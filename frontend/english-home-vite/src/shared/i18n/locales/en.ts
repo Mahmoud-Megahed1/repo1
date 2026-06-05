@@ -579,13 +579,13 @@ export default {
   PrivacyPolicy: {
     title: 'Privacy Policy',
     intro:
-      'This policy explains how we collect, use, and protect the personal information you provide when using our services, especially regarding interactive audio recordings.',
-    lastUpdated: 'Last updated: October 1, 2025',
+      'This policy explains how we collect, use, and protect the personal information you provide when using our services, especially regarding interactive audio recordings and technical systems.',
+    lastUpdated: 'Last updated: June 1, 2026',
     sections: {
       dataCollection: {
         title: '1. Information We Collect',
         intro:
-          'We collect two types of information to provide and improve our services:',
+          'We collect limited information to provide and improve the performance of technical systems:',
         table: {
           headers: {
             type: 'Information Type',
@@ -595,35 +595,35 @@ export default {
           rows: {
             registration: {
               type: 'Registration and Account Information',
-              examples: 'Name, email, encrypted password',
-              purpose: 'To create your account and provide access to services',
+              examples: 'Name, email, encrypted password.',
+              purpose: 'To create your account and provide access to technical systems and services.',
             },
             payment: {
               type: 'Payment Data',
-              examples: 'Payment card details (via secure payment gateways)',
+              examples: 'Payment card details (via secure and approved payment gateways).',
               purpose:
-                'To process subscriptions and renewals (we do not store your complete card details)',
+                'To process subscriptions and financial renewals (we do not store your complete card details).',
             },
             performance: {
-              type: 'Educational Performance Data',
+              type: 'Performance and Tracks Data',
               examples:
-                'Task completion records, daily test results, progress in the 1000 words',
+                'Task completion records, daily evaluation results, progress in the 1000 words.',
               purpose:
-                'To track your progress and ensure curriculum effectiveness',
+                'To track your progress and self-performance and ensure the effectiveness of algorithms and systems.',
             },
             audioRecordings: {
               type: 'Exclusive Audio Recordings',
               examples:
-                'Your audio files recorded for pronunciation challenges (such as the 25-Second challenge)',
+                'Your audio files recorded for pronunciation challenges (such as the 25-Second challenge).',
               purpose:
-                'Primary purpose: To enable you to compare and self-correct your pronunciation. ',
+                'Primary purpose: To enable you to compare and self-correct your pronunciation through the system.',
             },
             usage: {
               type: 'Automatic Usage Data',
               examples:
-                'IP address, browser type, pages visited, session timings',
+                'IP address, browser type, pages visited, session timings.',
               purpose:
-                'To analyze website performance and improve user experience',
+                'To analyze website performance, improve technical user experience, and develop systems.',
             },
           },
         },
@@ -631,20 +631,20 @@ export default {
       dataUsage: {
         title: '2. How We Use Your Information',
         intro:
-          'We use your personal data exclusively for the following purposes:',
+          'We use your personal data exclusively for the following technical purposes:',
         purposes: {
           serviceProvision:
-            'To provide and operate the service: Enable you to access daily content and complete tasks.',
+            'To provide and operate the service: Enable you to access daily content and systems and complete programmed tasks.',
           support:
-            'Technical support: Respond to your inquiries and resolve technical issues related to your account.',
+            'Technical support: Respond to your inquiries and resolve technical issues related to your account or the database.',
           payment:
-            'Payment management: Process fees and confirm subscriptions.',
+            'Payment management: Process fees and confirm digital subscriptions via approved payment gateways.',
           noHumanIntervention:
-            'No Human Intervention or Monitoring: The platform confirms that the process of creating, using, and analyzing audio recordings is fully automated. No other party or person (including platform employees) has any right or authority to listen to, monitor, evaluate, or view any audio file from your recordings.',
+            'No Human Intervention or Monitoring: The platform confirms that the process of creating, using, and analyzing audio recordings is fully automated and programmatic. No other party or person (including platform employees) has any right or authority to listen to, monitor, evaluate, or view any audio file from your recordings.',
           exclusiveUse:
-            'Exclusive Use for Learners: Audio recordings are used exclusively for the purpose of self-study and training by the learner, as well as to improve the voice recognition feature in the system.',
+            'Exclusive Use for the User: Audio recordings are used exclusively for the purpose of independent practice and self-training by the user, as well as to improve the automatic voice recognition feature in the system.',
           ownership:
-            'Ownership and Exclusive Access: Audio recordings are the private property of the learner and are stored in their personal file. Only the learner has permission to access them and listen to them for conducting their own performance evaluation.',
+            'Ownership and Exclusive Access: Audio recordings are the private property of the user and are stored securely in their personal technical file, where the user alone has permission to access and listen to them for conducting their own performance evaluation.',
           noSharing:
             'No Sharing or Disclosure: In no way are your individual audio recordings shared, sold, or disclosed to any external or internal third party for any marketing, commercial, or administrative purposes.',
         },
@@ -654,39 +654,39 @@ export default {
       dataProtection: {
         title: '3. Data Protection and Security',
         security:
-          'We apply the latest technologies and security procedures to protect your data from unauthorized access, modification, or disclosure.',
+          'We apply the latest cyber technologies and security procedures to protect your data from unauthorized access, modification, or disclosure.',
         paymentEncryption:
-          'All payment data is encrypted using global security protocols when processed through trusted payment gateways.',
+          'All payment data is encrypted using global security protocols when processed through approved electronic payment gateways in Saudi Arabia.',
         passwordHashing:
-          'Passwords are stored using encryption (Hashing), making it impossible for anyone, including our staff, to access your original password.',
+          'Passwords are stored using encryption (Hashing), making it impossible for anyone, including developers or system engineers, to access your original password.',
       },
       dataSharing: {
         title: '4. Data Sharing with Third Parties',
         intro:
-          'We do not sell, trade, or transfer your personal information to external parties except in the following necessary cases:',
+          'We do not sell, trade, or transfer your personal information to external parties except in the following necessary operational cases:',
         exceptions: {
           serviceProviders:
-            'Service Providers: Such as secure payment gateways (Visa/Mastercard) and website hosting services. These parties are obligated to maintain the confidentiality of your data.',
+            'Service Providers: Such as approved secure payment gateways and server and website hosting services. These parties are legally obligated and under data protection agreements to maintain the confidentiality of your data.',
           legalRequirements:
-            'Legal Requirements: When required by law or court order.',
+            'Legal Requirements: When required by local regulations, applicable laws, or court order from competent authorities.',
         },
       },
       userRights: {
         title: '5. User Rights',
-        intro: 'As a user, you have the right to:',
+        intro: 'As a user of the system, you have the right to:',
         rights: {
           access:
-            'Data Access: Request a copy of the personal data we hold about you.',
+            'Data Access: Request a copy of the personal technical data we hold about you in the system.',
           modification:
-            'Data Modification: Request correction of any incomplete or inaccurate data.',
+            'Data Modification: Request correction of any incomplete or inaccurate account data.',
           deletion:
-            'Right to Deletion: Request deletion of your account and all your personal data permanently from our database, which will be implemented immediately after verification.',
+            'Right to Deletion: Request deletion of your account and all your personal data and files permanently from our database, which will be implemented programmatically immediately after verifying account ownership.',
         },
       },
       cookies: {
         title: '6. Cookies',
         description:
-          'We use cookies to improve user experience and remember your preferences (such as login) and analyze website usage. You can disable this feature from your browser settings, but this may affect the functionality of some website features.',
+          'We use cookies to improve the technical user experience and remember preferences (such as keeping login) and analyze website usage programmatically. You can disable this feature from your browser settings, but this may affect the functionality of some interactive systems features on the website.',
       },
     },
   },
