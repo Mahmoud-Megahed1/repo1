@@ -71,6 +71,7 @@ const LevelCard: FC<LevelCardProps> = ({
   isCompleted = false,
   expiresAt,
   previousLevelCompleted = false,
+  daysCount = 50,
 }) => {
   const { t } = useTranslation();
   const {
