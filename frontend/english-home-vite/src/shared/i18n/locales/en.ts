@@ -87,10 +87,9 @@ export default {
       LEVEL_B1: {
         features: [
           'Business sector software and terminology',
-          'Text structural checking and composition tool',
-          'Advanced and timed pronunciation challenges',
+          'Structural checking and composition tool',
+          'Advanced pronunciation challenges',
           'Simulating natural speaking standards',
-          'Complex and extended dialogue systems',
         ],
       },
       LEVEL_B2: {
