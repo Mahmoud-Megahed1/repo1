@@ -41,4 +41,8 @@ export class UpdateCourseDto {
   @IsOptional()
   @IsPositive()
   originalPrice?: number;
+
+  @IsOptional()
+  @IsPositive()
+  daysCount?: number;
 }

@@ -35,4 +35,8 @@ export class CreateCourseDto {
   @IsOptional()
   @IsNumber()
   originalPrice?: number;
+
+  @IsOptional()
+  @IsNumber()
+  daysCount?: number;
 }

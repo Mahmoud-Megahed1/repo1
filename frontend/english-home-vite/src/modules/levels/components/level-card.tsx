@@ -57,6 +57,7 @@ export type LevelCardProps = {
   isCompleted?: boolean;
   expiresAt?: string;
   previousLevelCompleted?: boolean;
+  daysCount?: number;
 };
 
 const LevelCard: FC<LevelCardProps> = ({
@@ -106,7 +107,7 @@ const LevelCard: FC<LevelCardProps> = ({
       {/* Top Days Badge */}
       <div className="absolute top-4 rtl:left-4 ltr:right-4 z-10">
         <span className="flex items-center gap-1 rounded-full bg-black/40 px-3 py-1 text-xs font-semibold backdrop-blur-md">
-          {t('Global.forFiftyDays')}
+          {t('Global.forDays', { count: daysCount })}
         </span>
       </div>
 

@@ -638,6 +638,19 @@
       "edit": "Edit Theme",
       "delete": "Delete Theme",
       "list": "Themes List"
+    },
+    "levels": {
+      "title": "Levels",
+      "addNewLevel": "Add New Level",
+      "update": "Update",
+      "availability": "Availability",
+      "price": "Price",
+      "daysCount": "Days Count",
+      "createLevel": "Create Level",
+      "creating": "Creating...",
+      "updateLevel": "Update Level",
+      "save": "Save",
+      "saving": "Saving..."
     }
   }
 }

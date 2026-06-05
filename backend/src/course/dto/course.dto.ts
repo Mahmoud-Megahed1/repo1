@@ -32,6 +32,9 @@ export class CourseDto {
   @Expose()
   originalPrice: number;
 
+  @Expose()
+  daysCount: number;
+
   constructor(partial: Partial<CourseDto>) {
     if (partial) {
       // If we have _id, convert it to id string

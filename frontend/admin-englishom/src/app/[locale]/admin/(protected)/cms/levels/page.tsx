@@ -38,6 +38,7 @@ import { Plus } from 'lucide-react';
 import { FC, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
+import { useTranslations } from 'next-intl';
 
 const Levels = () => {
   const { data } = useQuery({
@@ -78,12 +79,17 @@ const createFormSchema = z.object({
     .string()
     .optional()
     .transform((val) => (val ? +val : undefined)),
+  daysCount: z
+    .string()
+    .optional()
+    .transform((val) => (val ? +val : undefined)),
   isAvailable: z.boolean().optional(),
 });
 
 const CreateLevelDialog: FC<{ existingLevelNames: string[] }> = ({
   existingLevelNames,
 }) => {
+  const t = useTranslations();
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
@@ -108,6 +114,7 @@ const CreateLevelDialog: FC<{ existingLevelNames: string[] }> = ({
       descriptionEn: '',
       price: '' as unknown as number,
       originalPrice: '' as unknown as number,
+      daysCount: 50 as unknown as number,
       isAvailable: true,
     },
   });
@@ -125,11 +132,11 @@ const CreateLevelDialog: FC<{ existingLevelNames: string[] }> = ({
       <DialogTrigger asChild>
         <Button className="gap-2">
           <Plus className="size-4" />
-          إضافة مستوى جديد
+          {t('Admin.levels.addNewLevel')}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[90%] overflow-auto">
-        <DialogTitle>إنشاء مستوى جديد</DialogTitle>
+        <DialogTitle>{t('Admin.levels.createLevel')}</DialogTitle>
         <Form {...form}>
           <form
             className="grid grid-cols-2 gap-4"
@@ -209,8 +216,17 @@ const CreateLevelDialog: FC<{ existingLevelNames: string[] }> = ({
               required
               lang="en"
             />
+            <InputFormField
+              control={form.control}
+              name="daysCount"
+              label={t('Admin.levels.daysCount')}
+              placeholder="e.g. 50"
+              type="number"
+              required={false}
+              lang="en"
+            />
             <Button className="col-span-full" disabled={isPending}>
-              {isPending ? 'جاري الإنشاء...' : 'إنشاء مستوى'}
+              {isPending ? t('Admin.levels.creating') : t('Admin.levels.createLevel')}
             </Button>
           </form>
         </Form>
@@ -233,6 +249,10 @@ const formSchema = z.object({
     .string()
     .optional()
     .transform((val) => (val ? +val : undefined)),
+  daysCount: z
+    .string()
+    .optional()
+    .transform((val) => (val ? +val : undefined)),
   isAvailable: z.boolean().optional(),
 });
 
@@ -245,7 +265,9 @@ const LevelItem: FC<LevelType> = ({
   titleAr,
   titleEn,
   isAvailable,
+  daysCount = 50,
 }) => {
+  const t = useTranslations();
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
@@ -268,6 +290,7 @@ const LevelItem: FC<LevelType> = ({
       descriptionEn,
       price: `${price}` as unknown as number,
       originalPrice: originalPrice ? `${originalPrice}` as unknown as number : '' as unknown as number,
+      daysCount: `${daysCount}` as unknown as number,
       isAvailable,
     },
   });
@@ -290,7 +313,7 @@ const LevelItem: FC<LevelType> = ({
       </CardHeader>
       <CardContent>
         <div className="flex items-center gap-3">
-          <span>السعر: </span>
+          <span>{t('Admin.levels.price')}: </span>
           {originalPrice && originalPrice > price && (
             <span lang="en" className="inline-flex items-center gap-1 text-muted-foreground line-through">
               <RiyalSymbol className="size-3" />
@@ -306,11 +329,11 @@ const LevelItem: FC<LevelType> = ({
       <CardFooter className="mt-auto flex w-full items-center justify-between">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button>تحديث</Button>
+            <Button>{t('Admin.levels.update')}</Button>
           </DialogTrigger>
           <DialogContent className="max-h-[90%] overflow-auto">
             <DialogTitle>
-              تحديث المستوى{' '}
+              {t('Admin.levels.updateLevel')}{' '}
               <Badge className="w-fit py-1">{LEVELS_LABELS[level_name]}</Badge>
             </DialogTitle>
             <Form {...form}>
@@ -372,8 +395,17 @@ const LevelItem: FC<LevelType> = ({
                   required
                   lang="en"
                 />
+                <InputFormField
+                  control={form.control}
+                  name="daysCount"
+                  label={t('Admin.levels.daysCount')}
+                  placeholder="e.g. 50"
+                  type="number"
+                  required={false}
+                  lang="en"
+                />
                 <Button className="col-span-full" disabled={isPending}>
-                  {isPending ? 'جاري الحفظ...' : 'حفظ'}
+                  {isPending ? t('Admin.levels.saving') : t('Admin.levels.save')}
                 </Button>
               </form>
             </Form>
@@ -384,7 +416,7 @@ const LevelItem: FC<LevelType> = ({
             htmlFor={`${level_name}-available`}
             className="text-muted-foreground"
           >
-            التوفر
+            {t('Admin.levels.availability')}
           </Label>
           <Switch
             id={`${level_name}-available`}

@@ -637,6 +637,19 @@
       "edit": "تعديل السمة",
       "delete": "حذف السمة",
       "list": "قائمة السمات"
+    },
+    "levels": {
+      "title": "المستويات",
+      "addNewLevel": "إضافة مستوى جديد",
+      "update": "تحديث",
+      "availability": "التوفر",
+      "price": "السعر",
+      "daysCount": "عدد الأيام",
+      "createLevel": "إنشاء مستوى",
+      "creating": "جاري الإنشاء...",
+      "updateLevel": "تحديث المستوى",
+      "save": "حفظ",
+      "saving": "جاري الحفظ..."
     }
   }
 }
