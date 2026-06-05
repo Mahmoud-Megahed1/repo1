@@ -17,6 +17,7 @@ async function updateCourses() {
         descriptionAr: 'تهيئة النظام وبناء النواة اللغوية الأساسية للمستخدم',
         descriptionEn: 'Initializing the system and building the basic linguistic core for the user',
         price: 999,
+        originalPrice: 1499,
       },
       {
         level_name: 'LEVEL_A2',
@@ -25,6 +26,7 @@ async function updateCourses() {
         descriptionAr: 'معالجة الصياغات المباشرة والمواقف اليومية التفاعلية',
         descriptionEn: 'Processing direct formulations and interactive daily situations',
         price: 1199,
+        originalPrice: 1699,
       },
       {
         level_name: 'LEVEL_B1',
@@ -33,6 +35,7 @@ async function updateCourses() {
         descriptionAr: 'تنشيط أدوات التعبير الموقوت ومحاكاة الحوارات المتنوعة',
         descriptionEn: 'Activating timed expression tools and simulating diverse dialogues',
         price: 1399,
+        originalPrice: 1999,
       },
       {
         level_name: 'LEVEL_B2',
@@ -41,6 +44,7 @@ async function updateCourses() {
         descriptionAr: 'تفعيل خوارزميات النطق المحترف وضبط التركيب النصي المتقدم',
         descriptionEn: 'Activating professional pronunciation algorithms and adjusting advanced text composition',
         price: 1499,
+        originalPrice: 2199,
       },
       {
         level_name: 'LEVEL_C1',
@@ -49,6 +53,7 @@ async function updateCourses() {
         descriptionAr: 'تحقيق معايير التحدث التلقائي والتحليل البرمجي المعقد للنصوص',
         descriptionEn: 'Achieving automatic speaking standards and complex programmatic text analysis',
         price: 1799,
+        originalPrice: 2499,
       },
       {
         level_name: 'LEVEL_C2',
@@ -57,6 +62,7 @@ async function updateCourses() {
         descriptionAr: 'التدفق التقني الكامل ومحاكاة بيئات التحدث القيادية',
         descriptionEn: 'Complete technical flow and simulation of leadership speaking environments',
         price: 1999,
+        originalPrice: 2999,
       },
     ];
 
@@ -70,6 +76,7 @@ async function updateCourses() {
             descriptionAr: update.descriptionAr,
             descriptionEn: update.descriptionEn,
             price: update.price,
+            originalPrice: update.originalPrice,
           },
         }
       );
