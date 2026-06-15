@@ -53,9 +53,15 @@ export function serveStatic(app: Express) {
       ? path.resolve(import.meta.dirname, "../..", "dist", "public")
       : path.resolve(import.meta.dirname, "public");
   if (!fs.existsSync(distPath)) {
-    console.error(
-      `Could not find the build directory: ${distPath}, make sure to build the client first`
-    );
+    console.error(`Could not find the build directory: ${distPath}`);
+    try {
+      const parentDir = path.resolve(distPath, "..");
+      console.error(`Contents of ${parentDir}:`, fs.readdirSync(parentDir));
+    } catch (e) {
+      console.error("Could not read parent directory either", e);
+    }
+  } else if (!fs.existsSync(path.resolve(distPath, "index.html"))) {
+    console.error(`index.html is missing in ${distPath}! Contents:`, fs.readdirSync(distPath));
   }
 
   app.use(express.static(distPath));
