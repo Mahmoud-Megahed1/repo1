@@ -3,6 +3,10 @@ import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import { Button } from "@/components/ui/button";
+import { useRef, useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
+import { useLocalization } from "@/contexts/LocalizationContext";
 import {
   Bold,
   Italic,
@@ -14,6 +18,7 @@ import {
   Image as ImageIcon,
   Undo2,
   Redo2,
+  Loader2,
 } from "lucide-react";
 import "./RichTextEditor.css";
 
@@ -24,6 +29,23 @@ interface RichTextEditorProps {
 }
 
 export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { language } = useLocalization();
+  const [isUploading, setIsUploading] = useState(false);
+
+  const uploadMediaMutation = trpc.blog.posts.uploadMedia.useMutation({
+    onSuccess: (data) => {
+      editor?.chain().focus().setImage({ src: data.url }).run();
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    },
+    onError: (error) => {
+      setIsUploading(false);
+      toast.error(language === "ar" ? `خطأ في رفع الصورة: ${error.message}` : `Upload failed: ${error.message}`);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  });
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -49,15 +71,40 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     }
   };
 
-  const addImage = () => {
-    const url = window.prompt("Enter image URL:");
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error(language === "ar" ? "حجم الصورة يجب أن يكون أقل من 5MB" : "Image must be less than 5MB");
+      return;
     }
+
+    setIsUploading(true);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64String = (reader.result as string).split(",")[1];
+      uploadMediaMutation.mutate({
+        fileName: file.name,
+        fileData: base64String,
+      });
+    };
+    reader.onerror = () => {
+      setIsUploading(false);
+      toast.error(language === "ar" ? "فشل قراءة الملف" : "Failed to read file");
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
-    <div className="border border-border rounded-lg overflow-hidden">
+    <div className="border border-border rounded-lg overflow-hidden relative">
+      <input 
+        type="file" 
+        accept="image/*" 
+        className="hidden" 
+        ref={fileInputRef} 
+        onChange={handleImageUpload} 
+      />
       {/* Toolbar */}
       <div className="bg-muted p-2 flex flex-wrap gap-1 border-b border-border">
         <Button
@@ -132,10 +179,11 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         <Button
           size="sm"
           variant="outline"
-          onClick={addImage}
-          title="Add Image"
+          onClick={() => fileInputRef.current?.click()}
+          title="Upload Image"
+          disabled={isUploading}
         >
-          <ImageIcon size={16} />
+          {isUploading ? <Loader2 size={16} className="animate-spin" /> : <ImageIcon size={16} />}
         </Button>
 
         <div className="w-px bg-border mx-1" />

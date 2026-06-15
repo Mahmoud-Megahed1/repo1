@@ -29,6 +29,7 @@ export default function AdminPostsManager() {
   const [featuredImageFile, setFeaturedImageFile] = useState<File | null>(null);
   const [featuredImagePreview, setFeaturedImagePreview] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [existingSlug, setExistingSlug] = useState<string>("");
 
   // Fetch ALL posts (admin endpoint - includes drafts)
   const { data: postsData, isLoading, refetch } = trpc.blog.posts.listAdmin.useQuery({
@@ -98,12 +99,15 @@ export default function AdminPostsManager() {
 
     const reader = new FileReader();
     reader.onload = () => {
-      const base64 = (reader.result as string).split(",")[1];
+      const base64String = (reader.result as string).split(",")[1];
       uploadImageMutation.mutate({
         postId,
         fileName: featuredImageFile.name,
-        fileData: base64,
+        fileData: base64String,
       });
+    };
+    reader.onerror = () => {
+      toast.error(language === "ar" ? "فشل قراءة الملف" : "Failed to read file");
     };
     reader.readAsDataURL(featuredImageFile);
   };
@@ -145,6 +149,7 @@ export default function AdminPostsManager() {
     setFeaturedImageFile(null);
     setFeaturedImagePreview("");
     setShowPreview(false);
+    setExistingSlug("");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -154,6 +159,8 @@ export default function AdminPostsManager() {
       toast.error(language === "ar" ? "يرجى تعبئة جميع الحقول المطلوبة" : "Please fill in all required fields");
       return;
     }
+
+    const generatedSlug = titleEn.toLowerCase().replace(/\s+/g, "-").replace(/[^\w\u0600-\u06FF-]/g, "") || `post-${Date.now()}`;
 
     const postData = {
       titleEn,
@@ -165,7 +172,7 @@ export default function AdminPostsManager() {
       categoryId,
       status,
       readingTimeMinutes,
-      slug: titleEn.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""),
+      slug: existingSlug || generatedSlug,
     };
 
     if (editingId) {
@@ -191,6 +198,7 @@ export default function AdminPostsManager() {
     setReadingTimeMinutes(post.readingTimeMinutes || 5);
     setFeaturedImagePreview(post.featuredImageUrl || "");
     setFeaturedImageFile(null);
+    setExistingSlug(post.slug || "");
     setIsCreating(true);
   };
 

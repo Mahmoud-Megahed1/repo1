@@ -279,6 +279,31 @@ export const appRouter = router({
             });
           }
         }),
+
+      // Upload general media (e.g., inside post content)
+      uploadMedia: adminProcedure
+        .input(
+          z.object({
+            fileName: z.string(),
+            fileData: z.string(), // base64 encoded
+          })
+        )
+        .mutation(async ({ input }) => {
+          try {
+            const buffer = Buffer.from(input.fileData, "base64");
+            const { url } = await storagePut(
+              `blog/media/${Date.now()}-${input.fileName}`,
+              buffer,
+              "image/jpeg"
+            );
+            return { url };
+          } catch (error) {
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: "Failed to upload media",
+            });
+          }
+        }),
     }),
 
     // ============================================================================
