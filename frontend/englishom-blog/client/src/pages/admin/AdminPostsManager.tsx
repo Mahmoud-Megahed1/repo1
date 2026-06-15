@@ -296,6 +296,23 @@ export default function AdminPostsManager() {
                   />
                 </div>
 
+                {/* Slug (URL) */}
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    {language === "ar" ? "رابط المقالة (Slug)" : "Post URL (Slug)"}
+                  </label>
+                  <Input
+                    value={existingSlug}
+                    onChange={(e) => setExistingSlug(e.target.value.toLowerCase().replace(/\s+/g, "-"))}
+                    placeholder={language === "ar" ? "مثال: my-new-post" : "e.g. my-new-post"}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    {language === "ar" 
+                      ? "اختياري: اتركه فارغاً ليتم توليده تلقائياً. تأكد من عدم استخدام مسافات أو رموز معقدة." 
+                      : "Optional: Leave empty to auto-generate. Avoid spaces and special characters."}
+                  </p>
+                </div>
+
                 {/* Category */}
                 <div>
                   <label className="block text-sm font-medium mb-2">Category</label>
