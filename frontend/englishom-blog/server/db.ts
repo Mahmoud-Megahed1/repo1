@@ -222,7 +222,7 @@ export async function deletePost(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
-  return db.update(blogPosts).set({ deletedAt: new Date() }).where(eq(blogPosts.id, id));
+  return db.delete(blogPosts).where(eq(blogPosts.id, id));
 }
 
 export async function getFeaturedPosts(limit: number = 6) {
