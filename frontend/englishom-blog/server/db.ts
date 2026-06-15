@@ -1,4 +1,4 @@
-import { eq, desc, and, like, isNull, count, sql, inArray } from "drizzle-orm";
+import { eq, desc, and, like, isNull, isNotNull, count, sql, inArray, ne } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, blogPosts, blogCategories, blogComments, blogTags, blogPostTags, blogMedia, blogCta, blogAnalytics, postRatings, InsertPostRating } from "../drizzle/schema";
 import { ENV } from './_core/env';
@@ -129,7 +129,7 @@ export async function getPublishedPosts(limit: number = 10, offset: number = 0) 
   const posts = await db
     .select()
     .from(blogPosts)
-    .where(eq(blogPosts.status, "published"))
+    .where(and(eq(blogPosts.status, "published"), isNull(blogPosts.deletedAt)))
     .orderBy(desc(blogPosts.publishedAt))
     .limit(limit)
     .offset(offset);
@@ -144,7 +144,7 @@ export async function getPostBySlug(slug: string) {
   const result = await db
     .select()
     .from(blogPosts)
-    .where(and(eq(blogPosts.slug, slug), eq(blogPosts.status, "published")))
+    .where(and(eq(blogPosts.slug, slug), eq(blogPosts.status, "published"), isNull(blogPosts.deletedAt)))
     .limit(1);
 
   if (result.length === 0) return null;
@@ -232,7 +232,7 @@ export async function getFeaturedPosts(limit: number = 6) {
   const posts = await db
     .select()
     .from(blogPosts)
-    .where(and(eq(blogPosts.status, "published"), eq(blogPosts.isFeatured, true)))
+    .where(and(eq(blogPosts.status, "published"), eq(blogPosts.isFeatured, true), isNull(blogPosts.deletedAt)))
     .orderBy(desc(blogPosts.publishedAt))
     .limit(limit);
 
@@ -262,6 +262,7 @@ export async function searchPosts(query: string, limit: number = 20) {
     .where(
       and(
         eq(blogPosts.status, "published"),
+        isNull(blogPosts.deletedAt),
         sql`(${blogPosts.titleEn} LIKE ${searchTerm} OR ${blogPosts.titleAr} LIKE ${searchTerm} OR ${blogPosts.contentEn} LIKE ${searchTerm} OR ${blogPosts.contentAr} LIKE ${searchTerm})`
       )
     )
@@ -286,12 +287,12 @@ export async function getPostsByCategory(categoryId: number, limit: number = 10,
   const result = await db
     .select({ count: count() })
     .from(blogPosts)
-    .where(and(eq(blogPosts.categoryId, categoryId), eq(blogPosts.status, "published")));
+    .where(and(eq(blogPosts.categoryId, categoryId), eq(blogPosts.status, "published"), isNull(blogPosts.deletedAt)));
 
   const posts = await db
     .select()
     .from(blogPosts)
-    .where(and(eq(blogPosts.categoryId, categoryId), eq(blogPosts.status, "published")))
+    .where(and(eq(blogPosts.categoryId, categoryId), eq(blogPosts.status, "published"), isNull(blogPosts.deletedAt)))
     .orderBy(desc(blogPosts.publishedAt))
     .limit(limit)
     .offset(offset);
@@ -335,6 +336,7 @@ export async function getRelatedPosts(postId: number, categoryId: number, limit:
       and(
         eq(blogPosts.categoryId, categoryId),
         eq(blogPosts.status, "published"),
+        isNull(blogPosts.deletedAt),
         sql`${blogPosts.id} != ${postId}`
       )
     )
@@ -648,9 +650,33 @@ export async function getPublishedPostsCount() {
   const result = await db
     .select({ count: count() })
     .from(blogPosts)
-    .where(eq(blogPosts.status, "published"));
+    .where(and(eq(blogPosts.status, "published"), isNull(blogPosts.deletedAt)));
 
   return result[0]?.count || 0;
+}
+
+// Admin: get ALL posts (including drafts, scheduled, soft-deleted)
+export async function getAllAdminPosts(limit: number = 200) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const posts = await db
+    .select()
+    .from(blogPosts)
+    .where(isNull(blogPosts.deletedAt))
+    .orderBy(desc(blogPosts.createdAt))
+    .limit(limit);
+
+  // Enrich with category info
+  return Promise.all(
+    posts.map(async (post) => {
+      const category = await db.select().from(blogCategories).where(eq(blogCategories.id, post.categoryId)).limit(1);
+      return {
+        ...post,
+        category: category[0] || null,
+      };
+    })
+  );
 }
 
 // ============================================================================

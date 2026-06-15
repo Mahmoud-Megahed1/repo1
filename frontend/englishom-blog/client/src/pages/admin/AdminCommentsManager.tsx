@@ -11,20 +11,29 @@ export default function AdminCommentsManager() {
   const { data: comments, isLoading, refetch } = trpc.blog.comments.listAdmin.useQuery({ limit: 100 });
   const approveMutation = trpc.blog.comments.approve.useMutation({
     onSuccess: () => {
-      toast.success("Comment approved");
+      toast.success(language === "ar" ? "تم قبول التعليق" : "Comment approved");
       refetch();
+    },
+    onError: (error: any) => {
+      toast.error(language === "ar" ? `خطأ في قبول التعليق: ${error.message}` : `Failed to approve: ${error.message}`);
     }
   });
   const rejectMutation = trpc.blog.comments.reject.useMutation({
     onSuccess: () => {
-      toast.success("Comment hidden/rejected");
+      toast.success(language === "ar" ? "تم إخفاء التعليق" : "Comment hidden/rejected");
       refetch();
+    },
+    onError: (error: any) => {
+      toast.error(language === "ar" ? `خطأ في رفض التعليق: ${error.message}` : `Failed to reject: ${error.message}`);
     }
   });
   const deleteMutation = trpc.blog.comments.delete.useMutation({
     onSuccess: () => {
-      toast.success("Comment deleted");
+      toast.success(language === "ar" ? "تم حذف التعليق" : "Comment deleted");
       refetch();
+    },
+    onError: (error: any) => {
+      toast.error(language === "ar" ? `خطأ في حذف التعليق: ${error.message}` : `Failed to delete: ${error.message}`);
     }
   });
 

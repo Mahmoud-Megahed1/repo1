@@ -106,6 +106,18 @@ export const appRouter = router({
           return { posts, total };
         }),
 
+      // Admin: Get ALL posts (including drafts, scheduled)
+      listAdmin: adminProcedure
+        .input(
+          z.object({
+            limit: z.number().min(1).max(200).default(100),
+          })
+        )
+        .query(async ({ input }) => {
+          const posts = await db.getAllAdminPosts(input.limit);
+          return { posts, total: posts.length };
+        }),
+
       // Get single post by slug
       getBySlug: publicProcedure
         .input(z.object({ slug: z.string() }))
@@ -197,6 +209,7 @@ export const appRouter = router({
             categoryId: z.number().optional(),
             status: z.enum(["draft", "published", "scheduled"]).optional(),
             isFeatured: z.boolean().optional(),
+            readingTimeMinutes: z.number().optional(),
             metaDescriptionEn: z.string().optional(),
             metaDescriptionAr: z.string().optional(),
             metaKeywordsEn: z.string().optional(),

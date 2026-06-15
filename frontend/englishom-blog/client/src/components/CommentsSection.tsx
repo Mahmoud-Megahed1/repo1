@@ -46,7 +46,18 @@ export default function CommentsSection({ postId }: CommentsSectionProps) {
         guestName: !user ? guestName : undefined,
         guestEmail: !user ? guestEmail : undefined,
       });
-      toast.success(language === "ar" ? "تم إضافة التعليق" : "Comment added");
+      
+      // Admin comments are auto-approved, guest/user comments need approval
+      if (user?.role === "admin") {
+        toast.success(language === "ar" ? "تم إضافة التعليق" : "Comment added");
+      } else {
+        toast.success(
+          language === "ar" 
+            ? "تم إرسال التعليق بنجاح! سيظهر بعد موافقة المشرف" 
+            : "Comment submitted! It will appear after admin approval"
+        );
+      }
+      
       setCommentText("");
       setReplyingTo(null);
       refetch();
