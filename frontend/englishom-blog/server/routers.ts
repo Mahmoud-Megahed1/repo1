@@ -206,6 +206,8 @@ export const appRouter = router({
             contentAr: z.string().optional(),
             excerptEn: z.string().optional(),
             excerptAr: z.string().optional(),
+            slug: z.string().optional(),
+            featuredImageUrl: z.string().optional(),
             categoryId: z.number().optional(),
             status: z.enum(["draft", "published", "scheduled"]).optional(),
             isFeatured: z.boolean().optional(),
