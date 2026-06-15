@@ -162,7 +162,7 @@ export default function AdminPostsManager() {
 
     const generatedSlug = titleEn.toLowerCase().replace(/\s+/g, "-").replace(/[^\w\u0600-\u06FF-]/g, "") || `post-${Date.now()}`;
 
-    const postData = {
+    const postData: any = {
       titleEn,
       titleAr,
       excerptEn,
@@ -174,6 +174,11 @@ export default function AdminPostsManager() {
       readingTimeMinutes,
       slug: existingSlug || generatedSlug,
     };
+
+    // If there is an external URL and no file selected, save it directly
+    if (!featuredImageFile && featuredImagePreview && !featuredImagePreview.startsWith("blob:")) {
+      postData.featuredImageUrl = featuredImagePreview;
+    }
 
     if (editingId) {
       updatePostMutation.mutate({
@@ -362,19 +367,34 @@ export default function AdminPostsManager() {
                     onChange={handleImageSelect}
                     className="hidden"
                   />
-                  <div className="flex gap-2 items-center">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => fileInputRef.current?.click()}
-                      className="flex items-center gap-2"
-                    >
-                      <ImagePlus size={16} />
-                      {language === "ar" ? "اختر صورة" : "Choose Image"}
-                    </Button>
+                  <div className="flex flex-col gap-3">
+                    <div className="flex gap-2 items-center">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="flex items-center gap-2 whitespace-nowrap"
+                      >
+                        <ImagePlus size={16} />
+                        {language === "ar" ? "اختر صورة" : "Choose Image"}
+                      </Button>
+                      <span className="text-sm font-medium text-muted-foreground px-2">
+                        {language === "ar" ? "أو" : "OR"}
+                      </span>
+                      <Input
+                        type="url"
+                        placeholder={language === "ar" ? "أدخل رابط الصورة..." : "Enter image URL..."}
+                        value={!featuredImageFile && featuredImagePreview ? featuredImagePreview : ""}
+                        onChange={(e) => {
+                          setFeaturedImageFile(null);
+                          setFeaturedImagePreview(e.target.value);
+                        }}
+                        className="flex-1"
+                      />
+                    </div>
                     {(featuredImagePreview || featuredImageFile) && (
                       <span className="text-sm text-green-600">
-                        {featuredImageFile ? featuredImageFile.name : (language === "ar" ? "صورة حالية" : "Current image")}
+                        {featuredImageFile ? featuredImageFile.name : (language === "ar" ? "تم استخدام رابط خارجي" : "Using external URL")}
                       </span>
                     )}
                   </div>
