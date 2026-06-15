@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
 import net from "net";
+import path from "path";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
 import { registerStorageProxy } from "./storageProxy";
@@ -42,8 +43,17 @@ async function startServer() {
     createExpressMiddleware({
       router: appRouter,
       createContext,
+      onError: ({ error, type, path, input, ctx, req }) => {
+        console.error(`[TRPC Error on ${path}]:`, error.message);
+        if (error.stack) {
+          console.error(error.stack);
+        }
+      },
     })
   );
+  
+  // Serve uploaded media
+  app.use("/api/uploads", express.static(path.resolve(process.cwd(), "uploads")));
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);

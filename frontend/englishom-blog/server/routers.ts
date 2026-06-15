@@ -169,6 +169,7 @@ export const appRouter = router({
             contentAr: z.string().min(1),
             excerptEn: z.string().optional(),
             excerptAr: z.string().optional(),
+            featuredImageUrl: z.string().optional(),
             categoryId: z.number(),
             status: z.enum(["draft", "published", "scheduled"]),
             readingTimeMinutes: z.number().optional(),
@@ -274,10 +275,11 @@ export const appRouter = router({
             });
 
             return { url, key };
-          } catch (error) {
+          } catch (error: any) {
+            console.error("uploadImage error:", error);
             throw new TRPCError({
-              code: "INTERNAL_SERVER_ERROR",
-              message: "Failed to upload image",
+              code: "BAD_REQUEST",
+              message: "Failed to upload image: " + error.message,
             });
           }
         }),
@@ -299,10 +301,11 @@ export const appRouter = router({
               "image/jpeg"
             );
             return { url };
-          } catch (error) {
+          } catch (error: any) {
+            console.error("uploadMedia error:", error);
             throw new TRPCError({
-              code: "INTERNAL_SERVER_ERROR",
-              message: "Failed to upload media",
+              code: "BAD_REQUEST",
+              message: "Failed to upload media: " + error.message,
             });
           }
         }),
