@@ -164,7 +164,11 @@ export default function App() {
             </div>
             <h2 className="text-xl font-bold text-white">سجل دخولك أولاً</h2>
             <p className="text-slate-400 text-sm leading-relaxed">يجب تسجيل الدخول لعرض بيانات تقدمك الفعلية في الكورس.</p>
-            <a href="https://englishom.com/ar/login" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-emerald-500 text-white font-bold text-sm hover:opacity-90 transition-opacity">
+            <a
+              href="https://englishom.com/ar/login"
+              onClick={() => { localStorage.setItem('redirectUrl', window.location.pathname + window.location.search + window.location.hash); }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-emerald-500 text-white font-bold text-sm hover:opacity-90 transition-opacity"
+            >
               <LogIn className="w-4 h-4" />
               تسجيل الدخول
             </a>
