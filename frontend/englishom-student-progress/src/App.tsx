@@ -1,14 +1,82 @@
-import { useState, useMemo } from 'react';
-import { Rocket, Zap, Target, TrendingUp, AlertTriangle, Clock, BarChart3, Calendar, Timer, Award, ArrowUp, ArrowDown, Minus, GraduationCap } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { Rocket, Zap, Target, TrendingUp, AlertTriangle, Clock, BarChart3, Calendar, Timer, Award, ArrowUp, ArrowDown, Minus, GraduationCap, Loader2, LogIn, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const TOTAL_COURSE_DAYS = 50;
 const CIRCLE_RADIUS = 90;
 const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
+const API_BASE = 'https://api.englishom.com/api';
+
+type LevelDetails = {
+  levelName: string;
+  currentDay: number;
+  isCompleted: boolean;
+  purchaseDate: string;
+  expiresAt: string;
+  daysLeft: number;
+  isExpired: boolean;
+};
+
+type LoadingState = 'loading' | 'loaded' | 'no-auth' | 'error';
 
 export default function App() {
-  const [planDays, setPlanDays] = useState(10);
-  const [studentDays, setStudentDays] = useState(15);
+  const [planDays, setPlanDays] = useState(0);
+  const [studentDays, setStudentDays] = useState(0);
+  const [loadingState, setLoadingState] = useState<LoadingState>('loading');
+  const [activeLevelName, setActiveLevelName] = useState<string>('');
+
+  useEffect(() => {
+    const fetchProgress = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setLoadingState('no-auth');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/users/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) {
+          if (res.status === 401) {
+            setLoadingState('no-auth');
+            return;
+          }
+          throw new Error('Failed to fetch');
+        }
+
+        const data = await res.json();
+        const levels: LevelDetails[] = data.levelsDetails || [];
+
+        // Find the active (non-completed, non-expired) level
+        const activeLevel = levels.find(l => !l.isCompleted && !l.isExpired) || levels[0];
+
+        if (activeLevel) {
+          // studentDays = completed days (currentDay - 1, since currentDay is the NEXT day to study)
+          const completed = Math.max(0, activeLevel.currentDay - 1);
+          setStudentDays(completed);
+          setActiveLevelName(activeLevel.levelName);
+
+          // planDays = calendar days elapsed since purchase (expected 1 lesson/day)
+          if (activeLevel.purchaseDate) {
+            const purchase = new Date(activeLevel.purchaseDate);
+            const now = new Date();
+            const elapsed = Math.floor((now.getTime() - purchase.getTime()) / (1000 * 60 * 60 * 24));
+            setPlanDays(Math.min(Math.max(1, elapsed), TOTAL_COURSE_DAYS));
+          }
+
+          setLoadingState('loaded');
+        } else {
+          setLoadingState('error');
+        }
+      } catch {
+        setLoadingState('error');
+      }
+    };
+
+    fetchProgress();
+  }, []);
 
   const velocity = useMemo(() => {
     if (planDays === 0) return 1;
@@ -77,8 +145,51 @@ export default function App() {
         <p className="text-slate-400 text-base mr-11">تابع تقدمك وسرعة إنجازك في الكورس</p>
       </div>
 
+      {/* Loading State */}
+      {loadingState === 'loading' && (
+        <div className="flex-1 flex items-center justify-center py-32">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center gap-4">
+            <Loader2 className="w-10 h-10 text-blue-400 animate-spin" />
+            <p className="text-slate-400 text-sm">جاري تحميل بيانات التقدم...</p>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Not Authenticated */}
+      {loadingState === 'no-auth' && (
+        <div className="flex-1 flex items-center justify-center py-32 px-4">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-10 max-w-md text-center space-y-5">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-emerald-500/20 border border-white/10 flex items-center justify-center mx-auto">
+              <LogIn className="w-8 h-8 text-blue-400" />
+            </div>
+            <h2 className="text-xl font-bold text-white">سجل دخولك أولاً</h2>
+            <p className="text-slate-400 text-sm leading-relaxed">يجب تسجيل الدخول لعرض بيانات تقدمك الفعلية في الكورس.</p>
+            <a href="https://englishom.com/ar/login" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-emerald-500 text-white font-bold text-sm hover:opacity-90 transition-opacity">
+              <LogIn className="w-4 h-4" />
+              تسجيل الدخول
+            </a>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Error State */}
+      {loadingState === 'error' && (
+        <div className="flex-1 flex items-center justify-center py-32 px-4">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-10 max-w-md text-center space-y-5">
+            <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto">
+              <AlertTriangle className="w-8 h-8 text-red-400" />
+            </div>
+            <h2 className="text-xl font-bold text-white">حدث خطأ</h2>
+            <p className="text-slate-400 text-sm leading-relaxed">لم نتمكن من تحميل بيانات تقدمك. تأكد من اتصالك بالإنترنت وأنك مسجل في كورس نشط.</p>
+            <button onClick={() => window.location.reload()} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 border border-white/10 text-white font-bold text-sm hover:bg-white/20 transition-colors">
+              إعادة المحاولة
+            </button>
+          </motion.div>
+        </div>
+      )}
+
       {/* Main Content */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-12">
+      {loadingState === 'loaded' && <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
           {/* Speedometer Section */}
@@ -234,11 +345,11 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Controls (Demo) */}
+              {/* Live Progress Data */}
               <div className="glass-card p-6">
                 <div className="flex items-center gap-2 mb-6 pb-3 border-b border-white/10">
-                  <Target className="w-5 h-5 text-purple-400" />
-                  <h3 className="text-base font-bold text-white">محاكي التحديثات</h3>
+                  <Activity className="w-5 h-5 text-purple-400" />
+                  <h3 className="text-base font-bold text-white">سرعة الدراسة مقابل الخطة</h3>
                 </div>
                 <div className="space-y-6">
                   <div>
@@ -246,30 +357,46 @@ export default function App() {
                       <label className="text-sm text-slate-300">إنجاز الطالب (أيام)</label>
                       <span className="text-sm font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded">{studentDays}</span>
                     </div>
-                    <input 
-                      type="range" min="0" max="60" value={studentDays} 
-                      onChange={(e) => setStudentDays(Number(e.target.value))}
-                      className="slider-cyan"
-                    />
+                    <div className="w-full bg-white/5 rounded-full h-2.5 overflow-hidden">
+                      <motion.div 
+                        className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-cyan-400"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${Math.min((studentDays / TOTAL_COURSE_DAYS) * 100, 100)}%` }}
+                        transition={{ duration: 1.2, ease: 'easeOut' }}
+                      />
+                    </div>
                   </div>
                   <div>
                     <div className="flex justify-between mb-2.5">
-                      <label className="text-sm text-slate-300">الخطة الحالية (أيام)</label>
+                      <label className="text-sm text-slate-300">الخطة المتوقعة (أيام)</label>
                       <span className="text-sm font-bold text-red-400 bg-red-500/10 px-2 py-0.5 rounded">{planDays}</span>
                     </div>
-                    <input 
-                      type="range" min="0" max="50" value={planDays} 
-                      onChange={(e) => setPlanDays(Number(e.target.value))}
-                      className="slider-red"
-                    />
+                    <div className="w-full bg-white/5 rounded-full h-2.5 overflow-hidden">
+                      <motion.div 
+                        className="h-full rounded-full bg-gradient-to-r from-red-500 to-red-400"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${Math.min((planDays / TOTAL_COURSE_DAYS) * 100, 100)}%` }}
+                        transition={{ duration: 1.2, ease: 'easeOut', delay: 0.3 }}
+                      />
+                    </div>
                   </div>
+                  {activeLevelName && (
+                    <div className="pt-3 border-t border-white/10">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-slate-500">المستوى الحالي</span>
+                        <span className="text-xs font-bold text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded">
+                          {activeLevelName.replace('LEVEL_', '')}
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               
             </div>
           </div>
         </div>
-      </main>
+      </main>}
 
       {/* Footer */}
       <footer className="border-t border-white/10 bg-white/5 backdrop-blur-sm mt-auto">
