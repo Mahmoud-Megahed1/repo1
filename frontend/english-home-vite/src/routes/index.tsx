@@ -19,7 +19,9 @@ function RootLandingPage() {
 
   return (
     <DirectionProvider dir="rtl">
-      <LandingPage />
+      <div lang="ar" dir="rtl" className="w-full">
+        <LandingPage />
+      </div>
     </DirectionProvider>
   );
 }
