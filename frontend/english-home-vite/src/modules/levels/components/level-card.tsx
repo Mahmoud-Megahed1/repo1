@@ -176,7 +176,7 @@ const useComponentVariant = ({
   const { data: activeCourse } = useActiveCourse();
   const discountPercentage = discountData?.discountPercentage || 0;
   const discountedPrice = discountPercentage > 0 
-    ? Math.round(price - (price * (discountPercentage / 100))) 
+    ? Math.round((price - (price * (discountPercentage / 100))) * 100) / 100
     : price;
 
   const daysLeft = expiresAt
