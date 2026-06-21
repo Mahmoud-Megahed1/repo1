@@ -27,8 +27,12 @@ import { z } from 'zod';
 import { coursesColumns } from './columns';
 import { useTranslations } from 'next-intl';
 
+import { ArrowRight } from 'lucide-react';
+import { useRouter } from '@/components/shared/smooth-navigation';
+
 const UserDetails = () => {
   const t = useTranslations('Admin.userDetails');
+  const router = useRouter();
   const [id] = useQueryState('id', parseAsString.withDefault(''));
   const { data, isLoading, isError } = useQuery({
     queryKey: ['userDetails', id],
@@ -42,6 +46,12 @@ const UserDetails = () => {
   if (!userDetails || isError) return t('userNotFound');
   return (
     <div className="flex flex-col gap-4">
+      <div className="flex items-center">
+        <Button variant="outline" size="sm" onClick={() => router.back()} className="gap-2 rtl:flex-row-reverse">
+          <ArrowRight className="size-4 rtl:rotate-180" />
+          {t('back', { fallback: 'عودة' })}
+        </Button>
+      </div>
       <section className="box flex min-h-32 flex-col justify-between gap-8 md:flex-row md:items-center">
         <div className="flex items-center gap-4">
           <span className="flex size-20 shrink-0 items-center justify-center rounded-full border bg-primary text-xl font-bold text-primary-foreground">
