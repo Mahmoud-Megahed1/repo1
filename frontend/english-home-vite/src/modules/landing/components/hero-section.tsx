@@ -66,7 +66,7 @@ export function HeroSection() {
             <Button asChild size="lg" className="group shadow-xl hover:shadow-2xl transition-all duration-300">
               <Link to="/signup">
                 {t('Landing.hero.cta')}
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="ms-2 h-4 w-4 transition-transform ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
               </Link>
             </Button>
           </div>

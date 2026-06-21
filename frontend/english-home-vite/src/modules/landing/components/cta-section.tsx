@@ -44,7 +44,7 @@ export function CtaSection() {
             <Button asChild size="lg" className="group px-8 py-6 text-lg">
               <Link to="/signup">
                 {t('Landing.cta.primary')}
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="ms-2 h-5 w-5 transition-transform ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
               </Link>
             </Button>
             {/* Temporarily hidden until certification is issued

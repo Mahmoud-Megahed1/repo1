@@ -37,7 +37,7 @@ export function LandingHeader() {
             </div>
           </Link>
 
-          {/* Desktop Navigation - Temporarily hidden until certification is issued
+          {/* Desktop Navigation */}
           <nav className="hidden items-center space-x-6 md:flex">
             <Link
               to={'/#features' as never}
@@ -82,7 +82,6 @@ export function LandingHeader() {
               {t('Landing.header.navigation.contact')}
             </Link>
           </nav>
-          */}
 
           {/* Desktop CTA Buttons */}
           <div className="hidden items-center space-x-4 md:flex">
@@ -115,7 +114,7 @@ export function LandingHeader() {
         {isMobileMenuOpen && (
           <div className="bg-background absolute left-0 w-full border-t md:hidden">
             <div className="container space-y-4 py-4">
-              {/* Mobile Menu Links - Temporarily hidden until certification is issued
+              {/* Mobile Menu Links */}
               <Link
                 to={'/#features' as never}
                 className="hover:text-primary block text-sm font-medium transition-colors"
@@ -158,12 +157,11 @@ export function LandingHeader() {
               >
                 {t('Landing.header.navigation.contact')}
               </Link>
-              */}
               <div className="space-y-3 pt-4">
                 <div className="flex items-center justify-between gap-2">
                   <Button variant="ghost" asChild>
                     <LanguageSwitcher>
-                      <Globe className="text-muted-foreground mr-2 h-4 w-4" />
+                      <Globe className="text-muted-foreground me-2 h-4 w-4" />
                       {locale === 'ar' ? 'English' : 'العربية'}
                     </LanguageSwitcher>
                   </Button>

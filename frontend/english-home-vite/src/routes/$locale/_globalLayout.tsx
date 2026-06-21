@@ -12,6 +12,8 @@ export const Route = createFileRoute('/$locale/_globalLayout')({
       return notFound();
     } else {
       i18next.changeLanguage(locale);
+      document.documentElement.lang = locale;
+      document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
     }
   },
 });

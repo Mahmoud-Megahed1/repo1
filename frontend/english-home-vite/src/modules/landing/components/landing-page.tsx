@@ -12,7 +12,7 @@ import ScrollArrows from '@shared/components/scroll-arrows';
 export function LandingPage() {
   const navigate = useNavigate();
   const params = useParams({ strict: false });
-  const locale = (params as any).locale || 'en';
+  const locale = (params as any).locale || 'ar';
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
