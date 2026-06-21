@@ -385,7 +385,13 @@ const useComponentVariant = ({
         <>
           <Button
             variant={'destructive'}
-            onClick={() => setShowAgreement(true)}
+            onClick={() => {
+              if (activeCourse && activeCourse.levelName !== levelId) {
+                setShowConflict(true);
+              } else {
+                setShowAgreement(true);
+              }
+            }}
             disabled={isPending}
             className="w-full"
           >
@@ -402,6 +408,13 @@ const useComponentVariant = ({
             isPending={isPending}
             daysCount={daysCount}
           />
+          {activeCourse && (
+            <ActiveCourseConflictModal
+              open={showConflict}
+              onOpenChange={setShowConflict}
+              activeCourse={activeCourse}
+            />
+          )}
         </>
       ),
     },
