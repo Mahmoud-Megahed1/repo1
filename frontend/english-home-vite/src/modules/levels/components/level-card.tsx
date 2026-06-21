@@ -239,7 +239,7 @@ const useComponentVariant = ({
             }}
             disabled={isPending}
           >
-            {isPending ? t('Global.processing') : (previousLevelCompleted && discountPercentage > 0) ? t('Global.unlock') + ` (-${discountPercentage}%)` : t('Global.unlock')}
+            {isPending ? t('Global.processing') : (discountPercentage > 0) ? t('Global.unlock') + ` (-${discountPercentage}%)` : t('Global.unlock')}
             <KeyRound />
           </Button>
           <PurchaseAgreementModal
@@ -261,7 +261,7 @@ const useComponentVariant = ({
           )}
         </>
       ),
-      content: (previousLevelCompleted && discountPercentage > 0) ? (
+      content: (discountPercentage > 0) ? (
         <div className="flex flex-col items-center gap-0.5 drop-shadow-sm">
           <div className="flex items-center gap-1.5 mt-2">
             <span className="text-3xl font-bold font-sans text-white leading-none tracking-tight">{discountedPrice}</span>
