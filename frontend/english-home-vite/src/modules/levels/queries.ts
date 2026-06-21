@@ -100,6 +100,7 @@ export function useDiscountEligibility() {
         queryKey: ['discountEligibility'],
         queryFn: getDiscountEligibility,
         select: (res) => res.data,
+        refetchOnMount: true,
     });
 }
 
@@ -108,5 +109,6 @@ export function useActiveCourse() {
         queryKey: ['active-course'],
         queryFn: getActiveCourse,
         select: (res) => res.data.activeCourse,
+        refetchOnMount: true,
     });
 }
