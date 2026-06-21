@@ -43,7 +43,7 @@ export function AboutSection() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-muted-foreground leading-relaxed text-justify">
                     {t(`Landing.about.sections.${section}.description`)}
                   </p>
                 </CardContent>

@@ -2,6 +2,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
+import TextAlign from "@tiptap/extension-text-align";
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
 import { trpc } from "@/lib/trpc";
@@ -16,6 +17,10 @@ import {
   Heading3,
   Link as LinkIcon,
   Image as ImageIcon,
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
   Undo2,
   Redo2,
   Loader2,
@@ -53,6 +58,10 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         openOnClick: false,
       }),
       Image,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+        alignments: ['left', 'center', 'right', 'justify'],
+      }),
     ],
     content: value,
     onUpdate: ({ editor }) => {
@@ -143,6 +152,44 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           title="Heading 3"
         >
           <Heading3 size={16} />
+        </Button>
+
+        <div className="w-px bg-border mx-1" />
+
+        <Button
+          size="sm"
+          variant={editor.isActive({ textAlign: 'left' }) ? "default" : "outline"}
+          onClick={() => editor.chain().focus().setTextAlign('left').run()}
+          title="Align Left"
+        >
+          <AlignLeft size={16} />
+        </Button>
+
+        <Button
+          size="sm"
+          variant={editor.isActive({ textAlign: 'center' }) ? "default" : "outline"}
+          onClick={() => editor.chain().focus().setTextAlign('center').run()}
+          title="Align Center"
+        >
+          <AlignCenter size={16} />
+        </Button>
+
+        <Button
+          size="sm"
+          variant={editor.isActive({ textAlign: 'right' }) ? "default" : "outline"}
+          onClick={() => editor.chain().focus().setTextAlign('right').run()}
+          title="Align Right"
+        >
+          <AlignRight size={16} />
+        </Button>
+
+        <Button
+          size="sm"
+          variant={editor.isActive({ textAlign: 'justify' }) ? "default" : "outline"}
+          onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+          title="Justify"
+        >
+          <AlignJustify size={16} />
         </Button>
 
         <div className="w-px bg-border mx-1" />
