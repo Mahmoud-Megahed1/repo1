@@ -284,15 +284,24 @@ export class PaymobController {
       );
       
       // Check if user has an expired order for this same level
-      // An order is considered expired if:
-      // 1. accessStatus is explicitly EXPIRED, OR
-      // 2. accessExpiresAt exists and is in the past, OR
-      // 3. Legacy order: accessStatus and accessExpiresAt are both missing (old orders before these fields were added)
-      //    AND there is no currently ACTIVE order for this level
-      const activeOrderForLevel = await this.paymobService.orderRepo.findActiveCompletedOrder(
-        user._id.toString(), paymentIntentionDto.level_name
-      );
-      const hasExpiredSameCourse = sameLevelOrders.length > 0 && !activeOrderForLevel;
+      // We check DIRECTLY using accessExpiresAt date to avoid relying on cron job updating accessStatus
+      let hasExpiredSameCourse = false;
+      if (sameLevelOrders.length > 0) {
+        const now = new Date();
+        // Check if ALL same-level orders are expired (no active one exists)
+        const hasActiveOrder = sameLevelOrders.some((order) => {
+          // Order is active if: accessStatus is ACTIVE AND (no expiry date OR expiry date is in the future)
+          const isStatusActive = order.accessStatus === 'ACTIVE';
+          const isNotExpiredByDate = !order.accessExpiresAt || new Date(order.accessExpiresAt) > now;
+          return isStatusActive && isNotExpiredByDate;
+        });
+        hasExpiredSameCourse = !hasActiveOrder;
+        if (hasExpiredSameCourse) {
+          this.logger.log(
+            `Detected expired course ${paymentIntentionDto.level_name} for user ${user._id} (direct date check)`
+          );
+        }
+      }
 
       if (hasExpiredSameCourse) {
         finalPrice = Math.round(course.price * 0.25); // Pay only 25% of original price
