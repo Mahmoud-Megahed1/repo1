@@ -452,10 +452,32 @@ export class UserService {
       { adminGrantedDays: newGrantedDays },
     );
 
-    // Reactivate the most recent order so the dynamic expiry calculation takes effect
+    // Find the most recent order and reactivate it if expired
     const recentOrder = await this.orderRepo.findMostRecentOrder(userId);
     if (recentOrder) {
-      await this.orderRepo.reactivateOrder(recentOrder._id.toString());
+      const now = new Date();
+      const isExpired = recentOrder.accessStatus === 'EXPIRED' 
+        || (recentOrder.accessExpiresAt && new Date(recentOrder.accessExpiresAt) <= now);
+
+      if (isExpired) {
+        // For expired orders: set new expiry from NOW + granted days
+        // This ensures the user gets actual usable days from this moment
+        const newExpiresAt = new Date(now.getTime() + daysToGrant * 24 * 60 * 60 * 1000);
+        await this.orderRepo.reactivateOrderWithExpiry(recentOrder._id.toString(), newExpiresAt);
+        this.logger.log(
+          `Reactivated expired order for user ${userId}. New expiry: ${newExpiresAt.toISOString()} (${daysToGrant} days from now)`
+        );
+      } else {
+        // For active orders: extend the existing expiry by the granted days
+        if (recentOrder.accessExpiresAt) {
+          const currentExpiry = new Date(recentOrder.accessExpiresAt);
+          const newExpiresAt = new Date(currentExpiry.getTime() + daysToGrant * 24 * 60 * 60 * 1000);
+          await this.orderRepo.reactivateOrderWithExpiry(recentOrder._id.toString(), newExpiresAt);
+          this.logger.log(
+            `Extended active order for user ${userId}. New expiry: ${newExpiresAt.toISOString()} (+${daysToGrant} days)`
+          );
+        }
+      }
     }
 
     this.logger.log(`Admin ${adminId} modified days by ${daysToGrant} for user ${userId}. New total granted: ${newGrantedDays}`);

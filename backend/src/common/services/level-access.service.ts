@@ -40,7 +40,12 @@ export class LevelAccessService {
     let daysElapsed = Math.max(0, Math.floor((now.getTime() - purchaseDate.getTime()) / (1000 * 60 * 60 * 24)));
     let daysLeft = Math.max(0, Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
 
-    if (order.accessStatus === 'EXPIRED' || daysLeft <= 0) {
+    if (order.accessStatus === 'EXPIRED') {
+      isExpired = true;
+      daysLeft = 0;
+    } else if (order.accessStatus === 'ACTIVE' && daysLeft <= 0) {
+      // accessStatus is ACTIVE but calculated days show expired
+      // This could happen if cron hasn't run yet - trust the date
       isExpired = true;
       daysLeft = 0;
     }
