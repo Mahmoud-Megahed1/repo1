@@ -277,8 +277,11 @@ const useComponentVariant = ({
             <span className="text-sm font-sans">{price}</span>
             <RiyalSymbol className="size-3" />
           </div>
-          <p className="mt-2 flex items-center gap-2 rounded-md border-green-200 bg-green-100 px-2 py-1 text-green-800 text-xs font-semibold">
-            {t('Global.loyaltyDiscountApplied', { discount: discountPercentage })}
+          <p className="mt-2 flex items-center text-center gap-2 rounded-md border-green-200 bg-green-100 px-2 py-1 text-green-800 text-[11px] leading-tight font-bold">
+            {discountData?.activeCoursesCount === 1 
+              ? `خصم مميز لك لأن هذا هو الكورس الثاني لك (${discountPercentage}%)`
+              : `خصم مميز لك لأن هذا هو الكورس الثالث لك (${discountPercentage}%)`
+            }
           </p>
         </div>
       ) : (
