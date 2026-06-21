@@ -287,6 +287,10 @@
   p {
     text-align: justify;
   }
+
+  .text-center p, p.text-center {
+    text-align: center;
+  }
 }
 
 @keyframes paging {

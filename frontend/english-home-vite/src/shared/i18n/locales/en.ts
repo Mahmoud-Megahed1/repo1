@@ -577,7 +577,7 @@ export default {
     },
     contactInfo: {
       title: 'For inquiries, please contact us at:',
-      publishDate: 'Publication date: October 1, 2025',
+      publishDate: 'Last updated: June 1, 2026',
     },
   },
   PrivacyPolicy: {

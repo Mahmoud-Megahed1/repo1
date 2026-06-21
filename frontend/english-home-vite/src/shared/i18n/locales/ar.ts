@@ -567,7 +567,7 @@ export default {
     },
     contactInfo: {
       title: 'للاستفسارات، يرجى التواصل معنا عبر:',
-      publishDate: 'تاريخ النشر: 1 أكتوبر 2025',
+      publishDate: 'آخر تحديث: 1 يونيو 2026',
     },
   },
   PrivacyPolicy: {
