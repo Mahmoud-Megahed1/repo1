@@ -111,6 +111,11 @@ export class OrderRepo extends AbstractRepo<Order> implements OrderService {
         levelName,
         paymentStatus: PaymentStatus.COMPLETED,
         accessStatus: OrderAccessStatus.ACTIVE,
+        $or: [
+          { accessExpiresAt: { $exists: false } },
+          { accessExpiresAt: null },
+          { accessExpiresAt: { $gt: new Date() } }
+        ]
       })
       .session(session || null)
       .sort({ createdAt: -1 }); // Get the most recent active completed order
@@ -131,6 +136,11 @@ export class OrderRepo extends AbstractRepo<Order> implements OrderService {
         userId: userIdObjectId,
         paymentStatus: PaymentStatus.COMPLETED,
         accessStatus: OrderAccessStatus.ACTIVE,
+        $or: [
+          { accessExpiresAt: { $exists: false } },
+          { accessExpiresAt: null },
+          { accessExpiresAt: { $gt: new Date() } }
+        ]
       })
       .session(session || null)
       .sort({ createdAt: -1 });
