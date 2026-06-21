@@ -24,7 +24,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import type { FC } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePayment } from '../mutations';
 import { useDiscountEligibility, useActiveCourse } from '../queries';
@@ -172,7 +172,13 @@ const useComponentVariant = ({
   const [showAgreement, setShowAgreement] = useState(false);
   const [showConflict, setShowConflict] = useState(false);
   
-  const { data: discountData } = useDiscountEligibility();
+  const { data: discountData, error: discountError } = useDiscountEligibility();
+  useEffect(() => {
+    console.log(`[LevelCard Debug - ${levelId}]`, {
+      discountData,
+      discountError: discountError ? ((discountError as any).message || discountError) : null
+    });
+  }, [levelId, discountData, discountError]);
   const { data: activeCourse } = useActiveCourse();
   const discountPercentage = discountData?.discountPercentage || 0;
   const discountedPrice = discountPercentage > 0 
