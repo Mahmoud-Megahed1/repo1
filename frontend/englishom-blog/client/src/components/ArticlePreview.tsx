@@ -58,9 +58,9 @@ export default function ArticlePreview({
 
       {/* Metadata */}
       <div className="flex flex-wrap gap-4 mb-6 text-sm text-muted-foreground">
-        <span style={{ color: ENGLISHOM_COLORS.primary }}>{categoryName}</span>
-        <span>•</span>
-        <span>{authorName}</span>
+        <span className="flex items-center gap-2" style={{ color: ENGLISHOM_COLORS.primary }}>
+          {language === "ar" ? "هندسة العادات اللغوية" : "Linguistic Habits Engineering"}
+        </span>
         <span>•</span>
         <span>{publishedAt.toLocaleDateString(language === "ar" ? "ar-SA" : "en-US")}</span>
       </div>

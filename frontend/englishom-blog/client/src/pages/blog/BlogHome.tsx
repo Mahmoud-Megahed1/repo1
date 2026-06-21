@@ -238,7 +238,7 @@ export default function BlogHome() {
                           className="px-2 py-1 rounded text-xs font-semibold text-white"
                           style={{ backgroundColor: ENGLISHOM_COLORS.primary }}
                         >
-                          Category
+                          {language === "ar" ? "هندسة العادات اللغوية" : "Linguistic Habits Engineering"}
                         </span>
                       </div>
                       <h3 className="text-lg font-bold mb-2 line-clamp-2">

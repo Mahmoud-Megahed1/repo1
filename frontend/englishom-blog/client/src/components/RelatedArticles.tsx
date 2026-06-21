@@ -61,7 +61,7 @@ export default function RelatedArticles({ postId, categoryId }: RelatedArticlesP
                   className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-white"
                   style={{ backgroundColor: ENGLISHOM_COLORS.primary }}
                 >
-                  {post.category?.nameEn}
+                  {language === "ar" ? "هندسة العادات اللغوية" : "Linguistic Habits Engineering"}
                 </span>
               </div>
 
