@@ -175,7 +175,7 @@ export class PaymobController {
   @Get('discount-eligibility')
   async getDiscountEligibility(@CurrentUser() user: User) {
     try {
-      if ('adminRole' in user) {
+      if ((user as any).adminRole) {
         return { discountPercentage: 0, reason: 'admin' };
       }
 
