@@ -46,7 +46,7 @@ export function TestimonialsSection() {
     );
   }
 
-  if (testimonials.length === 0) return null;
+  // if (testimonials.length === 0) return null;
 
   return (
     <section className="py-20 lg:py-32">

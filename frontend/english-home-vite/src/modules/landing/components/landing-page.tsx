@@ -31,11 +31,9 @@ export function LandingPage() {
         <div id="features">
           <FeaturesSection />
         </div>
-        {/* Temporarily hidden until certification is issued
         <div id="levels">
           <LevelsSection />
         </div>
-        */}
         <div id="testimonials">
           <TestimonialsSection />
         </div>
