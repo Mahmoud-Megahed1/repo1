@@ -400,6 +400,7 @@
       "blocked": "محظور"
     },
     "userDetails": {
+      "back": "عودة",
       "personalInfo": "المعلومات الشخصية",
       "firstName": "الاسم الأول",
       "lastName": "اسم العائلة",

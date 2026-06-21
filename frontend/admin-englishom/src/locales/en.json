@@ -401,6 +401,7 @@
       "blocked": "Blocked"
     },
     "userDetails": {
+      "back": "Back",
       "personalInfo": "Personal Info",
       "firstName": "First Name",
       "lastName": "Last Name",
