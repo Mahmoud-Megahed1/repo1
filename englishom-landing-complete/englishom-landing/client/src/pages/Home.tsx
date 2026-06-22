@@ -13,10 +13,15 @@ export default function Home() {
   const [coursesData, setCoursesData] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('https://api.englishom.com/courses')
-      .then(res => res.json())
+    fetch('https://api.englishom.com/api/courses')
+      .then(res => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      })
       .then(data => {
-        if (data && data.data) {
+        if (Array.isArray(data)) {
+          setCoursesData(data);
+        } else if (data && data.data) {
           setCoursesData(data.data);
         }
       })
