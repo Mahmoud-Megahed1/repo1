@@ -3,30 +3,21 @@ import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Save, CheckCircle2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 
 const LEVELS = ["beginner", "elementary", "intermediate", "upper-intermediate", "advanced"];
 const SCORE_RANGES = ["90-100", "70-89", "0-69"];
 
 export default function FeedbackManagement() {
-  const { toast } = useToast();
   const utils = trpc.useContext();
   
   const { data: messages, isLoading } = trpc.admin.getAllMessages.useQuery();
   const upsertMessageMutation = trpc.admin.upsertMessage.useMutation({
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Feedback message updated successfully",
-      });
+      alert("Feedback message updated successfully");
       utils.admin.getAllMessages.invalidate();
     },
     onError: (error) => {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to update feedback message",
-        variant: "destructive",
-      });
+      alert(error.message || "Failed to update feedback message");
     }
   });
 

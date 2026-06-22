@@ -134,6 +134,7 @@ export default function Test() {
                 className="w-full bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl px-4 py-6 text-lg transition-all hover:bg-white dark:hover:bg-slate-900"
               />
             </div>
+            
             <div className="space-y-2 text-left">
               <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">Email Address</label>
               <Input
@@ -141,24 +142,26 @@ export default function Test() {
                 placeholder="Enter your email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-          </div>
+                className="w-full bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl px-4 py-6 text-lg transition-all hover:bg-white dark:hover:bg-slate-900"
+              />
+            </div>
 
-          <div className="bg-blue-50 p-4 rounded-lg mb-6">
-            <h3 className="font-semibold text-gray-800 mb-2">Test Overview:</h3>
-            <ul className="text-sm text-gray-700 space-y-1">
-              <li>✓ 5 Stages of Assessment</li>
-              <li>✓ ~30-40 minutes total</li>
-              <li>✓ Immediate results & feedback</li>
-              <li>✓ No going back between stages</li>
-            </ul>
-          </div>
+            <div className="bg-indigo-50/50 dark:bg-indigo-900/20 p-4 rounded-xl border border-indigo-100 dark:border-indigo-800/50">
+              <h3 className="font-semibold text-indigo-900 dark:text-indigo-300 mb-2">Test Overview:</h3>
+              <ul className="text-sm text-indigo-800 dark:text-indigo-400 space-y-1.5 font-medium">
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> 5 Stages of Assessment</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> ~30-40 minutes total</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-indigo-500"></div> Immediate results & feedback</li>
+              </ul>
+            </div>
 
-          <Button
-            onClick={handleStartTest}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 text-lg"
-          >
-            Start Test
-          </Button>
+            <Button
+              onClick={handleStartTest}
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-6 text-lg rounded-xl mt-4 shadow-lg shadow-indigo-600/25 transition-transform active:scale-[0.98] font-semibold"
+            >
+              Start Your Assessment
+            </Button>
+          </div>
         </div>
       </div>
     );

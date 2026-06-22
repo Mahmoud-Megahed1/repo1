@@ -149,5 +149,12 @@ export default function Results() {
               navigate("/");
             }}
             variant="outline"
+            className="rounded-xl px-8 py-6 text-lg border-2 border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 shadow-sm"
+          >
+            Return to Home
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
