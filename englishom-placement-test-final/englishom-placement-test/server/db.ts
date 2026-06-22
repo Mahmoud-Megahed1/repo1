@@ -1,4 +1,4 @@
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, questions, testResults, testAnswers, adminMessages, levelThresholds, InsertTestResult, InsertTestAnswer } from "../drizzle/schema";
 import { ENV } from './_core/env';
@@ -188,15 +188,31 @@ export async function getTestAnswersByResultId(testResultId: number) {
 export async function getAllQuestions() {
   const db = await getDb();
   if (!db) return [];
-  const res = await db.select().from(questions);
-  return res.map(q => ({ ...q, _id: q.id.toString(), imageData: q.imageUrl }));
+  const res = await db.select().from(questions).orderBy(desc(questions.createdAt));
+  return res.map(q => {
+    let parsedOptions = [];
+    try {
+      parsedOptions = q.options ? JSON.parse(q.options) : [];
+    } catch(e) {}
+    return {
+      ...q,
+      _id: q.id.toString(),
+      imageData: q.imageUrl,
+      audioData: q.audioUrl,
+      options: parsedOptions
+    };
+  });
 }
 
 export async function createQuestion(data: any) {
   const db = await getDb();
   if (!db) return null;
-  const insertData = { ...data, imageUrl: data.imageData };
+  const insertData = { ...data, imageUrl: data.imageData, audioUrl: data.audioData };
   delete insertData.imageData;
+  delete insertData.audioData;
+  if (Array.isArray(insertData.options)) {
+    insertData.options = JSON.stringify(insertData.options);
+  }
   const [result] = await db.insert(questions).values(insertData);
   return result;
 }
@@ -208,6 +224,13 @@ export async function updateQuestion(id: string | number, data: any) {
   if (updateData.imageData !== undefined) {
     updateData.imageUrl = updateData.imageData;
     delete updateData.imageData;
+  }
+  if (updateData.audioData !== undefined) {
+    updateData.audioUrl = updateData.audioData;
+    delete updateData.audioData;
+  }
+  if (Array.isArray(updateData.options)) {
+    updateData.options = JSON.stringify(updateData.options);
   }
   await db.update(questions).set(updateData).where(eq(questions.id, Number(id)));
   return true;

@@ -5,7 +5,7 @@ import { decimal, int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "d
  * Extend this file with additional tables as your product grows.
  * Columns use camelCase to match both database fields and generated types.
  */
-export const users = mysqlTable("users", {
+export const users = mysqlTable("placement_users", {
   /**
    * Surrogate primary key. Auto-incremented numeric value managed by the database.
    * Use this for relations between tables.
@@ -26,7 +26,7 @@ export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
 // Questions table for all 5 stages
-export const questions = mysqlTable("questions", {
+export const questions = mysqlTable("placement_questions", {
   id: int("id").autoincrement().primaryKey(),
   stage: mysqlEnum("stage", [
     "visual_recognition",
@@ -43,7 +43,7 @@ export const questions = mysqlTable("questions", {
     "advanced",
   ]).notNull(),
   questionText: text("questionText"),
-  imageUrl: varchar("imageUrl", { length: 500 }),
+  imageUrl: text("imageUrl"),
   audioUrl: varchar("audioUrl", { length: 500 }),
   correctAnswer: text("correctAnswer").notNull(),
   options: text("options"), // JSON array of options
@@ -56,11 +56,11 @@ export type Question = typeof questions.$inferSelect;
 export type InsertQuestion = typeof questions.$inferInsert;
 
 // Test results table
-export const testResults = mysqlTable("testResults", {
+export const testResults = mysqlTable("placement_test_results", {
   id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
+  userId: int("userId").notNull(), // Links to users table or 0 for anonymous
   studentName: varchar("studentName", { length: 255 }),
-  studentEmail: varchar("studentEmail", { length: 320 }),
+  studentEmail: varchar("studentEmail", { length: 255 }),
   overallLevel: mysqlEnum("overallLevel", [
     "beginner",
     "elementary",
@@ -82,7 +82,7 @@ export type TestResult = typeof testResults.$inferSelect;
 export type InsertTestResult = typeof testResults.$inferInsert;
 
 // Test answers table for detailed tracking
-export const testAnswers = mysqlTable("testAnswers", {
+export const testAnswers = mysqlTable("placement_test_answers", {
   id: int("id").autoincrement().primaryKey(),
   testResultId: int("testResultId").notNull(),
   questionId: int("questionId").notNull(),
@@ -95,7 +95,7 @@ export const testAnswers = mysqlTable("testAnswers", {
   ]).notNull(),
   userAnswer: text("userAnswer"),
   isCorrect: mysqlEnum("isCorrect", ["yes", "no"]).notNull(),
-  timeSpent: int("timeSpent"), // in milliseconds
+  timeSpent: int("timeSpent"), // Time spent on the question in seconds
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -103,7 +103,7 @@ export type TestAnswer = typeof testAnswers.$inferSelect;
 export type InsertTestAnswer = typeof testAnswers.$inferInsert;
 
 // Admin messages for feedback
-export const adminMessages = mysqlTable("adminMessages", {
+export const adminMessages = mysqlTable("placement_admin_messages", {
   id: int("id").autoincrement().primaryKey(),
   level: mysqlEnum("level", [
     "beginner",
@@ -112,13 +112,8 @@ export const adminMessages = mysqlTable("adminMessages", {
     "upper_intermediate",
     "advanced",
   ]).notNull(),
-  scoreRange: varchar("scoreRange", { length: 50 }).notNull(), // e.g., "90-100", "70-89", "0-69"
-  titleAr: text("titleAr"),
-  titleEn: text("titleEn"),
-  messageAr: text("messageAr"),
-  messageEn: text("messageEn"),
-  recommendationAr: text("recommendationAr"),
-  recommendationEn: text("recommendationEn"),
+  scoreRange: mysqlEnum("scoreRange", ["90-100", "70-89", "0-69"]).notNull(),
+  message: text("message").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -127,7 +122,7 @@ export type AdminMessage = typeof adminMessages.$inferSelect;
 export type InsertAdminMessage = typeof adminMessages.$inferInsert;
 
 // Level thresholds for scoring
-export const levelThresholds = mysqlTable("levelThresholds", {
+export const levelThresholds = mysqlTable("placement_level_thresholds", {
   id: int("id").autoincrement().primaryKey(),
   level: mysqlEnum("level", [
     "beginner",
