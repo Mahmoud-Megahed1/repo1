@@ -52,7 +52,7 @@ export default function AdminDashboard() {
   });
 
   // Fetch all leads (test results)
-  const { data: leads = [], isLoading: leadsLoading } = trpc.admin.getAllTestResults.useQuery(undefined, {
+  const { data: leads = [], isLoading: leadsLoading, refetch: refetchLeads } = trpc.admin.getAllTestResults.useQuery(undefined, {
     enabled: !!user && user.role === "admin",
   });
 
@@ -88,6 +88,16 @@ export default function AdminDashboard() {
     },
     onError: () => {
       toast.error("Failed to delete question");
+    },
+  });
+
+  const deleteLeadMutation = trpc.admin.deleteTestResult.useMutation({
+    onSuccess: () => {
+      toast.success("Result deleted successfully!");
+      refetchLeads();
+    },
+    onError: () => {
+      toast.error("Failed to delete result");
     },
   });
 
@@ -564,31 +574,47 @@ export default function AdminDashboard() {
               <p className="text-muted-foreground text-center py-8">No results recorded yet.</p>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full text-start">
                   <thead>
                     <tr className="border-b border-border">
-                      <th className="text-left py-3 px-4 text-foreground font-semibold">Name</th>
-                      <th className="text-left py-3 px-4 text-foreground font-semibold">Phone/Email</th>
-                      <th className="text-left py-3 px-4 text-foreground font-semibold">Level</th>
-                      <th className="text-left py-3 px-4 text-foreground font-semibold">Score</th>
-                      <th className="text-left py-3 px-4 text-foreground font-semibold">Accuracy</th>
-                      <th className="text-left py-3 px-4 text-foreground font-semibold">Date</th>
+                      <th className="text-start py-3 px-4 text-foreground font-semibold">Name</th>
+                      <th className="text-start py-3 px-4 text-foreground font-semibold">Phone/Email</th>
+                      <th className="text-start py-3 px-4 text-foreground font-semibold">Level</th>
+                      <th className="text-start py-3 px-4 text-foreground font-semibold">Score</th>
+                      <th className="text-start py-3 px-4 text-foreground font-semibold">Accuracy</th>
+                      <th className="text-start py-3 px-4 text-foreground font-semibold">Date</th>
+                      <th className="text-end py-3 px-4 text-foreground font-semibold">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {leads.map((lead: any) => (
                       <tr key={lead.id} className="border-b border-border hover:bg-muted/50 transition-colors">
-                        <td className="py-3 px-4 text-foreground">{lead.studentName || "Guest"}</td>
-                        <td className="py-3 px-4 text-foreground" dir="ltr">{lead.studentPhone || "-"}</td>
-                        <td className="py-3 px-4">
+                        <td className="text-start py-3 px-4 text-foreground">{lead.studentName || "Guest"}</td>
+                        <td className="text-start py-3 px-4 text-foreground" dir="ltr">{lead.studentPhone || "-"}</td>
+                        <td className="text-start py-3 px-4">
                           <span className="inline-block px-2 py-1 rounded bg-primary/10 text-primary text-sm font-medium">
                             {lead.level}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-foreground">{lead.correctAnswers} / {lead.totalQuestions}</td>
-                        <td className="py-3 px-4 text-foreground">{lead.accuracy}%</td>
-                        <td className="py-3 px-4 text-muted-foreground text-sm">
+                        <td className="text-start py-3 px-4 text-foreground">{lead.correctAnswers} / {lead.totalQuestions}</td>
+                        <td className="text-start py-3 px-4 text-foreground">{lead.accuracy}%</td>
+                        <td className="text-start py-3 px-4 text-muted-foreground text-sm">
                           {new Date(lead.completedAt).toLocaleDateString()}
+                        </td>
+                        <td className="text-end py-3 px-4">
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="h-8 px-2"
+                            onClick={() => {
+                              if (window.confirm("Are you sure you want to delete this result?")) {
+                                deleteLeadMutation.mutate({ id: lead.id });
+                              }
+                            }}
+                            disabled={deleteLeadMutation.isPending}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
                         </td>
                       </tr>
                     ))}

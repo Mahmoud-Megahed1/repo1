@@ -431,6 +431,30 @@ export const appRouter = router({
           throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
         }
       }),
+
+    /**
+     * Delete a test result / lead (admin only)
+     */
+    deleteTestResult: protectedProcedure
+      .use(async ({ ctx, next }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
+        }
+        return next({ ctx });
+      })
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        const db = await getDb();
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database unavailable" });
+        
+        try {
+          await db.delete(testResults).where(eq(testResults.id, input.id));
+          return { success: true };
+        } catch (error) {
+          console.error("Failed to delete test result:", error);
+          throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+        }
+      }),
   }),
 });
 
