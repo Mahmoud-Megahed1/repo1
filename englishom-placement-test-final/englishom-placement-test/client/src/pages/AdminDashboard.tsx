@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import Header from "@/components/Header";
 import QuestionManagement from "./admin/QuestionManagement";
+import FeedbackManagement from "./admin/FeedbackManagement";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function AdminDashboard() {
@@ -179,18 +180,8 @@ export default function AdminDashboard() {
             )}
 
             {activeTab === "messages" && (
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-                  Feedback Messages
-                </h2>
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
-                  <p className="text-blue-800 dark:text-blue-200">
-                    Feedback message management interface coming soon. You will be able to customize messages for each proficiency level.
-                  </p>
-                </div>
-                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                  Add New Message
-                </Button>
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <FeedbackManagement />
               </div>
             )}
           </div>

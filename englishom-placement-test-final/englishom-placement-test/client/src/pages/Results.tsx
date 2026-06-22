@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 import { useLocation } from "wouter";
+import { Trophy, Award, BarChart2, MessageSquare, User, Mail } from "lucide-react";
 
 export default function Results() {
   const [, navigate] = useLocation();
   const [testId, setTestId] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const id = sessionStorage.getItem("testResultId");
@@ -18,156 +17,137 @@ export default function Results() {
     }
   }, [navigate]);
 
-  const getResultQuery = trpc.test.getResult.useQuery(
+  const studentEmail = sessionStorage.getItem("studentEmail") || "student@example.com";
+  const studentName = sessionStorage.getItem("studentName") || "Student";
+
+  const { data, isLoading, error } = trpc.test.getResult.useQuery(
     { testId: testId || 0 },
     { enabled: !!testId }
   );
 
-  useEffect(() => {
-    if (getResultQuery.data) {
-      setIsLoading(false);
-    }
-  }, [getResultQuery.data]);
-
-  if (isLoading || !getResultQuery.data) {
+  if (isLoading || !data) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 animate-spin text-indigo-600 mx-auto mb-4" />
-          <p className="text-gray-600">Loading your results...</p>
-        </div>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">Loading your results...</div>
       </div>
     );
   }
 
-  const { result, message } = getResultQuery.data;
-  if (!result) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 text-lg">Results not found</p>
-          <Button onClick={() => navigate("/")} className="mt-4">
-            Back to Home
-          </Button>
-        </div>
+  const { result, message } = data;
+  const scores = result;
+
+  const ScoreBar = ({ label, score, color }: { label: string; score: number; color: string }) => (
+    <div className="space-y-2">
+      <div className="flex justify-between text-sm font-medium">
+        <span className="text-slate-600 dark:text-slate-400">{label}</span>
+        <span className="text-slate-900 dark:text-slate-100">{Math.round(score)}%</span>
       </div>
-    );
-  }
-
-  const getLevelColor = (level: string) => {
-    switch (level) {
-      case "beginner":
-        return "bg-red-100 text-red-800 border-red-300";
-      case "elementary":
-        return "bg-orange-100 text-orange-800 border-orange-300";
-      case "intermediate":
-        return "bg-yellow-100 text-yellow-800 border-yellow-300";
-      case "upper_intermediate":
-        return "bg-blue-100 text-blue-800 border-blue-300";
-      case "advanced":
-        return "bg-green-100 text-green-800 border-green-300";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getLevelLabel = (level: string) => {
-    const labels: Record<string, string> = {
-      beginner: "Beginner",
-      elementary: "Elementary",
-      intermediate: "Intermediate",
-      upper_intermediate: "Upper-Intermediate",
-      advanced: "Advanced",
-    };
-    return labels[level] || level;
-  };
-
-  const scorePercentage = Number(result.totalScore);
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4">
-      <div className="max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">Englishom</h1>
-          <p className="text-gray-600">Your Test Results</p>
-        </div>
-
-        {/* Score Card */}
-        <div className="bg-white rounded-lg shadow-xl p-8 mb-6">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 mb-4">
-              <span className="text-5xl font-bold text-white">{Math.round(scorePercentage)}%</span>
-            </div>
-            <p className="text-gray-600 mb-4">Your Overall Score</p>
-          </div>
-
-          {/* Level Badge */}
-          <div className="text-center mb-8">
-            <div className={`inline-block px-6 py-3 rounded-full border-2 font-bold text-lg ${getLevelColor(result.overallLevel)}`}>
-              {getLevelLabel(result.overallLevel)}
-            </div>
-          </div>
-
-          {/* Score Breakdown */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-            {[
-              { label: "Visual", score: result.visualScore },
-              { label: "Auditory", score: result.auditoryScore },
-              { label: "Spelling", score: result.spellingScore },
-              { label: "Reading", score: result.readingScore },
-              { label: "Vocal", score: result.vocalScore },
-            ].map((item, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-4 text-center">
-                <p className="text-xs text-gray-600 mb-1">{item.label}</p>
-                <p className="text-2xl font-bold text-indigo-600">
-                  {item.score ? Math.round(Number(item.score)) : "-"}%
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Feedback Message */}
-          {message && (
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded">
-              <h3 className="text-lg font-bold text-blue-900 mb-2">{message.titleEn}</h3>
-              <p className="text-blue-800 mb-4">{message.messageEn}</p>
-              <div className="bg-white p-4 rounded border border-blue-200">
-                <p className="text-sm font-semibold text-gray-700 mb-2">Recommendation:</p>
-                <p className="text-gray-700">{message.recommendationEn}</p>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex gap-4 justify-center">
-          <Button
-            onClick={() => {
-              sessionStorage.removeItem("testResultId");
-              window.location.href = "/";
-            }}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2"
-          >
-            Take Test Again
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => {
-              window.print();
-            }}
-            className="px-6 py-2"
-          >
-            Print Results
-          </Button>
-        </div>
-
-        {/* Footer Info */}
-        <div className="mt-8 text-center text-sm text-gray-600">
-          <p>Test completed on {new Date(result.completedAt).toLocaleDateString()}</p>
-          <p>Result ID: {testId}</p>
-        </div>
+      <div className="h-3 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+        <div className={`h-full ${color} rounded-full transition-all duration-500`} style={{ width: `${score}%` }} />
       </div>
     </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col pt-12 p-4 font-sans">
+      <div className="max-w-3xl mx-auto w-full relative z-10">
+        
+        {/* Confetti / Success Header */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-tr from-emerald-400 to-teal-500 rounded-full mb-6 shadow-lg shadow-emerald-500/30">
+            <Trophy className="w-10 h-10 text-white" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
+            Test Completed!
+          </h1>
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
+            Great job! We have calculated your English proficiency level based on your performance across all stages.
+          </p>
+        </div>
+
+        <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-xl border border-slate-200/50 dark:border-slate-800/50 overflow-hidden mb-8">
+          
+          {/* Main Result Card */}
+          <div className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 p-8 text-white text-center relative overflow-hidden">
+            <div className="relative z-10">
+              <div className="flex justify-center gap-6 mb-6 text-indigo-100 text-sm font-medium">
+                <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-md">
+                  <User className="w-4 h-4" />
+                  <span>{studentName}</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-md">
+                  <Mail className="w-4 h-4" />
+                  <span>{studentEmail}</span>
+                </div>
+              </div>
+
+              <h2 className="text-indigo-100 text-lg uppercase tracking-widest font-semibold mb-2">Your Proficiency Level</h2>
+              <div className="text-5xl md:text-7xl font-black mb-4 tracking-tight capitalize drop-shadow-md">
+                {result.overallLevel.replace("_", " ")}
+              </div>
+              
+              <div className="flex items-center justify-center gap-3 text-2xl font-bold bg-white/10 w-max mx-auto px-6 py-3 rounded-2xl backdrop-blur-md">
+                <Award className="w-8 h-8 text-yellow-400" />
+                <span>Overall Score: {Math.round(Number(result.totalScore))}%</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Custom Admin Feedback Message */}
+          {message && (
+            <div className="bg-indigo-50/50 dark:bg-indigo-900/10 border-b border-indigo-100 dark:border-indigo-900/30 p-8 text-center">
+              <h3 className="text-lg font-bold text-indigo-900 dark:text-indigo-300 mb-3 flex items-center justify-center gap-2">
+                <MessageSquare className="w-5 h-5" />
+                Instructor Feedback
+              </h3>
+              <p className="text-indigo-800 dark:text-indigo-200 text-lg leading-relaxed max-w-2xl mx-auto italic">
+                "{message.message}"
+              </p>
+            </div>
+          )}
+
+          {/* Detailed Scores */}
+          <div className="p-8">
+            <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2 mb-6">
+              <BarChart2 className="w-5 h-5 text-indigo-500" />
+              Stage Breakdown
+            </h3>
+            <div className="grid gap-6">
+              <ScoreBar
+                label="Visual Recognition"
+                score={Number(scores.visualScore)}
+                color="bg-blue-500"
+              />
+              <ScoreBar
+                label="Auditory Processing"
+                score={Number(scores.auditoryScore)}
+                color="bg-amber-500"
+              />
+              <ScoreBar
+                label="Spelling & Structure"
+                score={Number(scores.spellingScore)}
+                color="bg-emerald-500"
+              />
+              <ScoreBar
+                label="Reading Sprint"
+                score={Number(scores.readingScore)}
+                color="bg-purple-500"
+              />
+              <ScoreBar
+                label="Vocal Challenge"
+                score={Number(scores.vocalScore)}
+                color="bg-rose-500"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <Button
+            onClick={() => {
+              sessionStorage.clear();
+              navigate("/");
+            }}
+            variant="outline"
   );
 }

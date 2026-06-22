@@ -172,6 +172,25 @@ export const appRouter = router({
       return getAllTestResults();
     }),
     
+    // Feedback Messages Management
+    getAllMessages: protectedProcedure.query(async ({ ctx }) => {
+      if (ctx.user?.role !== "admin") throw new Error("Unauthorized");
+      return getAllAdminMessages();
+    }),
+    
+    upsertMessage: protectedProcedure
+      .input(
+        z.object({
+          level: z.string(),
+          scoreRange: z.string(),
+          message: z.string(),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user?.role !== "admin") throw new Error("Unauthorized");
+        return upsertAdminMessage(input.level, input.scoreRange, input.message);
+      }),
+    
     // Question Management
     getAllQuestions: protectedProcedure.query(async ({ ctx }) => {
       if (ctx.user?.role !== "admin") throw new Error("Unauthorized");

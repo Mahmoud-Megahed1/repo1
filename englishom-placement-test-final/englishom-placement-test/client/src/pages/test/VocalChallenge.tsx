@@ -124,7 +124,8 @@ export default function VocalChallenge() {
       setAnswered(false);
       setRecordedAudio(null);
     } else {
-      completeTest();
+      window.dispatchEvent(new Event('testComplete'));
+      if (typeof completeTest === 'function') completeTest();
     }
   };
 
@@ -137,7 +138,25 @@ export default function VocalChallenge() {
   }
 
   if (!questions.length) {
-    return <div className="text-center text-red-500">No questions available</div>;
+    return (
+      <div className="text-center py-12 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+        <p className="text-slate-500 dark:text-slate-400 mb-6">No questions available for this stage.</p>
+        <button 
+          onClick={() => {
+            if (stageIndex < 4) {
+              nextStage();
+            } else {
+              window.dispatchEvent(new Event('testComplete'));
+              if (typeof completeTest === 'function') window.dispatchEvent(new Event('testComplete'));
+      if (typeof completeTest === 'function') completeTest();
+            }
+          }}
+          className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors font-medium"
+        >
+          Continue to Next Stage
+        </button>
+      </div>
+    );
   }
 
   const currentQuestion = questions[currentQuestionIndex];

@@ -148,11 +148,41 @@ export async function getAdminMessage(level: string, scoreRange: string) {
     .where(
       and(
         eq(adminMessages.level, level as any),
-        eq(adminMessages.scoreRange, scoreRange)
+        eq(adminMessages.scoreRange, scoreRange as any)
       )
     )
     .limit(1);
   return result.length > 0 ? result[0] : null;
+}
+
+export async function getAllAdminMessages() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(adminMessages).orderBy(adminMessages.level, adminMessages.scoreRange);
+}
+
+export async function upsertAdminMessage(level: string, scoreRange: string, message: string) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const existing = await getAdminMessage(level, scoreRange);
+  if (existing) {
+    await db.update(adminMessages)
+      .set({ message })
+      .where(
+        and(
+          eq(adminMessages.level, level as any),
+          eq(adminMessages.scoreRange, scoreRange as any)
+        )
+      );
+  } else {
+    await db.insert(adminMessages).values({
+      level: level as any,
+      scoreRange: scoreRange as any,
+      message,
+    });
+  }
+  return getAdminMessage(level, scoreRange);
 }
 
 export async function getLevelThreshold(level: string) {
