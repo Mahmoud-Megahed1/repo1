@@ -55,7 +55,10 @@ export default function QuestionManagement() {
     imageUrl: "",
     audioUrl: "",
     correctAnswer: "",
-    options: "",
+    optionA: "",
+    optionB: "",
+    optionC: "",
+    optionD: "",
   });
 
   const stages: TestStage[] = [
@@ -97,6 +100,8 @@ export default function QuestionManagement() {
       return;
     }
 
+    const optionsArray = [formData.optionA, formData.optionB, formData.optionC, formData.optionD].filter(Boolean);
+
     if (editingId) {
       updateMutation.mutate({
         id: editingId,
@@ -106,7 +111,7 @@ export default function QuestionManagement() {
         imageUrl: formData.imageUrl,
         audioUrl: formData.audioUrl,
         correctAnswer: formData.correctAnswer,
-        options: formData.options,
+        options: optionsArray,
       });
     } else {
       createMutation.mutate({
@@ -116,7 +121,7 @@ export default function QuestionManagement() {
         imageUrl: formData.imageUrl,
         audioUrl: formData.audioUrl,
         correctAnswer: formData.correctAnswer,
-        options: formData.options,
+        options: optionsArray,
       });
     }
   };
@@ -127,7 +132,10 @@ export default function QuestionManagement() {
       imageUrl: question.imageData || "",
       audioUrl: question.audioData || "",
       correctAnswer: question.correctAnswer,
-      options: question.options ? question.options.join(", ") : "",
+      optionA: question.options?.[0] || "",
+      optionB: question.options?.[1] || "",
+      optionC: question.options?.[2] || "",
+      optionD: question.options?.[3] || "",
     });
     setEditingId(question._id);
     setIsAddingQuestion(true);
@@ -147,8 +155,26 @@ export default function QuestionManagement() {
       imageUrl: "",
       audioUrl: "",
       correctAnswer: "",
-      options: "",
+      optionA: "",
+      optionB: "",
+      optionC: "",
+      optionD: "",
     });
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        alert("Image must be smaller than 2MB");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, imageUrl: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const filteredQuestions = getQuestionsForFilter();
@@ -239,20 +265,38 @@ export default function QuestionManagement() {
             {selectedStage === "visual_recognition" && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Image URL
+                  Image URL / Upload
                 </label>
-                <Input
-                  type="text"
-                  value={formData.imageUrl}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      imageUrl: e.target.value,
-                    })
-                  }
-                  placeholder="Enter image URL"
-                  className="w-full bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
-                />
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    value={formData.imageUrl}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        imageUrl: e.target.value,
+                      })
+                    }
+                    placeholder="Enter image URL or Base64"
+                    className="flex-1 bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+                  />
+                  <div className="relative">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                    <Button type="button" variant="outline" className="h-full bg-indigo-50 hover:bg-indigo-100 text-indigo-600 border-indigo-200">
+                      Upload Image
+                    </Button>
+                  </div>
+                </div>
+                {formData.imageUrl && formData.imageUrl.startsWith("data:image") && (
+                  <div className="mt-2">
+                    <img src={formData.imageUrl} alt="Preview" className="h-20 rounded shadow-sm" />
+                  </div>
+                )}
               </div>
             )}
 
@@ -276,34 +320,82 @@ export default function QuestionManagement() {
               </div>
             )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Correct Answer
-              </label>
-              <Input
-                type="text"
-                value={formData.correctAnswer}
-                onChange={(e) =>
-                  setFormData({ ...formData, correctAnswer: e.target.value })
-                }
-                placeholder="Enter correct answer"
-                className="w-full bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  * Choice A
+                </label>
+                <Input
+                  type="text"
+                  value={formData.optionA}
+                  onChange={(e) =>
+                    setFormData({ ...formData, optionA: e.target.value })
+                  }
+                  placeholder="Enter choice A"
+                  className="w-full bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  * Choice B
+                </label>
+                <Input
+                  type="text"
+                  value={formData.optionB}
+                  onChange={(e) =>
+                    setFormData({ ...formData, optionB: e.target.value })
+                  }
+                  placeholder="Enter choice B"
+                  className="w-full bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Choice C
+                </label>
+                <Input
+                  type="text"
+                  value={formData.optionC}
+                  onChange={(e) =>
+                    setFormData({ ...formData, optionC: e.target.value })
+                  }
+                  placeholder="Enter choice C"
+                  className="w-full bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Choice D
+                </label>
+                <Input
+                  type="text"
+                  value={formData.optionD}
+                  onChange={(e) =>
+                    setFormData({ ...formData, optionD: e.target.value })
+                  }
+                  placeholder="Enter choice D"
+                  className="w-full bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+                />
+              </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Options (comma-separated)
+                * Correct Answer
               </label>
-              <textarea
-                value={formData.options}
+              <select
+                value={formData.correctAnswer}
                 onChange={(e) =>
-                  setFormData({ ...formData, options: e.target.value })
+                  setFormData({ ...formData, correctAnswer: e.target.value })
                 }
-                placeholder="Option 1, Option 2, Option 3, Option 4, Option 5"
-                rows={3}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              />
+              >
+                <option value="">Select Correct Answer</option>
+                {formData.optionA && <option value={formData.optionA}>A: {formData.optionA}</option>}
+                {formData.optionB && <option value={formData.optionB}>B: {formData.optionB}</option>}
+                {formData.optionC && <option value={formData.optionC}>C: {formData.optionC}</option>}
+                {formData.optionD && <option value={formData.optionD}>D: {formData.optionD}</option>}
+              </select>
             </div>
 
             <div className="flex gap-3">
