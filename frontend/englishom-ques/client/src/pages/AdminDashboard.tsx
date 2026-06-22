@@ -51,8 +51,8 @@ export default function AdminDashboard() {
     enabled: !!user && user.role === "admin",
   });
 
-  // Fetch all leads
-  const { data: leads = [], isLoading: leadsLoading } = trpc.admin.getAllLeads.useQuery(undefined, {
+  // Fetch all leads (test results)
+  const { data: leads = [], isLoading: leadsLoading } = trpc.admin.getAllTestResults.useQuery(undefined, {
     enabled: !!user && user.role === "admin",
   });
 
