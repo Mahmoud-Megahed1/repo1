@@ -89,10 +89,10 @@ export default function Home() {
               <Button 
                 size="lg" 
                 className="gap-2 text-lg px-8"
-                onClick={() => navigate("/quiz")}
+                onClick={() => navigate("/ques")}
               >
                 <Zap className="w-5 h-5" />
-                {t("hero.startQuiz")}
+                {t("home.cta.start")}
               </Button>
             </div>
           </div>
