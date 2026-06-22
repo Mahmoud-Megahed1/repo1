@@ -12,6 +12,7 @@ import {
   getAdminMessage,
   getAllAdminMessages,
   upsertAdminMessage,
+  getAvailableStages,
   getAllTestResults,
   upsertUser,
   getAllQuestions,
@@ -75,6 +76,11 @@ export const appRouter = router({
 
   // Test management procedures
   test: router({
+    getAvailableStages: publicProcedure.query(async () => {
+      const stages = await getAvailableStages();
+      return stages;
+    }),
+
     // Get questions for a specific stage
     getQuestionsByStage: publicProcedure
       .input(z.object({ stage: z.string(), limit: z.number().optional() }))

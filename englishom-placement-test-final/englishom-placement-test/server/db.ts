@@ -272,3 +272,10 @@ export async function deleteQuestion(id: string | number) {
   await db.delete(questions).where(eq(questions.id, Number(id)));
   return true;
 }
+
+export async function getAvailableStages() {
+  const db = await getDb();
+  if (!db) return [];
+  const result = await db.select({ stage: questions.stage }).from(questions).groupBy(questions.stage);
+  return result.map(r => r.stage);
+}

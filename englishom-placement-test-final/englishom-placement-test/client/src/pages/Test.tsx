@@ -16,6 +16,7 @@ export default function Test() {
   const {
     currentStage,
     stageIndex,
+    activeStages,
     answers,
     studentName,
     studentEmail,
@@ -23,6 +24,7 @@ export default function Test() {
     testCompleted,
     nextStage,
     setStudentInfo,
+    setActiveStages,
     startTest,
     completeTest,
     getStageProgress,
@@ -33,6 +35,24 @@ export default function Test() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitTestMutation = trpc.test.submitTest.useMutation();
+  const { data: availableStages, isLoading: stagesLoading } = trpc.test.getAvailableStages.useQuery(undefined, {
+    enabled: !testStarted,
+  });
+
+  const STAGE_DISPLAY_NAMES: Record<string, string> = {
+    visual_recognition: "Visual Recognition",
+    auditory_processing: "Auditory Processing",
+    spelling_structure: "Spelling & Structure",
+    reading_sprint: "Reading Sprint",
+    vocal_challenge: "Vocal Challenge",
+  };
+  const ORDERED_STAGES = [
+    "visual_recognition",
+    "auditory_processing",
+    "spelling_structure",
+    "reading_sprint",
+    "vocal_challenge",
+  ];
 
   useEffect(() => {
     const handleNextStage = () => {
@@ -51,8 +71,7 @@ export default function Test() {
         const readingScore = calculateStageScore("reading_sprint");
         const vocalScore = calculateStageScore("vocal_challenge");
 
-        const totalScore =
-          (visualScore + auditoryScore + spellingScore + readingScore + vocalScore) / 5;
+
 
         // Submit test results
         const result = await submitTestMutation.mutateAsync({
@@ -69,7 +88,7 @@ export default function Test() {
         sessionStorage.setItem(
           "testScores",
           JSON.stringify({
-            totalScore,
+            totalScore: result.totalScore,
             visualScore,
             auditoryScore,
             spellingScore,
@@ -97,8 +116,14 @@ export default function Test() {
 
   const handleStartTest = () => {
     if (name.trim() && email.trim()) {
-      setStudentInfo(name, email);
-      startTest();
+      if (availableStages && availableStages.length > 0) {
+        const orderedActive = ORDERED_STAGES.filter(s => availableStages.includes(s));
+        setActiveStages(orderedActive as any);
+        setStudentInfo(name, email);
+        startTest();
+      } else if (!stagesLoading) {
+        alert("No questions configured for this test yet!");
+      }
     } else {
       alert("Please enter your name and email");
     }
@@ -157,9 +182,10 @@ export default function Test() {
 
             <Button
               onClick={handleStartTest}
+              disabled={stagesLoading}
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-6 text-lg rounded-xl mt-4 shadow-lg shadow-indigo-600/25 transition-transform active:scale-[0.98] font-semibold"
             >
-              Start Your Assessment
+              {stagesLoading ? "Loading..." : "Start Your Assessment"}
             </Button>
           </div>
         </div>
@@ -189,22 +215,6 @@ export default function Test() {
     );
   }
 
-  // Color progression for progress indicator
-  const getProgressColor = (index: number) => {
-    if (index === 0) return "bg-gray-400";
-    if (index === 1) return "bg-amber-700";
-    if (index === 2) return "bg-gray-400";
-    if (index === 3) return "bg-yellow-500";
-    return "bg-yellow-600";
-  };
-
-  const stageNames = [
-    "Visual Recognition",
-    "Auditory Processing",
-    "Spelling & Structure",
-    "Reading Sprint",
-    "Vocal Challenge",
-  ];
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-4 md:p-8 font-sans transition-colors duration-500 relative overflow-hidden">
@@ -232,15 +242,15 @@ export default function Test() {
           <div className="flex items-end justify-between mb-4 px-2">
             <div>
               <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-1 tracking-wide uppercase">Current Stage</p>
-              <h2 className="text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100">{stageNames[stageIndex]}</h2>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100">{STAGE_DISPLAY_NAMES[currentStage]}</h2>
             </div>
-            <p className="text-lg font-bold text-slate-400 dark:text-slate-500">{stageIndex + 1} <span className="text-sm font-medium">/ 5</span></p>
+            <p className="text-lg font-bold text-slate-400 dark:text-slate-500">{stageIndex + 1} <span className="text-sm font-medium">/ {activeStages.length}</span></p>
           </div>
           
           <div className="relative pt-6">
             <Progress value={getStageProgress()} className="h-2 bg-slate-200 dark:bg-slate-800" />
             <div className="absolute top-0 left-0 w-full flex justify-between px-[2%]">
-              {stageNames.map((name, index) => (
+              {activeStages.map((stage, index) => (
                 <div
                   key={index}
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-500 shadow-sm ${

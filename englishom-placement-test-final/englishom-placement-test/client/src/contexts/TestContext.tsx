@@ -13,6 +13,7 @@ export interface TestAnswer {
 export interface TestContextType {
   currentStage: TestStage;
   stageIndex: number;
+  activeStages: TestStage[];
   answers: TestAnswer[];
   studentName: string;
   studentEmail: string;
@@ -20,6 +21,7 @@ export interface TestContextType {
   testCompleted: boolean;
   stageScores: Record<TestStage, number>;
 
+  setActiveStages: (stages: TestStage[]) => void;
   setCurrentStage: (stage: TestStage) => void;
   nextStage: () => void;
   addAnswer: (answer: TestAnswer) => void;
@@ -42,6 +44,7 @@ const STAGES: TestStage[] = [
 ];
 
 export function TestProvider({ children }: { children: ReactNode }) {
+  const [activeStages, setActiveStagesState] = useState<TestStage[]>(STAGES);
   const [currentStage, setCurrentStage] = useState<TestStage>("visual_recognition");
   const [answers, setAnswers] = useState<TestAnswer[]>([]);
   const [studentName, setStudentName] = useState("");
@@ -56,15 +59,22 @@ export function TestProvider({ children }: { children: ReactNode }) {
     vocal_challenge: 0,
   });
 
-  const stageIndex = STAGES.indexOf(currentStage);
+  const stageIndex = activeStages.indexOf(currentStage);
+
+  const setActiveStages = (stages: TestStage[]) => {
+    setActiveStagesState(stages);
+    if (stages.length > 0 && !stages.includes(currentStage)) {
+      setCurrentStage(stages[0]);
+    }
+  };
 
   const handleSetCurrentStage = (stage: TestStage) => {
     setCurrentStage(stage);
   };
 
   const handleNextStage = () => {
-    if (stageIndex < STAGES.length - 1) {
-      const nextStage = STAGES[stageIndex + 1];
+    if (stageIndex < activeStages.length - 1) {
+      const nextStage = activeStages[stageIndex + 1];
       setCurrentStage(nextStage);
     } else {
       setTestCompleted(true);
@@ -105,7 +115,7 @@ export function TestProvider({ children }: { children: ReactNode }) {
   };
 
   const getStageProgress = () => {
-    return ((stageIndex + 1) / STAGES.length) * 100;
+    return activeStages.length > 0 ? ((stageIndex + 1) / activeStages.length) * 100 : 0;
   };
 
   const calculateStageScore = (stage: TestStage): number => {
@@ -118,12 +128,14 @@ export function TestProvider({ children }: { children: ReactNode }) {
   const value: TestContextType = {
     currentStage,
     stageIndex,
+    activeStages,
     answers,
     studentName,
     studentEmail,
     testStarted,
     testCompleted,
     stageScores,
+    setActiveStages,
     setCurrentStage: handleSetCurrentStage,
     nextStage: handleNextStage,
     addAnswer: handleAddAnswer,
