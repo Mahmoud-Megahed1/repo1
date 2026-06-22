@@ -113,31 +113,41 @@ export default function Results() {
               Stage Breakdown
             </h3>
             <div className="grid gap-6">
-              <ScoreBar
-                label="Visual Recognition"
-                score={Number(scores.visualScore)}
-                color="bg-blue-500"
-              />
-              <ScoreBar
-                label="Auditory Processing"
-                score={Number(scores.auditoryScore)}
-                color="bg-amber-500"
-              />
-              <ScoreBar
-                label="Spelling & Structure"
-                score={Number(scores.spellingScore)}
-                color="bg-emerald-500"
-              />
-              <ScoreBar
-                label="Reading Sprint"
-                score={Number(scores.readingScore)}
-                color="bg-purple-500"
-              />
-              <ScoreBar
-                label="Vocal Challenge"
-                score={Number(scores.vocalScore)}
-                color="bg-rose-500"
-              />
+              {scores.visualScore !== null && (
+                <ScoreBar
+                  label="Visual Recognition"
+                  score={Number(scores.visualScore)}
+                  color="bg-blue-500"
+                />
+              )}
+              {scores.auditoryScore !== null && (
+                <ScoreBar
+                  label="Auditory Processing"
+                  score={Number(scores.auditoryScore)}
+                  color="bg-amber-500"
+                />
+              )}
+              {scores.spellingScore !== null && (
+                <ScoreBar
+                  label="Spelling & Structure"
+                  score={Number(scores.spellingScore)}
+                  color="bg-emerald-500"
+                />
+              )}
+              {scores.readingScore !== null && (
+                <ScoreBar
+                  label="Reading Sprint"
+                  score={Number(scores.readingScore)}
+                  color="bg-purple-500"
+                />
+              )}
+              {scores.vocalScore !== null && (
+                <ScoreBar
+                  label="Vocal Challenge"
+                  score={Number(scores.vocalScore)}
+                  color="bg-rose-500"
+                />
+              )}
             </div>
           </div>
         </div>

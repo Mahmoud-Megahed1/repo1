@@ -119,6 +119,19 @@ export const appRouter = router({
         else if (totalScore >= 70) overallLevel = "intermediate";
         else if (totalScore >= 60) overallLevel = "elementary";
 
+        const getStageScore = (stageName: string) => {
+          const stageAnswers = input.answers.filter((a) => a.stage === stageName);
+          if (stageAnswers.length === 0) return null;
+          const correctCount = stageAnswers.filter((a) => a.isCorrect).length;
+          return Number(((correctCount / stageAnswers.length) * 100).toFixed(2));
+        };
+
+        const visualScore = getStageScore("visual_recognition");
+        const auditoryScore = getStageScore("auditory_processing");
+        const spellingScore = getStageScore("spelling_structure");
+        const readingScore = getStageScore("reading_sprint");
+        const vocalScore = getStageScore("vocal_challenge");
+
         // Create test result
         const result = await createTestResult({
           userId: 0, // Anonymous user
@@ -126,6 +139,11 @@ export const appRouter = router({
           studentEmail: input.studentEmail,
           overallLevel,
           totalScore: totalScore.toString() as any,
+          visualScore: visualScore !== null ? visualScore.toString() as any : null,
+          auditoryScore: auditoryScore !== null ? auditoryScore.toString() as any : null,
+          spellingScore: spellingScore !== null ? spellingScore.toString() as any : null,
+          readingScore: readingScore !== null ? readingScore.toString() as any : null,
+          vocalScore: vocalScore !== null ? vocalScore.toString() as any : null,
         });
 
         // Save individual answers
