@@ -368,30 +368,34 @@ const useComponentVariant = ({
             </span>
           </p>
           <div className="flex flex-col gap-2 pt-1">
-            <p className="flex items-center">
-              <span className="text-muted-foreground pe-2 text-sm">
-                <b>{t('Global.originalPrice')}:</b>
-              </span>
-              <span className="inline-flex items-center gap-1 font-bold line-through decoration-red-500 opacity-50">
-                <RiyalSymbol className="size-4" />
-                {price}
-              </span>
-            </p>
-            <p className="flex items-center">
-              <span className="text-muted-foreground pe-2 text-sm">
-                <b>{t('Global.renewalPrice')}:</b>
-              </span>
-              <span className="inline-flex items-center gap-1 font-bold text-green-600 dark:text-green-400">
-                <RiyalSymbol className="size-4" />
-                {renewalPrice}
-              </span>
-            </p>
+            {showPrice && (
+              <>
+                <p className="flex items-center">
+                  <span className="text-muted-foreground pe-2 text-sm">
+                    <b>{t('Global.originalPrice')}:</b>
+                  </span>
+                  <span className="inline-flex items-center gap-1 font-bold line-through decoration-red-500 opacity-50">
+                    <RiyalSymbol className="size-4" />
+                    {price}
+                  </span>
+                </p>
+                <p className="flex items-center">
+                  <span className="text-muted-foreground pe-2 text-sm">
+                    <b>{t('Global.renewalPrice')}:</b>
+                  </span>
+                  <span className="inline-flex items-center gap-1 font-bold text-green-600 dark:text-green-400">
+                    <RiyalSymbol className="size-4" />
+                    {renewalPrice}
+                  </span>
+                </p>
+              </>
+            )}
             <p className="flex items-center gap-1.5 text-sm font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2 py-0.5 rounded-full border border-green-200 dark:border-green-800">
               <Clock size={14} />
               {t('Global.forDays', { count: daysCount })}
             </p>
             {/* @ts-ignore JSX custom element */}
-            {renewalPrice > 0 && <tamara-widget type="tamara-summary" amount={renewalPrice} inline-type="2"></tamara-widget>}
+            {showPrice && renewalPrice > 0 && <tamara-widget type="tamara-summary" amount={renewalPrice} inline-type="2"></tamara-widget>}
           </div>
         </div>
       ),
