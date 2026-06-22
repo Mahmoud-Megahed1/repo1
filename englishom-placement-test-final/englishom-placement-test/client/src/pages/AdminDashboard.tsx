@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { Loader2 } from "lucide-react";
+import { Loader2, BookOpen, BarChart, MessageSquare, Trash2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import Header from "@/components/Header";
 import QuestionManagement from "./admin/QuestionManagement";
@@ -17,6 +17,16 @@ export default function AdminDashboard() {
 
   const getAllResultsQuery = trpc.admin.getAllResults.useQuery(undefined, {
     enabled: user?.role === "admin",
+  });
+
+  const deleteResultMutation = trpc.admin.deleteResult.useMutation({
+    onSuccess: () => {
+      getAllResultsQuery.refetch();
+    },
+    onError: (error) => {
+      console.error("Failed to delete result:", error);
+      alert("Failed to delete result.");
+    }
   });
 
   if (loading) {
@@ -71,33 +81,36 @@ export default function AdminDashboard() {
           <div className="flex gap-4 mb-8 border-b border-gray-200 dark:border-gray-700">
             <button
               onClick={() => setActiveTab("questions")}
-              className={`px-6 py-3 font-medium transition-all border-b-2 ${
+              className={`px-6 py-3 font-medium transition-all border-b-2 flex items-center gap-2 ${
                 activeTab === "questions"
                   ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
                   : "border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
               }`}
             >
-              📚 Question Bank
+              <BookOpen className="w-4 h-4" />
+              Question Bank
             </button>
             <button
               onClick={() => setActiveTab("results")}
-              className={`px-6 py-3 font-medium transition-all border-b-2 ${
+              className={`px-6 py-3 font-medium transition-all border-b-2 flex items-center gap-2 ${
                 activeTab === "results"
                   ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
                   : "border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
               }`}
             >
-              📊 Student Results
+              <BarChart className="w-4 h-4" />
+              Student Results
             </button>
             <button
               onClick={() => setActiveTab("messages")}
-              className={`px-6 py-3 font-medium transition-all border-b-2 ${
+              className={`px-6 py-3 font-medium transition-all border-b-2 flex items-center gap-2 ${
                 activeTab === "messages"
                   ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
                   : "border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
               }`}
             >
-              💬 Feedback Messages
+              <MessageSquare className="w-4 h-4" />
+              Feedback Messages
             </button>
           </div>
 
@@ -134,6 +147,9 @@ export default function AdminDashboard() {
                           <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
                             Date
                           </th>
+                          <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                            Actions
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -160,12 +176,26 @@ export default function AdminDashboard() {
                               <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                                 {new Date(result.completedAt).toLocaleDateString()}
                               </td>
+                              <td className="px-6 py-4 text-sm">
+                                <button
+                                  onClick={() => {
+                                    if (confirm("Are you sure you want to delete this result?")) {
+                                      deleteResultMutation.mutate({ id: result.id });
+                                    }
+                                  }}
+                                  disabled={deleteResultMutation.isPending}
+                                  className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors disabled:opacity-50"
+                                  title="Delete Result"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </td>
                             </tr>
                           ))
                         ) : (
                           <tr>
                             <td
-                              colSpan={5}
+                              colSpan={6}
                               className="px-6 py-8 text-center text-gray-600 dark:text-gray-400"
                             >
                               No test results yet

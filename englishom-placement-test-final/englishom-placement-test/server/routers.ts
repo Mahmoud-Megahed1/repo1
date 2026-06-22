@@ -20,6 +20,7 @@ import {
   createQuestion,
   updateQuestion,
   deleteQuestion,
+  deleteTestResult,
 } from "./db";
 import axios from "axios";
 import { sdk } from "./_core/sdk";
@@ -226,6 +227,14 @@ export const appRouter = router({
       }
       return getAllTestResults();
     }),
+
+    // Delete a test result
+    deleteResult: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user?.role !== "admin") throw new Error("Unauthorized");
+        return deleteTestResult(input.id);
+      }),
     
     // Feedback Messages Management
     getAllMessages: protectedProcedure.query(async ({ ctx }) => {

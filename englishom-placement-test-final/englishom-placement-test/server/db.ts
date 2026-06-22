@@ -143,6 +143,17 @@ export async function getTestResultById(id: number) {
   return result.length > 0 ? result[0] : null;
 }
 
+export async function deleteTestResult(id: number) {
+  const db = await getDb();
+  if (!db) return false;
+  
+  // also delete test answers associated with this result
+  await db.delete(testAnswers).where(eq(testAnswers.testResultId, id));
+  await db.delete(testResults).where(eq(testResults.id, id));
+  
+  return true;
+}
+
 export async function saveTestAnswer(data: InsertTestAnswer) {
   const db = await getDb();
   if (!db) return null;
