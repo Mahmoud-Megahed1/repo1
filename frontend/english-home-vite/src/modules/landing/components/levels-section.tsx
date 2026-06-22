@@ -42,7 +42,7 @@ export function LevelsSection() {
         <div className="grid gap-8 md:grid-cols-3">
           {localizedLevels.map(
             (
-              { title, description, levelLabel, levelId, price, originalPrice, isAvailable },
+              { title, description, levelLabel, levelId, price, originalPrice, isAvailable, showPrice = true },
               index
             ) => (
               <Card
@@ -70,18 +70,20 @@ export function LevelsSection() {
                   <CardDescription className="text-base">
                     {description}
                   </CardDescription>
-                  <div className="mt-4 flex flex-col gap-1">
-                    <span className="text-primary flex items-center gap-1 text-3xl font-bold">
-                      <RiyalSymbol className="size-4" />
-                      {localizedNumber(price, locale)}
-                    </span>
-                    {originalPrice && originalPrice > price && (
-                      <span className="text-muted-foreground flex items-center gap-1 text-lg line-through">
-                        <RiyalSymbol className="size-3" />
-                        {localizedNumber(originalPrice, locale)}
+                  {showPrice && (
+                    <div className="mt-4 flex flex-col gap-1">
+                      <span className="text-primary flex items-center gap-1 text-3xl font-bold">
+                        <RiyalSymbol className="size-4" />
+                        {localizedNumber(price, locale)}
                       </span>
-                    )}
-                  </div>
+                      {originalPrice && originalPrice > price && (
+                        <span className="text-muted-foreground flex items-center gap-1 text-lg line-through">
+                          <RiyalSymbol className="size-3" />
+                          {localizedNumber(originalPrice, locale)}
+                        </span>
+                      )}
+                    </div>
+                  )}
 
                 </CardHeader>
                 <CardContent className="flex h-full flex-col">
