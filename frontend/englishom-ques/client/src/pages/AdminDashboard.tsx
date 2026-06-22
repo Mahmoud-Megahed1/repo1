@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { Trash2, Edit2, Plus, Globe, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 
-type AdminTab = "questions" | "add" | "stats";
+type AdminTab = "questions" | "add" | "stats" | "leads";
 
 interface FormData {
   question: string;
@@ -48,6 +48,11 @@ export default function AdminDashboard() {
 
   // Fetch all questions
   const { data: questions = [], refetch: refetchQuestions } = trpc.admin.getAllQuestions.useQuery(undefined, {
+    enabled: !!user && user.role === "admin",
+  });
+
+  // Fetch all leads
+  const { data: leads = [], isLoading: leadsLoading } = trpc.admin.getAllLeads.useQuery(undefined, {
     enabled: !!user && user.role === "admin",
   });
 
