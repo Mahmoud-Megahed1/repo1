@@ -1,4 +1,4 @@
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, questions, testResults, testAnswers, adminMessages, levelThresholds, InsertTestResult, InsertTestAnswer } from "../drizzle/schema";
 import { ENV } from './_core/env';
@@ -112,6 +112,17 @@ export async function getQuestionsByStageAndLevel(stage: string, level: string) 
         eq(questions.level, level as any)
       )
     );
+}
+
+export async function getQuestionLevels(questionIds: number[]) {
+  if (questionIds.length === 0) return [];
+  const db = await getDb();
+  if (!db) return [];
+
+  return db.select({
+    id: questions.id,
+    level: questions.level,
+  }).from(questions).where(inArray(questions.id, questionIds));
 }
 
 export async function createTestResult(data: InsertTestResult) {

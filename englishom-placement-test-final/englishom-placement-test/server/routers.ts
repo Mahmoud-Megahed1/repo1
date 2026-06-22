@@ -16,6 +16,7 @@ import {
   getAllTestResults,
   upsertUser,
   getAllQuestions,
+  getQuestionLevels,
   createQuestion,
   updateQuestion,
   deleteQuestion,
@@ -112,12 +113,40 @@ export const appRouter = router({
         const correctAnswers = input.answers.filter((a) => a.isCorrect).length;
         const totalScore = Number(((correctAnswers / totalQuestions) * 100).toFixed(2));
 
-        // Determine level based on score
+        const questionIds = input.answers.map(a => a.questionId);
+        const questionLevels = await getQuestionLevels(questionIds);
+        
+        // Count frequencies of each level
+        const levelCounts: Record<string, number> = {
+          beginner: 0,
+          elementary: 0,
+          intermediate: 0,
+          upper_intermediate: 0,
+          advanced: 0
+        };
+
+        for (const q of questionLevels) {
+          if (levelCounts[q.level] !== undefined) {
+            levelCounts[q.level]++;
+          }
+        }
+
+        // Find the majority level.
+        // In case of a tie, the order of iteration in Object.entries will usually pick the first one it encounters.
+        // We can enforce a tie breaker by selecting the highest level in case of tie.
+        const LEVELS_ORDER = ["beginner", "elementary", "intermediate", "upper_intermediate", "advanced"];
         let overallLevel: any = "beginner";
-        if (totalScore >= 90) overallLevel = "advanced";
-        else if (totalScore >= 80) overallLevel = "upper_intermediate";
-        else if (totalScore >= 70) overallLevel = "intermediate";
-        else if (totalScore >= 60) overallLevel = "elementary";
+        let maxCount = -1;
+
+        for (const level of LEVELS_ORDER) {
+          if (levelCounts[level] >= maxCount && levelCounts[level] > 0) {
+            maxCount = levelCounts[level];
+            overallLevel = level;
+          }
+        }
+
+        // If no questions were answered or found, default to beginner
+        if (maxCount === -1) overallLevel = "beginner";
 
         const getStageScore = (stageName: string) => {
           const stageAnswers = input.answers.filter((a) => a.stage === stageName);
