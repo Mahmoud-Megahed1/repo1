@@ -1,4 +1,4 @@
-import { decimal, int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { decimal, int, mysqlEnum, mysqlTable, text, mediumtext, timestamp, varchar } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -43,11 +43,12 @@ export const questions = mysqlTable("placement_questions", {
     "advanced",
   ]).notNull(),
   questionText: text("questionText"),
-  imageUrl: text("imageUrl"),
-  audioUrl: varchar("audioUrl", { length: 500 }),
+  imageUrl: mediumtext("imageUrl"),
+  audioUrl: mediumtext("audioUrl"),
   correctAnswer: text("correctAnswer").notNull(),
   options: text("options"), // JSON array of options
   explanation: text("explanation"),
+  timeLimit: int("timeLimit").default(30), // Time limit in seconds
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

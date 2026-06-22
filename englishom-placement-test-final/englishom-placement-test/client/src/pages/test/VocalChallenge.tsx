@@ -15,7 +15,7 @@ export default function VocalChallenge() {
   const { addAnswer, nextStage, completeTest } = useTest();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(15);
+  const [timeLeft, setTimeLeft] = useState(30);
   const [answered, setAnswered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isRecording, setIsRecording] = useState(false);
@@ -32,6 +32,7 @@ export default function VocalChallenge() {
     if (getQuestionsQuery.data) {
       setQuestions(getQuestionsQuery.data);
       setIsLoading(false);
+      if (getQuestionsQuery.data.length > 0) setTimeLeft(getQuestionsQuery.data[0].timeLimit || 30);
     }
   }, [getQuestionsQuery.data]);
 
@@ -93,7 +94,7 @@ export default function VocalChallenge() {
         stage: "vocal_challenge",
         userAnswer: recordedAudio ? "audio_recorded" : null,
         isCorrect: !!recordedAudio,
-        timeSpent: 15000,
+        timeSpent: (questions[currentQuestionIndex].timeLimit || 30) * 1000,
       });
     }
   };
@@ -111,7 +112,7 @@ export default function VocalChallenge() {
         stage: "vocal_challenge",
         userAnswer: recordedAudio ? "audio_recorded" : null,
         isCorrect: !!recordedAudio,
-        timeSpent: (15 - timeLeft) * 1000,
+        timeSpent: ((questions[currentQuestionIndex].timeLimit || 30) - timeLeft) * 1000,
       });
     }
   };
@@ -119,7 +120,7 @@ export default function VocalChallenge() {
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setTimeLeft(15);
+      setTimeLeft(questions[currentQuestionIndex + 1]?.timeLimit || 30);
       setAnswered(false);
       setRecordedAudio(null);
     } else {

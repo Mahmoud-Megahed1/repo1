@@ -187,6 +187,7 @@ export const appRouter = router({
           audioUrl: z.string().optional(),
           correctAnswer: z.string(),
           options: z.array(z.string()),
+          timeLimit: z.number().optional(),
         })
       )
       .mutation(async ({ input, ctx }) => {
@@ -201,6 +202,7 @@ export const appRouter = router({
           audioData: input.audioUrl,
           correctAnswer: input.correctAnswer,
           options: input.options,
+          timeLimit: input.timeLimit,
         });
       }),
     updateQuestion: protectedProcedure
@@ -214,6 +216,7 @@ export const appRouter = router({
           audioUrl: z.string().optional(),
           correctAnswer: z.string().optional(),
           options: z.array(z.string()).optional(),
+          timeLimit: z.number().optional(),
         })
       )
       .mutation(async ({ input, ctx }) => {

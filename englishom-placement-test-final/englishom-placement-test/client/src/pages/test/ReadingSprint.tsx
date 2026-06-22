@@ -15,7 +15,7 @@ export default function ReadingSprint() {
   const { addAnswer, nextStage } = useTest();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(60);
+  const [timeLeft, setTimeLeft] = useState(30);
   const [answered, setAnswered] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,6 +29,7 @@ export default function ReadingSprint() {
     if (getQuestionsQuery.data) {
       setQuestions(getQuestionsQuery.data);
       setIsLoading(false);
+      if (getQuestionsQuery.data.length > 0) setTimeLeft(getQuestionsQuery.data[0].timeLimit || 30);
     }
   }, [getQuestionsQuery.data]);
 
@@ -50,7 +51,7 @@ export default function ReadingSprint() {
         stage: "reading_sprint",
         userAnswer: selectedAnswer || null,
         isCorrect: selectedAnswer === currentQuestion.correctAnswer,
-        timeSpent: 60000,
+        timeSpent: (questions[currentQuestionIndex].timeLimit || 30) * 1000,
       });
     }
   };
@@ -68,7 +69,7 @@ export default function ReadingSprint() {
         stage: "reading_sprint",
         userAnswer: answer || null,
         isCorrect: answer === currentQuestion.correctAnswer,
-        timeSpent: (60 - timeLeft) * 1000,
+        timeSpent: ((questions[currentQuestionIndex].timeLimit || 30) - timeLeft) * 1000,
       });
     }
   };
@@ -76,7 +77,7 @@ export default function ReadingSprint() {
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setTimeLeft(60);
+      setTimeLeft(questions[currentQuestionIndex + 1]?.timeLimit || 30);
       setAnswered(false);
       setSelectedAnswer(null);
     } else {

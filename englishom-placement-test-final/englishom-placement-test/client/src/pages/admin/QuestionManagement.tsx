@@ -112,6 +112,7 @@ export default function QuestionManagement() {
         audioUrl: formData.audioUrl,
         correctAnswer: formData.correctAnswer,
         options: optionsArray,
+        timeLimit: formData.timeLimit,
       });
     } else {
       createMutation.mutate({
@@ -122,6 +123,7 @@ export default function QuestionManagement() {
         audioUrl: formData.audioUrl,
         correctAnswer: formData.correctAnswer,
         options: optionsArray,
+        timeLimit: formData.timeLimit,
       });
     }
   };
@@ -136,6 +138,7 @@ export default function QuestionManagement() {
       optionB: question.options?.[1] || "",
       optionC: question.options?.[2] || "",
       optionD: question.options?.[3] || "",
+      timeLimit: question.timeLimit || 30,
     });
     setEditingId(question._id);
     setIsAddingQuestion(true);
@@ -159,6 +162,7 @@ export default function QuestionManagement() {
       optionB: "",
       optionC: "",
       optionD: "",
+      timeLimit: 30,
     });
   };
 
@@ -396,6 +400,21 @@ export default function QuestionManagement() {
                 {formData.optionC && <option value={formData.optionC}>C: {formData.optionC}</option>}
                 {formData.optionD && <option value={formData.optionD}>D: {formData.optionD}</option>}
               </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Time Limit (Seconds)
+              </label>
+              <Input
+                type="number"
+                min="1"
+                value={formData.timeLimit}
+                onChange={(e) =>
+                  setFormData({ ...formData, timeLimit: parseInt(e.target.value) || 30 })
+                }
+                className="w-full bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+              />
             </div>
 
             <div className="flex gap-3">

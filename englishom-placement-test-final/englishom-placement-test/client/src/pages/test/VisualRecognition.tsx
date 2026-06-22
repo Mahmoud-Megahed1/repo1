@@ -16,7 +16,7 @@ export default function VisualRecognition() {
   const { addAnswer, nextStage, stageIndex } = useTest();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(2);
+  const [timeLeft, setTimeLeft] = useState(30);
   const [answered, setAnswered] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,6 +30,9 @@ export default function VisualRecognition() {
     if (getQuestionsQuery.data) {
       setQuestions(getQuestionsQuery.data);
       setIsLoading(false);
+      if (getQuestionsQuery.data.length > 0) {
+        setTimeLeft(getQuestionsQuery.data[0].timeLimit || 30);
+      }
     }
   }, [getQuestionsQuery.data]);
 
@@ -51,7 +54,7 @@ export default function VisualRecognition() {
         stage: "visual_recognition",
         userAnswer: selectedAnswer || null,
         isCorrect: selectedAnswer === currentQuestion.correctAnswer,
-        timeSpent: 2000,
+        timeSpent: (questions[currentQuestionIndex].timeLimit || 30) * 1000,
       });
     }
   };
@@ -69,7 +72,7 @@ export default function VisualRecognition() {
         stage: "visual_recognition",
         userAnswer: answer,
         isCorrect: answer === currentQuestion.correctAnswer,
-        timeSpent: (2 - timeLeft) * 1000,
+        timeSpent: ((questions[currentQuestionIndex].timeLimit || 30) - timeLeft) * 1000,
       });
     }
   };
@@ -77,7 +80,7 @@ export default function VisualRecognition() {
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setTimeLeft(2);
+      setTimeLeft(questions[currentQuestionIndex + 1]?.timeLimit || 30);
       setAnswered(false);
       setSelectedAnswer(null);
     } else {
@@ -120,11 +123,11 @@ export default function VisualRecognition() {
 
       {/* Image */}
       {currentQuestion.imageUrl && (
-        <div className="mb-6 flex justify-center">
+        <div className="mb-6 flex justify-center w-full">
           <img
             src={currentQuestion.imageUrl}
             alt="Question"
-            className="max-w-md h-auto rounded-lg shadow-lg"
+            className="w-full max-h-80 object-contain rounded-lg shadow-sm"
           />
         </div>
       )}
