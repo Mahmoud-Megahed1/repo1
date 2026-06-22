@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Save, CheckCircle2 } from "lucide-react";
 
-const LEVELS = ["beginner", "elementary", "intermediate", "upper-intermediate", "advanced"];
+const LEVELS = ["beginner", "elementary", "intermediate", "upper_intermediate", "advanced"];
 const SCORE_RANGES = ["90-100", "70-89", "0-69"];
 
 export default function FeedbackManagement() {
@@ -66,7 +66,7 @@ export default function FeedbackManagement() {
           <div key={level} className="bg-white dark:bg-slate-900 rounded-xl shadow-sm overflow-hidden border border-slate-200 dark:border-slate-800">
             <div className="bg-slate-50 dark:bg-slate-800/50 px-6 py-4 border-b border-slate-200 dark:border-slate-800">
               <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 capitalize">
-                {level.replace("-", " ")} Level
+                {level.replace("_", " ")} Level
               </h3>
             </div>
             

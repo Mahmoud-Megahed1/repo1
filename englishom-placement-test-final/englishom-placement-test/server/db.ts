@@ -118,8 +118,8 @@ export async function createTestResult(data: InsertTestResult) {
   const db = await getDb();
   if (!db) return null;
   
-  const result = await db.insert(testResults).values(data);
-  return { insertId: (result as any).insertId || 0 };
+  const [result] = await db.insert(testResults).values(data);
+  return { insertId: result.insertId || 0 };
 }
 
 export async function getTestResultById(id: number) {
@@ -136,8 +136,8 @@ export async function saveTestAnswer(data: InsertTestAnswer) {
   const db = await getDb();
   if (!db) return null;
   
-  const result = await db.insert(testAnswers).values(data);
-  return { insertId: (result as any).insertId || 0 };
+  const [result] = await db.insert(testAnswers).values(data);
+  return { insertId: result.insertId || 0 };
 }
 
 export async function getAdminMessage(level: string, scoreRange: string) {
