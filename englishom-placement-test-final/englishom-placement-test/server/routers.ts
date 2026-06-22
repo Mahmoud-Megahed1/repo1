@@ -12,6 +12,10 @@ import {
   getAdminMessage,
   getAllTestResults,
   upsertUser,
+  getAllQuestions,
+  createQuestion,
+  updateQuestion,
+  deleteQuestion,
 } from "./db";
 import axios from "axios";
 import { sdk } from "./_core/sdk";
@@ -21,13 +25,6 @@ import {
   calculateOverallScore,
   determineLevelFromScore,
 } from "../shared/scoring";
-import {
-  createQuestion,
-  getQuestions,
-  updateQuestion,
-  deleteQuestion,
-  getQuestionById,
-} from "./models/questionHelpers";
 
 export const appRouter = router({
   system: systemRouter,
@@ -178,7 +175,7 @@ export const appRouter = router({
     // Question Management
     getAllQuestions: protectedProcedure.query(async ({ ctx }) => {
       if (ctx.user?.role !== "admin") throw new Error("Unauthorized");
-      return getQuestions();
+      return getAllQuestions();
     }),
     createQuestion: protectedProcedure
       .input(

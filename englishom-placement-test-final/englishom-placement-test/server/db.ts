@@ -183,3 +183,39 @@ export async function getTestAnswersByResultId(testResultId: number) {
   return db.select().from(testAnswers)
     .where(eq(testAnswers.testResultId, testResultId));
 }
+
+// Admin Question Management via Drizzle
+export async function getAllQuestions() {
+  const db = await getDb();
+  if (!db) return [];
+  const res = await db.select().from(questions);
+  return res.map(q => ({ ...q, _id: q.id.toString(), imageData: q.imageUrl }));
+}
+
+export async function createQuestion(data: any) {
+  const db = await getDb();
+  if (!db) return null;
+  const insertData = { ...data, imageUrl: data.imageData };
+  delete insertData.imageData;
+  const [result] = await db.insert(questions).values(insertData);
+  return result;
+}
+
+export async function updateQuestion(id: string | number, data: any) {
+  const db = await getDb();
+  if (!db) return null;
+  const updateData = { ...data };
+  if (updateData.imageData !== undefined) {
+    updateData.imageUrl = updateData.imageData;
+    delete updateData.imageData;
+  }
+  await db.update(questions).set(updateData).where(eq(questions.id, Number(id)));
+  return true;
+}
+
+export async function deleteQuestion(id: string | number) {
+  const db = await getDb();
+  if (!db) return null;
+  await db.delete(questions).where(eq(questions.id, Number(id)));
+  return true;
+}
