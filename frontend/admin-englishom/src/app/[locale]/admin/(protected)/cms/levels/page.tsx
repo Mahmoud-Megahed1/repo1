@@ -265,6 +265,7 @@ const LevelItem: FC<LevelType> = ({
   titleAr,
   titleEn,
   isAvailable,
+  showPrice = true,
   daysCount = 50,
 }) => {
   const t = useTranslations();
@@ -312,18 +313,35 @@ const LevelItem: FC<LevelType> = ({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center gap-3">
-          <span>{t('Admin.levels.price')}: </span>
-          {originalPrice && originalPrice > price && (
-            <span lang="en" className="inline-flex items-center gap-1 text-muted-foreground line-through">
-              <RiyalSymbol className="size-3" />
-              {originalPrice}
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <span>{t('Admin.levels.price')}: </span>
+            {originalPrice && originalPrice > price && (
+              <span lang="en" className="inline-flex items-center gap-1 text-muted-foreground line-through">
+                <RiyalSymbol className="size-3" />
+                {originalPrice}
+              </span>
+            )}
+            <span lang="en" className="inline-flex items-center gap-1 text-green-600 dark:text-green-400">
+              <RiyalSymbol className="size-4" />
+              <b>{price}</b>
             </span>
-          )}
-          <span lang="en" className="inline-flex items-center gap-1 text-green-600 dark:text-green-400">
-            <RiyalSymbol className="size-4" />
-            <b>{price}</b>
-          </span>
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            <Label
+              htmlFor={`${level_name}-show-price`}
+              className="whitespace-nowrap text-xs text-muted-foreground"
+            >
+              Show Price
+            </Label>
+            <Switch
+              id={`${level_name}-show-price`}
+              defaultChecked={showPrice}
+              onCheckedChange={(checked) => {
+                mutate({ showPrice: checked, level_name });
+              }}
+            />
+          </div>
         </div>
       </CardContent>
       <CardFooter className="mt-auto flex w-full flex-wrap items-center justify-between gap-4">

@@ -39,6 +39,10 @@ export class UpdateCourseDto {
   isAvailable?: boolean;
 
   @IsOptional()
+  @IsBoolean()
+  showPrice?: boolean;
+
+  @IsOptional()
   @IsPositive()
   originalPrice?: number;
 

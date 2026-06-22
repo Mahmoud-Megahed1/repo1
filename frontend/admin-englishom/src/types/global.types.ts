@@ -23,6 +23,7 @@ export type LevelType = {
   price: number;
   originalPrice?: number;
   isAvailable: boolean;
+  showPrice?: boolean;
 };
 
 export type ExcludeAriaAttributes<T> = {

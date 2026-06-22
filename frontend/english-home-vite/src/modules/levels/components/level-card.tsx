@@ -53,6 +53,7 @@ export type LevelCardProps = {
   icon: LucideIcon;
   price: number;
   originalPrice?: number;
+  showPrice?: boolean;
   variant?: 'unlocked' | 'locked' | 'coming-soon' | 'expired';
   isCompleted?: boolean;
   expiresAt?: string;
@@ -66,6 +67,7 @@ const LevelCard: FC<LevelCardProps> = ({
   levelLabel,
   price,
   originalPrice,
+  showPrice = true,
   title,
   variant = 'locked',
   isCompleted = false,
@@ -83,6 +85,7 @@ const LevelCard: FC<LevelCardProps> = ({
     levelId,
     price,
     originalPrice,
+    showPrice,
     expiresAt,
     variant,
     isCompleted,
@@ -151,6 +154,7 @@ const useComponentVariant = ({
   levelId,
   price,
   originalPrice,
+  showPrice = true,
   expiresAt,
   variant = 'locked',
   isCompleted = false,
@@ -160,6 +164,7 @@ const useComponentVariant = ({
   levelId: LevelId;
   price: number;
   originalPrice?: number;
+  showPrice?: boolean;
   expiresAt?: string;
   variant?: 'unlocked' | 'locked' | 'coming-soon' | 'expired';
   isCompleted?: boolean;
@@ -199,7 +204,7 @@ const useComponentVariant = ({
     'coming-soon': {
       iconBg: 'amber',
       labelVariant: 'amber-gradient',
-      content: (
+      content: showPrice ? (
         <div className="flex flex-col items-center gap-0.5 drop-shadow-sm">
           <div className="flex items-center gap-1.5 mt-2">
             <span className="text-3xl font-bold font-sans text-white leading-none tracking-tight">{price}</span>
@@ -214,7 +219,7 @@ const useComponentVariant = ({
           {/* @ts-ignore JSX custom element */}
           {price > 0 && <div className="mt-2 w-full max-w-[200px] bg-white/10 rounded-md p-1 backdrop-blur-sm"><tamara-widget type="tamara-summary" amount={price} inline-type="2"></tamara-widget></div>}
         </div>
-      ),
+      ) : null,
       cta: (
         <Button
           className={cn(
@@ -267,7 +272,7 @@ const useComponentVariant = ({
           )}
         </>
       ),
-      content: (discountPercentage > 0) ? (
+      content: showPrice ? ((discountPercentage > 0) ? (
         <div className="flex flex-col items-center gap-0.5 drop-shadow-sm">
           <div className="flex items-center gap-1.5 mt-2">
             <span className="text-3xl font-bold font-sans text-white leading-none tracking-tight">{discountedPrice}</span>
@@ -299,7 +304,7 @@ const useComponentVariant = ({
           {/* @ts-ignore JSX custom element */}
           {price > 0 && <div className="mt-2 w-full max-w-[200px] bg-white/10 rounded-md p-1 backdrop-blur-sm"><tamara-widget type="tamara-summary" amount={price} inline-type="2"></tamara-widget></div>}
         </div>
-      ),
+      )) : null,
     },
     unlocked: {
       className: 'border border-green-500/50',
