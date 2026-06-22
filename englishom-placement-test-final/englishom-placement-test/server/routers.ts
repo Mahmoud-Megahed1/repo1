@@ -115,7 +115,7 @@ export const appRouter = router({
         // Determine level based on score
         let overallLevel: any = "beginner";
         if (totalScore >= 90) overallLevel = "advanced";
-        else if (totalScore >= 80) overallLevel = "upper_intermediate";
+        else if (totalScore >= 80) overallLevel = "upper-intermediate";
         else if (totalScore >= 70) overallLevel = "intermediate";
         else if (totalScore >= 60) overallLevel = "elementary";
 

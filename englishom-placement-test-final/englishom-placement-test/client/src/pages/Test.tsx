@@ -55,12 +55,7 @@ export default function Test() {
   ];
 
   useEffect(() => {
-    const handleNextStage = () => {
-      nextStage();
-    };
-
     const handleTestComplete = async () => {
-      completeTest();
       setIsSubmitting(true);
 
       try {
@@ -105,14 +100,10 @@ export default function Test() {
       }
     };
 
-    window.addEventListener("nextStage", handleNextStage);
-    window.addEventListener("testComplete", handleTestComplete);
-
-    return () => {
-      window.removeEventListener("nextStage", handleNextStage);
-      window.removeEventListener("testComplete", handleTestComplete);
-    };
-  }, [stageIndex, answers, studentName, studentEmail, completeTest, nextStage, submitTestMutation, navigate, calculateStageScore]);
+    if (testCompleted && !isSubmitting) {
+      handleTestComplete();
+    }
+  }, [testCompleted, isSubmitting, answers, studentName, studentEmail, submitTestMutation, navigate, calculateStageScore]);
 
   const handleStartTest = () => {
     if (name.trim() && email.trim()) {
