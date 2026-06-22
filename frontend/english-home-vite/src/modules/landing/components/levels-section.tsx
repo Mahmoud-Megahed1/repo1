@@ -42,7 +42,7 @@ export function LevelsSection() {
         <div className="grid gap-8 md:grid-cols-3">
           {localizedLevels.map(
             (
-              { title, description, levelLabel, levelId, price, originalPrice, isAvailable, showPrice = true },
+              { title, description, levelLabel, levelId, price, originalPrice, isAvailable, showPrice = true, daysCount = 50 },
               index
             ) => (
               <Card
@@ -55,7 +55,7 @@ export function LevelsSection() {
                       <Badge
                         variant={badgeVariants[index % badgeVariants.length]}
                       >
-                        {localizedNumber(50, locale)}{' '}
+                        {localizedNumber(daysCount, locale)}{' '}
                         {locale === 'ar'
                           ? t('Global.suspendedAccount.day')
                           : t('Global.suspendedAccount.days')}
