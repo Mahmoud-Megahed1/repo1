@@ -189,12 +189,11 @@ export const appRouter = router({
           imageUrl: z.string().optional(),
           audioUrl: z.string().optional(),
           correctAnswer: z.string(),
-          options: z.string(),
+          options: z.array(z.string()),
         })
       )
       .mutation(async ({ input, ctx }) => {
         if (ctx.user?.role !== "admin") throw new Error("Unauthorized");
-        const optsArray = input.options.split(',').map(s => s.trim()).filter(Boolean);
         // Map frontend level "upper_intermediate" to backend level "upper-intermediate" if needed
         const mappedLevel = input.level === 'upper_intermediate' ? 'upper-intermediate' : input.level;
         return createQuestion({
@@ -204,7 +203,7 @@ export const appRouter = router({
           imageData: input.imageUrl,
           audioData: input.audioUrl,
           correctAnswer: input.correctAnswer,
-          options: optsArray,
+          options: input.options,
         });
       }),
     updateQuestion: protectedProcedure
@@ -217,7 +216,7 @@ export const appRouter = router({
           imageUrl: z.string().optional(),
           audioUrl: z.string().optional(),
           correctAnswer: z.string().optional(),
-          options: z.string().optional(),
+          options: z.array(z.string()).optional(),
         })
       )
       .mutation(async ({ input, ctx }) => {
@@ -225,7 +224,7 @@ export const appRouter = router({
         const { id, options, imageUrl, audioUrl, level, ...rest } = input;
         const dataToUpdate: any = { ...rest };
         if (options) {
-          dataToUpdate.options = options.split(',').map(s => s.trim()).filter(Boolean);
+          dataToUpdate.options = options;
         }
         if (imageUrl !== undefined) dataToUpdate.imageData = imageUrl;
         if (audioUrl !== undefined) dataToUpdate.audioData = audioUrl;
