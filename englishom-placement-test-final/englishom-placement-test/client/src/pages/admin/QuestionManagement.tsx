@@ -9,14 +9,14 @@ type TestStage = "visual_recognition" | "auditory_processing" | "spelling_struct
 type Level = "beginner" | "elementary" | "intermediate" | "upper_intermediate" | "advanced";
 
 interface Question {
-  id: number;
+  _id: string;
   stage: TestStage;
   level: Level;
   questionText?: string;
-  imageUrl?: string;
-  audioUrl?: string;
+  imageData?: string;
+  audioData?: string;
   correctAnswer: string;
-  options?: string;
+  options?: string[];
 }
 
 export default function QuestionManagement() {
@@ -24,9 +24,31 @@ export default function QuestionManagement() {
   const [selectedStage, setSelectedStage] = useState<TestStage>("visual_recognition");
   const [selectedLevel, setSelectedLevel] = useState<Level>("beginner");
   const [isAddingQuestion, setIsAddingQuestion] = useState(false);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const { data: questionsData = [], refetch } = trpc.admin.getAllQuestions.useQuery();
+  const questions = questionsData as unknown as Question[];
+
+  const createMutation = trpc.admin.createQuestion.useMutation({
+    onSuccess: () => {
+      refetch();
+      handleCancelEdit();
+    },
+    onError: (err) => alert(err.message)
+  });
+
+  const updateMutation = trpc.admin.updateQuestion.useMutation({
+    onSuccess: () => {
+      refetch();
+      handleCancelEdit();
+    },
+    onError: (err) => alert(err.message)
+  });
+
+  const deleteMutation = trpc.admin.deleteQuestion.useMutation({
+    onSuccess: () => refetch(),
+    onError: (err) => alert(err.message)
+  });
 
   const [formData, setFormData] = useState({
     questionText: "",
@@ -65,7 +87,7 @@ export default function QuestionManagement() {
   // Get questions for selected stage and level
   const getQuestionsForFilter = () => {
     return questions.filter(
-      (q) => q.stage === selectedStage && q.level === selectedLevel
+      (q) => q.stage === selectedStage && q.level === (selectedLevel === 'upper_intermediate' ? 'upper-intermediate' : selectedLevel)
     );
   };
 
@@ -75,54 +97,45 @@ export default function QuestionManagement() {
       return;
     }
 
-    const newQuestion: Question = {
-      id: editingId || Date.now(),
-      stage: selectedStage,
-      level: selectedLevel,
-      questionText: formData.questionText,
-      imageUrl: formData.imageUrl,
-      audioUrl: formData.audioUrl,
-      correctAnswer: formData.correctAnswer,
-      options: formData.options,
-    };
-
     if (editingId) {
-      // Update existing question
-      setQuestions(
-        questions.map((q) => (q.id === editingId ? newQuestion : q))
-      );
-      setEditingId(null);
+      updateMutation.mutate({
+        id: editingId,
+        stage: selectedStage,
+        level: selectedLevel,
+        questionText: formData.questionText,
+        imageUrl: formData.imageUrl,
+        audioUrl: formData.audioUrl,
+        correctAnswer: formData.correctAnswer,
+        options: formData.options,
+      });
     } else {
-      // Add new question
-      setQuestions([...questions, newQuestion]);
+      createMutation.mutate({
+        stage: selectedStage,
+        level: selectedLevel,
+        questionText: formData.questionText,
+        imageUrl: formData.imageUrl,
+        audioUrl: formData.audioUrl,
+        correctAnswer: formData.correctAnswer,
+        options: formData.options,
+      });
     }
-
-    // Reset form
-    setFormData({
-      questionText: "",
-      imageUrl: "",
-      audioUrl: "",
-      correctAnswer: "",
-      options: "",
-    });
-    setIsAddingQuestion(false);
   };
 
   const handleEditQuestion = (question: Question) => {
     setFormData({
       questionText: question.questionText || "",
-      imageUrl: question.imageUrl || "",
-      audioUrl: question.audioUrl || "",
+      imageUrl: question.imageData || "",
+      audioUrl: question.audioData || "",
       correctAnswer: question.correctAnswer,
-      options: question.options || "",
+      options: question.options ? question.options.join(", ") : "",
     });
-    setEditingId(question.id);
+    setEditingId(question._id);
     setIsAddingQuestion(true);
   };
 
-  const handleDeleteQuestion = (id: number) => {
+  const handleDeleteQuestion = (id: string) => {
     if (confirm("Are you sure you want to delete this question?")) {
-      setQuestions(questions.filter((q) => q.id !== id));
+      deleteMutation.mutate({ id });
     }
   };
 
@@ -336,7 +349,7 @@ export default function QuestionManagement() {
               {filteredQuestions.length > 0 ? (
                 filteredQuestions.map((question) => (
                   <tr
-                    key={question.id}
+                    key={question._id}
                     className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
                   >
                     <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
@@ -374,7 +387,7 @@ export default function QuestionManagement() {
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => handleDeleteQuestion(question.id)}
+                          onClick={() => handleDeleteQuestion(question._id)}
                           className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                           title="Delete"
                         >

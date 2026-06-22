@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IQuestion extends Document {
-  stage: 'visual' | 'auditory' | 'spelling' | 'reading' | 'vocal';
+  stage: 'visual_recognition' | 'auditory_processing' | 'spelling_structure' | 'reading_sprint' | 'vocal_challenge';
   level: 'beginner' | 'elementary' | 'intermediate' | 'upper-intermediate' | 'advanced';
   questionText: string;
   imageData?: string; // Base64 encoded image
@@ -16,7 +16,7 @@ const questionSchema = new Schema<IQuestion>(
   {
     stage: {
       type: String,
-      enum: ['visual', 'auditory', 'spelling', 'reading', 'vocal'],
+      enum: ['visual_recognition', 'auditory_processing', 'spelling_structure', 'reading_sprint', 'vocal_challenge'],
       required: true,
     },
     level: {

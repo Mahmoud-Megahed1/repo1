@@ -18,6 +18,13 @@ import {
   calculateOverallScore,
   determineLevelFromScore,
 } from "../shared/scoring";
+import {
+  createQuestion,
+  getQuestions,
+  updateQuestion,
+  deleteQuestion,
+  getQuestionById,
+} from "./models/questionHelpers";
 
 export const appRouter = router({
   system: systemRouter,
@@ -132,6 +139,72 @@ export const appRouter = router({
       }
       return getAllTestResults();
     }),
+    
+    // Question Management
+    getAllQuestions: protectedProcedure.query(async ({ ctx }) => {
+      if (ctx.user?.role !== "admin") throw new Error("Unauthorized");
+      return getQuestions();
+    }),
+    createQuestion: protectedProcedure
+      .input(
+        z.object({
+          stage: z.enum(['visual_recognition', 'auditory_processing', 'spelling_structure', 'reading_sprint', 'vocal_challenge']),
+          level: z.enum(['beginner', 'elementary', 'intermediate', 'upper-intermediate', 'advanced', 'upper_intermediate'] as const),
+          questionText: z.string(),
+          imageUrl: z.string().optional(),
+          audioUrl: z.string().optional(),
+          correctAnswer: z.string(),
+          options: z.string(),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user?.role !== "admin") throw new Error("Unauthorized");
+        const optsArray = input.options.split(',').map(s => s.trim()).filter(Boolean);
+        // Map frontend level "upper_intermediate" to backend level "upper-intermediate" if needed
+        const mappedLevel = input.level === 'upper_intermediate' ? 'upper-intermediate' : input.level;
+        return createQuestion({
+          stage: input.stage,
+          level: mappedLevel as any,
+          questionText: input.questionText,
+          imageData: input.imageUrl,
+          audioData: input.audioUrl,
+          correctAnswer: input.correctAnswer,
+          options: optsArray,
+        });
+      }),
+    updateQuestion: protectedProcedure
+      .input(
+        z.object({
+          id: z.string(),
+          stage: z.enum(['visual_recognition', 'auditory_processing', 'spelling_structure', 'reading_sprint', 'vocal_challenge']).optional(),
+          level: z.enum(['beginner', 'elementary', 'intermediate', 'upper-intermediate', 'advanced', 'upper_intermediate'] as const).optional(),
+          questionText: z.string().optional(),
+          imageUrl: z.string().optional(),
+          audioUrl: z.string().optional(),
+          correctAnswer: z.string().optional(),
+          options: z.string().optional(),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user?.role !== "admin") throw new Error("Unauthorized");
+        const { id, options, imageUrl, audioUrl, level, ...rest } = input;
+        const dataToUpdate: any = { ...rest };
+        if (options) {
+          dataToUpdate.options = options.split(',').map(s => s.trim()).filter(Boolean);
+        }
+        if (imageUrl !== undefined) dataToUpdate.imageData = imageUrl;
+        if (audioUrl !== undefined) dataToUpdate.audioData = audioUrl;
+        if (level !== undefined) {
+          dataToUpdate.level = level === 'upper_intermediate' ? 'upper-intermediate' : level;
+        }
+        return updateQuestion(id, dataToUpdate);
+      }),
+    deleteQuestion: protectedProcedure
+      .input(z.object({ id: z.string() }))
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user?.role !== "admin") throw new Error("Unauthorized");
+        return deleteQuestion(input.id);
+      }),
   }),
 
   // Test results router (MongoDB)
