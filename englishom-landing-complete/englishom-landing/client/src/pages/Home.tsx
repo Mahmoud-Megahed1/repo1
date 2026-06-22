@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ChevronDown, BookOpen, Mic, TrendingUp, Award, MessageCircle, Zap, Users, Smartphone, Lock, Headphones, Tablet, Laptop } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 /**
  * صفحة الهبوط الرئيسية لمنصة إنجليشوم
@@ -10,6 +10,18 @@ import { useState } from "react";
 
 export default function Home() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
+  const [coursesData, setCoursesData] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch('https://api.englishom.com/courses')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.data) {
+          setCoursesData(data.data);
+        }
+      })
+      .catch(err => console.error("Failed to fetch courses:", err));
+  }, []);
 
   const features = [
     {
@@ -50,10 +62,11 @@ export default function Home() {
     }
   ];
 
-  const levels = [
+  const baseLevels = [
     {
       number: 1,
       code: "A1",
+      level_name: "LEVEL_A1",
       name: "المستوى الأول",
       description: "مستوى مبتدئ للغة الإنجليزية",
       details: "تعلم القواعد الأساسية والمفردات الضرورية للتواصل اليومي",
@@ -64,6 +77,7 @@ export default function Home() {
     {
       number: 2,
       code: "A2",
+      level_name: "LEVEL_A2",
       name: "المستوى الأساسي",
       description: "تطوير المهارات الأساسية في اللغة الإنجليزية",
       details: "طور مفرداتك والتعبيرات الشائعة للمحادثات اليومية",
@@ -74,6 +88,7 @@ export default function Home() {
     {
       number: 3,
       code: "B1",
+      level_name: "LEVEL_B1",
       name: "المستوى المتوسط",
       description: "بناء الثقة في التواصل باللغة الإنجليزية",
       details: "قوّ طلاقتك وثقتك في التحدث والكتابة",
@@ -84,6 +99,7 @@ export default function Home() {
     {
       number: 4,
       code: "B2",
+      level_name: "LEVEL_B2",
       name: "المستوى فوق المتوسط",
       description: "إتقان المهارات المتقدمة في اللغة الإنجليزية",
       details: "حقق الإتقان والتواصل بتأثير في جميع المواقف",
@@ -92,6 +108,21 @@ export default function Home() {
       price: null
     }
   ];
+
+  const levels = baseLevels.map(level => {
+    const course = coursesData.find(c => c.level_name === level.level_name);
+    if (course) {
+      return {
+        ...level,
+        name: course.titleAr || level.name,
+        description: course.descriptionAr || level.description,
+        status: course.isAvailable ? "متاح حاليا للتسجيل" : "قريبا",
+        price: course.showPrice && course.price ? `${course.price} ريال` : null,
+        daysCount: course.daysCount || 50
+      };
+    }
+    return { ...level, daysCount: 50 };
+  });
 
   const faqs = [
     {
@@ -253,7 +284,7 @@ export default function Home() {
                 <p className="text-2xl text-white/80 mb-4 text-center font-semibold" style={{fontFamily: 'Tajawal, sans-serif'}}>{level.description}</p>
                 <p className="text-2xl text-white/70 mb-6 flex-grow text-center font-semibold" style={{fontFamily: 'Tajawal, sans-serif'}}>{level.details}</p>
                 <div className="mt-auto pt-6 border-t border-white/20">
-                  <p className="text-base font-semibold mb-3 text-center">50 يوم من الممارسة المنظمة</p>
+                  <p className="text-base font-semibold mb-3 text-center">{level.daysCount} يوم من الممارسة المنظمة</p>
                   <p className="text-lg font-bold mb-3 text-center">{level.status}</p>
                   {level.price && <p className="text-5xl font-bold text-yellow-300 mb-4 text-center pulse-animate">{level.price}</p>}
                   <Button 
