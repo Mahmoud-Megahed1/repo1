@@ -11,7 +11,6 @@ import { BookOpen, Settings, LogOut, Moon, Sun, Globe, Zap, BarChart } from "luc
  * Home page for EnglishOM Ques
  */
 export default function Home() {
-  const { user, loading, isAuthenticated, logout } = useAuth();
   const [, navigate] = useLocation();
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
@@ -67,50 +66,6 @@ export default function Home() {
                 </>
               )}
             </Button>
-
-            {loading ? (
-              <div className="w-8 h-8 bg-muted rounded-full animate-pulse" />
-            ) : isAuthenticated ? (
-              <>
-                <div className={`text-${language === "ar" ? "left" : "right"}`}>
-                  <p className="text-sm font-semibold text-foreground">{user?.name}</p>
-                  <p className="text-xs text-muted-foreground">{user?.email}</p>
-                </div>
-                <Button
-                  variant="outline"
-                  onClick={() => navigate("/results")}
-                  className="gap-2"
-                >
-                  <BookOpen className="w-4 h-4" />
-                  {t("header.myResults")}
-                </Button>
-                {user?.role === "admin" && (
-                  <Button
-                    variant="outline"
-                    onClick={() => navigate("/admin")}
-                    className="gap-2"
-                  >
-                    <Settings className="w-4 h-4" />
-                    {t("header.admin")}
-                  </Button>
-                )}
-                <Button
-                  variant="outline"
-                  onClick={() => logout()}
-                  className="gap-2"
-                >
-                  <LogOut className="w-4 h-4" />
-                  {t("header.logout")}
-                </Button>
-              </>
-            ) : (
-              <Button
-                className="bg-accent hover:bg-accent/90 text-accent-foreground"
-                onClick={() => (window.location.href = getLoginUrl())}
-              >
-                {t("header.login")}
-              </Button>
-            )}
           </div>
         </div>
       </header>
@@ -130,22 +85,16 @@ export default function Home() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button
-              className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold py-6 px-8 text-lg gap-2"
-              onClick={() => navigate("/ques")}
-            >
-              <BookOpen className="w-5 h-5" />
-              {t("home.cta.start")}
-            </Button>
-            {!isAuthenticated && (
-              <Button
-                variant="outline"
-                className="font-semibold py-6 px-8 text-lg"
-                onClick={() => (window.location.href = getLoginUrl())}
+            <div className="flex gap-4">
+              <Button 
+                size="lg" 
+                className="gap-2 text-lg px-8"
+                onClick={() => navigate("/quiz")}
               >
-                {t("header.login")}
+                <Zap className="w-5 h-5" />
+                {t("hero.startQuiz")}
               </Button>
-            )}
+            </div>
           </div>
         </section>
 

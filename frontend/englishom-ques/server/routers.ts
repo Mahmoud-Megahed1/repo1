@@ -5,7 +5,7 @@ import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import { getDb, getUserProgress, updateUserProgress, getUserAchievements, addAchievement, getUserQuizHistory, upsertUser } from "./db";
 import { questions, testResults } from "../drizzle/schema";
-import { eq, inArray } from "drizzle-orm";
+import { eq, inArray, desc } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { checkNewBadges, getBadgeInfo } from "../shared/achievements";
 import axios from "axios";
@@ -118,6 +118,8 @@ export const appRouter = router({
         })),
         averageResponseTime: z.number().optional(),
         totalTimeSpent: z.number().optional(),
+        studentName: z.string().optional(),
+        studentPhone: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
 
@@ -146,16 +148,19 @@ export const appRouter = router({
           const totalQuestions = input.answers.length;
           const accuracy = totalQuestions > 0 ? Math.round((correctAnswersCount / totalQuestions) * 100) : 0;
 
-          if (ctx.user) {
-            await db.insert(testResults).values({
-              userId: ctx.user.id,
-              level: input.level,
-              totalQuestions: totalQuestions,
-              correctAnswers: correctAnswersCount,
-              accuracy: accuracy,
-              averageResponseTime: input.averageResponseTime,
-            });
+          // Insert result for both guests and logged in users
+          await db.insert(testResults).values({
+            userId: ctx.user?.id,
+            studentName: input.studentName,
+            studentPhone: input.studentPhone,
+            level: input.level,
+            totalQuestions: totalQuestions,
+            correctAnswers: correctAnswersCount,
+            accuracy: accuracy,
+            averageResponseTime: input.averageResponseTime,
+          });
 
+          if (ctx.user) {
             // Update user progress
             await updateUserProgress(
               ctx.user.id,
@@ -286,6 +291,30 @@ export const appRouter = router({
   }),
 
   admin: router({
+    /**
+     * Get all test results / leads (admin only)
+     */
+    getAllTestResults: protectedProcedure
+      .use(async ({ ctx, next }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
+        }
+        return next({ ctx });
+      })
+      .query(async () => {
+        const db = await getDb();
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database unavailable" });
+        
+        try {
+          // Fetch results joined with users (if applicable) and order by newest
+          const results = await db.select().from(testResults).orderBy(desc(testResults.completedAt));
+          return results;
+        } catch (error) {
+          console.error("Failed to fetch test results:", error);
+          throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+        }
+      }),
+
     /**
      * Get all questions (admin only)
      */

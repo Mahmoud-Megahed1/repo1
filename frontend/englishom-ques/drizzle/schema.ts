@@ -51,7 +51,9 @@ export type InsertQuestion = typeof questions.$inferInsert;
  */
 export const testResults = mysqlTable("testResults", {
   id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull().references(() => users.id),
+  userId: int("userId").references(() => users.id),
+  studentName: varchar("studentName", { length: 255 }),
+  studentPhone: varchar("studentPhone", { length: 50 }),
   level: mysqlEnum("level", ["A1", "A2", "B1", "B2", "C1", "C2"]).notNull(),
   totalQuestions: int("totalQuestions").notNull(),
   correctAnswers: int("correctAnswers").notNull(),

@@ -272,6 +272,13 @@ export default function AdminDashboard() {
           >
             Statistics
           </Button>
+          <Button
+            variant={activeTab === "leads" ? "default" : "ghost"}
+            onClick={() => setActiveTab("leads")}
+            className={activeTab === "leads" ? "bg-accent text-accent-foreground" : ""}
+          >
+            Student Results
+          </Button>
         </div>
       </div>
 
@@ -540,6 +547,51 @@ export default function AdminDashboard() {
               </div>
             </Card>
           </div>
+        )}
+
+        {/* Leads / Student Results Tab */}
+        {activeTab === "leads" && (
+          <Card className="p-6">
+            <h2 className="text-xl font-bold mb-6 text-foreground">Student Results & Leads</h2>
+            {leadsLoading ? (
+              <p className="text-muted-foreground text-center py-8">Loading results...</p>
+            ) : leads.length === 0 ? (
+              <p className="text-muted-foreground text-center py-8">No results recorded yet.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left py-3 px-4 text-foreground font-semibold">Name</th>
+                      <th className="text-left py-3 px-4 text-foreground font-semibold">Phone/Email</th>
+                      <th className="text-left py-3 px-4 text-foreground font-semibold">Level</th>
+                      <th className="text-left py-3 px-4 text-foreground font-semibold">Score</th>
+                      <th className="text-left py-3 px-4 text-foreground font-semibold">Accuracy</th>
+                      <th className="text-left py-3 px-4 text-foreground font-semibold">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {leads.map((lead: any) => (
+                      <tr key={lead.id} className="border-b border-border hover:bg-muted/50 transition-colors">
+                        <td className="py-3 px-4 text-foreground">{lead.studentName || "Guest"}</td>
+                        <td className="py-3 px-4 text-foreground" dir="ltr">{lead.studentPhone || "-"}</td>
+                        <td className="py-3 px-4">
+                          <span className="inline-block px-2 py-1 rounded bg-primary/10 text-primary text-sm font-medium">
+                            {lead.level}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-foreground">{lead.correctAnswers} / {lead.totalQuestions}</td>
+                        <td className="py-3 px-4 text-foreground">{lead.accuracy}%</td>
+                        <td className="py-3 px-4 text-muted-foreground text-sm">
+                          {new Date(lead.completedAt).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </Card>
         )}
       </div>
     </div>

@@ -11,7 +11,7 @@ import { ChevronLeft, Globe, Moon, Sun, Trophy, Star, Target, Twitter, MessageCi
 import { useState, useEffect, useRef } from "react";
 import { formatTime } from "@/../../shared/timing";
 
-type QuizState = "loading" | "level-select" | "quiz" | "results";
+type QuizState = "loading" | "level-select" | "quiz" | "lead-capture" | "results";
 
 interface QuizQuestion {
   id: number;
@@ -57,6 +57,8 @@ export default function Quiz() {
   const [results, setResults] = useState<QuizResult | null>(null);
   const [totalTimeSpent, setTotalTimeSpent] = useState(0);
   const [quizStartTime, setQuizStartTime] = useState<number | null>(null);
+  const [studentName, setStudentName] = useState("");
+  const [studentPhone, setStudentPhone] = useState("");
   const userAnswersRef = useRef<{questionId: number, userAnswer: string}[]>([]);
   const responseTimesRef = useRef<number[]>([]);
 
@@ -159,20 +161,33 @@ export default function Quiz() {
     const avgResponseTime = times.length > 0 ? times.reduce((a, b) => a + b, 0) / times.length : 0;
 
     const result: QuizResult = {
-      score: 0, // Will be updated by server response
+      score: 0,
       totalQuestions: questions.length,
-      accuracy: 0, // Will be updated by server response
+      accuracy: 0,
       averageResponseTime: avgResponseTime,
       totalTimeSpent: Math.floor(totalTime / 1000),
     };
     setResults(result);
-    setState("results");
+    // Go to lead capture instead of results immediately
+    setState("lead-capture");
+  };
 
+  const handleLeadCaptureSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!studentName.trim() || !studentPhone.trim()) {
+      toast.error(language === "ar" ? "يرجى إدخال جميع البيانات المطلوبة" : "Please fill in all required fields");
+      return;
+    }
+
+    setState("results");
+    
     submitResult({
       level: selectedLevel as any,
       answers: userAnswersRef.current,
-      averageResponseTime: avgResponseTime,
-      totalTimeSpent: Math.floor(totalTime / 1000),
+      averageResponseTime: results?.averageResponseTime,
+      totalTimeSpent: results?.totalTimeSpent,
+      studentName: studentName.trim(),
+      studentPhone: studentPhone.trim(),
     });
   };
 
@@ -190,6 +205,8 @@ export default function Quiz() {
     setResults(null);
     setTotalTimeSpent(0);
     setQuizStartTime(null);
+    setStudentName("");
+    setStudentPhone("");
   };
 
   const getTimerColor = () => {
@@ -435,6 +452,69 @@ export default function Quiz() {
             {/* Score Display removed to prevent immediate feedback */}
           </Card>
         </div>
+      </div>
+    );
+  }
+
+  if (state === "lead-capture") {
+    return (
+      <div className={`min-h-screen flex flex-col items-center justify-center bg-background p-4 relative overflow-hidden ${language === "ar" ? "rtl" : "ltr"}`}>
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+          <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-primary/10 blur-[120px]" />
+          <div className="absolute top-[60%] -right-[10%] w-[50%] h-[50%] rounded-full bg-secondary/10 blur-[120px]" />
+        </div>
+
+        <Card className="w-full max-w-lg p-8 relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-700 shadow-xl border-t-4 border-t-primary">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4">
+              <Trophy className="w-8 h-8" />
+            </div>
+            <h2 className="text-3xl font-bold text-foreground mb-2">
+              {language === "ar" ? "لقد أتممت الاختبار بنجاح!" : "You've successfully completed the test!"}
+            </h2>
+            <p className="text-muted-foreground text-lg">
+              {language === "ar" ? "أدخل بياناتك بالأسفل لنعرض لك النتيجة فوراً." : "Enter your details below to see your results immediately."}
+            </p>
+          </div>
+
+          <form onSubmit={handleLeadCaptureSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-foreground">
+                {language === "ar" ? "الاسم بالكامل" : "Full Name"}
+              </label>
+              <input
+                type="text"
+                required
+                value={studentName}
+                onChange={(e) => setStudentName(e.target.value)}
+                placeholder={language === "ar" ? "اكتب اسمك هنا" : "Enter your name"}
+                className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-foreground">
+                {language === "ar" ? "رقم الموبايل أو الإيميل" : "Phone Number or Email"}
+              </label>
+              <input
+                type="text"
+                required
+                value={studentPhone}
+                onChange={(e) => setStudentPhone(e.target.value)}
+                placeholder={language === "ar" ? "مثال: 01012345678" : "e.g., 01012345678"}
+                className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-left"
+                dir="ltr"
+              />
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
+              size="lg"
+            >
+              {language === "ar" ? "إظهار نتيجتي الآن" : "Show My Results Now"}
+            </Button>
+          </form>
+        </Card>
       </div>
     );
   }
