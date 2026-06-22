@@ -10,6 +10,8 @@ import {
   getTestResultById,
   getTestAnswersByResultId,
   getAdminMessage,
+  getAllAdminMessages,
+  upsertAdminMessage,
   getAllTestResults,
   upsertUser,
   getAllQuestions,
