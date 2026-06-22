@@ -34,9 +34,14 @@ export default function AdminDashboard() {
           <div className="text-center">
             <p className="text-red-600 dark:text-red-400 text-lg mb-4">Access Denied</p>
             <p className="text-gray-600 dark:text-gray-400 mb-6">You must be an admin to access this page</p>
-            <Button onClick={() => navigate("/")} className="bg-indigo-600 hover:bg-indigo-700">
-              Back to Home
-            </Button>
+            <div className="flex gap-4 justify-center">
+              <Button onClick={() => navigate("/")} variant="outline">
+                Back to Home
+              </Button>
+              <Button onClick={() => navigate("/admin/login")} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                Admin Login
+              </Button>
+            </div>
           </div>
         </div>
       </div>

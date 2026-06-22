@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Test from "./pages/Test";
 import Results from "./pages/Results";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminLogin from "./pages/AdminLogin";
 import QuestionInputPanel from "./pages/QuestionInputPanel";
 
 function Router() {
@@ -22,6 +23,7 @@ function Router() {
         <Route path={"/test"} component={Test} />
         <Route path={"/results"} component={Results} />
         <Route path={"/admin"} component={AdminDashboard} />
+        <Route path={"/admin/login"} component={AdminLogin} />
         <Route path={"/questions"} component={QuestionInputPanel} />
         <Route path={"/add-questions"} component={PublicQuestionInput} />
         <Route path={"/404"} component={NotFound} />
