@@ -134,7 +134,17 @@ export async function getPublishedPosts(limit: number = 10, offset: number = 0) 
     .limit(limit)
     .offset(offset);
 
-  return posts;
+  return Promise.all(
+    posts.map(async (post) => {
+      const author = await db.select().from(users).where(eq(users.id, post.authorId)).limit(1);
+      const category = await db.select().from(blogCategories).where(eq(blogCategories.id, post.categoryId)).limit(1);
+      return {
+        ...post,
+        author: author[0] || null,
+        category: category[0] || null,
+      };
+    })
+  );
 }
 
 export async function getPostBySlug(slug: string) {
@@ -256,7 +266,7 @@ export async function searchPosts(query: string, limit: number = 20) {
 
   const searchTerm = `%${query}%`;
 
-  return db
+  const posts = await db
     .select()
     .from(blogPosts)
     .where(
@@ -268,6 +278,18 @@ export async function searchPosts(query: string, limit: number = 20) {
     )
     .orderBy(desc(blogPosts.publishedAt))
     .limit(limit);
+
+  return Promise.all(
+    posts.map(async (post) => {
+      const author = await db.select().from(users).where(eq(users.id, post.authorId)).limit(1);
+      const category = await db.select().from(blogCategories).where(eq(blogCategories.id, post.categoryId)).limit(1);
+      return {
+        ...post,
+        author: author[0] || null,
+        category: category[0] || null,
+      };
+    })
+  );
 }
 
 export async function incrementPostViews(postId: number) {
@@ -297,7 +319,17 @@ export async function getPostsByCategory(categoryId: number, limit: number = 10,
     .limit(limit)
     .offset(offset);
 
-  return posts;
+  return Promise.all(
+    posts.map(async (post) => {
+      const author = await db.select().from(users).where(eq(users.id, post.authorId)).limit(1);
+      const category = await db.select().from(blogCategories).where(eq(blogCategories.id, post.categoryId)).limit(1);
+      return {
+        ...post,
+        author: author[0] || null,
+        category: category[0] || null,
+      };
+    })
+  );
 }
 
 export async function getPostsCategoryCount(categoryId: number) {
