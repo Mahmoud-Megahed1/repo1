@@ -10,7 +10,7 @@ import { translations } from "@/lib/translations";
  * - WhatsApp integration
  */
 
-export default function Footer() {
+export default function Footer({ courseData }: { courseData?: any }) {
   const { language } = useLanguage();
   const t = translations[language];
   const isRTL = language === "ar";
@@ -30,7 +30,7 @@ export default function Footer() {
               <h3 className="text-xl font-bold">Englishom</h3>
             </a>
             <p className="text-[#CCCCCC] text-sm leading-relaxed">
-              {t.footer.brand}
+              {t.footer.brand.replace('60', courseData?.daysCount?.toString() || '60')}
             </p>
           </div>
 

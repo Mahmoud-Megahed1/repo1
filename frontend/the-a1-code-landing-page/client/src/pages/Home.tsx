@@ -8,6 +8,7 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/lib/translations";
 import { Star } from "lucide-react";
+import { useState, useEffect } from "react";
 
 /**
  * Home Page - The A1 Code Landing Page
@@ -23,6 +24,20 @@ export default function Home() {
   const { language } = useLanguage();
   const t = translations[language];
   const isRTL = language === "ar";
+  const [courseData, setCourseData] = useState<any>(null);
+
+  useEffect(() => {
+    fetch('https://api.englishom.com/api/courses')
+      .then(res => res.json())
+      .then(data => {
+        let courses = [];
+        if (Array.isArray(data)) courses = data;
+        else if (data && data.data) courses = data.data;
+        const a1Course = courses.find((c: any) => c.level_name === 'LEVEL_A1');
+        if (a1Course) setCourseData(a1Course);
+      })
+      .catch(console.error);
+  }, []);
 
   return (
     <div className={`min-h-screen bg-white dark:bg-[#0f0f0f] transition-colors duration-300 ${isRTL ? "rtl" : "ltr"}`} dir={isRTL ? "rtl" : "ltr"}>
@@ -30,7 +45,7 @@ export default function Home() {
       <Navigation />
 
       {/* Hero Section */}
-      <HeroSection />
+      <HeroSection courseData={courseData} />
 
       {/* Features Section */}
       <section id="features" className="py-20 bg-[#F8F9FA] dark:bg-[#1a1a1a] transition-colors duration-300">
@@ -69,7 +84,7 @@ export default function Home() {
       <TenStepEngine />
 
       {/* Outcomes Section */}
-      <OutcomesSection />
+      <OutcomesSection courseData={courseData} />
 
       {/* Tamara Section */}
       <TamaraSection />
@@ -121,7 +136,7 @@ export default function Home() {
             {t.cta.title}
           </h2>
           <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            {t.cta.description}
+            {t.cta.description.replace('60', courseData?.daysCount?.toString() || '60')}
           </p>
           <div className="space-y-4">
             <a
@@ -133,7 +148,7 @@ export default function Home() {
               {t.cta.button}
             </a>
             <p className="text-white/90 text-lg font-bold">
-              {t.cta.price}
+              {courseData ? (courseData.showPrice && courseData.price ? `${language === 'ar' ? 'السعر' : 'Price'}: ${courseData.price} ${language === 'ar' ? 'ريال' : 'SAR'}` : (language === 'ar' ? 'قريبا' : 'Coming soon')) : t.cta.price}
             </p>
             <p className="text-white/70 text-sm">
               {t.cta.note}
@@ -143,7 +158,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <Footer />
+      <Footer courseData={courseData} />
 
       {/* Floating WhatsApp Button */}
       <FloatingWhatsApp />

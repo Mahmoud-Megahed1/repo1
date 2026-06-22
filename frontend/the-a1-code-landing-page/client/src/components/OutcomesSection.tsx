@@ -10,7 +10,7 @@ import { translations } from "@/lib/translations";
  * - Full language support
  */
 
-export default function OutcomesSection() {
+export default function OutcomesSection({ courseData }: { courseData?: any }) {
   const { language } = useLanguage();
   const t = translations[language];
   const isRTL = language === "ar";
@@ -54,11 +54,17 @@ export default function OutcomesSection() {
 
                 {/* Description */}
                 <p className="text-[#666666] dark:text-[#CCCCCC] leading-relaxed">
-                  {outcome.description}
+                  {(() => {
+                    let text = outcome.description;
+                    if (text.includes('60')) {
+                      text = text.replace('60', courseData?.daysCount?.toString() || '60');
+                    }
+                    return text;
+                  })()}
                 </p>
 
                 {/* Check mark */}
-                <div className="flex items-center gap-2 pt-4">
+                <div className="flex items-center gap-2 pt-4 justify-center">
                   <CheckCircle2 className="w-5 h-5 text-[#F5BB41]" />
                   <span className="text-sm font-semibold text-[#1F6BF6] dark:text-[#F5BB41]">
                     {outcome.guarantee}

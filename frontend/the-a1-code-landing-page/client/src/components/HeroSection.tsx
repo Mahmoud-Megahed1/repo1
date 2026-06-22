@@ -10,7 +10,7 @@ import { translations } from "@/lib/translations";
  * - Full language support with Dark Mode
  */
 
-export default function HeroSection() {
+export default function HeroSection({ courseData }: { courseData?: any }) {
   const { language } = useLanguage();
   const t = translations[language];
   const isRTL = language === "ar";
@@ -40,29 +40,35 @@ export default function HeroSection() {
 
             {/* Description */}
             <p className="text-lg text-[#666666] dark:text-[#CCCCCC] leading-relaxed">
-              {t.hero.description}
+              {t.hero.description.replace('60', courseData?.daysCount?.toString() || '60')}
             </p>
 
             {/* Features Grid */}
             <div className="grid grid-cols-2 gap-6 mx-auto max-w-2xl">
-              {t.hero.features.map((feature, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-3 bg-[#F8F9FA] dark:bg-[#1a1a1a] p-4 rounded-lg transition-colors duration-300"
-                >
-                  <div className="w-8 h-8 rounded-full bg-[#F5BB41] flex items-center justify-center flex-shrink-0">
-                    <Check className="w-4 h-4 text-[#222222] stroke-[3]" />
+              {t.hero.features.map((feature, index) => {
+                let value = feature.value;
+                if (feature.label === "يوم" || feature.label === "Days") {
+                  value = courseData?.daysCount?.toString() || feature.value;
+                }
+                return (
+                  <div
+                    key={index}
+                    className="flex items-center gap-3 bg-[#F8F9FA] dark:bg-[#1a1a1a] p-4 rounded-lg transition-colors duration-300"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-[#F5BB41] flex items-center justify-center flex-shrink-0">
+                      <Check className="w-4 h-4 text-[#222222] stroke-[3]" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-[#222222] dark:text-white">
+                        {value}
+                      </p>
+                      <p className="text-xs text-[#666666] dark:text-[#CCCCCC]">
+                        {feature.label}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-[#222222] dark:text-white">
-                      {feature.value}
-                    </p>
-                    <p className="text-xs text-[#666666] dark:text-[#CCCCCC]">
-                      {feature.label}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* CTAs */}
