@@ -60,9 +60,9 @@
     "joi": "^17.13.3",
     "mammoth": "^1.11.0",
     "moment-timezone": "^0.6.0",
-    "mongoose": "^8.13.2",
+    "mongoose": "^8.24.1",
     "multer": "^1.4.5-lts.2",
-    "nodemailer": "^7.0.12",
+    "nodemailer": "^9.0.1",
     "openai": "^4.104.0",
     "passport": "^0.7.0",
     "passport-facebook": "^3.0.0",
@@ -124,6 +124,9 @@
   },
   "overrides": {
     "minimatch": "^10.2.1",
-    "ajv": "^8.18.0"
+    "ajv": "^8.18.0",
+    "js-yaml": "^4.1.2",
+    "qs": "^6.15.2",
+    "protobufjs": "^7.6.3"
   }
 }
