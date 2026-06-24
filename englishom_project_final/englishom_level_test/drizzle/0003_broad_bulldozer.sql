@@ -1,1 +1,0 @@
-ALTER TABLE `questions` ADD `timeLimit` int DEFAULT 30 NOT NULL;
