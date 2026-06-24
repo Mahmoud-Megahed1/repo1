@@ -95,6 +95,7 @@
   "overrides": {
     "ajv": "^8.18.0",
     "minimatch": "^10.2.1",
-    "js-yaml": "^4.1.2"
+    "js-yaml": "^4.1.2",
+    "esbuild": "^0.28.1"
   }
 }
