@@ -112,6 +112,28 @@ export default function Home() {
       color: "from-orange-500 to-orange-600",
       status: "قريبا",
       price: null
+    },
+    {
+      number: 5,
+      code: "C1",
+      level_name: "LEVEL_C1",
+      name: "إصدار الخبراء المتقدم",
+      description: "تحقيق معايير التحدث التلقائي والتحليل البرمجي المعقد للنصوص",
+      details: "تفعيل معايير المعالجة اللغوية وأداة التدقيق الصياغي الهيكلي وتحديات التدفق الصوتي التلقائي",
+      color: "from-blue-500 to-blue-600",
+      status: "قريبا",
+      price: null
+    },
+    {
+      number: 6,
+      code: "C2",
+      level_name: "LEVEL_C2",
+      name: "نظام المحاكاة الاحترافية الكاملة",
+      description: "التدفق التقني الكامل ومحاكاة بيئات التحدث القيادية",
+      details: "مخرجات التدفق الصوتي الشامل ومعالجة النصوص التخصصية المعقدة وأنظمة الحوار التفاعلي",
+      color: "from-purple-500 to-purple-600",
+      status: "قريبا",
+      price: null
     }
   ];
 
@@ -326,7 +348,7 @@ export default function Home() {
             <p className="text-xl text-gray-400">مسارات تعليمية مصممة<br />خصيصاً لكل مستوى</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {levels.map((level, index) => (
               <Card key={index} className="relative overflow-hidden border-none bg-[#1C1C1E] text-white hover:shadow-2xl transition-all hover:scale-105 flex flex-col min-h-[500px]">
                 {/* Top Gradient Overlay */}
