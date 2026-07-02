@@ -8,27 +8,27 @@ if (isLinux) {
   
   const symlinks = [
     {
-      target: '/var/www/repo1/frontend/the-a1-code-landing-page/dist/public',
+      target: '/var/www/englishom/frontend/the-a1-code-landing-page/dist/public',
       link: path.join(distDir, 'Landingpage')
     },
     {
-      target: '/var/www/repo1/frontend/englishom-level-test/dist/public',
+      target: '/var/www/englishom/frontend/englishom-level-test/dist/public',
       link: path.join(distDir, 'test')
     },
     {
-      target: '/var/www/repo1/frontend/englishom-ques/dist/public',
+      target: '/var/www/englishom/frontend/englishom-ques/dist/public',
       link: path.join(distDir, 'ques')
     },
     {
-      target: '/var/www/repo1/frontend/englishom-blog/dist/public',
+      target: '/var/www/englishom/frontend/englishom-blog/dist/public',
       link: path.join(distDir, 'blog')
     },
     {
-      target: '/var/www/repo1/frontend/englishom-dashboard/dist/public',
+      target: '/var/www/englishom/frontend/englishom-dashboard/dist/public',
       link: path.join(distDir, 'dashboard')
     },
     {
-      target: '/var/www/repo1/frontend/englishom-student-progress/dist',
+      target: '/var/www/englishom/frontend/englishom-student-progress/dist',
       link: path.join(distDir, 'progress')
     }
   ];

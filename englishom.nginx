@@ -4,14 +4,14 @@ server {
 
     # Frontend (User App) - Vite SPA
     location / {
-        root /var/www/englishom/user/dist;
+        root /var/www/englishom/frontend/english-home-vite/dist;
         index index.html;
         try_files $uri $uri/ /index.html;
     }
 
-    # Admin Panel - Next.js (Port 3000)
-    location /admin {
-        proxy_pass http://localhost:3000;
+    # Blog API (Port 3001)
+    location /blog/api/ {
+        proxy_pass http://localhost:3001/api/;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -19,9 +19,59 @@ server {
         proxy_cache_bypass $http_upgrade;
     }
 
-    # Backend API - NestJS (Port 5000 - Assuming default)
-    location /api {
+    # Dashboard API (Port 3002)
+    location /dashboard/api/ {
+        proxy_pass http://localhost:3002/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Level Test API (Port 3003)
+    location /test/api/ {
+        proxy_pass http://localhost:3003/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Ques API (Port 3004)
+    location /ques/api/ {
+        proxy_pass http://localhost:3004/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+server {
+    listen 80;
+    server_name api.englishom.com;
+
+    # Backend API - NestJS (Port 5000)
+    location / {
         proxy_pass http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+server {
+    listen 80;
+    server_name admin.englishom.com;
+
+    # Admin Panel - Next.js (Port 8080)
+    location / {
+        proxy_pass http://localhost:8080;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
