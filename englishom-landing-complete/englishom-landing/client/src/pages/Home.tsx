@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChevronDown, BookOpen, Mic, TrendingUp, Award, MessageCircle, Zap, Users, Smartphone, Lock, Headphones, Tablet, Laptop } from "lucide-react";
+import { ChevronDown, BookOpen, Mic, TrendingUp, Award, MessageCircle, Zap, Users, Smartphone, Lock, Headphones, Tablet, Laptop, Check } from "lucide-react";
 import { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 /**
  * صفحة الهبوط الرئيسية لمنصة إنجليشوم
@@ -114,8 +115,40 @@ export default function Home() {
     }
   ];
 
+  const levelFeatures: Record<string, string[]> = {
+    LEVEL_A1: [
+      "تهيئة البيئة البرمجية الأولى",
+      "تفعيل خاصية المحاكاة الصوتية",
+      "تتبع التحديثات الصوتية الإلزامية",
+      "معالجة ومطابقة البصمة الصوتية",
+      "تحليل فوري لدقة مخارج الصوت"
+    ],
+    LEVEL_A2: [
+      "محاكاة التفاعل اللفظي الحي",
+      "خوارزميات وصف السيناريوهات اليومية",
+      "أنظمة الصياغة الزمنية التفاعلية",
+      "معالجة برمجية متقدمة للنطق",
+      "قواعد بيانات المواقف التفاعلية"
+    ],
+    LEVEL_B1: [
+      "برمجيات ومصطلحات قطاع الأعمال",
+      "أداة التدقيق والتركيب الهيكلي",
+      "تحديات النطق المتقدم",
+      "محاكاة معايير التحدث الطبيعي",
+      "أنظمة الحوار المعقد والممتد"
+    ],
+    LEVEL_B2: [
+      "معايير الممارسة الاحترافية",
+      "التدقيق والتركيب المتقدم للنصوص",
+      "محاكاة النقاشات التقنية الممتدة",
+      "أنظمة السياق اللغوي الطبيعي",
+      "تحليل التوافق التقني للصوت"
+    ]
+  };
+
   const levels = baseLevels.map(level => {
     const course = coursesData.find(c => c.level_name === level.level_name);
+    const features = levelFeatures[level.level_name] || [];
     if (course) {
       return {
         ...level,
@@ -123,11 +156,23 @@ export default function Home() {
         description: course.descriptionAr || level.description,
         status: course.isAvailable ? "متاح حاليا للتسجيل" : "قريبا",
         price: course.showPrice && course.price ? `${course.price} ريال` : null,
-        daysCount: course.daysCount || 50
+        originalPrice: course.originalPrice ? `${course.originalPrice} ريال` : null,
+        daysCount: course.daysCount || 50,
+        features
       };
     }
-    return { ...level, daysCount: 50 };
+    return { ...level, daysCount: 50, features };
   });
+
+  const getGradient = (id: string) => {
+    switch (id) {
+      case 'LEVEL_A1': return 'from-[#279B5A] via-[#279B5A]/20 to-transparent';
+      case 'LEVEL_A2': return 'from-[#E27625] via-[#E27625]/20 to-transparent';
+      case 'LEVEL_B1': return 'from-[#D4A346] via-[#D4A346]/20 to-transparent';
+      case 'LEVEL_B2': return 'from-[#D94579] via-[#D94579]/20 to-transparent';
+      default: return 'from-gray-600 via-gray-900/20 to-transparent';
+    }
+  };
 
   const faqs = [
     {
@@ -281,34 +326,81 @@ export default function Home() {
             <p className="text-xl text-gray-400">مسارات تعليمية مصممة<br />خصيصاً لكل مستوى</p>
           </div>
           
-          <div className="grid md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {levels.map((level, index) => (
-              <Card key={index} className={`bg-gradient-to-br ${level.color} border-0 p-8 text-white hover:shadow-2xl transition-all hover:scale-105 flex flex-col`}>
-                <div className="text-5xl font-bold mb-6 text-center opacity-90" style={{fontFamily: 'Tajawal, sans-serif'}}>{level.code}</div>
-                <h3 className="text-3xl font-bold mb-4 text-center" style={{fontFamily: 'Tajawal, sans-serif'}}>{level.name}</h3>
-                <p className="text-2xl text-white/80 mb-4 text-center font-semibold" style={{fontFamily: 'Tajawal, sans-serif'}}>{level.description}</p>
-                <p className="text-2xl text-white/70 mb-6 flex-grow text-center font-semibold" style={{fontFamily: 'Tajawal, sans-serif'}}>{level.details}</p>
-                <div className="mt-auto pt-6 border-t border-white/20">
-                  <p className="text-base font-semibold mb-3 text-center">{level.daysCount} يوم من الممارسة المنظمة</p>
-                  <p className="text-lg font-bold mb-3 text-center">{level.status}</p>
-                  {level.price && <p className="text-5xl font-bold text-yellow-300 mb-4 text-center pulse-animate">{level.price}</p>}
-                  <Button 
-                    size="lg" 
-                    className={`w-full font-bold text-lg ${
-                      level.price 
-                        ? 'bg-white text-slate-900 hover:bg-slate-100' 
-                        : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 border-0'
-                    }`}
-                    onClick={() => {
-                      if (level.price) {
-                        alert('يجب عليك التسجيل في الموقع أولاً للاشتراك في هذا المستوى');
-                        window.location.href = 'https://englishom.com/ar/login';
-                      }
-                    }}
-                    disabled={!level.price}
-                  >
-                    {level.price ? 'اشترك الآن' : 'قريبا'}
-                  </Button>
+              <Card key={index} className="relative overflow-hidden border-none bg-[#1C1C1E] text-white hover:shadow-2xl transition-all hover:scale-105 flex flex-col min-h-[500px]">
+                {/* Top Gradient Overlay */}
+                <div className={cn("absolute inset-0 h-2/3 bg-gradient-to-b opacity-80 pointer-events-none", getGradient(level.level_name))} />
+
+                {/* Days Badge */}
+                <div className="absolute top-4 left-4 z-10">
+                  <span className="flex items-center gap-1 rounded-full bg-black/40 px-3 py-1 text-xs font-semibold backdrop-blur-md">
+                    {level.price ? `${level.daysCount} يوماً` : 'قريباً'}
+                  </span>
+                </div>
+
+                <div className="relative z-10 flex flex-col flex-grow p-8">
+                  {/* Header */}
+                  <div className="text-center pb-2 pt-4">
+                    <div className="text-lg font-medium mb-1 drop-shadow-md">
+                      (مسار {level.code})
+                    </div>
+                    <h3 className="text-2xl font-bold drop-shadow-md" style={{fontFamily: 'Tajawal, sans-serif'}}>{level.name}</h3>
+                  </div>
+
+                  {/* Content Area */}
+                  <div className="flex flex-col flex-grow space-y-6 pt-2">
+                    {level.price ? (
+                      <div className="flex flex-col items-center justify-center min-h-[70px]">
+                        <span className="text-white flex items-center gap-1 text-4xl font-bold">
+                          {level.price}
+                        </span>
+                        {level.originalPrice && (
+                          <span className="text-gray-400 flex items-center gap-1 text-lg line-through mt-0.5">
+                            {level.originalPrice}
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center min-h-[70px]">
+                        <span className="text-gray-400 text-lg font-semibold">قريباً</span>
+                      </div>
+                    )}
+
+                    {/* Features List */}
+                    <div className="w-fit mx-auto flex-grow">
+                      <ul className="space-y-2.5">
+                        {(level.features || []).map((feature, idx) => (
+                          <li key={idx} className="flex items-center gap-3 text-sm text-gray-200">
+                            <Check className="text-white h-4 w-4 flex-shrink-0" />
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* CTA Button */}
+                    <div className="pt-4 mt-auto">
+                      <Button 
+                        size="lg" 
+                        className={cn(
+                          "w-full font-bold text-lg py-5 rounded-lg",
+                          level.price 
+                            ? "bg-white text-black hover:bg-gray-100" 
+                            : "bg-gray-700 text-gray-400 border-none cursor-not-allowed"
+                        )}
+                        onClick={() => {
+                          if (level.price) {
+                            alert('يجب عليك التسجيل في الموقع أولاً للاشتراك في هذا المستوى');
+                            window.location.href = 'https://englishom.com/ar/login';
+                          }
+                        }}
+                        disabled={!level.price}
+                      >
+                        {level.price ? 'اشترك الآن' : 'قريباً'}
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </Card>
             ))}
