@@ -192,6 +192,8 @@ export default function Home() {
       case 'LEVEL_A2': return 'from-[#E27625] via-[#E27625]/20 to-transparent';
       case 'LEVEL_B1': return 'from-[#D4A346] via-[#D4A346]/20 to-transparent';
       case 'LEVEL_B2': return 'from-[#D94579] via-[#D94579]/20 to-transparent';
+      case 'LEVEL_C1': return 'from-[#297BCE] via-[#297BCE]/20 to-transparent';
+      case 'LEVEL_C2': return 'from-[#8A21C6] via-[#8A21C6]/20 to-transparent';
       default: return 'from-gray-600 via-gray-900/20 to-transparent';
     }
   };
