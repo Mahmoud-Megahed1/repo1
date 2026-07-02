@@ -1,21 +1,4 @@
 import { RiyalSymbol } from '@components/icons';
-import { Badge, type BadgeVariant } from '@components/ui/badge';
-import { Button } from '@components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@components/ui/card';
-import useLocale from '@hooks/use-locale';
-import { localizedNumber } from '@lib/utils';
-import { useLocalizedLevels } from '@modules/levels/queries';
-import { Link } from '@shared/i18n/routing';
-import { Check } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-
-import { RiyalSymbol } from '@components/icons';
 import { Badge } from '@components/ui/badge';
 import { Button } from '@components/ui/button';
 import {
