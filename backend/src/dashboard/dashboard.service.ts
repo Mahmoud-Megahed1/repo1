@@ -287,13 +287,15 @@ export class DashboardService {
               expiresDate = new Date(purchaseDate);
               const extraDays = orderForLevel.carriedOverDays || 0;
               expiresDate.setDate(expiresDate.getDate() + 60 + extraDays);
-            }
 
-            // Include admin granted days and paused days dynamically
-            const adminGrantedDays = user.adminGrantedDays || 0;
-            const totalPausedDays = user.totalPausedDays || 0;
-            if (adminGrantedDays !== 0 || totalPausedDays > 0) {
-              expiresDate = new Date(expiresDate.getTime() + (adminGrantedDays + totalPausedDays) * 24 * 60 * 60 * 1000);
+              // Include admin granted days and paused days dynamically ONLY for legacy orders
+              const adminGrantedDays = user.adminGrantedDays || 0;
+              const totalPausedDays = user.totalPausedDays || 0;
+              if (adminGrantedDays !== 0 || totalPausedDays > 0) {
+                expiresDate = new Date(expiresDate.getTime() + (adminGrantedDays + totalPausedDays) * 24 * 60 * 60 * 1000);
+              }
+            } else {
+              expiresDate = new Date(expiresDate);
             }
 
             expiresAt = expiresDate.toISOString();
