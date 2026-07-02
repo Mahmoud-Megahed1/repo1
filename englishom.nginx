@@ -1,6 +1,7 @@
 server {
     listen 80;
     server_name englishom.com www.englishom.com;
+    client_max_body_size 50M;
 
     # Frontend (User App) - Vite SPA
     location / {
@@ -53,6 +54,7 @@ server {
 server {
     listen 80;
     server_name api.englishom.com;
+    client_max_body_size 50M;
 
     # Backend API - NestJS (Port 5000)
     location / {
