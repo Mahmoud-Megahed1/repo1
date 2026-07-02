@@ -9,7 +9,7 @@ import Home from "./pages/Home";
 
 function Router() {
   return (
-    <WouterRouter base="/Landingpage">
+    <WouterRouter base="/landingpage1">
       <Switch>
         <Route path={"/"} component={Home} />
         <Route path={"/404"} component={NotFound} />
