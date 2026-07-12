@@ -86,7 +86,7 @@ export default function Footer({ courseData }: { courseData?: any }) {
               <div className="flex items-center gap-3">
                 <MessageCircle className="w-5 h-5 text-[#F5BB41] flex-shrink-0" />
                 <a
-                  href={`https://wa.me/${t.footer.whatsapp}`}
+                  href={`https://wa.me/${t.footer.whatsapp}?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B+%D8%A8%D9%83+%D9%81%D9%8A+Englishom+-+%D9%87%D9%84+%D9%84%D8%AF%D9%8A%D9%83+%D8%A3%D9%8A+%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%D8%A7%D8%AA%D8%9F`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-[#F5BB41] transition-colors"
@@ -131,7 +131,7 @@ export default function Footer({ courseData }: { courseData?: any }) {
             <a href="https://www.tiktok.com/@englishom1" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-[#25F4EE] hover:bg-[#00D9D4] flex items-center justify-center transition-all duration-300 hover:scale-110" title="TikTok">
               <Music2 className="w-5 h-5 text-black" />
             </a>
-            <a href={`https://wa.me/${t.footer.whatsapp}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-[#25D366] hover:bg-[#1FA855] flex items-center justify-center transition-all duration-300 hover:scale-110" title="WhatsApp">
+            <a href={`https://wa.me/${t.footer.whatsapp}?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B+%D8%A8%D9%83+%D9%81%D9%8A+Englishom+-+%D9%87%D9%84+%D9%84%D8%AF%D9%8A%D9%83+%D8%A3%D9%8A+%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%D8%A7%D8%AA%D8%9F`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-[#25D366] hover:bg-[#1FA855] flex items-center justify-center transition-all duration-300 hover:scale-110" title="WhatsApp">
               <MessageCircle className="w-5 h-5 text-white" />
             </a>
             <a href="https://t.me/+xlzna51reL1hNzc0" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-[#0088cc] hover:bg-[#006699] flex items-center justify-center transition-all duration-300 hover:scale-110" title="Telegram">

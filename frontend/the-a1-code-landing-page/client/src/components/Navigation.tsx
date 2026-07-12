@@ -84,7 +84,7 @@ export default function Navigation() {
 
           {/* WhatsApp Support Button */}
           <a
-            href={`https://wa.me/${t.footer.whatsapp}`}
+            href={`https://wa.me/${t.footer.whatsapp}?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B+%D8%A8%D9%83+%D9%81%D9%8A+Englishom+-+%D9%87%D9%84+%D9%84%D8%AF%D9%8A%D9%83+%D8%A3%D9%8A+%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%D8%A7%D8%AA%D8%9F`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 bg-[#25D366] hover:bg-[#1FA855] rounded-lg transition-all duration-300 hover:scale-110"
