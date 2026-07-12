@@ -22,7 +22,7 @@
   <meta property="og:url" content="https://englishom.com/" />
   <meta property="og:title" content="Englishom | تعلم الإنجليزية من الصفر إلى الاحتراف" />
   <meta property="og:description" content="انضم إلى إنجليش هوم لتعلم اللغة الإنجليزية من خلال دورات تفاعلية ومستويات متقدمة. ابدأ رحلتك الآن!" />
-  <meta property="og:image" content="https://englishom.com/logo.jpeg" />
+  <meta property="og:image" content="https://englishom.com/og_image.png" />
   <meta property="og:locale" content="ar_SA" />
   <meta property="og:locale:alternate" content="en_US" />
   <meta property="og:site_name" content="Englishom" />
@@ -32,15 +32,135 @@
   <meta name="twitter:url" content="https://englishom.com/" />
   <meta name="twitter:title" content="Englishom | تعلم الإنجليزية من الصفر إلى الاحتراف" />
   <meta name="twitter:description" content="انضم إلى إنجليش هوم لتعلم اللغة الإنجليزية من خلال دورات تفاعلية ومستويات متقدمة. ابدأ رحلتك الآن!" />
-  <meta name="twitter:image" content="https://englishom.com/logo.jpeg" />
+  <meta name="twitter:image" content="https://englishom.com/og_image.png" />
 
   <!-- Tamara Payment Widget -->
   <script src="https://cdn.tamara.co/widget/product-widget.min.js"></script>
+
+  <!-- Structured Data (JSON-LD) for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "Englishom",
+    "alternateName": "إنجليش هوم",
+    "url": "https://englishom.com",
+    "logo": "https://englishom.com/logo.jpeg",
+    "description": "تعلم الإنجليزية من الصفر إلى الاحتراف من خلال دورات تفاعلية ومستويات متقدمة",
+    "sameAs": [
+      "https://www.facebook.com/share/19wWacNacT/",
+      "https://www.snapchat.com/add/englishom25"
+    ],
+    "hasCourse": [
+      {
+        "@type": "Course",
+        "name": "المستوى A1 - إصدار التأسيس التفاعلي",
+        "description": "تعلم أساسيات اللغة الإنجليزية من الصفر - 50 يوم تدريب تفاعلي",
+        "provider": {"@type": "Organization", "name": "Englishom"},
+        "inLanguage": ["ar", "en"],
+        "offers": {"@type": "Offer", "price": "999", "priceCurrency": "SAR", "availability": "https://schema.org/InStock"}
+      },
+      {
+        "@type": "Course",
+        "name": "المستوى A2 - مسار التواصل الأساسي",
+        "description": "التواصل في المواقف اليومية والتحدث عن الروتين اليومي",
+        "provider": {"@type": "Organization", "name": "Englishom"},
+        "inLanguage": ["ar", "en"],
+        "offers": {"@type": "Offer", "price": "1199", "priceCurrency": "SAR", "availability": "https://schema.org/InStock"}
+      },
+      {
+        "@type": "Course",
+        "name": "المستوى B1 - البيئة المتوسطة الذكية",
+        "description": "مناقشة المواضيع المألوفة وفهم النقاط الرئيسية",
+        "provider": {"@type": "Organization", "name": "Englishom"},
+        "inLanguage": ["ar", "en"],
+        "offers": {"@type": "Offer", "price": "1399", "priceCurrency": "SAR", "availability": "https://schema.org/InStock"}
+      },
+      {
+        "@type": "Course",
+        "name": "المستوى B2 - حزمة الإتقان التقني",
+        "description": "المشاركة في محادثات متنوعة وفهم النصوص المعقدة",
+        "provider": {"@type": "Organization", "name": "Englishom"},
+        "inLanguage": ["ar", "en"],
+        "offers": {"@type": "Offer", "price": "1499", "priceCurrency": "SAR", "availability": "https://schema.org/InStock"}
+      },
+      {
+        "@type": "Course",
+        "name": "المستوى C1 - إصدار الخبراء المتقدم",
+        "description": "التعبير بطلاقة وعفوية وفهم النصوص الصعبة",
+        "provider": {"@type": "Organization", "name": "Englishom"},
+        "inLanguage": ["ar", "en"],
+        "offers": {"@type": "Offer", "price": "1799", "priceCurrency": "SAR", "availability": "https://schema.org/InStock"}
+      },
+      {
+        "@type": "Course",
+        "name": "المستوى C2 - نظام المحاكاة الاحترافية الكاملة",
+        "description": "إتقان كامل للغة الإنجليزية - فهم كل ما تسمعه أو تقرأه",
+        "provider": {"@type": "Organization", "name": "Englishom"},
+        "inLanguage": ["ar", "en"],
+        "offers": {"@type": "Offer", "price": "1999", "priceCurrency": "SAR", "availability": "https://schema.org/InStock"}
+      }
+    ]
+  }
+  </script>
+
+  <!-- FAQ Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "كيف يعمل نظام التعلم اليومي في إنجليش هوم؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "كل يوم، ستقوم بإكمال مجموعة من الأنشطة المصممة لبناء مهاراتك تدريجياً. ويشمل ذلك تمارين في القراءة، الاستماع، التحدث، والكتابة."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "ما المستويات المتاحة في إنجليش هوم؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "نقدم ستة مستويات من A1 (مبتدئ) إلى C2 (إتقان). كل مستوى مُصمم لمساعدتك على إتقان اللغة خطوة بخطوة."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "هل يمكنني تتبع تقدمي في تعلم الإنجليزية؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "نعم! يمكنك متابعة تقدمك اليومي، وإنجازاتك، والمجالات التي تحتاج إلى تحسين من خلال لوحة تحليلاتنا."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "هل يوجد تطبيق جوال لإنجليش هوم؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "نعم! منصتنا متاحة على كل من أجهزة الكمبيوتر والجوال، مما يتيح لك التعلم في أي وقت ومن أي مكان."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
+
+  <!-- Google Analytics 4 - Replace G-XXXXXXXXXX with actual Measurement ID -->
+  <!--
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  -->
 </body>
 
 </html>
