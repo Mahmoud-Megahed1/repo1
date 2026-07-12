@@ -24,6 +24,7 @@ export const translations = {
       readyToTest: "Ready to Test Your English?",
       getAssessment: "Get your personalized assessment and start your learning journey today",
       startTestNow: "Start Test Now",
+      addQuestions: "Add Questions",
     },
     // Stages
     stages: {
@@ -139,6 +140,7 @@ export const translations = {
       readyToTest: "هل أنت مستعد لاختبار اللغة الإنجليزية؟",
       getAssessment: "احصل على تقييم شخصي وابدأ رحلة التعلم الخاصة بك اليوم",
       startTestNow: "ابدأ الاختبار الآن",
+      addQuestions: "إضافة أسئلة",
     },
     // Stages
     stages: {

@@ -80,7 +80,7 @@ export function ContactPage() {
     },
     {
       name: 'WhatsApp',
-      href: 'https://wa.me/qr/NLKCDGU2XBMEE1',
+      href: 'https://wa.me/966542577250',
       icon: WhatsappIcon,
       description: t('Landing.contact.social.whatsapp'),
     },

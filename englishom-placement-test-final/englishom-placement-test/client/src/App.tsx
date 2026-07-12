@@ -24,8 +24,6 @@ function Router() {
         <Route path={"/results"} component={Results} />
         <Route path={"/admin"} component={AdminDashboard} />
         <Route path={"/admin/login"} component={AdminLogin} />
-        <Route path={"/questions"} component={QuestionInputPanel} />
-        <Route path={"/add-questions"} component={PublicQuestionInput} />
         <Route path={"/404"} component={NotFound} />
         {/* Final fallback route */}
         <Route component={NotFound} />

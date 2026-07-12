@@ -442,16 +442,16 @@ export default function QuestionManagement() {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-slate-700 border-b border-gray-200 dark:border-gray-700">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                <th className="px-6 py-3 text-start text-sm font-semibold text-gray-900 dark:text-white">
                   Question
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                <th className="px-6 py-3 text-start text-sm font-semibold text-gray-900 dark:text-white">
                   Level
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                <th className="px-6 py-3 text-start text-sm font-semibold text-gray-900 dark:text-white">
                   Correct Answer
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                <th className="px-6 py-3 text-start text-sm font-semibold text-gray-900 dark:text-white">
                   Actions
                 </th>
               </tr>

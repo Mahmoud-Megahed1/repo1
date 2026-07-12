@@ -46,14 +46,6 @@ export default function Home() {
               >
                 {t("home.startNow")}
               </Button>
-              {isAuthenticated && user?.role === "admin" && (
-                <Button
-                  onClick={() => navigate("/add-questions")}
-                  className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg rounded-lg"
-                >
-                  {t("home.addQuestions") || "Add Questions"}
-                </Button>
-              )}
             </div>
           </div>
 

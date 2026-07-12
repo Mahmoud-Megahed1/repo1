@@ -14,18 +14,13 @@ export class TransactionService {
   async withTransaction<T>(
     callback: (session: ClientSession) => Promise<T>,
   ): Promise<T> {
-    const session = await this.connection.startSession();
-    session.startTransaction();
-
+    // MongoDB Standalone does not support transactions.
+    // Executing callback without a session.
     try {
-      const result = await callback(session);
-      await session.commitTransaction();
+      const result = await callback(null as any);
       return result;
     } catch (error) {
-      await session.abortTransaction();
       throw error;
-    } finally {
-      session.endSession();
     }
   }
 }

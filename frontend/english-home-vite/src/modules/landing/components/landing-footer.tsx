@@ -54,7 +54,7 @@ export function LandingFooter() {
       icon: InstagramIcon,
     },
     { href: 'https://t.me/+xlzna51reL1hNzc0', icon: TelegramIcon },
-    { href: 'https://wa.me/qr/NLKCDGU2XBMEE1', icon: WhatsappIcon },
+    { href: 'https://wa.me/966542577250', icon: WhatsappIcon },
     {
       href: 'https://www.tiktok.com/@englishom1?_t=ZS-8zrqZgIC37K&_r=1',
       icon: TiktokIcon,

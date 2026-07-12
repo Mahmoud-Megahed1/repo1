@@ -198,7 +198,7 @@ We would like to remind you that the 'Pause' feature is granted only once, so ta
           </p>
           <div className="flex flex-col items-center gap-4">
             <a
-              href="https://wa.me/qr/NLKCDGU2XBMEE1"
+              href="https://wa.me/966542577250"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700 transition-colors bg-blue-50 px-6 py-3 rounded-2xl border border-blue-100"

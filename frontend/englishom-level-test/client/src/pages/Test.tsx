@@ -174,15 +174,23 @@ export default function Test() {
       setIsAnswered(false);
       setTimeLeft(stageQuestions[currentQuestionIndex + 1]?.timeLimit || STAGE_TIMERS[currentStage - 1]);
       setSoundAlertPlayed(false);
-    } else if (currentStage < STAGES.length) {
-      setCurrentStage(currentStage + 1);
-      setCurrentQuestionIndex(0);
-      setSelectedAnswer(null);
-      setIsAnswered(false);
-      setTimeLeft(STAGE_TIMERS[currentStage]);
-      setSoundAlertPlayed(false);
     } else {
-      await submitTest();
+      // Find the next stage that actually has questions
+      let nextStageWithQuestions = currentStage + 1;
+      while (nextStageWithQuestions <= STAGES.length && (stageQCounts[nextStageWithQuestions] || 0) === 0) {
+        nextStageWithQuestions++;
+      }
+
+      if (nextStageWithQuestions <= STAGES.length) {
+        setCurrentStage(nextStageWithQuestions);
+        setCurrentQuestionIndex(0);
+        setSelectedAnswer(null);
+        setIsAnswered(false);
+        setTimeLeft(STAGE_TIMERS[nextStageWithQuestions - 1]);
+        setSoundAlertPlayed(false);
+      } else {
+        await submitTest();
+      }
     }
   };
 

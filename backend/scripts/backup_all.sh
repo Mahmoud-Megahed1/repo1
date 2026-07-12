@@ -21,8 +21,8 @@ MONGO_AUTH_URI="mongodb://admin:l9u4Yr76xYtTjYm9@127.0.0.1:27017/englishom?authS
 MONGO_DB_NAME="englishom"
 
 # MySQL Config
-MYSQL_USER="englishom_user"
-MYSQL_PASSWORD="user_password_change_me"  # UPDATE THIS with actual password
+MYSQL_USER="root"
+MYSQL_PASSWORD="jjF4f3ZfSwvbuxFNBM0="
 MYSQL_HOST="127.0.0.1"
 MYSQL_PORT="3306"
 
