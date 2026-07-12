@@ -18,4 +18,6 @@ englishom_backup_2026-06-27_03-00-02.tar.gz
 *.zip
 old-test.zip
 old-landing.zip
-
+package-lock.json
+uploads/
+subapps/
