@@ -1,3 +1,29 @@
 User-agent: *
 Allow: /
+
+# Main Pages
+Allow: /ar/
+Allow: /ar/app
+Allow: /landingpage1/
+Allow: /Landingpage/
+Allow: /blog/
+
+# Disallow Admin and Dashboard
+Disallow: /blog/admin
+Disallow: /test/admin
+Disallow: /test1/admin
+Disallow: /dashboard/
+Disallow: /admin
+
+# Disallow API endpoints
+Disallow: /api/
+Disallow: /blog/api/
+Disallow: /dashboard/api/
+Disallow: /test/api/
+Disallow: /ques/api/
+
+# Disallow internal/testing pages
+Disallow: /progress/
+
+# Sitemap
 Sitemap: https://englishom.com/sitemap.xml
