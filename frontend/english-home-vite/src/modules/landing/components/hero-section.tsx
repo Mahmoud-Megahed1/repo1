@@ -31,10 +31,7 @@ export function HeroSection() {
     >
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-4xl text-center">
-          {/* Badge */}
-          <Badge variant="outline" className={`mb-6 px-4 py-2 text-sm ${dynamicTheme?.assets?.backgroundImage ? 'text-white border-white/50 bg-black/20 backdrop-blur-sm' : ''}`}>
-            🚀 {t('Global.englishom')} {currentYear}
-          </Badge>
+
 
           {/* Pre-title */}
           <p className={`mx-auto mb-4 max-w-3xl text-lg sm:text-xl md:text-2xl ${dynamicTheme?.assets?.backgroundImage ? 'text-zinc-200 drop-shadow-md' : 'text-muted-foreground'}`}>
