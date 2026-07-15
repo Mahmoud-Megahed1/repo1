@@ -24,12 +24,6 @@ export const LEVEL_IDS = [
   'LEVEL_B2',
   'LEVEL_C1',
   'LEVEL_C2',
-  'LEVEL_C3',
-  'LEVEL_C4',
-  'LEVEL_D1',
-  'LEVEL_D2',
-  'LEVEL_E1',
-  'LEVEL_E2',
 ] as const;
 
 export const MAIN_SIDEBAR_ITEMS = (): Array<SidebarItem> => [
