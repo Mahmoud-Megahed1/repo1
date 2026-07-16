@@ -8,20 +8,7 @@ import Home from "./pages/Home";
 
 
 function Router() {
-  // Dynamically get the base path from the current URL to support any subfolder (e.g. /test1 or /landingpage1)
-  const currentPath = window.location.pathname;
-  const base = currentPath.endsWith('/') ? currentPath.slice(0, -1) : currentPath;
-
-  return (
-    <WouterRouter base={base}>
-      <Switch>
-        <Route path={"/"} component={Home} />
-        <Route path={"/404"} component={NotFound} />
-        {/* Final fallback route */}
-        <Route component={NotFound} />
-      </Switch>
-    </WouterRouter>
-  );
+  return <Home />;
 }
 
 // NOTE: About Theme
