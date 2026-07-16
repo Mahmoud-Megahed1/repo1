@@ -843,6 +843,7 @@ export default {
     notFound: 'Page Not Found',
     forFiftyDays: '50 days',
     forDays: '{{count}} days',
+    tryOneDay: 'Try for one day',
     expired: 'Expired',
     completed: 'Completed',
     expiredOn: 'Expired on',

@@ -828,6 +828,7 @@ export default {
     notFound: 'الصفحة غير موجودة',
     forFiftyDays: ' 50 يومًا',
     forDays: ' {{count}} يومًا',
+    tryOneDay: 'جرب ليوم واحد',
     expired: 'منتهي الصلاحية',
     completed: 'مكتمل',
     expiredOn: 'انتهت الصلاحية في',
