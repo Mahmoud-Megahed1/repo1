@@ -59,6 +59,7 @@ export type LevelCardProps = {
   expiresAt?: string;
   previousLevelCompleted?: boolean;
   daysCount?: number;
+  isTrialEnabled?: boolean;
 };
 
 const LevelCard: FC<LevelCardProps> = ({
@@ -74,6 +75,7 @@ const LevelCard: FC<LevelCardProps> = ({
   expiresAt,
   previousLevelCompleted = false,
   daysCount = 50,
+  isTrialEnabled = false,
 }) => {
   const { t, i18n } = useTranslation();
   const {
@@ -91,6 +93,7 @@ const LevelCard: FC<LevelCardProps> = ({
     isCompleted,
     previousLevelCompleted,
     daysCount,
+    isTrialEnabled,
   });
 
   const getGradient = (id: string) => {
@@ -160,6 +163,7 @@ const useComponentVariant = ({
   isCompleted = false,
   previousLevelCompleted = false,
   daysCount = 50,
+  isTrialEnabled = false,
 }: {
   levelId: LevelId;
   price: number;
@@ -170,6 +174,7 @@ const useComponentVariant = ({
   isCompleted?: boolean;
   previousLevelCompleted?: boolean;
   daysCount?: number;
+  isTrialEnabled?: boolean;
 }) => {
   const { mutate, isPending } = usePayment(levelId);
   const { t, i18n } = useTranslation();
@@ -198,13 +203,34 @@ const useComponentVariant = ({
     : 0;
 
   // Calculate discount prices
-  const renewalPrice = Math.round(price * 0.25); // Renewal: pay 25% of original
+  const renewalDiscount = discountData?.discountPercentage || 0;
+  const renewalPrice = renewalDiscount > 0 
+    ? Math.round((price - (price * (renewalDiscount / 100))) * 100) / 100
+    : price;
 
   const variants: ComponentVariant = {
     'coming-soon': {
       iconBg: 'amber',
       labelVariant: 'amber-gradient',
-      content: showPrice ? (
+      badge: (
+        <div className="absolute top-4 rtl:left-4 ltr:right-4 z-10">
+          <span className="flex items-center gap-1 rounded-full bg-black/40 px-3 py-1 text-xs font-semibold backdrop-blur-md text-amber-300">
+            {t('Global.comingSoon')}
+          </span>
+        </div>
+      ),
+      content: showPrice ? ((discountPercentage > 0) ? (
+        <div className="flex flex-col items-center gap-0.5 drop-shadow-sm">
+          <div className="flex items-center gap-1.5 mt-2">
+            <span className="text-3xl font-bold font-sans text-white leading-none tracking-tight">{discountedPrice}</span>
+            <RiyalSymbol className="size-5 text-white" />
+          </div>
+          <div className="flex items-center gap-1 text-gray-300 line-through decoration-red-500">
+            <span className="text-sm font-sans">{price}</span>
+            <RiyalSymbol className="size-3" />
+          </div>
+        </div>
+      ) : (
         <div className="flex flex-col items-center gap-0.5 drop-shadow-sm">
           <div className="flex items-center gap-1.5 mt-2">
             <span className="text-3xl font-bold font-sans text-white leading-none tracking-tight">{price}</span>
@@ -219,8 +245,8 @@ const useComponentVariant = ({
           {/* @ts-ignore JSX custom element */}
           {price > 0 && <div className="mt-2 w-full max-w-[200px] bg-white/10 rounded-md p-1 backdrop-blur-sm"><tamara-widget type="tamara-summary" amount={price} inline-type="2"></tamara-widget></div>}
         </div>
-      ) : null,
-      cta: (
+      )) : null,
+      cta: isTrialEnabled ? (
         <Button
           variant={'outline'}
           className="w-full border-amber-400/50 text-amber-300 hover:bg-amber-400/10 hover:text-amber-200"
@@ -229,11 +255,15 @@ const useComponentVariant = ({
           <Link
             to="/app/levels/$id"
             params={{ id: levelId }}
-            className="flex items-center gap-2"
+            className="flex items-center justify-center gap-2"
           >
             {t('Global.tryOneDay')}
             <MoveRight className="rtl:rotate-180" />
           </Link>
+        </Button>
+      ) : (
+        <Button disabled className="w-full bg-gray-700 text-gray-400 font-bold py-2 rounded-lg border-none">
+          {t('Global.comingSoon')}
         </Button>
       ),
     },
@@ -257,20 +287,22 @@ const useComponentVariant = ({
             {isPending ? t('Global.processing') : (discountPercentage > 0) ? t('Global.unlock') + ` (-${discountPercentage}%)` : t('Global.unlock')}
             <KeyRound />
           </Button>
-          <Button
-            variant={'outline'}
-            className="w-full border-white/10 hover:bg-white/5"
-            asChild
-          >
-            <Link
-              to="/app/levels/$id"
-              params={{ id: levelId }}
-              className="flex items-center justify-center gap-2"
+          {isTrialEnabled && (
+            <Button
+              variant={'outline'}
+              className="w-full border-white/10 hover:bg-white/5"
+              asChild
             >
-              {t('Global.tryOneDay')}
-              <MoveRight className="rtl:rotate-180" />
-            </Link>
-          </Button>
+              <Link
+                to="/app/levels/$id"
+                params={{ id: levelId }}
+                className="flex items-center justify-center gap-2"
+              >
+                {t('Global.tryOneDay')}
+                <MoveRight className="rtl:rotate-180" />
+              </Link>
+            </Button>
+          )}
           <PurchaseAgreementModal
             open={showAgreement}
             onOpenChange={setShowAgreement}

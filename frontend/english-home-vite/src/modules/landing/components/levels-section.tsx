@@ -46,7 +46,7 @@ export function LevelsSection() {
         <div className="grid gap-8 md:grid-cols-3">
           {localizedLevels.map(
             (
-              { title, description, levelLabel, levelId, price, originalPrice, isAvailable, showPrice = true, daysCount = 50 }
+              { title, description, levelLabel, levelId, price, originalPrice, isAvailable, isTrialEnabled = false, showPrice = true, daysCount = 50 }
             ) => (
               <Card
                 key={levelLabel}
@@ -111,12 +111,27 @@ export function LevelsSection() {
                     </ul>
                   </div>
 
-                  {/* Start Learning / Coming Soon Button */}
-                  <div className="pt-4 mt-auto">
+                  {/* Start Learning / Try One Day / Coming Soon Button */}
+                  <div className="pt-4 mt-auto flex flex-col gap-2">
                     {isAvailable ? (
-                      <Button asChild className="w-full bg-white text-black hover:bg-gray-100 font-bold py-5 rounded-lg">
+                      <>
+                        <Button asChild className="w-full bg-white text-black hover:bg-gray-100 font-bold py-5 rounded-lg">
+                          <Link to="/app/levels/$id" params={{ id: levelId }}>
+                            {t('Global.startLearning')}
+                          </Link>
+                        </Button>
+                        {isTrialEnabled && (
+                          <Button asChild variant="outline" className="w-full border-white/20 text-white hover:bg-white/10 font-bold py-4 rounded-lg">
+                            <Link to="/app/levels/$id" params={{ id: levelId }}>
+                              {t('Global.tryOneDay')}
+                            </Link>
+                          </Button>
+                        )}
+                      </>
+                    ) : isTrialEnabled ? (
+                      <Button asChild variant="outline" className="w-full border-amber-400/50 text-amber-300 hover:bg-amber-400/10 font-bold py-5 rounded-lg">
                         <Link to="/app/levels/$id" params={{ id: levelId }}>
-                          {t('Global.startLearning')}
+                          {t('Global.tryOneDay')}
                         </Link>
                       </Button>
                     ) : (

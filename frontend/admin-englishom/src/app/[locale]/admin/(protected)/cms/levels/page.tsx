@@ -254,6 +254,7 @@ const formSchema = z.object({
     .optional()
     .transform((val) => (val ? +val : undefined)),
   isAvailable: z.boolean().optional(),
+  isTrialEnabled: z.boolean().optional(),
 });
 
 const LevelItem: FC<LevelType> = ({
@@ -265,6 +266,7 @@ const LevelItem: FC<LevelType> = ({
   titleAr,
   titleEn,
   isAvailable,
+  isTrialEnabled = false,
   showPrice = true,
   daysCount = 50,
 }) => {
@@ -293,6 +295,7 @@ const LevelItem: FC<LevelType> = ({
       originalPrice: originalPrice ? `${originalPrice}` as unknown as number : '' as unknown as number,
       daysCount: `${daysCount}` as unknown as number,
       isAvailable,
+      isTrialEnabled,
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -441,6 +444,21 @@ const LevelItem: FC<LevelType> = ({
             defaultChecked={isAvailable}
             onCheckedChange={(checked) => {
               mutate({ isAvailable: checked, level_name });
+            }}
+          />
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <Label
+            htmlFor={`${level_name}-trial`}
+            className="whitespace-nowrap text-muted-foreground text-xs md:text-sm font-medium"
+          >
+            تجربة اليوم الواحد
+          </Label>
+          <Switch
+            id={`${level_name}-trial`}
+            defaultChecked={isTrialEnabled}
+            onCheckedChange={(checked) => {
+              mutate({ isTrialEnabled: checked, level_name });
             }}
           />
         </div>

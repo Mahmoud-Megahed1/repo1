@@ -43,6 +43,10 @@ export class UpdateCourseDto {
   showPrice?: boolean;
 
   @IsOptional()
+  @IsBoolean()
+  isTrialEnabled?: boolean;
+
+  @IsOptional()
   @IsPositive()
   originalPrice?: number;
 

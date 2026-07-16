@@ -24,5 +24,9 @@ export type LevelType = {
   descriptionAr: string;
   descriptionEn: string;
   price: number;
+  originalPrice?: number;
   isAvailable: boolean;
+  showPrice?: boolean;
+  isTrialEnabled?: boolean;
+  daysCount?: number;
 };

@@ -39,6 +39,9 @@ export class Course extends AbstractDocument {
   @Prop({ type: Boolean, default: true })
   showPrice: boolean;
 
+  @Prop({ type: Boolean, default: false })
+  isTrialEnabled: boolean;
+
   @Prop({ required: true, type: Number, default: 50 })
   daysCount: number;
 }

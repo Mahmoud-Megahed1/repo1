@@ -194,10 +194,11 @@ export default function Home() {
         price: course.showPrice && course.price ? `${course.price} ريال` : null,
         originalPrice: course.originalPrice ? `${course.originalPrice} ريال` : null,
         daysCount: course.daysCount || 50,
+        isTrialEnabled: course.isTrialEnabled ?? false,
         features
       };
     }
-    return { ...level, daysCount: 50, features };
+    return { ...level, daysCount: 50, isTrialEnabled: false, features };
   });
 
   const getGradient = (id: string) => {
@@ -418,25 +419,52 @@ export default function Home() {
                     </div>
 
                     {/* CTA Button */}
-                    <div className="pt-4 mt-auto">
-                      <Button 
-                        size="lg" 
-                        className={cn(
-                          "w-full font-bold text-lg py-5 rounded-lg",
-                          level.price 
-                            ? "bg-white text-black hover:bg-gray-100" 
-                            : "bg-gray-700 text-gray-400 border-none cursor-not-allowed"
-                        )}
-                        onClick={() => {
-                          if (level.price) {
-                            alert('يجب عليك التسجيل في الموقع أولاً للاشتراك في هذا المستوى');
-                            window.location.href = 'https://englishom.com/ar/login';
-                          }
-                        }}
-                        disabled={!level.price}
-                      >
-                        {level.price ? 'اشترك الآن' : 'قريباً'}
-                      </Button>
+                    <div className="pt-4 mt-auto flex flex-col gap-2">
+                      {level.price ? (
+                        <>
+                          <Button 
+                            size="lg" 
+                            className="w-full font-bold text-lg py-5 rounded-lg bg-white text-black hover:bg-gray-100"
+                            onClick={() => {
+                              alert('يجب عليك التسجيل في الموقع أولاً للاشتراك في هذا المستوى');
+                              window.location.href = 'https://englishom.com/ar/login';
+                            }}
+                          >
+                            اشترك الآن
+                          </Button>
+                          {level.isTrialEnabled && (
+                            <Button 
+                              size="lg" 
+                              variant="outline"
+                              className="w-full font-bold text-lg py-4 rounded-lg border-white/20 text-white hover:bg-white/10"
+                              onClick={() => {
+                                window.location.href = `https://englishom.com/ar/app/levels/${level.level_name}`;
+                              }}
+                            >
+                              جرب ليوم واحد ←
+                            </Button>
+                          )}
+                        </>
+                      ) : level.isTrialEnabled ? (
+                        <Button 
+                          size="lg" 
+                          variant="outline"
+                          className="w-full font-bold text-lg py-5 rounded-lg border-amber-400/50 text-amber-300 hover:bg-amber-400/10"
+                          onClick={() => {
+                            window.location.href = `https://englishom.com/ar/app/levels/${level.level_name}`;
+                          }}
+                        >
+                          جرب ليوم واحد ←
+                        </Button>
+                      ) : (
+                        <Button 
+                          size="lg" 
+                          className="w-full font-bold text-lg py-5 rounded-lg bg-gray-700 text-gray-400 border-none cursor-not-allowed"
+                          disabled
+                        >
+                          قريباً
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>

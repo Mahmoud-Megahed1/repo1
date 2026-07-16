@@ -37,6 +37,10 @@ export class CreateCourseDto {
   originalPrice?: number;
 
   @IsOptional()
+  @IsBoolean()
+  isTrialEnabled?: boolean;
+
+  @IsOptional()
   @IsNumber()
   daysCount?: number;
 }

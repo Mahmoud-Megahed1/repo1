@@ -24,6 +24,8 @@ export type LevelType = {
   originalPrice?: number;
   isAvailable: boolean;
   showPrice?: boolean;
+  isTrialEnabled?: boolean;
+  daysCount?: number;
 };
 
 export type ExcludeAriaAttributes<T> = {
