@@ -15,15 +15,33 @@ import PurchaseAgreementModal from './purchase-agreement-modal';
 const LevelGuard = ({
   levelId,
   children,
+  day,
+  lessonName,
 }: {
   levelId: LevelId;
   children: React.ReactNode;
+  day?: string;
+  lessonName?: string;
 }) => {
   const { levelsDetails, isLoading } = useAuth();
   const canAccess = levelsDetails?.some(
     ({ levelName, isExpired }) => levelName === levelId && !isExpired
   );
   if (isLoading) return <LoadingScreen className="flex-1" />;
+
+  // Full access - user owns the level
+  if (canAccess) return <>{children}</>;
+
+  // Trial mode: Allow Day 1 access (except DAILY_TEST)
+  // If no day is specified (days list page), allow through
+  if (!day) return <>{children}</>;
+
+  // For lesson pages: only allow Day 1, and block DAILY_TEST
+  if (day === '1' && lessonName !== 'DAILY_TEST') {
+    return <>{children}</>;
+  }
+
+  // Block access for Day 2+ or DAILY_TEST in trial
   if (!isLoading && !canAccess)
     return <LockedLevel levelId={levelId} className="flex-1" />;
   return <>{children}</>;

@@ -222,14 +222,18 @@ const useComponentVariant = ({
       ) : null,
       cta: (
         <Button
-          className={cn(
-            accordionVariants({
-              variant: 'amber',
-              className: 'w-full cursor-not-allowed dark:text-white',
-            })
-          )}
+          variant={'outline'}
+          className="w-full border-amber-400/50 text-amber-300 hover:bg-amber-400/10 hover:text-amber-200"
+          asChild
         >
-          {t('Global.comingSoon')}
+          <Link
+            to="/app/levels/$id"
+            params={{ id: levelId }}
+            className="flex items-center gap-2"
+          >
+            {t('Global.tryOneDay')}
+            <MoveRight className="rtl:rotate-180" />
+          </Link>
         </Button>
       ),
     },
@@ -237,7 +241,7 @@ const useComponentVariant = ({
       iconBg: 'default',
       labelVariant: 'default',
       cta: (
-        <>
+        <div className="w-full flex flex-col gap-2">
           <Button
             className="w-full"
             onClick={() => {
@@ -252,6 +256,20 @@ const useComponentVariant = ({
           >
             {isPending ? t('Global.processing') : (discountPercentage > 0) ? t('Global.unlock') + ` (-${discountPercentage}%)` : t('Global.unlock')}
             <KeyRound />
+          </Button>
+          <Button
+            variant={'outline'}
+            className="w-full border-white/10 hover:bg-white/5"
+            asChild
+          >
+            <Link
+              to="/app/levels/$id"
+              params={{ id: levelId }}
+              className="flex items-center justify-center gap-2"
+            >
+              {t('Global.tryOneDay')}
+              <MoveRight className="rtl:rotate-180" />
+            </Link>
           </Button>
           <PurchaseAgreementModal
             open={showAgreement}
@@ -270,7 +288,7 @@ const useComponentVariant = ({
               activeCourse={activeCourse}
             />
           )}
-        </>
+        </div>
       ),
       content: showPrice ? ((discountPercentage > 0) ? (
         <div className="flex flex-col items-center gap-0.5 drop-shadow-sm">

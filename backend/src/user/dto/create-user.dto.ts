@@ -25,6 +25,10 @@ export class CreateUserDto {
   @Length(6, 20)
   password: string;
 
+  @IsString()
+  @IsNotEmpty()
+  occupation: string;
+
   // will set country based on IP address during signup
   @IsString()
   @IsOptional()

@@ -76,7 +76,7 @@ function RouteComponent() {
   usePageTitle(t(`Global.sidebarItems.${lessonName}` as never));
   if (!canAccessDay)
     return (
-      <LevelGuard levelId={levelId as LevelId}>
+      <LevelGuard levelId={levelId as LevelId} day={day} lessonName={lessonName}>
         <DayAccessError
           day={+day}
           levelId={levelId as LevelId}
@@ -110,7 +110,7 @@ function RouteComponent() {
   }, [areAllTasksCompleted, isCurrentDay, setOpenAiChat, dynamicTheme?.showAIReviewChat, levelId, day]);
 
   return (
-    <LevelGuard levelId={levelId as LevelId}>
+    <LevelGuard levelId={levelId as LevelId} day={day} lessonName={lessonName}>
       {isFetching ? (
         <div className="flex h-full flex-1 flex-col items-center justify-center py-10">
           <BookLoader className="text-primary" />

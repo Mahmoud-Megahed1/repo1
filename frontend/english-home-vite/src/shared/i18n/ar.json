@@ -651,7 +651,17 @@
       "login-link": "سجل دخول الآن",
       "signup-with-facebook": "سجل بحساب فيسبوك",
       "signup-with-google": "سجل بحساب جوجل",
-      "accept-terms": "بالتسجيل، أنت توافق على"
+      "accept-terms": "بالتسجيل، أنت توافق على",
+      "occupation-label": "بصفتك الحالية: أنا...",
+      "occupation-options": {
+        "school-student": "طالب مدرسة",
+        "university-student": "طالب جامعي",
+        "employee": "موظف",
+        "job-seeker": "باحث عن عمل",
+        "interested": "مهتم",
+        "other": "أخرى"
+      },
+      "occupation-other-placeholder": "اكتب وظيفتك هنا..."
     },
     "otp-form": {
       "title": "تحقق من بريدك الإلكتروني",

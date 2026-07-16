@@ -56,8 +56,11 @@ function RouteComponent() {
   const levelLabel = t('Global.level', { level: levelId.split('_')[1] });
 
   const { levelsDetails } = useAuth();
-  const { currentDay = 0, isCompleted: isLevelCompleted = false } =
-    levelsDetails?.find((level) => level.levelName === levelId) || {};
+  const levelDetail = levelsDetails?.find((level) => level.levelName === levelId);
+  const isTrial = !levelDetail;
+  const { currentDay: rawCurrentDay = 0, isCompleted: isLevelCompleted = false } = levelDetail || {};
+  // For trial users, set currentDay to 1 so Day 1 shows as available
+  const currentDay = isTrial ? 1 : rawCurrentDay;
 
   const cards = [
     {

@@ -4,7 +4,15 @@ import { FacebookIcon, GoogleIcon } from '@components/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { cn } from '@lib/utils';
 import { Button } from '@ui/button';
-import { Form } from '@ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@ui/form';
+import { Input } from '@ui/input';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import z from 'zod';
@@ -14,6 +22,24 @@ import { Checkbox } from '@ui/checkbox';
 import { useState } from 'react';
 import type { CheckedState } from '@radix-ui/react-checkbox';
 import { facebookAuth, googleAuth } from '../services';
+
+const OCCUPATION_OPTIONS = [
+  'school_student',
+  'university_student',
+  'employee',
+  'job_seeker',
+  'interested',
+  'other',
+] as const;
+
+const OCCUPATION_I18N_MAP: Record<string, string> = {
+  school_student: 'Auth.signup-form.occupation-options.school-student',
+  university_student: 'Auth.signup-form.occupation-options.university-student',
+  employee: 'Auth.signup-form.occupation-options.employee',
+  job_seeker: 'Auth.signup-form.occupation-options.job-seeker',
+  interested: 'Auth.signup-form.occupation-options.interested',
+  other: 'Auth.signup-form.occupation-options.other',
+};
 
 const useLocalizedSchema = () => {
   const { t } = useTranslation();
@@ -25,6 +51,9 @@ const useLocalizedSchema = () => {
       .string(t('Global.form-fields.required-error'))
       .min(1, t('Global.form-fields.required-error')),
     email: z.email(t('Global.form-fields.email.error')),
+    occupation: z
+      .string()
+      .min(1, { message: t('Global.form-fields.required-error') }),
     password: z
       .string({ error: t('Global.form-fields.password.required-error') })
       .min(6, t('Global.form-fields.password.min-error', { min: 6 }))
@@ -41,10 +70,16 @@ export function SignupForm({
     resolver: zodResolver(formSchema),
   });
   const [isAcceptTerms, setIsAcceptTerms] = useState<CheckedState>(false);
+  const [customOccupation, setCustomOccupation] = useState('');
   const { mutate, isPending } = useSignup();
+
+  const selectedOccupation = form.watch('occupation');
+
   function onSubmit(values: z.infer<typeof formSchema>) {
+    const occupation =
+      values.occupation === 'other' ? customOccupation : values.occupation;
     mutate(
-      { data: values },
+      { data: { ...values, occupation } },
       {
         onError(error) {
           // Email already exists
@@ -96,6 +131,43 @@ export function SignupForm({
               placeholder={t('Global.form-fields.email.placeholder')}
               control={form.control}
             />
+            <FormField
+              control={form.control}
+              name="occupation"
+              render={({ field }) => (
+                <FormItem className="flex w-full flex-1 flex-col gap-2 space-y-0">
+                  <FormLabel>
+                    {t('Auth.signup-form.occupation-label')}
+                  </FormLabel>
+                  <FormControl>
+                    <select
+                      {...field}
+                      value={field.value ?? ''}
+                      className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <option value="" disabled>
+                        {t('Auth.signup-form.occupation-label')}
+                      </option>
+                      {OCCUPATION_OPTIONS.map((option) => (
+                        <option key={option} value={option}>
+                          {t(OCCUPATION_I18N_MAP[option])}
+                        </option>
+                      ))}
+                    </select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {selectedOccupation === 'other' && (
+              <Input
+                value={customOccupation}
+                onChange={(e) => setCustomOccupation(e.target.value)}
+                placeholder={t(
+                  'Auth.signup-form.occupation-other-placeholder'
+                )}
+              />
+            )}
             <InputFormField
               name="password"
               label={t('Global.form-fields.password.label')}

@@ -12,6 +12,9 @@ export class User extends AbstractUser {
   @Prop({ type: String })
   phone: string;
 
+  @Prop({ type: String })
+  occupation?: string;
+
   @Prop({ type: Boolean, default: false })
   isVerified: boolean;
 

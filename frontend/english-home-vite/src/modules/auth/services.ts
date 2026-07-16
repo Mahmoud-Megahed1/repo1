@@ -11,6 +11,7 @@ export const register = ({
     lastName: string;
     email: string;
     password: string;
+    occupation: string;
   };
   config?: AxiosRequestConfig;
 }) => {

@@ -765,6 +765,16 @@ export default {
       'signup-with-facebook': 'Sign up with Facebook',
       'signup-with-google': 'Sign up with Google',
       'accept-terms': 'By signing up, you agree to our',
+      'occupation-label': 'I am currently a...',
+      'occupation-options': {
+        'school-student': 'School Student',
+        'university-student': 'University Student',
+        employee: 'Employee',
+        'job-seeker': 'Job Seeker',
+        interested: 'Interested Learner',
+        other: 'Other',
+      },
+      'occupation-other-placeholder': 'Type your occupation here...',
     },
     'otp-form': {
       title: 'Verify your email',
