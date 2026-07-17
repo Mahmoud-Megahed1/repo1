@@ -115,6 +115,11 @@ const UserDetails = () => {
               <span className="font-medium text-muted-foreground">{t('email')}</span>
               <span className="font-bold">{userDetails.email}</span>
             </div>
+            <DropdownMenuSeparator className="bg-muted-foreground/30" />
+            <div className="flex flex-col">
+              <span className="font-medium text-muted-foreground">الصفة / الوظيفة</span>
+              <span className="font-bold text-teal-600 dark:text-teal-400">{userDetails.occupation || '-'}</span>
+            </div>
           </div>
         </div>
         <div className="box flex flex-col gap-8">

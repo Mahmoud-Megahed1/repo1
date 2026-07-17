@@ -58,6 +58,7 @@ export type User = {
   email: string;
   firstName: string;
   lastName: string;
+  occupation?: string;
   lastActivity: string;
   country: string;
   strategy: string;

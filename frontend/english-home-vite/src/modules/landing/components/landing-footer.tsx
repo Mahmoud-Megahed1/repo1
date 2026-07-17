@@ -187,45 +187,45 @@ export function LandingFooter() {
         </div>
 
       </div>
-      <div className="container mx-auto mt-8 border-t pt-8">
+      <div className="container mx-auto mt-8 border-t pt-8 pb-16 md:pb-0">
         <div className="flex flex-col items-center justify-center gap-6 md:flex-row">
-          <div className="bg-white/5 dark:bg-white/10 rounded-xl py-1 px-4 flex flex-wrap items-center justify-center gap-4 border border-border/10">
+          <div className="bg-white/5 dark:bg-white/10 rounded-xl py-2 px-3 sm:px-4 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 border border-border/10 max-w-full">
             <img
               src="/images/svgs/saudi-business-center.svg"
               alt="Saudi Business Center"
-              className="h-6 object-contain dark:brightness-0 dark:invert"
+              className="h-5 md:h-6 object-contain dark:brightness-0 dark:invert"
             />
-            <div className="flex items-center gap-3 bg-white/50 dark:bg-zinc-100 rounded-lg px-3 py-1">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 bg-white/50 dark:bg-zinc-100 rounded-lg px-2.5 py-1.5 max-w-full">
               <img
                 src="/images/svgs/mada.svg"
                 alt="Mada"
-                className="h-6 object-contain"
+                className="h-4 md:h-6 object-contain"
               />
               <img
                 src="/images/svgs/apple-pay.svg"
                 alt="Apple Pay"
-                className="h-6 object-contain"
+                className="h-4 md:h-6 object-contain"
               />
               <img
                 src="/images/svgs/visa.svg"
                 alt="Visa"
-                className="h-7 object-contain"
+                className="h-5 md:h-7 object-contain"
               />
               <img
                 src="/images/svgs/mastercard.svg"
                 alt="Mastercard"
-                className="h-6 object-contain"
+                className="h-4 md:h-6 object-contain"
               />
               <img
                 src="/tamara.svg?v=2"
                 alt="Tamara"
-                className="h-8 aspect-[710/280] object-contain"
+                className="h-5 md:h-8 aspect-[710/280] object-contain"
               />
             </div>
             <img
               src="/images/maroof_new.jpg"
               alt="Maroof"
-              className="h-6 object-contain rounded-full border border-border/20"
+              className="h-5 md:h-6 object-contain rounded-full border border-border/20"
             />
           </div>
         </div>

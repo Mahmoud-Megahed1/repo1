@@ -68,9 +68,16 @@ const UserRow: FC<Props> = ({
   return (
     <div className="flex w-full items-center gap-2 text-sm">
       <div className="grid h-14 w-full grid-cols-4 items-center gap-2 rounded-xl bg-white/50 px-3 py-2 dark:bg-background/20">
-        <span>
-          {firstName} {lastName}
-        </span>
+        <div className="flex flex-col justify-center">
+          <span className="font-semibold">
+            {firstName} {lastName}
+          </span>
+          {props.occupation && (
+            <span className="text-[11px] text-teal-600 dark:text-teal-400 font-medium">
+              {props.occupation}
+            </span>
+          )}
+        </div>
         <span>{lastActivity}</span>
         <div className="flex items-center gap-2">
           <span

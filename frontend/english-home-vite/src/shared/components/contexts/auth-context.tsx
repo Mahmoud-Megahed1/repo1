@@ -31,6 +31,8 @@ const AuthContext = createContext<ContextType>({
 
 const EMPTY_LEVELS: LevelDetails[] = [];
 
+import { MandatoryOccupationModal } from '../mandatory-occupation-modal';
+
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const queryClient = useQueryClient();
   const { data, isLoading, isSuccess, isError, refetch, error } = useQuery({
@@ -67,6 +69,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AuthContext.Provider value={value}>
       {children}
+      <MandatoryOccupationModal />
     </AuthContext.Provider>
   );
 };

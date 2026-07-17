@@ -9,3 +9,7 @@ type GetMeResponse = {
 export const getMe = async () => {
   return await axiosClient.get<GetMeResponse>('/users/me');
 };
+
+export const updateUserOccupation = async (userId: string, occupation: string) => {
+  return await axiosClient.patch<UserType>(`/users/${userId}`, { occupation });
+};
