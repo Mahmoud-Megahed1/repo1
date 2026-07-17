@@ -384,13 +384,16 @@ export class DashboardService {
       // Create regex for case-insensitive search
       const searchRegex = new RegExp(query.trim(), 'i');
 
-      // Build search filter using OR logic across email, firstName, lastName, full name, and occupation
+      // Build search filter using OR logic across email, firstName, lastName, full name, occupation, country, status, and phone
       const finalFilter = {
         $or: [
           { email: searchRegex },
           { firstName: searchRegex },
           { lastName: searchRegex },
           { occupation: searchRegex },
+          { country: searchRegex },
+          { status: searchRegex },
+          { phone: searchRegex },
           // Full name search - concatenate firstName and lastName
           {
             $expr: {

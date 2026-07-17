@@ -7,20 +7,59 @@ import { RefreshCcw, Download } from 'lucide-react';
 import { FC, useCallback, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useUsers } from '../_components/users-provider';
-import UsersList from './users-list';
 import { Button } from '@/components/ui/button';
 import { getUsers } from '@/services/admins';
 import { exportUsersToExcel } from './export-users';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import {
+  adminPauseUser,
+  adminResumeUser,
+  updateUserStatus,
+} from '@/services/admins';
+import { DataTable } from '@/components/shared/data-table';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { usersColumns } from './columns';
 
 const Users = () => {
   const t = useTranslations('Admin.users');
   const tOrders = useTranslations('Admin.orders');
   const tGlobal = useTranslations('Global');
+  const queryClient = useQueryClient();
   const {
     queryResult: { data, isFetching, isLoading, refetch },
     dispatch,
     params: { page, limit, query },
   } = useUsers();
+
+  const isSuper = true;
+
+  const { mutate: updateStatus, isPending: isUpdatingStatus } = useMutation({
+    mutationKey: ['updateUserStatus'],
+    mutationFn: updateUserStatus,
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      toast.success('User status updated');
+    },
+  });
+
+  const { mutate: pause, isPending: isPausing } = useMutation({
+    mutationKey: ['adminPauseUser'],
+    mutationFn: adminPauseUser,
+    onSuccess() {
+      toast.success(t('accountFrozen') || 'Account frozen successfully for 20 days');
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
+  });
+
+  const { mutate: resume, isPending: isResuming } = useMutation({
+    mutationKey: ['adminResumeUser'],
+    mutationFn: adminResumeUser,
+    onSuccess() {
+      toast.success(t('accountResumed') || 'Account resumed successfully');
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
+  });
 
   const [isExporting, setIsExporting] = useState(false);
 
@@ -78,14 +117,30 @@ const Users = () => {
         </div>
       </header>
       <div className="mt-4 flex flex-col gap-4">
-        <UsersList
-          t={t}
-          users={users}
-          isLoading={isLoading}
-          className={cn({
-            'animate-pulse duration-1000': isFetching,
-          })}
-        />
+        {isLoading ? (
+          <div className="box flex h-[400px] items-center justify-center">
+            <RefreshCcw className="size-8 animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          <ScrollArea className="box h-[calc(100vh-300px)] md:h-[calc(100vh-204px)]">
+            <DataTable
+              columns={usersColumns(
+                t,
+                isSuper,
+                updateStatus,
+                pause,
+                resume,
+                isUpdatingStatus,
+                isPausing,
+                isResuming,
+              )}
+              data={users}
+              className={cn({
+                'animate-pulse duration-1000': isFetching,
+              })}
+            />
+          </ScrollArea>
+        )}
         <div className="mx-auto flex items-end gap-4">
           <CustomSelect
             placeholder="Size"
