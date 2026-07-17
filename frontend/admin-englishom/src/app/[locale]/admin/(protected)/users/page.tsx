@@ -3,19 +3,41 @@ import CustomPagination from '@/components/shared/custom-pagination';
 import CustomSelect from '@/components/ui/custom-select';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { RefreshCcw } from 'lucide-react';
-import { FC, useCallback } from 'react';
+import { RefreshCcw, Download } from 'lucide-react';
+import { FC, useCallback, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useUsers } from '../_components/users-provider';
 import UsersList from './users-list';
+import { Button } from '@/components/ui/button';
+import { getUsers } from '@/services/admins';
+import { exportUsersToExcel } from './export-users';
 
 const Users = () => {
   const t = useTranslations('Admin.users');
+  const tOrders = useTranslations('Admin.orders');
   const {
     queryResult: { data, isFetching, isLoading, refetch },
     dispatch,
-    params: { page, limit },
+    params: { page, limit, query },
   } = useUsers();
+
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExport = useCallback(async () => {
+    try {
+      setIsExporting(true);
+      const response = await getUsers({
+        limit: 10000,
+        query: query === '' ? undefined : query,
+      });
+      const allUsers = response.data.users || [];
+      await exportUsersToExcel(allUsers);
+    } catch (error) {
+      console.error('Failed to export users:', error);
+    } finally {
+      setIsExporting(false);
+    }
+  }, [query]);
   const onPaginate = useCallback(
     (page: number) => dispatch({ type: 'SET_PAGE', payload: page }),
     [dispatch],
@@ -44,6 +66,14 @@ const Users = () => {
         </div>
         <div className="flex w-full items-center gap-4 md:w-auto">
           <SearchInput />
+          <Button
+            disabled={isExporting}
+            onClick={handleExport}
+            className="gap-2 bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-md transition-colors"
+          >
+            <Download className="size-4" />
+            {isExporting ? tOrders('loading') : tOrders('exportExcel')}
+          </Button>
         </div>
       </header>
       <div className="mt-4 flex flex-col gap-4">
