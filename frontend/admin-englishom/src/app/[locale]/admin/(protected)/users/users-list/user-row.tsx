@@ -35,6 +35,7 @@ const UserRow: FC<Props> = ({
   lastName,
   firstName,
   isVoluntaryPaused,
+  occupation,
   t,
 }) => {
   const isSuper = true;
@@ -72,9 +73,9 @@ const UserRow: FC<Props> = ({
           <span className="font-semibold">
             {firstName} {lastName}
           </span>
-          {props.occupation && (
+          {occupation && (
             <span className="text-[11px] text-teal-600 dark:text-teal-400 font-medium">
-              {props.occupation}
+              {occupation}
             </span>
           )}
         </div>
