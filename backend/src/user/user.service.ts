@@ -147,10 +147,9 @@ export class UserService {
 
   async getCompletedDaysInLevel(userId: string, levelName: Level_Name) {
     const userLevels = await this.getUserCompletedLevelNames(userId);
-    log('userLevels', userLevels);
-    // if level name not included within userLevels throw an error
+    // if level name not included within userLevels, it means they are on a trial, return 0 completed days
     if (!userLevels.includes(levelName)) {
-      throw new NotFoundException('User does not have this level');
+      return 0;
     }
 
     return await this.userRepo.userProgress(userId, levelName);
@@ -247,7 +246,7 @@ export class UserService {
     dailyTestResult?: any,
   ) {
     const userLevels = await this.getUserCompletedLevelNames(userId);
-    if (!userLevels.includes(levelName)) {
+    if (!userLevels.includes(levelName) && dayNumber !== 1) {
       throw new NotFoundException('User does not have this level');
     }
 
@@ -282,7 +281,7 @@ export class UserService {
     feedback?: string,
   ) {
     const userLevels = await this.getUserCompletedLevelNames(userId);
-    if (!userLevels.includes(levelName)) {
+    if (!userLevels.includes(levelName) && dayNumber !== 1) {
       throw new NotFoundException('User does not have this level');
     }
 
@@ -312,7 +311,7 @@ export class UserService {
     dayNumber: number,
   ) {
     const userLevels = await this.getUserCompletedLevelNames(userId);
-    if (!userLevels.includes(levelName)) {
+    if (!userLevels.includes(levelName) && dayNumber !== 1) {
       throw new NotFoundException('User does not have this level');
     }
 
