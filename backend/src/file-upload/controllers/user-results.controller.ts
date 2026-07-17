@@ -37,7 +37,7 @@ export class UserResultsController {
       speakCompareTranscriptsDto.level_name,
     );
 
-    if (!existingActiveOrder) {
+    if (!existingActiveOrder && speakCompareTranscriptsDto.day !== 1) {
       throw new BadRequestException('User has not purchased this level or access has expired');
     }
     /////
