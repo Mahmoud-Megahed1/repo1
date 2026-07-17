@@ -15,6 +15,10 @@ import { routeTree } from './routeTree.gen';
 import './shared/i18n';
 import './styles/index.css';
 
+window.addEventListener('vite:preloadError', () => {
+  window.location.reload();
+});
+
 export const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
