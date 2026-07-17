@@ -66,32 +66,34 @@ export default function AppSidebar({ items = [], user, ...props }: Props) {
         </div>
         <div className="px-4 mb-4 group-data-[state=collapsed]:hidden">
           <TestimonialForm>
-            <button className="relative flex w-full cursor-pointer flex-col rounded-xl bg-secondary p-4 text-start shadow-[0_0_15px_rgba(249,115,22,0.15)] border border-orange-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(249,115,22,0.3)] hover:border-orange-500/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 overflow-hidden group/feedback">
-              {/* Glow overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover/feedback:opacity-100 transition-opacity duration-300" />
+            <button className="relative flex w-full cursor-pointer flex-col rounded-xl bg-orange-500/10 p-4 text-start shadow-[0_0_20px_rgba(249,115,22,0.4)] border-2 border-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(249,115,22,0.8)] hover:border-orange-400 hover:bg-orange-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 overflow-hidden group/feedback">
+              {/* Continuous background pulse effect */}
+              <div className="absolute inset-0 bg-orange-500/10 animate-pulse pointer-events-none" />
+              
               <div className="flex items-center gap-3 w-full relative z-10">
                 <div className="flex flex-1 flex-col gap-1">
-                  <span className="text-sm font-bold text-foreground group-hover/feedback:text-orange-500 transition-colors">
+                  <span className="text-sm font-extrabold text-orange-600 dark:text-orange-400 drop-shadow-sm transition-colors group-hover/feedback:text-orange-500">
                     {t('Global.testimonial.title')}
                   </span>
-                  <span className="text-xs text-muted-foreground line-clamp-2">
+                  <span className="text-xs text-orange-700/80 dark:text-orange-200/80 font-medium line-clamp-2">
                     {t('Global.testimonial.description')}
                   </span>
                 </div>
-                <div className="flex shrink-0 items-center justify-center rounded-lg bg-orange-500 p-2 text-white shadow-lg shadow-orange-500/50 relative">
-                  {/* Subtle pulsing background behind icon */}
-                  <span className="absolute -inset-1 rounded-xl bg-orange-500 opacity-20 animate-ping"></span>
+                <div className="flex shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 p-2 text-white shadow-[0_0_15px_rgba(249,115,22,0.8)] relative">
+                  {/* Aggressive pulsing rings behind icon */}
+                  <span className="absolute -inset-1.5 rounded-xl bg-orange-500 opacity-50 animate-ping"></span>
+                  <span className="absolute inset-0 rounded-lg bg-orange-400 opacity-40 animate-pulse"></span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
+                    width="22"
+                    height="22"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                     stroke="currentColor"
                     strokeWidth="1"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="relative z-10"
+                    className="relative z-10 drop-shadow-lg scale-110 group-hover/feedback:scale-125 transition-transform duration-300"
                   >
                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                   </svg>
