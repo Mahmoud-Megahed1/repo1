@@ -15,6 +15,7 @@ import type { SidebarItem } from '@shared/types/entities';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from './contexts/theme-context';
 import TestimonialForm from '../../modules/insights/components/testimonial-form';
+import LearningPathTracker from './learning-path-tracker';
 
 type Props = {
   items?: Array<SidebarItem>;
@@ -60,7 +61,10 @@ export default function AppSidebar({ items = [], user, ...props }: Props) {
       </SidebarHeader>
       <SidebarContent className="flex flex-col gap-4">
         <NavMain items={items as never} />
-        <div className="px-4 mt-auto mb-4 group-data-[state=collapsed]:hidden">
+        <div className="px-4 mt-auto mb-2 group-data-[state=collapsed]:hidden">
+          <LearningPathTracker />
+        </div>
+        <div className="px-4 mb-4 group-data-[state=collapsed]:hidden">
           <TestimonialForm>
             <button className="flex w-full cursor-pointer flex-col rounded-xl bg-secondary p-4 text-start shadow-sm transition-all hover:bg-secondary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <div className="flex items-center gap-3 w-full">
