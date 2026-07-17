@@ -1,12 +1,32 @@
+# Englishom - إنجلشوم
+# https://englishom.com
+
 User-agent: *
 Allow: /
 
-# Main Pages
+# Main Public Pages (Arabic)
 Allow: /ar/
-Allow: /ar/app
+Allow: /ar/our-vision
+Allow: /ar/contact
+Allow: /ar/privacy-policy
+Allow: /ar/terms-and-conditions
+Allow: /ar/user-guide
+Allow: /ar/share-progress
+Allow: /ar/login
+Allow: /ar/signup
+
+# Main Public Pages (English)
+Allow: /en/
+Allow: /en/our-vision
+Allow: /en/contact
+Allow: /en/login
+Allow: /en/signup
+
+# Landing Pages
 Allow: /landingpage1/
 Allow: /Landingpage/
 Allow: /blog/
+Allow: /test/
 
 # Disallow Admin and Dashboard
 Disallow: /blog/admin
@@ -14,6 +34,16 @@ Disallow: /test/admin
 Disallow: /test1/admin
 Disallow: /dashboard/
 Disallow: /admin
+
+# Disallow Authenticated App Pages (not indexable)
+Disallow: /ar/app/
+Disallow: /en/app/
+Disallow: /ar/verify-email
+Disallow: /en/verify-email
+Disallow: /ar/account-status/
+Disallow: /en/account-status/
+Disallow: /ar/suspended
+Disallow: /en/suspended
 
 # Disallow API endpoints
 Disallow: /api/
@@ -24,6 +54,9 @@ Disallow: /ques/api/
 
 # Disallow internal/testing pages
 Disallow: /progress/
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
 
 # Sitemap
 Sitemap: https://englishom.com/sitemap.xml

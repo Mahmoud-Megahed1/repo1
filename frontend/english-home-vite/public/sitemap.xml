@@ -1,28 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
-   <!-- Homepage Arabic -->
+
+   <!-- Homepage Arabic (Primary) -->
    <url>
       <loc>https://englishom.com/ar</loc>
+      <xhtml:link rel="alternate" hreflang="ar" href="https://englishom.com/ar"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://englishom.com/en"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://englishom.com/"/>
       <changefreq>daily</changefreq>
       <priority>1.0</priority>
    </url>
 
    <!-- Homepage English -->
    <url>
+      <loc>https://englishom.com/en</loc>
+      <xhtml:link rel="alternate" hreflang="ar" href="https://englishom.com/ar"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://englishom.com/en"/>
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://englishom.com/"/>
+      <changefreq>daily</changefreq>
+      <priority>1.0</priority>
+   </url>
+
+   <!-- Homepage Default -->
+   <url>
       <loc>https://englishom.com/</loc>
       <changefreq>daily</changefreq>
       <priority>1.0</priority>
    </url>
 
-   <!-- Landing Page 1 -->
+   <!-- Our Vision - Arabic -->
+   <url>
+      <loc>https://englishom.com/ar/our-vision</loc>
+      <xhtml:link rel="alternate" hreflang="ar" href="https://englishom.com/ar/our-vision"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://englishom.com/en/our-vision"/>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <!-- Our Vision - English -->
+   <url>
+      <loc>https://englishom.com/en/our-vision</loc>
+      <xhtml:link rel="alternate" hreflang="ar" href="https://englishom.com/ar/our-vision"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://englishom.com/en/our-vision"/>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <!-- Contact - Arabic -->
+   <url>
+      <loc>https://englishom.com/ar/contact</loc>
+      <xhtml:link rel="alternate" hreflang="ar" href="https://englishom.com/ar/contact"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://englishom.com/en/contact"/>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+
+   <!-- Contact - English -->
+   <url>
+      <loc>https://englishom.com/en/contact</loc>
+      <xhtml:link rel="alternate" hreflang="ar" href="https://englishom.com/ar/contact"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://englishom.com/en/contact"/>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+
+   <!-- Privacy Policy - Arabic -->
+   <url>
+      <loc>https://englishom.com/ar/privacy-policy</loc>
+      <xhtml:link rel="alternate" hreflang="ar" href="https://englishom.com/ar/privacy-policy"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://englishom.com/en/privacy-policy"/>
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+   </url>
+
+   <!-- Terms and Conditions - Arabic -->
+   <url>
+      <loc>https://englishom.com/ar/terms-and-conditions</loc>
+      <xhtml:link rel="alternate" hreflang="ar" href="https://englishom.com/ar/terms-and-conditions"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://englishom.com/en/terms-and-conditions"/>
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+   </url>
+
+   <!-- User Guide - Arabic -->
+   <url>
+      <loc>https://englishom.com/ar/user-guide</loc>
+      <xhtml:link rel="alternate" hreflang="ar" href="https://englishom.com/ar/user-guide"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://englishom.com/en/user-guide"/>
+      <changefreq>monthly</changefreq>
+      <priority>0.6</priority>
+   </url>
+
+   <!-- Share Progress - Arabic -->
+   <url>
+      <loc>https://englishom.com/ar/share-progress</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.6</priority>
+   </url>
+
+   <!-- Login - Arabic -->
+   <url>
+      <loc>https://englishom.com/ar/login</loc>
+      <xhtml:link rel="alternate" hreflang="ar" href="https://englishom.com/ar/login"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://englishom.com/en/login"/>
+      <changefreq>monthly</changefreq>
+      <priority>0.6</priority>
+   </url>
+
+   <!-- Signup - Arabic -->
+   <url>
+      <loc>https://englishom.com/ar/signup</loc>
+      <xhtml:link rel="alternate" hreflang="ar" href="https://englishom.com/ar/signup"/>
+      <xhtml:link rel="alternate" hreflang="en" href="https://englishom.com/en/signup"/>
+      <changefreq>monthly</changefreq>
+      <priority>0.6</priority>
+   </url>
+
+   <!-- Landing Pages -->
    <url>
       <loc>https://englishom.com/landingpage1/</loc>
       <changefreq>weekly</changefreq>
       <priority>0.9</priority>
    </url>
 
-   <!-- Landing Page -->
    <url>
       <loc>https://englishom.com/Landingpage/</loc>
       <changefreq>weekly</changefreq>
@@ -36,13 +137,6 @@
       <priority>0.8</priority>
    </url>
 
-   <!-- Level Test -->
-   <url>
-      <loc>https://englishom.com/test/</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-
    <!-- Blog -->
    <url>
       <loc>https://englishom.com/blog/</loc>
@@ -50,24 +144,10 @@
       <priority>0.7</priority>
    </url>
 
-   <!-- Questions -->
+   <!-- Level Test -->
    <url>
-      <loc>https://englishom.com/ques/</loc>
+      <loc>https://englishom.com/test/</loc>
       <changefreq>monthly</changefreq>
-      <priority>0.6</priority>
-   </url>
-
-   <!-- Login -->
-   <url>
-      <loc>https://englishom.com/ar/login</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.5</priority>
-   </url>
-
-   <!-- Signup -->
-   <url>
-      <loc>https://englishom.com/ar/signup</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.5</priority>
+      <priority>0.7</priority>
    </url>
 </urlset>
