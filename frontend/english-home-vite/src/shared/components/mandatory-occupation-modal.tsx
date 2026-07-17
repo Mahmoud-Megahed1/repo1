@@ -31,12 +31,22 @@ export function MandatoryOccupationModal() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (occupation: string) => {
-      if (!user?._id) return;
-      return await updateUserOccupation(user._id, occupation);
+      const userId = user?._id || (user as any)?.id;
+      if (!userId) {
+        console.error("User ID is missing from user object:", user);
+        throw new Error("User ID is missing");
+      }
+      console.log("Saving occupation for user:", userId, occupation);
+      return await updateUserOccupation(userId, occupation);
     },
     onSuccess: () => {
+      console.log("Occupation saved successfully!");
       queryClient.invalidateQueries({ queryKey: ['getMe'] });
     },
+    onError: (err) => {
+      console.error("Failed to save occupation:", err);
+      setError(isAr ? 'حدث خطأ أثناء حفظ البيانات' : 'An error occurred while saving');
+    }
   });
 
   if (!isOpen) return null;

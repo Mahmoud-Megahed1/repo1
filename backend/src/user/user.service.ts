@@ -100,7 +100,7 @@ export class UserService {
   }
 
   async findOneAndUpdate(_id: string, updateUserDto: UpdateUserDto) {
-    return await this.userRepo.findOneAndUpdate({ _id }, updateUserDto);
+    return await this.userRepo.findOneAndUpdate({ _id }, { $set: updateUserDto });
   }
 
   async getUserCertificate(userId: string, certificateDto: GetCertificateDto) {
