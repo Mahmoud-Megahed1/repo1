@@ -36,8 +36,8 @@ export default function LearningPathTracker() {
   const currentLevelLabel = activeLevel ? LEVEL_LABELS[activeLevel.levelName] || activeLevel.levelName : null;
 
   return (
-    <Link
-      to="/app/levels"
+    <a
+      href="/progress/"
       className="flex w-full cursor-pointer flex-col rounded-xl bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 border border-indigo-500/20 p-4 text-start shadow-sm transition-all hover:shadow-md hover:border-indigo-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group"
     >
       {/* Header */}
@@ -135,6 +135,6 @@ export default function LearningPathTracker() {
           </span>
         </div>
       )}
-    </Link>
+    </a>
   );
 }
