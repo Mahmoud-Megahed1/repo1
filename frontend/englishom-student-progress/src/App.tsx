@@ -17,7 +17,7 @@ type LevelDetails = {
   isExpired: boolean;
 };
 
-type LoadingState = 'loading' | 'loaded' | 'no-auth' | 'error';
+type LoadingState = 'loading' | 'loaded' | 'no-auth' | 'no-course' | 'error';
 
 export default function App() {
   const [planDays, setPlanDays] = useState(0);
@@ -49,6 +49,11 @@ export default function App() {
         const data = await res.json();
         const levels: LevelDetails[] = data.levelsDetails || [];
 
+        if (levels.length === 0) {
+          setLoadingState('no-course');
+          return;
+        }
+
         // Find the active (non-completed, non-expired) level
         const activeLevel = levels.find(l => !l.isCompleted && !l.isExpired) || levels[0];
 
@@ -68,7 +73,7 @@ export default function App() {
 
           setLoadingState('loaded');
         } else {
-          setLoadingState('error');
+          setLoadingState('no-course');
         }
       } catch {
         setLoadingState('error');
@@ -184,10 +189,30 @@ export default function App() {
               <AlertTriangle className="w-8 h-8 text-red-400" />
             </div>
             <h2 className="text-xl font-bold text-white">حدث خطأ</h2>
-            <p className="text-slate-400 text-sm leading-relaxed">لم نتمكن من تحميل بيانات تقدمك. تأكد من اتصالك بالإنترنت وأنك مسجل في كورس نشط.</p>
+            <p className="text-slate-400 text-sm leading-relaxed">لم نتمكن من تحميل بيانات تقدمك. تأكد من اتصالك بالإنترنت.</p>
             <button onClick={() => window.location.reload()} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 border border-white/10 text-white font-bold text-sm hover:bg-white/20 transition-colors">
               إعادة المحاولة
             </button>
+          </motion.div>
+        </div>
+      )}
+
+      {/* No Course State */}
+      {loadingState === 'no-course' && (
+        <div className="flex-1 flex items-center justify-center py-32 px-4">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-10 max-w-md text-center space-y-5">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center mx-auto">
+              <Activity className="w-8 h-8 text-indigo-400" />
+            </div>
+            <h2 className="text-xl font-bold text-white">لا يوجد اشتراك نشط</h2>
+            <p className="text-slate-400 text-sm leading-relaxed">أنت الآن في فترة التجربة المجانية ولم تقم بالاشتراك في أي مستوى حتى الآن. اشترك الآن لتبدأ في تتبع تقدمك بدقة واحترافية!</p>
+            <a
+              href="https://englishom.com/#pricing"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold text-sm hover:opacity-90 transition-opacity"
+            >
+              <Target className="w-4 h-4" />
+              تصفح خطط الاشتراك
+            </a>
           </motion.div>
         </div>
       )}
