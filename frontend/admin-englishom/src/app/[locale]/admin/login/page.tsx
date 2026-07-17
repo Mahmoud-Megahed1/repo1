@@ -1,4 +1,5 @@
 'use client';
+import React, { useState } from 'react';
 import { useRouter } from '@/components/shared/smooth-navigation';
 import { Button } from '@/components/ui/button';
 import {
@@ -34,6 +35,7 @@ function LoginPage() {
 function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [errorMsg, setErrorMsg] = React.useState('');
   const { mutate, isPending } = useMutation({
     mutationKey: ['adminLogin'],
     mutationFn: login,
@@ -42,9 +44,13 @@ function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
       queryClient.invalidateQueries({ queryKey: ['getLoggedAdmin'] });
       router.push('/admin');
     },
+    onError: (err: any) => {
+      setErrorMsg(err?.response?.data?.message || err?.message || 'Login failed. Please check your credentials.');
+    }
   });
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMsg('');
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
@@ -58,6 +64,7 @@ function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
           <CardDescription>Login with your email and password</CardDescription>
         </CardHeader>
         <CardContent>
+          {errorMsg && <div className="text-red-500 text-sm text-center mb-4">{errorMsg}</div>}
           <form onSubmit={onSubmit}>
             <div className="grid gap-6">
               <div className="grid gap-6">
