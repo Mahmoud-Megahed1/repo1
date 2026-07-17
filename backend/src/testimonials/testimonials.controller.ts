@@ -41,6 +41,7 @@ export class TestimonialsController {
       user._id.toString(),
       userName,
       body,
+      user.occupation,
     );
   }
 

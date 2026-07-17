@@ -11,11 +11,20 @@ export class TestimonialsService {
 
   // Public: Get only visible AND approved testimonials, sorted by order
   async findAllPublic(): Promise<Testimonial[]> {
-    return this.testimonialModel
+    const testimonials = await this.testimonialModel
       .find({ isVisible: true, status: TestimonialStatus.APPROVED })
+      .populate({ path: 'userId', select: 'occupation' })
       .sort({ order: 1, createdAt: -1 })
       .lean()
       .exec();
+
+    return testimonials.map((item: any) => {
+      const user = item.userId as any;
+      return {
+        ...item,
+        role: user?.occupation || item.role || 'Student',
+      };
+    }) as any;
   }
 
   // Admin: Get all testimonials with pagination and search
@@ -33,7 +42,7 @@ export class TestimonialsService {
     const [testimonials, totalDocs] = await Promise.all([
       this.testimonialModel
         .find(filter)
-        .populate({ path: 'userId', select: 'firstName lastName email' })
+        .populate({ path: 'userId', select: 'firstName lastName email occupation' })
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
@@ -42,17 +51,33 @@ export class TestimonialsService {
       this.testimonialModel.countDocuments(filter).exec(),
     ]);
 
+    const mappedTestimonials = testimonials.map((item: any) => {
+      const user = item.userId as any;
+      return {
+        ...item,
+        role: user?.occupation || item.role || 'Student',
+      };
+    });
+
     const totalPages = Math.ceil(totalDocs / limit);
 
-    return { testimonials, totalPages, totalDocs };
+    return { testimonials: mappedTestimonials as any, totalPages, totalDocs };
   }
 
   async findOne(id: string): Promise<Testimonial> {
-    const testimonial = await this.testimonialModel.findById(id).lean().exec();
+    const testimonial = await this.testimonialModel
+      .findById(id)
+      .populate({ path: 'userId', select: 'occupation' })
+      .lean()
+      .exec();
     if (!testimonial) {
       throw new NotFoundException(`Testimonial with ID ${id} not found`);
     }
-    return testimonial;
+    const user = testimonial.userId as any;
+    return {
+      ...testimonial,
+      role: user?.occupation || testimonial.role || 'Student',
+    } as any;
   }
 
   async create(createTestimonialDto: any): Promise<Testimonial> {
@@ -64,7 +89,12 @@ export class TestimonialsService {
   /**
    * Student submits a testimonial (status = pending, needs admin approval)
    */
-  async submitTestimonial(userId: string, userName: string, data: { content: string; rating: number }): Promise<Testimonial> {
+  async submitTestimonial(
+    userId: string,
+    userName: string,
+    data: { content: string; rating: number },
+    occupation?: string,
+  ): Promise<Testimonial> {
     if (!data.content || !data.rating) {
       throw new BadRequestException('Content and rating are required');
     }
@@ -85,7 +115,7 @@ export class TestimonialsService {
       name: userName,
       content: data.content,
       rating: data.rating,
-      role: 'Student',
+      role: occupation || 'Student',
       userId: new Types.ObjectId(userId),
       status: TestimonialStatus.PENDING,
       isVisible: false,
