@@ -15,6 +15,7 @@ import { exportUsersToExcel } from './export-users';
 const Users = () => {
   const t = useTranslations('Admin.users');
   const tOrders = useTranslations('Admin.orders');
+  const tGlobal = useTranslations('Global');
   const {
     queryResult: { data, isFetching, isLoading, refetch },
     dispatch,
@@ -72,7 +73,7 @@ const Users = () => {
             className="gap-2 bg-teal-600 hover:bg-teal-700 text-white font-medium shadow-md transition-colors"
           >
             <Download className="size-4" />
-            {isExporting ? tOrders('loading') : tOrders('exportExcel')}
+            {isExporting ? `${tGlobal('loading')}...` : tOrders('exportExcel')}
           </Button>
         </div>
       </header>

@@ -1,8 +1,15 @@
-import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsOptional, IsString, IsInt, IsPositive, Min, Max } from 'class-validator';
+import { Type } from 'class-transformer';
 import { PaginationDto } from '../../user/dto/pagination.dto';
 
 export class DashboardSearchDto extends PaginationDto {
-  // make the pagination with query only
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @IsPositive()
+  @Min(1)
+  @Max(10000)
+  limit?: number = 10;
 
   @IsString()
   @IsOptional()
@@ -10,5 +17,11 @@ export class DashboardSearchDto extends PaginationDto {
 }
 
 export class DashboardPaginationDto extends PaginationDto {
-  // Inherits page and limit from PaginationDto
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @IsPositive()
+  @Min(1)
+  @Max(10000)
+  limit?: number = 10;
 }
