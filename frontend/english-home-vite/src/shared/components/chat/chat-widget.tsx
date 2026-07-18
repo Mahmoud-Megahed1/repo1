@@ -116,6 +116,25 @@ export const ChatWidget = () => {
         const messageText = retryMessage || inputValue.trim();
         if (!messageText || isLoading) return;
 
+        // Check the 10 questions limit
+        const storedCount = localStorage.getItem('englishom_chat_count');
+        const currentCount = storedCount ? parseInt(storedCount, 10) : 0;
+        
+        if (currentCount >= 10) {
+            const limitMsg: Message = {
+                id: Date.now().toString(),
+                role: 'assistant',
+                content: isArabic 
+                    ? 'عذراً، لقد وصلت للحد الأقصى من الأسئلة المسموح بها (10 أسئلة). يرجى التواصل معنا عبر وسائل الدعم الأخرى.'
+                    : 'Sorry, you have reached the maximum number of questions allowed (10 questions). Please contact us via other support channels.',
+                timestamp: new Date(),
+                status: 'sent',
+            };
+            setMessages(prev => [...prev, limitMsg]);
+            setInputValue('');
+            return;
+        }
+
         const userMsgId = Date.now().toString();
         const userMsg: Message = {
             id: userMsgId,
@@ -128,6 +147,8 @@ export const ChatWidget = () => {
         if (!retryMessage) {
             setMessages(prev => [...prev, userMsg]);
             setInputValue('');
+            // Increment the question count
+            localStorage.setItem('englishom_chat_count', (currentCount + 1).toString());
         }
         setIsLoading(true);
 
