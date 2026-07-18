@@ -11,7 +11,7 @@ set -e
 # ======================== Configuration ========================
 BACKUP_DIR="/var/www/repo1/backups"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-RETENTION_DAYS=7
+RETENTION_HOURS=36
 RCLONE_REMOTE="Englishom_Backups_2026"
 CLOUD_FOLDER="englishom_backups"
 LOG_FILE="$BACKUP_DIR/backup_$TIMESTAMP.log"
@@ -142,9 +142,9 @@ if command -v rclone &> /dev/null && rclone listremotes | grep -q "$RCLONE_REMOT
         echo "❌ Cloud upload FAILED! Local backup is still available."
     fi
     
-    # Cleanup old cloud backups
-    echo "🗑️  Cleaning up cloud backups older than $RETENTION_DAYS days..."
-    rclone delete "$RCLONE_REMOTE:$CLOUD_FOLDER/" --min-age ${RETENTION_DAYS}d
+    # Cleanup old cloud backups (Keep only backups from within the last 36 hours, i.e. today & yesterday)
+    echo "🗑️  Cleaning up cloud backups older than $RETENTION_HOURS hours..."
+    rclone delete "$RCLONE_REMOTE:$CLOUD_FOLDER/" --min-age ${RETENTION_HOURS}h
 else
     echo ""
     echo "⚠️  rclone not configured. Local backup only."
@@ -153,11 +153,11 @@ fi
 
 # ======================== Cleanup Old Local Backups ========================
 echo ""
-echo "🗑️  Cleaning up local backups older than $RETENTION_DAYS days..."
-find "$BACKUP_DIR" -name "englishom_full_backup_*.tar.gz" -mtime +$RETENTION_DAYS -delete
-find "$BACKUP_DIR" -name "backup_*.log" -mtime +$RETENTION_DAYS -delete
+echo "🗑️  Cleaning up local backups older than $RETENTION_HOURS hours..."
+find "$BACKUP_DIR" -name "englishom_full_backup_*.tar.gz" -mmin +$((RETENTION_HOURS * 60)) -delete
+find "$BACKUP_DIR" -name "backup_*.log" -mmin +$((RETENTION_HOURS * 60)) -delete
 # Also clean old MongoDB-only backups
-find "$BACKUP_DIR" -path "*/mongodb/*.tar.gz" -mtime +$RETENTION_DAYS -delete
+find "$BACKUP_DIR" -path "*/mongodb/*.tar.gz" -mmin +$((RETENTION_HOURS * 60)) -delete
 
 # ======================== Summary ========================
 echo ""
