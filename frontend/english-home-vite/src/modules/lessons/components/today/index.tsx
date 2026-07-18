@@ -106,10 +106,10 @@ const Today: FC<Props> = ({
 
           {/* Tab content */}
           <div className="flex-1">
-            {activeTab === 'instructions' && (
+            <div className={cn(activeTab === 'instructions' ? 'block' : 'hidden')}>
               <InstructionsCard instructions={instructions} asPanel />
-            )}
-            {activeTab === 'audio' && (
+            </div>
+            <div className={cn(activeTab === 'audio' ? 'block' : 'hidden')}>
               <Card className="gap-2 h-full">
                 <CardHeader className="flex items-center gap-4">
                   <div className="to-primary dark:to-secondary rounded-xl bg-gradient-to-br from-[#96796e] p-3 shadow-lg">
@@ -126,10 +126,10 @@ const Today: FC<Props> = ({
                   />
                 </CardContent>
               </Card>
-            )}
-            {activeTab === 'sentences' && (
+            </div>
+            <div className={cn(activeTab === 'sentences' ? 'block' : 'hidden')}>
               <SentencesCard sentences={sentences} asPanel />
-            )}
+            </div>
           </div>
         </div>
       </div>
