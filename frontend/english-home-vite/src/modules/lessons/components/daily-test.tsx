@@ -23,6 +23,7 @@ import { useParams } from '@tanstack/react-router';
 import { useNavigate } from '@shared/i18n/routing';
 import { useQueryClient } from '@tanstack/react-query';
 import { ChevronLeftIcon } from 'lucide-react';
+import { useLevelById } from '../../levels/queries';
 
 const PASS_SCORE = 70;
 
@@ -82,13 +83,15 @@ const ResultCard = ({
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isNavigating, setIsNavigating] = useState(false);
+  const { data: levelData } = useLevelById(id as LevelId);
+  const totalDays = levelData?.data?.daysCount ?? 50;
 
   const handleGoToNextDay = useCallback(async () => {
     setIsNavigating(true);
     try {
       // Wait for getMe query to finish refetching so currentDay is up-to-date
       await queryClient.refetchQueries({ queryKey: ['getMe'] });
-      if (+day >= 50) {
+      if (+day >= totalDays) {
         window.location.href = '/progress/';
         return;
       }
@@ -182,12 +185,12 @@ const ResultCard = ({
           {isNavigating ? (
             <span className="flex items-center gap-2">
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-              {+day >= 50 
+              {+day >= totalDays 
                 ? (locale === 'ar-EG' ? 'جاري التحويل...' : 'Redirecting...') 
                 : t('Global.nextDay' as any, { day: String(+day + 1) })}
             </span>
           ) : (
-             +day >= 50 
+             +day >= totalDays 
                 ? (locale === 'ar-EG' ? 'إنهاء المستوى ومتابعة التقدم' : 'Finish Level & View Progress')
                 : t('Global.nextDay' as any, { day: String(+day + 1) })
           )}
