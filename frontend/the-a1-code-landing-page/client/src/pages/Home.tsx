@@ -138,59 +138,84 @@ export default function Home() {
           <p className="text-xl text-white/90 max-w-2xl mx-auto">
             {t.cta.description.replace('60', courseData?.daysCount?.toString() || '60')}
           </p>
-          <div className="space-y-4">
-            <a
-              href="https://englishom.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-[#F5BB41] text-[#222222] font-bold py-4 px-12 rounded-lg hover:bg-[#F5BB41]/90 transition-all duration-300 transform hover:scale-105 text-lg shadow-lg"
-            >
-              {t.cta.button}
-            </a>
-            {/* Dynamic Price & Trial Display */}
-            <div className="flex flex-col items-center justify-center gap-3 my-4">
-              {/* If Trial Enabled */}
-              {courseData ? (
-                <>
-                  {courseData.isTrialEnabled && (
-                    <p className="text-[#F5BB41] text-2xl md:text-3xl font-bold tracking-wide drop-shadow-[0_0_15px_rgba(245,187,65,0.9)] animate-pulse">
-                      {language === 'ar' ? 'جرب الآن ليوم واحد' : 'Try now for 1 day'}
+          <div className="flex flex-col items-center justify-center gap-6 max-w-xl mx-auto my-6">
+            {/* If courseData loaded */}
+            {courseData ? (
+              <>
+                {/* 1) Trial Enabled Button */}
+                {courseData.isTrialEnabled && (
+                  <div className="space-y-2 w-full max-w-md">
+                    <a
+                      href="https://englishom.com/app/levels/LEVEL_A1"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-block bg-[#F5BB41] text-[#222222] font-bold py-4 px-8 rounded-xl hover:bg-[#F5BB41]/90 transition-all duration-300 transform hover:scale-105 text-xl shadow-lg border-2 border-amber-300/50"
+                    >
+                      {language === 'ar' ? 'جرب الآن ليوم واحد' : 'Try Now for 1 Day'}
+                    </a>
+                    <p className="text-[#F5BB41] text-lg font-bold tracking-wide drop-shadow-[0_0_15px_rgba(245,187,65,0.9)] animate-pulse">
+                      {language === 'ar' ? '✨ افتح تجربة اليوم الواحد مجاناً' : '✨ Start your 1-day trial for free'}
                     </p>
-                  )}
+                  </div>
+                )}
 
-                  {/* If Show Price Enabled */}
-                  {courseData.showPrice && (
+                {/* 2) Purchase / Show Price Enabled Button */}
+                {courseData.showPrice && (
+                  <div className="space-y-2 w-full max-w-md">
+                    <a
+                      href="https://englishom.com/app/levels/LEVEL_A1"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-block bg-white text-[#1F6BF6] hover:bg-gray-100 font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 text-xl shadow-lg"
+                    >
+                      {language === 'ar' ? 'اشترك الآن في الكورس' : 'Enroll Now in Course'}
+                    </a>
                     <div className="flex items-center justify-center gap-3">
                       <p className="text-[#F5BB41] text-2xl md:text-3xl font-bold tracking-wide drop-shadow-[0_0_15px_rgba(245,187,65,0.9)] animate-pulse">
                         {language === 'ar' ? 'السعر:' : 'Price:'} {courseData.price} {language === 'ar' ? 'ريال' : 'SAR'}
                       </p>
                       {courseData.originalPrice && courseData.originalPrice > courseData.price && (
-                        <span className="text-white/60 line-through text-lg">
+                        <span className="text-white/60 line-through text-lg font-semibold">
                           {courseData.originalPrice} {language === 'ar' ? 'ريال' : 'SAR'}
                         </span>
                       )}
                     </div>
-                  )}
+                  </div>
+                )}
 
-                  {/* Fallback if neither is enabled */}
-                  {!courseData.isTrialEnabled && !courseData.showPrice && (
-                    <p className="text-white/80 text-xl font-bold">
-                      {language === 'ar' ? 'قريبا' : 'Coming soon'}
-                    </p>
-                  )}
-                </>
-              ) : (
-                /* Default fallback while loading */
-                <p className="text-[#F5BB41] text-2xl md:text-3xl font-bold tracking-wide drop-shadow-[0_0_15px_rgba(245,187,65,0.9)] animate-pulse">
-                  {language === 'ar' ? 'جرب الآن ليوم واحد' : 'Try now for 1 day'}
+                {/* Fallback if neither is enabled */}
+                {!courseData.isTrialEnabled && !courseData.showPrice && (
+                  <div className="space-y-2 w-full max-w-md">
+                    <button
+                      disabled
+                      className="w-full bg-white/20 text-white/60 font-bold py-4 px-8 rounded-xl cursor-not-allowed text-xl"
+                    >
+                      {language === 'ar' ? 'قريبا' : 'Coming Soon'}
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              /* Default loading / fallback button */
+              <div className="space-y-2 w-full max-w-md">
+                <a
+                  href="https://englishom.com/app/levels/LEVEL_A1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full inline-block bg-[#F5BB41] text-[#222222] font-bold py-4 px-8 rounded-xl hover:bg-[#F5BB41]/90 transition-all duration-300 transform hover:scale-105 text-xl shadow-lg"
+                >
+                  {language === 'ar' ? 'جرب الآن ليوم واحد' : 'Try Now for 1 Day'}
+                </a>
+                <p className="text-[#F5BB41] text-lg font-bold tracking-wide drop-shadow-[0_0_15px_rgba(245,187,65,0.9)] animate-pulse">
+                  {language === 'ar' ? '✨ افتح تجربة اليوم الواحد' : '✨ Start your 1-day trial'}
                 </p>
-              )}
-            </div>
-
-            <p className="text-white/70 text-sm">
-              {t.cta.note}
-            </p>
+              </div>
+            )}
           </div>
+
+          <p className="text-white/70 text-sm">
+            {t.cta.note}
+          </p>
         </div>
       </section>
 
