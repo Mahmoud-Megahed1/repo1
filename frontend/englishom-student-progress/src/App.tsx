@@ -124,9 +124,11 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <a href="https://englishom.com" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                <span className="text-white font-bold text-sm">E</span>
-              </div>
+              <img
+                src="https://englishom.com/logo.jpeg"
+                alt="Englishom"
+                className="h-10 w-auto rounded-md"
+              />
               <span className="font-bold text-lg text-white">Englishom</span>
             </a>
             <span className="text-slate-500 text-sm">|</span>
