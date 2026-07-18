@@ -20,13 +20,45 @@ import { useState, useEffect } from "react";
  * - Dark Mode support
  */
 
+// Avatar component for testimonials
+function TestimonialAvatar({ src, name, index }: { src?: string; name: string; index: number }) {
+  const [hasError, setHasError] = useState(false);
+  const initials = name ? name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase() : 'EH';
+  const gradients = [
+    'from-pink-500 to-rose-500',
+    'from-blue-500 to-cyan-500',
+    'from-purple-500 to-violet-500'
+  ];
+  const gradient = gradients[index % gradients.length];
+
+  if (src && !hasError) {
+    const fullUrl = src.startsWith('http') ? src : `https://api.englishom.com${src}`;
+    return (
+      <img
+        src={fullUrl}
+        alt={name}
+        className="w-12 h-12 rounded-full object-cover shrink-0 border border-gray-100 dark:border-gray-800 shadow-sm"
+        onError={() => setHasError(true)}
+      />
+    );
+  }
+
+  return (
+    <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center font-bold text-white text-sm shrink-0 shadow-inner`}>
+      {initials}
+    </div>
+  );
+}
+
 export default function Home() {
   const { language } = useLanguage();
   const t = translations[language];
   const isRTL = language === "ar";
   const [courseData, setCourseData] = useState<any>(null);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
 
   useEffect(() => {
+    // Fetch courses
     fetch('https://api.englishom.com/api/courses')
       .then(res => res.json())
       .then(data => {
@@ -35,6 +67,20 @@ export default function Home() {
         else if (data && data.data) courses = data.data;
         const a1Course = courses.find((c: any) => c.level_name === 'LEVEL_A1');
         if (a1Course) setCourseData(a1Course);
+      })
+      .catch(console.error);
+
+    // Fetch testimonials
+    fetch('https://api.englishom.com/api/testimonials/public')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setTestimonials(data);
+        } else if (data && data.testimonials) {
+          setTestimonials(data.testimonials);
+        } else if (data && data.data) {
+          setTestimonials(data.data);
+        }
       })
       .catch(console.error);
   }, []);
@@ -104,24 +150,29 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {t.testimonials.items.map((testimonial, index) => (
+            {(testimonials.length > 0 ? testimonials : t.testimonials.items).map((testimonial, index) => (
               <div
                 key={index}
-                className="bg-white dark:bg-[#1a1a1a] rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                className="bg-white dark:bg-[#1a1a1a] rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
               >
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <span key={i} className="text-[#F5BB41]">
-                      <Star className="w-5 h-5 fill-current" />
-                    </span>
-                  ))}
+                <div>
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(testimonial.rating || 5)].map((_, i) => (
+                      <span key={i} className="text-[#F5BB41]">
+                        <Star className="w-5 h-5 fill-current" />
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-[#666666] dark:text-[#CCCCCC] mb-6 leading-relaxed italic">
+                    "{testimonial.content || testimonial.feedback}"
+                  </p>
                 </div>
-                <p className="text-[#666666] dark:text-[#CCCCCC] mb-6 leading-relaxed italic">
-                  "{testimonial.feedback}"
-                </p>
-                <div className={isRTL ? "text-right" : ""}>
-                  <p className="font-bold text-[#222222] dark:text-white">{testimonial.name}</p>
-                  <p className="text-sm text-[#1F6BF6] dark:text-[#F5BB41]">{testimonial.role}</p>
+                <div className="flex items-center gap-4 border-t border-gray-100 dark:border-gray-800 pt-4 mt-auto">
+                  <TestimonialAvatar src={testimonial.avatar} name={testimonial.name} index={index} />
+                  <div className={isRTL ? "text-right" : "text-left"}>
+                    <p className="font-bold text-[#222222] dark:text-white leading-tight">{testimonial.name}</p>
+                    <p className="text-sm text-[#1F6BF6] dark:text-[#F5BB41]">{testimonial.role}</p>
+                  </div>
                 </div>
               </div>
             ))}
