@@ -570,10 +570,10 @@ export default function Home() {
             <div className="space-y-4">
               <h4 className="font-bold text-lg">روابط سريعة</h4>
               <ul className="space-y-2 text-[#CCCCCC]">
-                <li><a href="https://englishom.com/ar" className="hover:text-[#F5BB41] transition-colors duration-300">الرئيسية</a></li>
-                <li><a href="https://englishom.com/ar/about" className="hover:text-[#F5BB41] transition-colors duration-300">من نحن</a></li>
-                <li><a href="https://englishom.com/ar/faq" className="hover:text-[#F5BB41] transition-colors duration-300">الأسئلة الشائعة</a></li>
-                <li><a href="https://englishom.com/ar/blog" className="hover:text-[#F5BB41] transition-colors duration-300">المدونة</a></li>
+                <li><a href="https://englishom.com" className="hover:text-[#F5BB41] transition-colors duration-300">الرئيسية</a></li>
+                <li><a href="https://englishom.com/our-vision" className="hover:text-[#F5BB41] transition-colors duration-300">من نحن</a></li>
+                <li><a href="#faq" className="hover:text-[#F5BB41] transition-colors duration-300">الأسئلة الشائعة</a></li>
+                <li><a href="https://englishom.com/blog/" className="hover:text-[#F5BB41] transition-colors duration-300">المدونة</a></li>
               </ul>
             </div>
 
@@ -581,10 +581,10 @@ export default function Home() {
             <div className="space-y-4">
               <h4 className="font-bold text-lg">المصادر</h4>
               <ul className="space-y-2 text-[#CCCCCC]">
-                <li><a href="https://englishom.com/ar/terms" className="hover:text-[#F5BB41] transition-colors duration-300">الشروط والأحكام</a></li>
-                <li><a href="https://englishom.com/ar/privacy" className="hover:text-[#F5BB41] transition-colors duration-300">سياسة الخصوصية</a></li>
-                <li><a href="https://englishom.com/ar/refund" className="hover:text-[#F5BB41] transition-colors duration-300">سياسة الاسترجاع</a></li>
-                <li><a href="https://englishom.com/ar/maroof" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">شهادة معروف</a></li>
+                <li><a href="https://englishom.com/terms-and-conditions" className="hover:text-[#F5BB41] transition-colors duration-300">الشروط والأحكام</a></li>
+                <li><a href="https://englishom.com/privacy-policy" className="hover:text-[#F5BB41] transition-colors duration-300">سياسة الخصوصية</a></li>
+                <li><a href="https://englishom.com/terms-and-conditions" className="hover:text-[#F5BB41] transition-colors duration-300">سياسة الاسترجاع</a></li>
+                <li><a href="https://englishom.com" className="hover:text-[#F5BB41] transition-colors duration-300">شهادة معروف</a></li>
               </ul>
             </div>
 
