@@ -151,7 +151,7 @@ export function ShareProgressPage() {
         <div className="mx-auto max-w-xl text-center">
           <p className="text-muted-foreground mb-3 text-sm">
             {t('ShareProgress.cta', {
-              defaultValue: 'انضم إلينا في عالم واسع وطوّر لغتك الإنجليزية مع إنجلش هوم',
+              defaultValue: 'انضم إلينا في عالم واسع وطوّر لغتك الإنجليزية مع إنجلشوم',
             })}
           </p>
           <a
