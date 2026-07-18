@@ -83,18 +83,30 @@ export function LandingHeader() {
             </Link>
           </nav>
 
-          {/* Desktop CTA Buttons */}
-          <div className="hidden items-center space-x-4 md:flex">
-            <Button asChild>
-              <Link to="/signup">{t('Landing.header.cta.signup')}</Link>
-            </Button>
-            <ThemeSwitcher />
-            <Button variant="ghost" asChild>
-              <LanguageSwitcher>
-                <Globe className="text-muted-foreground size-4" />{' '}
-                {locale === 'ar' ? 'الانجليزية' : 'Arabic'}
-              </LanguageSwitcher>
-            </Button>
+          {/* Always visible Toggles (Mobile + Desktop) */}
+          <div className="flex items-center space-x-2 md:space-x-4">
+            <LanguageSwitcher className="flex size-10 items-center justify-center rounded-full bg-accent font-bold transition-colors hover:bg-accent/80 md:size-auto md:bg-transparent md:px-3 md:text-sm md:font-medium">
+              {locale === 'ar' ? (
+                <span className="md:hidden">En</span>
+              ) : (
+                <span className="font-arabic md:hidden">ع</span>
+              )}
+              <span className="hidden md:inline-flex md:items-center">
+                <Globe className="mr-2 size-4 rtl:ml-2 rtl:mr-0" />
+                {locale === 'ar' ? 'English' : 'العربية'}
+              </span>
+            </LanguageSwitcher>
+            
+            <div className="scale-90 md:scale-100">
+              <ThemeSwitcher />
+            </div>
+
+            {/* Desktop CTA Buttons */}
+            <div className="hidden items-center md:flex">
+              <Button asChild>
+                <Link to="/signup">{t('Landing.header.cta.signup')}</Link>
+              </Button>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -157,24 +169,15 @@ export function LandingHeader() {
               >
                 {t('Landing.header.navigation.contact')}
               </Link>
-              <div className="space-y-3 pt-4">
-                <div className="flex items-center justify-between gap-2">
-                  <Button variant="ghost" asChild>
-                    <LanguageSwitcher>
-                      <Globe className="text-muted-foreground me-2 h-4 w-4" />
-                      {locale === 'ar' ? 'English' : 'العربية'}
-                    </LanguageSwitcher>
-                  </Button>
-                  <ThemeSwitcher />
-                </div>
-                <div className="flex flex-col space-y-2">
-                  <Button variant="ghost" asChild className="justify-start">
-                    <Link to="/login">{t('Landing.header.cta.login')}</Link>
-                  </Button>
-                  <Button asChild className="justify-start">
-                    <Link to="/signup">{t('Landing.header.cta.signup')}</Link>
-                  </Button>
-                </div>
+
+              {/* Mobile CTA */}
+              <div className="flex flex-col space-y-2 pt-4">
+                <Button variant="ghost" asChild className="justify-start">
+                  <Link to="/login">{t('Landing.header.cta.login')}</Link>
+                </Button>
+                <Button className="w-full" asChild>
+                  <Link to="/signup">{t('Landing.header.cta.signup')}</Link>
+                </Button>
               </div>
             </div>
           </div>
