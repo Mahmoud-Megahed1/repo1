@@ -11,7 +11,7 @@ set -e
 # ======================== Configuration ========================
 BACKUP_DIR="/var/www/repo1/backups"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-RETENTION_DAYS=2
+RETENTION_DAYS=7
 RCLONE_REMOTE="Englishom_Backups_2026"
 CLOUD_FOLDER="englishom_backups"
 LOG_FILE="$BACKUP_DIR/backup_$TIMESTAMP.log"
