@@ -45,15 +45,12 @@ const Header: FC<Props> = ({ className, breadcrumbItems = [], ...props }) => {
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>
       <div className="ml-auto mr-4 flex items-center gap-2 md:gap-4 rtl:ml-4 rtl:mr-auto">
-        <LanguageSwitcher className="flex size-10 items-center justify-center rounded-full bg-accent font-bold transition-colors hover:bg-accent/80 md:size-auto md:bg-transparent md:px-3 md:text-sm md:font-medium">
+        <LanguageSwitcher className="flex size-10 items-center justify-center rounded-full bg-accent font-bold transition-colors hover:bg-accent/80">
           {locale === 'ar' ? (
-            <span className="md:hidden text-lg">En</span>
+            <span className="text-lg">En</span>
           ) : (
-            <span className="font-arabic md:hidden text-lg">ع</span>
+            <span className="font-arabic text-lg">ع</span>
           )}
-          <span className="hidden md:inline-flex md:items-center">
-            {locale === 'ar' ? 'English' : 'العربية'}
-          </span>
         </LanguageSwitcher>
         <div className="scale-90 md:scale-100">
           <ThemeSwitcher />

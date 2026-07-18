@@ -85,16 +85,12 @@ export function LandingHeader() {
 
           {/* Always visible Toggles (Mobile + Desktop) */}
           <div className="flex items-center space-x-2 md:space-x-4">
-            <LanguageSwitcher className="flex size-10 items-center justify-center rounded-full bg-accent font-bold transition-colors hover:bg-accent/80 md:size-auto md:bg-transparent md:px-3 md:text-sm md:font-medium">
+            <LanguageSwitcher className="flex size-10 items-center justify-center rounded-full bg-accent font-bold transition-colors hover:bg-accent/80">
               {locale === 'ar' ? (
-                <span className="md:hidden">En</span>
+                <span className="text-lg">En</span>
               ) : (
-                <span className="font-arabic md:hidden">ع</span>
+                <span className="font-arabic text-lg">ع</span>
               )}
-              <span className="hidden md:inline-flex md:items-center">
-                <Globe className="mr-2 size-4 rtl:ml-2 rtl:mr-0" />
-                {locale === 'ar' ? 'English' : 'العربية'}
-              </span>
             </LanguageSwitcher>
             
             <div className="scale-90 md:scale-100">
