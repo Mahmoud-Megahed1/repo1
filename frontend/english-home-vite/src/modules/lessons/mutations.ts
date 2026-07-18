@@ -10,6 +10,7 @@ import {
   getDayStatus,
 } from './services';
 import type { LessonParams } from './types';
+import { toast } from 'sonner';
 
 export function useUploadAudio(options: LessonParams) {
   return useMutation({
@@ -127,7 +128,11 @@ export function useCombineLevelAudios(levelName: LevelId) {
       queryClient.invalidateQueries({
         queryKey: ['combined-level-audio', levelName],
       });
+      toast.success('Combined audio generated successfully');
     },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || 'Failed to generate combined audio. Make sure you have completed the speaking tasks.');
+    }
   });
 }
 
