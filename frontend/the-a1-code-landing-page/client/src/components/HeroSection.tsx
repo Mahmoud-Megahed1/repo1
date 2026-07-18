@@ -74,7 +74,7 @@ export default function HeroSection({ courseData }: { courseData?: any }) {
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://englishom.com"
+                href="https://englishom.com/ar/signup"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#1F6BF6] dark:bg-[#F5BB41] text-white dark:text-[#222222] font-bold py-3 px-8 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
@@ -86,9 +86,12 @@ export default function HeroSection({ courseData }: { courseData?: any }) {
                   <ArrowRight className="w-5 h-5" />
                 )}
               </a>
-              <button className="border-2 border-[#F5BB41] text-[#F5BB41] dark:border-[#F5BB41] dark:text-[#F5BB41] font-bold py-3 px-8 rounded-lg hover:bg-[#F5BB41]/10 dark:hover:bg-[#F5BB41]/20 transition-all duration-300">
+              <a
+                href="#pricing"
+                className="border-2 border-[#F5BB41] text-[#F5BB41] dark:border-[#F5BB41] dark:text-[#F5BB41] font-bold py-3 px-8 rounded-lg hover:bg-[#F5BB41]/10 dark:hover:bg-[#F5BB41]/20 transition-all duration-300 flex items-center justify-center"
+              >
                 {t.hero.cta2}
-              </button>
+              </a>
             </div>
 
             {/* Success Count */}

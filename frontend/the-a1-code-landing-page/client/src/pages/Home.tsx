@@ -146,7 +146,7 @@ export default function Home() {
                 {courseData.isTrialEnabled && (
                   <div className="space-y-2 w-full max-w-md">
                     <a
-                      href="https://englishom.com/app/levels/LEVEL_A1"
+                      href={`https://englishom.com/${language}/signup`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full inline-block bg-[#F5BB41] text-[#222222] font-bold py-4 px-8 rounded-xl hover:bg-[#F5BB41]/90 transition-all duration-300 transform hover:scale-105 text-xl shadow-lg border-2 border-amber-300/50"
@@ -163,7 +163,7 @@ export default function Home() {
                 {courseData.showPrice && (
                   <div className="space-y-2 w-full max-w-md">
                     <a
-                      href="https://englishom.com/app/levels/LEVEL_A1"
+                      href={`https://englishom.com/${language}/signup`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full inline-block bg-white text-[#1F6BF6] hover:bg-gray-100 font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 text-xl shadow-lg"
@@ -199,7 +199,7 @@ export default function Home() {
               /* Default loading / fallback button */
               <div className="space-y-2 w-full max-w-md">
                 <a
-                  href="https://englishom.com/app/levels/LEVEL_A1"
+                  href={`https://englishom.com/${language}/signup`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full inline-block bg-[#F5BB41] text-[#222222] font-bold py-4 px-8 rounded-xl hover:bg-[#F5BB41]/90 transition-all duration-300 transform hover:scale-105 text-xl shadow-lg"

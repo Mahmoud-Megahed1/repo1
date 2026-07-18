@@ -112,16 +112,13 @@ export default function OutcomesSection({ courseData }: { courseData?: any }) {
           </p>
           <div className="space-y-4">
             <a
-              href="https://englishom.com"
+              href="https://englishom.com/ar/signup"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-gradient-to-r from-[#1F6BF6] to-[#3D84F3] text-white font-bold py-4 px-12 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-300"
             >
               {t.outcomes.button}
             </a>
-            <p className="text-3xl font-bold animate-pulse-glow text-[#F5BB41] dark:text-[#F5BB41]">
-              {t.cta.price}
-            </p>
           </div>
         </div>
       </div>
