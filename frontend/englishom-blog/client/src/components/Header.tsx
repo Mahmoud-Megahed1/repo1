@@ -59,9 +59,13 @@ export default function Header() {
             size="icon"
             onClick={handleLanguageToggle}
             title={t("common.language", language)}
-            className="hidden sm:flex"
+            className="rounded-full font-bold flex"
           >
-            <Globe size={18} />
+            {language === "ar" ? (
+              <span className="text-base font-sans">En</span>
+            ) : (
+              <span className="text-base font-arabic">ع</span>
+            )}
           </Button>
 
           {/* Theme Toggle */}
@@ -70,7 +74,7 @@ export default function Header() {
             size="icon"
             onClick={handleThemeToggle}
             title={theme === "light" ? t("common.darkMode", language) : t("common.lightMode", language)}
-            className="hidden sm:flex"
+            className="rounded-full flex"
           >
             {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
           </Button>
@@ -117,37 +121,6 @@ export default function Header() {
                 {t("admin.dashboard", language)}
               </a>
             )}
-            <div className="flex gap-2 pt-2 border-t border-border">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleLanguageToggle}
-                className="flex-1"
-              >
-                <Globe size={16} className="mr-2" />
-                {language === "en" ? "العربية" : "English"}
-              </Button>
-            {toggleTheme && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleThemeToggle}
-                className="flex-1"
-              >
-                {theme === "light" ? (
-                  <>
-                    <Moon size={16} className="mr-2" />
-                    {t("common.darkMode", language)}
-                  </>
-                ) : (
-                  <>
-                    <Sun size={16} className="mr-2" />
-                    {t("common.lightMode", language)}
-                  </>
-                )}
-              </Button>
-            )}
-            </div>
           </nav>
         </div>
       )}
