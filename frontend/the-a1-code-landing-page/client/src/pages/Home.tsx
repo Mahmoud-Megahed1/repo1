@@ -147,8 +147,8 @@ export default function Home() {
             >
               {t.cta.button}
             </a>
-            <p className="text-white/90 text-lg font-bold">
-              {courseData ? (courseData.showPrice && courseData.price ? `${language === 'ar' ? 'السعر' : 'Price'}: ${courseData.price} ${language === 'ar' ? 'ريال' : 'SAR'}` : (language === 'ar' ? 'قريبا' : 'Coming soon')) : t.cta.price}
+            <p className="text-[#F5BB41] text-2xl md:text-3xl font-bold tracking-wide drop-shadow-[0_0_15px_rgba(245,187,65,0.8)] animate-pulse my-4">
+              {language === 'ar' ? 'جرب الآن ليوم واحد' : 'Try now for 1 day'}
             </p>
             <p className="text-white/70 text-sm">
               {t.cta.note}

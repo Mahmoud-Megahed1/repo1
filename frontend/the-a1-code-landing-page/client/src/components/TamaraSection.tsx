@@ -19,9 +19,9 @@ export default function TamaraSection() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="flex justify-center mb-4">
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-full p-4">
-              <CreditCard className="w-8 h-8 text-white" />
+          <div className="flex justify-center mb-6">
+            <div className="bg-white/10 dark:bg-white/5 p-4 px-6 rounded-2xl border border-blue-500/20 shadow-xl backdrop-blur-sm flex items-center justify-center">
+              <img src="/tamara.svg" alt="Tamara" className="h-10 md:h-12 w-auto object-contain" />
             </div>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-center">
