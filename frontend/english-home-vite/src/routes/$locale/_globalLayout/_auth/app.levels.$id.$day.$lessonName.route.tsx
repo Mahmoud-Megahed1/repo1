@@ -57,13 +57,21 @@ function RouteComponent() {
     const defaultItems = LESSONS_SIDEBAR_DEFAULT_ITEMS(levelId as LevelId, day, t as never);
     const completed = completedTasks?.data || [];
 
-    const updatedItems = defaultItems.map((item) => ({
+    // Hide DAILY_TEST from sidebar for trial users (no active subscription for this level)
+    const canAccess = levelsDetails?.some(
+      ({ levelName, isExpired }) => levelName === levelId && !isExpired
+    );
+    const filteredItems = canAccess
+      ? defaultItems
+      : defaultItems.filter((item) => item.id !== 'DAILY_TEST');
+
+    const updatedItems = filteredItems.map((item) => ({
       ...item,
       isCompleted: completed.includes(item.id),
     }));
 
     useSidebarStore.getState().setItems(updatedItems);
-  }, [completedTasks?.data, levelId, day, t]);
+  }, [completedTasks?.data, levelId, day, t, levelsDetails]);
 
   // Separate effect for unmount cleanup
   useEffect(() => {

@@ -824,6 +824,7 @@ export default {
       title: 'Technical Support',
     },
     lessonCompleted: 'Lesson Completed',
+    completeLesson: 'Complete Lesson',
     lessonInstructions: {
       READ: 'Read the text and learn new vocabulary',
       PICTURES: 'Look at the pictures and learn new vocabulary',

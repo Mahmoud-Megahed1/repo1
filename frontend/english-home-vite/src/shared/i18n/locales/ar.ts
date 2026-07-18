@@ -809,6 +809,7 @@ export default {
       title: 'الدعم الفني',
     },
     lessonCompleted: 'تم إكمال الدرس',
+    completeLesson: 'إنهاء الدرس',
     lessonInstructions: {
       READ: 'اقرأ النص وتعرّف على المفردات الجديدة',
       PICTURES: 'انظر إلى الصور وتعلّم المفردات الجديدة',

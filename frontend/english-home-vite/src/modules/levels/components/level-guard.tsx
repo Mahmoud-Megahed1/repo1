@@ -36,8 +36,8 @@ const LevelGuard = ({
   // If no day is specified (days list page), allow through
   if (!day) return <>{children}</>;
 
-  // For lesson pages: only allow Day 1
-  if (day === '1') {
+  // For lesson pages: only allow Day 1, and block DAILY_TEST
+  if (day === '1' && lessonName !== 'DAILY_TEST') {
     return <>{children}</>;
   }
 

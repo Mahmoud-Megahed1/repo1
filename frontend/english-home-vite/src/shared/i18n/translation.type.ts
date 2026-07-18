@@ -621,6 +621,7 @@ export type TranslationType = {
       title: string;
     };
     lessonCompleted: string;
+    completeLesson: string;
     lessonInstructions: {
       READ: string;
       PICTURES: string;
