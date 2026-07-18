@@ -88,6 +88,10 @@ const ResultCard = ({
     try {
       // Wait for getMe query to finish refetching so currentDay is up-to-date
       await queryClient.refetchQueries({ queryKey: ['getMe'] });
+      if (+day >= 50) {
+        window.location.href = '/progress/';
+        return;
+      }
       navigate({
         to: '/app/levels/$id/$day/$lessonName',
         params: { id, day: String(+day + 1), lessonName: 'READ' } as any,
@@ -178,10 +182,14 @@ const ResultCard = ({
           {isNavigating ? (
             <span className="flex items-center gap-2">
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-              {t('Global.nextDay' as any, { day: String(+day + 1) })}
+              {+day >= 50 
+                ? (locale === 'ar-EG' ? 'جاري التحويل...' : 'Redirecting...') 
+                : t('Global.nextDay' as any, { day: String(+day + 1) })}
             </span>
           ) : (
-            t('Global.nextDay' as any, { day: String(+day + 1) })
+             +day >= 50 
+                ? (locale === 'ar-EG' ? 'إنهاء المستوى ومتابعة التقدم' : 'Finish Level & View Progress')
+                : t('Global.nextDay' as any, { day: String(+day + 1) })
           )}
         </Button>
       )}
