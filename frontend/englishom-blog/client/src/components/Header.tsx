@@ -1,26 +1,19 @@
 import { useLocalization } from "@/contexts/LocalizationContext";
-import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { t } from "@/i18n/translations";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, Globe, Menu, X } from "lucide-react";
+import { Globe, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { ENGLISHOM_COLORS } from "@/constants/colors";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 export default function Header() {
   const { language, setLanguage } = useLocalization();
-  const { theme, toggleTheme } = useTheme();
   const { user, isAuthenticated } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLanguageToggle = () => {
     setLanguage(language === "en" ? "ar" : "en");
-  };
-
-  const handleThemeToggle = () => {
-    if (toggleTheme) {
-      toggleTheme();
-    }
   };
 
   return (
@@ -31,7 +24,7 @@ export default function Header() {
           <img
             src="/logo.jpeg"
             alt="EnglishOM"
-            className="w-10 h-10 object-contain"
+            className="w-10 h-10 object-contain rounded-md"
           />
           <span className="font-bold text-lg hidden sm:inline">EnglishOM</span>
         </a>
@@ -51,34 +44,8 @@ export default function Header() {
           )}
         </nav>
 
-        {/* Controls */}
-        <div className="flex items-center gap-2">
-          {/* Language Toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleLanguageToggle}
-            title={t("common.language", language)}
-            className="rounded-full font-bold flex"
-          >
-            {language === "ar" ? (
-              <span className="text-base font-sans">En</span>
-            ) : (
-              <span className="text-base font-arabic">ع</span>
-            )}
-          </Button>
-
-          {/* Theme Toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleThemeToggle}
-            title={theme === "light" ? t("common.darkMode", language) : t("common.lightMode", language)}
-            className="rounded-full flex"
-          >
-            {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
-          </Button>
-
+        {/* Desktop Controls */}
+        <div className="hidden md:flex items-center gap-4">
           {/* Auth Button */}
           {isAuthenticated ? (
             <Button variant="outline" size="sm" onClick={() => window.location.href = "/blog"}>
@@ -94,12 +61,26 @@ export default function Header() {
             </Button>
           )}
 
-          {/* Mobile Menu Toggle */}
+          {/* Theme Switcher Slider */}
+          <ThemeSwitcher />
+
+          {/* Language Toggle */}
+          <Button
+            variant="ghost"
+            onClick={handleLanguageToggle}
+            className="flex items-center gap-2 text-sm font-medium"
+          >
+            <Globe className="h-4 w-4 text-muted-foreground" />
+            {language === "ar" ? "English" : "العربية"}
+          </Button>
+        </div>
+
+        {/* Mobile Menu Toggle Button */}
+        <div className="md:hidden flex items-center">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden"
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </Button>
@@ -121,6 +102,31 @@ export default function Header() {
                 {t("admin.dashboard", language)}
               </a>
             )}
+
+            <div className="space-y-3 pt-4 border-t border-border mt-2">
+              <div className="flex items-center justify-between gap-2">
+                <Button variant="ghost" onClick={handleLanguageToggle} className="flex items-center gap-2">
+                  <Globe className="h-4 w-4 text-muted-foreground" />
+                  {language === "ar" ? "English" : "العربية"}
+                </Button>
+                <ThemeSwitcher />
+              </div>
+              <div className="flex flex-col space-y-2">
+                {isAuthenticated ? (
+                  <Button variant="outline" className="w-full justify-start" onClick={() => window.location.href = "/blog"}>
+                    {user?.name || "Account"}
+                  </Button>
+                ) : (
+                  <Button
+                    className="w-full justify-start"
+                    style={{ backgroundColor: ENGLISHOM_COLORS.primary }}
+                    onClick={() => window.location.href = "/blog"}
+                  >
+                    {t("nav.startLearning", language)}
+                  </Button>
+                )}
+              </div>
+            </div>
           </nav>
         </div>
       )}
