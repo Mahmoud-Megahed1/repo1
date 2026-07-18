@@ -20,14 +20,10 @@ import { SidebarTrigger } from '@ui/sidebar';
 import type { FC } from 'react';
 import React from 'react';
 import ThemeSwitcher from './theme-switcher';
-import LanguageSwitcher from './language-switcher';
-import useLocale from '@hooks/use-locale';
-
 type Props = React.ComponentProps<'header'> & {
   breadcrumbItems?: Array<BreadcrumbItemType>;
 };
 const Header: FC<Props> = ({ className, breadcrumbItems = [], ...props }) => {
-  const locale = useLocale();
   return (
     <header
       className={cn(
@@ -44,17 +40,8 @@ const Header: FC<Props> = ({ className, breadcrumbItems = [], ...props }) => {
         />
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>
-      <div className="ml-auto mr-4 flex items-center gap-2 md:gap-4 rtl:ml-4 rtl:mr-auto">
-        <LanguageSwitcher className="flex size-10 items-center justify-center rounded-full bg-accent font-bold transition-colors hover:bg-accent/80">
-          {locale === 'ar' ? (
-            <span className="text-lg">En</span>
-          ) : (
-            <span className="font-arabic text-lg">ع</span>
-          )}
-        </LanguageSwitcher>
-        <div className="scale-90 md:scale-100">
-          <ThemeSwitcher />
-        </div>
+      <div className="ml-auto mr-4 rtl:ml-4 rtl:mr-auto">
+        <ThemeSwitcher />
       </div>
     </header>
   );
