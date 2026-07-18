@@ -27,7 +27,6 @@ import {
   useSidebar,
 } from '@ui/sidebar';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from './language-switcher';
 import useLocale from '@hooks/use-locale';
 import { Link } from '@shared/i18n/routing';
 import { Button } from '@ui/button';
@@ -152,15 +151,6 @@ export function NavUser({ user, onLogout }: Props) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <ModeToggle />
-              <DropdownMenuItem asChild>
-                <LanguageSwitcher
-                  onClick={() => {
-                    if (isMobile) setOpenMobile(false);
-                  }}
-                >
-                  <Globe /> {locale === 'ar' ? 'الانجليزية' : 'Arabic'}
-                </LanguageSwitcher>
-              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
