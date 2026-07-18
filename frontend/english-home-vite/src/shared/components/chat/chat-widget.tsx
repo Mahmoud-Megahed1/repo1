@@ -113,6 +113,9 @@ export const ChatWidget = () => {
     }, [isOpen, isArabic]);
 
     const handleSendMessage = useCallback(async (retryMessage?: string) => {
+        const messageText = retryMessage || inputValue.trim();
+        if (!messageText || isLoading) return;
+
         // Check the 10 questions limit PER DAY
         const todayStr = new Date().toDateString();
         const storedDataStr = localStorage.getItem('englishom_chat_limit');
