@@ -261,6 +261,16 @@ const DailyTest: FC<DailyTestProps> = ({ lesson, day, levelId }) => {
   }, [currentIndex]);
 
   const getResult = useMemo(() => {
+    if (!questionsStates || questionsStates.length === 0) {
+      // Fallback if there are no questions (e.g. mock test passed from backend without questions)
+      return {
+        correctAnswers: 0,
+        totalQuestions: 0,
+        incorrectAnswers: 0,
+        score: dayStatus?.data?.dailyTestResult?.score || 100,
+        isPassed: dayStatus?.data?.dailyTestResult?.isPassed ?? true,
+      };
+    }
     const correctAnswers = questionsStates.filter((q) => q.isCorrect).length;
     return {
       correctAnswers,
@@ -271,7 +281,7 @@ const DailyTest: FC<DailyTestProps> = ({ lesson, day, levelId }) => {
         Math.round((correctAnswers / questionsStates.length) * 100) >=
         PASS_SCORE,
     };
-  }, [questionsStates]);
+  }, [questionsStates, dayStatus]);
 
   const resetTest = useCallback(() => {
     reset();
@@ -319,9 +329,9 @@ const DailyTest: FC<DailyTestProps> = ({ lesson, day, levelId }) => {
     }
   }, [testStatus, getResult, mutate, isSuccess, levelId, day, questionsStates, markTaskCompleted]);
 
-  if (!currentItem) return null;
+  if (!currentItem && testStatus !== 'completed') return null;
 
-  const { question, answers, type } = currentItem;
+  const { question, answers, type } = currentItem || {};
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col space-y-3">
@@ -357,7 +367,7 @@ const DailyTest: FC<DailyTestProps> = ({ lesson, day, levelId }) => {
           isDayCompleted={isSuccess}
           isDayAlreadyCompleted={!!dayStatus?.data?.dailyTestResult?.isPassed}
         />
-      ) : (
+      ) : currentItem ? (
         <Card className="overflow-hidden border-border shadow-card">
           <div className={cn(
             'flex flex-col',
@@ -480,7 +490,7 @@ const DailyTest: FC<DailyTestProps> = ({ lesson, day, levelId }) => {
             </div>
           </div>
         </Card>
-      )}
+      ) : null}
 
       {testStatus === 'reviewed' && (
         <div className="flex justify-center mt-4">
