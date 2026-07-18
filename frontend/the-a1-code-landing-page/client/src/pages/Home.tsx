@@ -147,9 +147,46 @@ export default function Home() {
             >
               {t.cta.button}
             </a>
-            <p className="text-[#F5BB41] text-2xl md:text-3xl font-bold tracking-wide drop-shadow-[0_0_15px_rgba(245,187,65,0.8)] animate-pulse my-4">
-              {language === 'ar' ? 'جرب الآن ليوم واحد' : 'Try now for 1 day'}
-            </p>
+            {/* Dynamic Price & Trial Display */}
+            <div className="flex flex-col items-center justify-center gap-3 my-4">
+              {/* If Trial Enabled */}
+              {courseData ? (
+                <>
+                  {courseData.isTrialEnabled && (
+                    <p className="text-[#F5BB41] text-2xl md:text-3xl font-bold tracking-wide drop-shadow-[0_0_15px_rgba(245,187,65,0.9)] animate-pulse">
+                      {language === 'ar' ? 'جرب الآن ليوم واحد' : 'Try now for 1 day'}
+                    </p>
+                  )}
+
+                  {/* If Show Price Enabled */}
+                  {courseData.showPrice && (
+                    <div className="flex items-center justify-center gap-3">
+                      <p className="text-[#F5BB41] text-2xl md:text-3xl font-bold tracking-wide drop-shadow-[0_0_15px_rgba(245,187,65,0.9)] animate-pulse">
+                        {language === 'ar' ? 'السعر:' : 'Price:'} {courseData.price} {language === 'ar' ? 'ريال' : 'SAR'}
+                      </p>
+                      {courseData.originalPrice && courseData.originalPrice > courseData.price && (
+                        <span className="text-white/60 line-through text-lg">
+                          {courseData.originalPrice} {language === 'ar' ? 'ريال' : 'SAR'}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Fallback if neither is enabled */}
+                  {!courseData.isTrialEnabled && !courseData.showPrice && (
+                    <p className="text-white/80 text-xl font-bold">
+                      {language === 'ar' ? 'قريبا' : 'Coming soon'}
+                    </p>
+                  )}
+                </>
+              ) : (
+                /* Default fallback while loading */
+                <p className="text-[#F5BB41] text-2xl md:text-3xl font-bold tracking-wide drop-shadow-[0_0_15px_rgba(245,187,65,0.9)] animate-pulse">
+                  {language === 'ar' ? 'جرب الآن ليوم واحد' : 'Try now for 1 day'}
+                </p>
+              )}
+            </div>
+
             <p className="text-white/70 text-sm">
               {t.cta.note}
             </p>
