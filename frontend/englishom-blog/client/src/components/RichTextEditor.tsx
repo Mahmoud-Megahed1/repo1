@@ -1,4 +1,4 @@
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, Node, mergeAttributes } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
@@ -32,6 +32,7 @@ import {
   Loader2,
   Youtube as YoutubeIcon,
   Upload,
+  Trash2,
 } from "lucide-react";
 import "./RichTextEditor.css";
 
@@ -41,6 +42,58 @@ interface RichTextEditorProps {
   placeholder?: string;
   dir?: "ltr" | "rtl" | "auto";
 }
+
+// Custom TipTap Extension for raw <video> tags
+const VideoExtension = Node.create({
+  name: "videoNode",
+  group: "block",
+  selectable: true,
+  draggable: true,
+  atom: true,
+
+  addAttributes() {
+    return {
+      src: { default: null },
+      controls: { default: "controls" },
+      class: { default: "w-full aspect-video rounded-xl my-4 shadow-lg" },
+    };
+  },
+
+  parseHTML() {
+    return [{ tag: "video" }];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return ["video", mergeAttributes(HTMLAttributes, { controls: "controls" })];
+  },
+});
+
+// Custom TipTap Extension for raw <iframe> tags
+const IframeExtension = Node.create({
+  name: "iframeNode",
+  group: "block",
+  selectable: true,
+  draggable: true,
+  atom: true,
+
+  addAttributes() {
+    return {
+      src: { default: null },
+      frameborder: { default: "0" },
+      allowfullscreen: { default: "true" },
+      allow: { default: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" },
+      class: { default: "w-full aspect-video rounded-xl my-4 shadow-lg" },
+    };
+  },
+
+  parseHTML() {
+    return [{ tag: "iframe" }];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return ["iframe", mergeAttributes(HTMLAttributes)];
+  },
+});
 
 export function parseYoutubeUrl(url: string): string | null {
   if (!url) return null;
@@ -93,6 +146,8 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         width: 640,
         height: 360,
       }),
+      VideoExtension,
+      IframeExtension,
       TextAlign.configure({
         types: ['heading', 'paragraph', 'blockquote'],
         alignments: ['left', 'center', 'right', 'justify'],
@@ -133,6 +188,18 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
       editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
     }
   };
+
+  // Delete selected node (Image, Video, Iframe, Youtube, etc.)
+  const deleteSelectedMedia = () => {
+    editor.chain().focus().deleteSelection().run();
+    toast.success(isAr ? "تم حذف العنصر المحدد" : "Selected media deleted");
+  };
+
+  const isMediaSelected =
+    editor.isActive("image") ||
+    editor.isActive("youtube") ||
+    editor.isActive("videoNode") ||
+    editor.isActive("iframeNode");
 
   // Image Upload with Progress Percentage
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -186,27 +253,25 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         const url = res.data?.result?.data?.json?.url || res.data?.result?.data?.url;
 
         if (url) {
-          editor.chain().focus().insertContent(`<p><img src="${url}" alt="${file.name}" class="rounded-lg max-w-full my-4 shadow-md" /></p>`).run();
+          editor.chain().focus().setImage({ src: url }).run();
           toast.success(isAr ? "تم إدراج الصورة بنجاح في المقالة" : "Image inserted successfully");
         } else {
-          // Fallback to tRPC mutation
           uploadMediaMutation.mutate(
             { fileName: file.name, fileData: base64String },
             {
               onSuccess: (data) => {
-                editor.chain().focus().insertContent(`<p><img src="${data.url}" alt="${file.name}" class="rounded-lg max-w-full my-4 shadow-md" /></p>`).run();
+                editor.chain().focus().setImage({ src: data.url }).run();
                 toast.success(isAr ? "تم إدراج الصورة بنجاح!" : "Image inserted!");
               },
             }
           );
         }
       } catch (err: any) {
-        // Fallback to tRPC mutation if direct Axios fails
         uploadMediaMutation.mutate(
           { fileName: file.name, fileData: base64String },
           {
             onSuccess: (data) => {
-              editor.chain().focus().insertContent(`<p><img src="${data.url}" alt="${file.name}" class="rounded-lg max-w-full my-4 shadow-md" /></p>`).run();
+              editor.chain().focus().setImage({ src: data.url }).run();
               toast.success(isAr ? "تم إدراج الصورة بنجاح!" : "Image inserted!");
             },
             onError: (mutationErr) => {
@@ -286,7 +351,10 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         const url = res.data?.result?.data?.json?.url || res.data?.result?.data?.url;
 
         if (url) {
-          editor.chain().focus().insertContent(`<p><video controls src="${url}" class="w-full aspect-video rounded-xl my-4 shadow-lg"></video></p>`).run();
+          editor.chain().focus().insertContent({
+            type: "videoNode",
+            attrs: { src: url },
+          }).run();
           toast.success(isAr ? "تم إدراج الفيديو بنجاح!" : "Video inserted successfully!");
         }
       } catch (err: any) {
@@ -306,16 +374,28 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
 
   // YouTube Link Insert
   const handleInsertYoutube = () => {
-    if (!youtubePreviewEmbed) {
+    if (!youtubePreviewEmbed && !youtubeUrlInput) {
       toast.error(isAr ? "يرجى أدخال رابط يوتيوب صحيح" : "Please enter a valid YouTube URL");
       return;
     }
 
-    editor.chain().focus().insertContent(`
-      <p>
-        <iframe src="${youtubePreviewEmbed}" class="w-full aspect-video rounded-xl my-4 shadow-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      </p>
-    `).run();
+    const embedUrl = youtubePreviewEmbed || parseYoutubeUrl(youtubeUrlInput);
+
+    if (embedUrl) {
+      // 1. Try TipTap YouTube Extension
+      const setSuccess = editor.chain().focus().setYoutubeVideo({ src: youtubeUrlInput }).run();
+      
+      // 2. If TipTap youtube extension didn't run, use custom IframeExtension
+      if (!setSuccess) {
+        editor.chain().focus().insertContent({
+          type: "iframeNode",
+          attrs: { src: embedUrl },
+        }).run();
+      }
+    } else {
+      toast.error(isAr ? "تعذر استخراج فيديو اليوتيوب" : "Could not parse YouTube URL");
+      return;
+    }
 
     setIsVideoModalOpen(false);
     setYoutubeUrlInput("");
@@ -348,7 +428,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
       />
 
       {/* Toolbar */}
-      <div className="bg-muted p-2 flex flex-wrap gap-1 border-b border-border">
+      <div className="bg-muted p-2 flex flex-wrap gap-1 border-b border-border items-center">
         <Button
           size="sm"
           variant={editor.isActive("bold") ? "default" : "outline"}
@@ -367,7 +447,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           <Italic size={16} />
         </Button>
 
-        <div className="w-px bg-border mx-1" />
+        <div className="w-px bg-border mx-1 h-5" />
 
         <Button
           size="sm"
@@ -387,7 +467,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           <Heading3 size={16} />
         </Button>
 
-        <div className="w-px bg-border mx-1" />
+        <div className="w-px bg-border mx-1 h-5" />
 
         <Button
           size="sm"
@@ -425,7 +505,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           <AlignJustify size={16} />
         </Button>
 
-        <div className="w-px bg-border mx-1" />
+        <div className="w-px bg-border mx-1 h-5" />
 
         <Button
           size="sm"
@@ -454,7 +534,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           <ListOrdered size={16} />
         </Button>
 
-        <div className="w-px bg-border mx-1" />
+        <div className="w-px bg-border mx-1 h-5" />
 
         <Button
           size="sm"
@@ -471,7 +551,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           variant="outline"
           onClick={() => setIsVideoModalOpen(true)}
           title={isAr ? "إدراج فيديو (يوتيوب أو رفع)" : "Insert Video"}
-          className="gap-1 text-red-600 hover:text-red-700 dark:text-red-400"
+          className="gap-1 text-red-600 hover:text-red-700 dark:text-red-400 font-medium"
         >
           <Video size={16} />
         </Button>
@@ -487,7 +567,21 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           <ImageIcon size={16} />
         </Button>
 
-        <div className="w-px bg-border mx-1" />
+        {/* Delete Selected Media Button */}
+        {isMediaSelected && (
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={deleteSelectedMedia}
+            title={isAr ? "حذف العنصر المحدد" : "Delete Selected Media"}
+            className="gap-1 animate-in fade-in"
+          >
+            <Trash2 size={15} />
+            <span className="text-xs font-semibold">{isAr ? "حذف" : "Delete"}</span>
+          </Button>
+        )}
+
+        <div className="w-px bg-border mx-1 h-5" />
 
         <Button
           size="sm"
