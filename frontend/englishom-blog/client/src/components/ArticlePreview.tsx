@@ -1,6 +1,6 @@
 import { useLocalization } from "@/contexts/LocalizationContext";
 import { ENGLISHOM_COLORS } from "@/constants/colors";
-import { Streamdown } from "streamdown";
+import ArticleContentRenderer from "@/components/ArticleContentRenderer";
 
 interface ArticlePreviewProps {
   titleEn?: string;
@@ -72,9 +72,7 @@ export default function ArticlePreview({
       )}
 
       {/* Content */}
-      <div className="prose dark:prose-invert max-w-none">
-        <Streamdown>{content}</Streamdown>
-      </div>
+      <ArticleContentRenderer content={content} />
 
       {/* Footer */}
       <div className="mt-8 pt-6 border-t border-border text-center text-sm text-muted-foreground">

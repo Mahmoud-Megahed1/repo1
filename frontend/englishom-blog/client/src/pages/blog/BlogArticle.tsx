@@ -6,7 +6,7 @@ import { t } from "@/i18n/translations";
 import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft, User, Calendar, Eye } from "lucide-react";
 import { ENGLISHOM_COLORS } from "@/constants/colors";
-import { Streamdown } from "streamdown";
+import ArticleContentRenderer from "@/components/ArticleContentRenderer";
 import RelatedArticles from "@/components/RelatedArticles";
 import ShareAndFavorite from "@/components/ShareAndFavorite";
 import StarRating from "@/components/StarRating";
@@ -163,9 +163,7 @@ export default function BlogArticle() {
           </div>
 
           {/* Article Body */}
-          <div className="prose dark:prose-invert max-w-none mb-12">
-            <Streamdown>{content}</Streamdown>
-          </div>
+          <ArticleContentRenderer content={content} className="mb-12" />
 
           {/* Star Rating Section */}
           <div className="border-t border-border pt-8 mb-8">

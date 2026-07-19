@@ -5,10 +5,13 @@ import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
 import Youtube from "@tiptap/extension-youtube";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useRef, useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { useLocalization } from "@/contexts/LocalizationContext";
+import axios from "axios";
 import {
   Bold,
   Italic,
@@ -27,6 +30,8 @@ import {
   Undo2,
   Redo2,
   Loader2,
+  Youtube as YoutubeIcon,
+  Upload,
 } from "lucide-react";
 import "./RichTextEditor.css";
 
@@ -37,25 +42,40 @@ interface RichTextEditorProps {
   dir?: "ltr" | "rtl" | "auto";
 }
 
+export function parseYoutubeUrl(url: string): string | null {
+  if (!url) return null;
+  const trimmed = url.trim();
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = trimmed.match(regExp);
+  if (match && match[2] && match[2].length === 11) {
+    return `https://www.youtube.com/embed/${match[2]}`;
+  }
+  if (trimmed.includes("youtube.com/embed/")) {
+    return trimmed;
+  }
+  return null;
+}
+
 export default function RichTextEditor({ value, onChange, placeholder, dir }: RichTextEditorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
   const { language } = useLocalization();
+  const isAr = language === "ar";
+
+  // Upload Progress State
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStatusText, setUploadStatusText] = useState("");
 
-  const defaultDir = dir || (language === "ar" ? "rtl" : "ltr");
+  // Video Dialog State
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [videoMode, setVideoMode] = useState<"youtube" | "upload">("youtube");
+  const [youtubeUrlInput, setYoutubeUrlInput] = useState("");
+  const [youtubePreviewEmbed, setYoutubePreviewEmbed] = useState<string | null>(null);
 
-  const uploadMediaMutation = trpc.blog.posts.uploadMedia.useMutation({
-    onSuccess: (data) => {
-      editor?.chain().focus().setImage({ src: data.url }).run();
-      setIsUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    },
-    onError: (error) => {
-      setIsUploading(false);
-      toast.error(language === "ar" ? `خطأ في رفع الصورة: ${error.message}` : `Upload failed: ${error.message}`);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    }
-  });
+  const defaultDir = dir || (isAr ? "rtl" : "ltr");
+
+  const uploadMediaMutation = trpc.blog.posts.uploadMedia.useMutation();
 
   const editor = useEditor({
     extensions: [
@@ -63,7 +83,10 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
       Link.configure({
         openOnClick: false,
       }),
-      Image,
+      Image.configure({
+        allowBase64: true,
+        inline: false,
+      }),
       Youtube.configure({
         controls: true,
         nocookie: true,
@@ -105,51 +128,210 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
   }
 
   const addLink = () => {
-    const url = window.prompt(language === "ar" ? "أدخل الرابط:" : "Enter URL:");
+    const url = window.prompt(isAr ? "أدخل الرابط:" : "Enter URL:");
     if (url) {
       editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
     }
   };
 
-  const addYoutubeVideo = () => {
-    const url = window.prompt(
-      language === "ar"
-        ? "أدخل رابط فيديو اليوتيوب:"
-        : "Enter YouTube Video URL:"
-    );
-
-    if (url) {
-      editor.chain().focus().setYoutubeVideo({ src: url }).run();
-    }
-  };
-
+  // Image Upload with Progress Percentage
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error(language === "ar" ? "حجم الصورة يجب أن يكون أقل من 5MB" : "Image must be less than 5MB");
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error(isAr ? "حجم الصورة يجب أن يكون أقل من 20MB" : "Image size must be less than 20MB");
       return;
     }
 
     setIsUploading(true);
+    setUploadProgress(10);
+    setUploadStatusText(isAr ? "جاري تجهيز الصورة..." : "Preparing image...");
+
     const reader = new FileReader();
-    reader.onload = () => {
-      const base64String = (reader.result as string).split(",")[1];
-      uploadMediaMutation.mutate({
-        fileName: file.name,
-        fileData: base64String,
-      });
+    reader.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const percent = Math.round((event.loaded / event.total) * 30);
+        setUploadProgress(percent);
+      }
     };
+
+    reader.onload = async () => {
+      setUploadStatusText(isAr ? "جاري رفع الصورة للسيرفر..." : "Uploading image to server...");
+      setUploadProgress(40);
+      const base64String = (reader.result as string).split(",")[1];
+
+      try {
+        const res = await axios.post(
+          "/api/trpc/blog.posts.uploadMedia",
+          {
+            json: {
+              fileName: file.name,
+              fileData: base64String,
+            },
+          },
+          {
+            onUploadProgress: (progressEvent) => {
+              if (progressEvent.total) {
+                const progress = 40 + Math.round((progressEvent.loaded / progressEvent.total) * 55);
+                setUploadProgress(Math.min(98, progress));
+              }
+            },
+          }
+        );
+
+        setUploadProgress(100);
+        setUploadStatusText(isAr ? "تم الرفع بنجاح!" : "Upload complete!");
+
+        const url = res.data?.result?.data?.json?.url || res.data?.result?.data?.url;
+
+        if (url) {
+          editor.chain().focus().insertContent(`<p><img src="${url}" alt="${file.name}" class="rounded-lg max-w-full my-4 shadow-md" /></p>`).run();
+          toast.success(isAr ? "تم إدراج الصورة بنجاح في المقالة" : "Image inserted successfully");
+        } else {
+          // Fallback to tRPC mutation
+          uploadMediaMutation.mutate(
+            { fileName: file.name, fileData: base64String },
+            {
+              onSuccess: (data) => {
+                editor.chain().focus().insertContent(`<p><img src="${data.url}" alt="${file.name}" class="rounded-lg max-w-full my-4 shadow-md" /></p>`).run();
+                toast.success(isAr ? "تم إدراج الصورة بنجاح!" : "Image inserted!");
+              },
+            }
+          );
+        }
+      } catch (err: any) {
+        // Fallback to tRPC mutation if direct Axios fails
+        uploadMediaMutation.mutate(
+          { fileName: file.name, fileData: base64String },
+          {
+            onSuccess: (data) => {
+              editor.chain().focus().insertContent(`<p><img src="${data.url}" alt="${file.name}" class="rounded-lg max-w-full my-4 shadow-md" /></p>`).run();
+              toast.success(isAr ? "تم إدراج الصورة بنجاح!" : "Image inserted!");
+            },
+            onError: (mutationErr) => {
+              toast.error(isAr ? `خطأ في رفع الصورة: ${mutationErr.message}` : `Image upload failed: ${mutationErr.message}`);
+            },
+          }
+        );
+      } finally {
+        setTimeout(() => {
+          setIsUploading(false);
+          setUploadProgress(0);
+          setUploadStatusText("");
+        }, 600);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      }
+    };
+
     reader.onerror = () => {
       setIsUploading(false);
-      toast.error(language === "ar" ? "فشل قراءة الملف" : "Failed to read file");
+      setUploadProgress(0);
+      toast.error(isAr ? "فشل قراءة ملف الصورة" : "Failed to read image file");
     };
+
     reader.readAsDataURL(file);
+  };
+
+  // Video File Upload Handler
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 50 * 1024 * 1024) {
+      toast.error(isAr ? "حجم ملف الفيديو يجب أن يكون أقل من 50MB" : "Video file must be less than 50MB");
+      return;
+    }
+
+    setIsVideoModalOpen(false);
+    setIsUploading(true);
+    setUploadProgress(10);
+    setUploadStatusText(isAr ? "جاري معالجة الفيديو..." : "Processing video file...");
+
+    const reader = new FileReader();
+    reader.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const percent = Math.round((event.loaded / event.total) * 30);
+        setUploadProgress(percent);
+      }
+    };
+
+    reader.onload = async () => {
+      setUploadStatusText(isAr ? "جاري رفع الفيديو للسيرفر..." : "Uploading video to server...");
+      setUploadProgress(40);
+      const base64String = (reader.result as string).split(",")[1];
+
+      try {
+        const res = await axios.post(
+          "/api/trpc/blog.posts.uploadMedia",
+          {
+            json: {
+              fileName: file.name,
+              fileData: base64String,
+            },
+          },
+          {
+            onUploadProgress: (progressEvent) => {
+              if (progressEvent.total) {
+                const progress = 40 + Math.round((progressEvent.loaded / progressEvent.total) * 55);
+                setUploadProgress(Math.min(98, progress));
+              }
+            },
+          }
+        );
+
+        setUploadProgress(100);
+        setUploadStatusText(isAr ? "تم الرفع بنجاح!" : "Video upload complete!");
+
+        const url = res.data?.result?.data?.json?.url || res.data?.result?.data?.url;
+
+        if (url) {
+          editor.chain().focus().insertContent(`<p><video controls src="${url}" class="w-full aspect-video rounded-xl my-4 shadow-lg"></video></p>`).run();
+          toast.success(isAr ? "تم إدراج الفيديو بنجاح!" : "Video inserted successfully!");
+        }
+      } catch (err: any) {
+        toast.error(isAr ? `فشل رفع الفيديو: ${err.message}` : `Video upload failed: ${err.message}`);
+      } finally {
+        setTimeout(() => {
+          setIsUploading(false);
+          setUploadProgress(0);
+          setUploadStatusText("");
+        }, 600);
+        if (videoInputRef.current) videoInputRef.current.value = "";
+      }
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  // YouTube Link Insert
+  const handleInsertYoutube = () => {
+    if (!youtubePreviewEmbed) {
+      toast.error(isAr ? "يرجى أدخال رابط يوتيوب صحيح" : "Please enter a valid YouTube URL");
+      return;
+    }
+
+    editor.chain().focus().insertContent(`
+      <p>
+        <iframe src="${youtubePreviewEmbed}" class="w-full aspect-video rounded-xl my-4 shadow-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </p>
+    `).run();
+
+    setIsVideoModalOpen(false);
+    setYoutubeUrlInput("");
+    setYoutubePreviewEmbed(null);
+    toast.success(isAr ? "تم إدراج فيديو اليوتيوب بنجاح!" : "YouTube video embedded successfully!");
+  };
+
+  const handleYoutubeUrlChange = (val: string) => {
+    setYoutubeUrlInput(val);
+    const embed = parseYoutubeUrl(val);
+    setYoutubePreviewEmbed(embed);
   };
 
   return (
     <div className="border border-border rounded-lg overflow-hidden relative">
+      {/* Hidden File Inputs */}
       <input 
         type="file" 
         accept="image/*" 
@@ -157,13 +339,21 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         ref={fileInputRef} 
         onChange={handleImageUpload} 
       />
+      <input 
+        type="file" 
+        accept="video/*" 
+        className="hidden" 
+        ref={videoInputRef} 
+        onChange={handleVideoUpload} 
+      />
+
       {/* Toolbar */}
       <div className="bg-muted p-2 flex flex-wrap gap-1 border-b border-border">
         <Button
           size="sm"
           variant={editor.isActive("bold") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleBold().run()}
-          title={language === "ar" ? "عريض" : "Bold"}
+          title={isAr ? "عريض" : "Bold"}
         >
           <Bold size={16} />
         </Button>
@@ -172,7 +362,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           size="sm"
           variant={editor.isActive("italic") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          title={language === "ar" ? "مائل" : "Italic"}
+          title={isAr ? "مائل" : "Italic"}
         >
           <Italic size={16} />
         </Button>
@@ -183,7 +373,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           size="sm"
           variant={editor.isActive("heading", { level: 2 }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          title={language === "ar" ? "عنوان فرعي 2" : "Heading 2"}
+          title={isAr ? "عنوان فرعي 2" : "Heading 2"}
         >
           <Heading2 size={16} />
         </Button>
@@ -192,7 +382,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           size="sm"
           variant={editor.isActive("heading", { level: 3 }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          title={language === "ar" ? "عنوان فرعي 3" : "Heading 3"}
+          title={isAr ? "عنوان فرعي 3" : "Heading 3"}
         >
           <Heading3 size={16} />
         </Button>
@@ -203,7 +393,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           size="sm"
           variant={editor.isActive({ textAlign: 'left' }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().setTextAlign('left').run()}
-          title={language === "ar" ? "محاذاة لليسار" : "Align Left"}
+          title={isAr ? "محاذاة لليسار" : "Align Left"}
         >
           <AlignLeft size={16} />
         </Button>
@@ -212,7 +402,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           size="sm"
           variant={editor.isActive({ textAlign: 'center' }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().setTextAlign('center').run()}
-          title={language === "ar" ? "محاذاة للوسط" : "Align Center"}
+          title={isAr ? "محاذاة للوسط" : "Align Center"}
         >
           <AlignCenter size={16} />
         </Button>
@@ -221,7 +411,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           size="sm"
           variant={editor.isActive({ textAlign: 'right' }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().setTextAlign('right').run()}
-          title={language === "ar" ? "محاذاة لليمين" : "Align Right"}
+          title={isAr ? "محاذاة لليمين" : "Align Right"}
         >
           <AlignRight size={16} />
         </Button>
@@ -230,7 +420,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           size="sm"
           variant={editor.isActive({ textAlign: 'justify' }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-          title={language === "ar" ? "ضبط المحاذاة (Justify)" : "Justify"}
+          title={isAr ? "ضبط المحاذاة (Justify)" : "Justify"}
         >
           <AlignJustify size={16} />
         </Button>
@@ -241,7 +431,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           size="sm"
           variant={editor.isActive("blockquote") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          title={language === "ar" ? "تنسيق اقتباس" : "Quote"}
+          title={isAr ? "تنسيق اقتباس" : "Quote"}
         >
           <Quote size={16} />
         </Button>
@@ -250,7 +440,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           size="sm"
           variant={editor.isActive("bulletList") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          title={language === "ar" ? "قائمة نقطية" : "Bullet List"}
+          title={isAr ? "قائمة نقطية" : "Bullet List"}
         >
           <List size={16} />
         </Button>
@@ -259,7 +449,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           size="sm"
           variant={editor.isActive("orderedList") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          title={language === "ar" ? "قائمة رقمية" : "Ordered List"}
+          title={isAr ? "قائمة رقمية" : "Ordered List"}
         >
           <ListOrdered size={16} />
         </Button>
@@ -270,28 +460,31 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           size="sm"
           variant="outline"
           onClick={addLink}
-          title={language === "ar" ? "إضافة رابط" : "Add Link"}
+          title={isAr ? "إضافة رابط" : "Add Link"}
         >
           <LinkIcon size={16} />
         </Button>
 
+        {/* Video Button */}
         <Button
           size="sm"
           variant="outline"
-          onClick={addYoutubeVideo}
-          title={language === "ar" ? "إدراج فيديو يوتيوب" : "Insert YouTube Video"}
+          onClick={() => setIsVideoModalOpen(true)}
+          title={isAr ? "إدراج فيديو (يوتيوب أو رفع)" : "Insert Video"}
+          className="gap-1 text-red-600 hover:text-red-700 dark:text-red-400"
         >
           <Video size={16} />
         </Button>
 
+        {/* Image Upload Button */}
         <Button
           size="sm"
           variant="outline"
           onClick={() => fileInputRef.current?.click()}
-          title={language === "ar" ? "رفع صورة" : "Upload Image"}
+          title={isAr ? "رفع صورة" : "Upload Image"}
           disabled={isUploading}
         >
-          {isUploading ? <Loader2 size={16} className="animate-spin" /> : <ImageIcon size={16} />}
+          <ImageIcon size={16} />
         </Button>
 
         <div className="w-px bg-border mx-1" />
@@ -301,7 +494,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           variant="outline"
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().undo()}
-          title={language === "ar" ? "تراجع" : "Undo"}
+          title={isAr ? "تراجع" : "Undo"}
         >
           <Undo2 size={16} />
         </Button>
@@ -311,16 +504,158 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
           variant="outline"
           onClick={() => editor.chain().focus().redo().run()}
           disabled={!editor.can().redo()}
-          title={language === "ar" ? "إعادة" : "Redo"}
+          title={isAr ? "إعادة" : "Redo"}
         >
           <Redo2 size={16} />
         </Button>
       </div>
 
-      {/* Editor */}
+      {/* Upload Progress Indicator Bar (0% -> 100%) */}
+      {isUploading && (
+        <div className="bg-blue-50 dark:bg-slate-900 border-b border-blue-200 dark:border-slate-700 p-3 flex flex-col gap-2 animate-in fade-in">
+          <div className="flex justify-between items-center text-xs font-bold text-blue-600 dark:text-blue-400">
+            <span className="flex items-center gap-2">
+              <Loader2 size={15} className="animate-spin" />
+              {uploadStatusText || (isAr ? "جاري رفع الملف..." : "Uploading file...")}
+            </span>
+            <span className="bg-blue-100 dark:bg-blue-900/50 px-2 py-0.5 rounded text-blue-700 dark:text-blue-300 font-mono text-xs">
+              {uploadProgress}%
+            </span>
+          </div>
+          <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden">
+            <div
+              className="bg-blue-600 dark:bg-blue-500 h-2.5 rounded-full transition-all duration-200 ease-out"
+              style={{ width: `${uploadProgress}%` }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Editor Content */}
       <div className="prose dark:prose-invert prose-sm max-w-none">
         <EditorContent editor={editor} />
       </div>
+
+      {/* Video Modal */}
+      <Dialog open={isVideoModalOpen} onOpenChange={setIsVideoModalOpen}>
+        <DialogContent className="sm:max-w-lg" dir={isAr ? "rtl" : "ltr"}>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Video className="text-red-500" size={20} />
+              {isAr ? "إدراج فيديو في المقالة" : "Insert Video in Post"}
+            </DialogTitle>
+          </DialogHeader>
+
+          {/* Mode Selector */}
+          <div className="flex border border-border rounded-lg overflow-hidden my-2">
+            <button
+              type="button"
+              className={`flex-1 py-2 px-3 text-xs font-bold flex items-center justify-center gap-2 transition-colors ${
+                videoMode === "youtube"
+                  ? "bg-red-600 text-white"
+                  : "bg-muted text-muted-foreground hover:text-foreground"
+              }`}
+              onClick={() => setVideoMode("youtube")}
+            >
+              <YoutubeIcon size={16} />
+              {isAr ? "رابط يوتيوب" : "YouTube Link"}
+            </button>
+            <button
+              type="button"
+              className={`flex-1 py-2 px-3 text-xs font-bold flex items-center justify-center gap-2 transition-colors ${
+                videoMode === "upload"
+                  ? "bg-blue-600 text-white"
+                  : "bg-muted text-muted-foreground hover:text-foreground"
+              }`}
+              onClick={() => setVideoMode("upload")}
+            >
+              <Upload size={16} />
+              {isAr ? "رفع ملف فيديو" : "Upload Video File"}
+            </button>
+          </div>
+
+          {videoMode === "youtube" ? (
+            <div className="space-y-4 py-2">
+              <div>
+                <label className="block text-xs font-semibold mb-1.5 text-foreground">
+                  {isAr ? "ضع رابط فيديو اليوتيوب هنا:" : "Paste YouTube Video Link:"}
+                </label>
+                <Input
+                  type="url"
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  value={youtubeUrlInput}
+                  onChange={(e) => handleYoutubeUrlChange(e.target.value)}
+                  dir="ltr"
+                />
+                <span className="text-[11px] text-muted-foreground mt-1 block">
+                  {isAr
+                    ? "يدعم روابط watch و youtu.be و shorts"
+                    : "Supports watch, short links & shorts"}
+                </span>
+              </div>
+
+              {/* YouTube Video Live Preview */}
+              {youtubePreviewEmbed ? (
+                <div className="rounded-lg overflow-hidden border border-border shadow-md">
+                  <span className="text-xs font-semibold p-2 bg-muted block text-muted-foreground">
+                    {isAr ? "معاينة الفيديو قبل الإدراج:" : "Video Live Preview:"}
+                  </span>
+                  <div className="aspect-video w-full bg-black">
+                    <iframe
+                      src={youtubePreviewEmbed}
+                      className="w-full h-full"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              ) : youtubeUrlInput ? (
+                <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300 rounded text-xs">
+                  {isAr ? "الرابط غير صحيح أو متعذر التعرف عليه" : "Invalid YouTube URL format"}
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <div className="space-y-4 py-4 text-center border-2 border-dashed border-border rounded-xl p-6">
+              <Upload size={32} className="mx-auto text-blue-500 mb-2" />
+              <div>
+                <h4 className="text-sm font-bold mb-1">
+                  {isAr ? "اختر ملف فيديو لرفعه" : "Choose a video file to upload"}
+                </h4>
+                <p className="text-xs text-muted-foreground">
+                  {isAr ? "يدعم صيغ MP4, WebM حتى 50MB" : "Supports MP4, WebM up to 50MB"}
+                </p>
+              </div>
+
+              <Button
+                type="button"
+                variant="default"
+                onClick={() => videoInputRef.current?.click()}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {isAr ? "اختيار فيديو من الجهاز" : "Browse Video"}
+              </Button>
+            </div>
+          )}
+
+          <DialogFooter className="gap-2">
+            <Button variant="outline" type="button" onClick={() => setIsVideoModalOpen(false)}>
+              {isAr ? "إلغاء" : "Cancel"}
+            </Button>
+            {videoMode === "youtube" && (
+              <Button
+                type="button"
+                className="bg-red-600 hover:bg-red-700 text-white"
+                disabled={!youtubePreviewEmbed}
+                onClick={handleInsertYoutube}
+              >
+                {isAr ? "إدراج الفيديو في المقال" : "Insert Video"}
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

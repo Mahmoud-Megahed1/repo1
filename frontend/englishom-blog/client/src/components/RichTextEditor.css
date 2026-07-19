@@ -42,14 +42,16 @@
   cursor: pointer;
 }
 
-.ProseMirror img {
+.ProseMirror img,
+.article-content img {
   max-width: 100%;
   height: auto;
   margin: 1rem 0;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
 }
 
-.ProseMirror blockquote {
+.ProseMirror blockquote,
+.article-content blockquote {
   border-left: 4px solid #2167d1;
   padding: 0.75rem 1rem;
   margin: 1.5rem 0;
@@ -60,27 +62,36 @@
 }
 
 .ProseMirror[dir="rtl"] blockquote,
-.rtl-editor .ProseMirror blockquote {
+.rtl-editor .ProseMirror blockquote,
+[dir="rtl"] .article-content blockquote {
   border-left: none;
   border-right: 4px solid #2167d1;
   border-radius: 0.5rem 0 0 0.5rem;
 }
 
-.ProseMirror iframe {
+.ProseMirror iframe,
+.ProseMirror video,
+.article-content iframe,
+.article-content video {
   width: 100%;
+  max-width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   margin: 1.5rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: block;
 }
 
-.ProseMirror code {
+.ProseMirror code,
+.article-content code {
   background-color: #f3f4f6;
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
   font-family: monospace;
 }
 
-.ProseMirror pre {
+.ProseMirror pre,
+.article-content pre {
   background-color: #f3f4f6;
   padding: 1rem;
   border-radius: 0.5rem;
@@ -88,7 +99,8 @@
   margin: 1rem 0;
 }
 
-.ProseMirror pre code {
+.ProseMirror pre code,
+.article-content pre code {
   background-color: transparent;
   padding: 0;
 }
@@ -127,24 +139,29 @@
   text-align-last: center !important;
 }
 
-.dark .ProseMirror {
+.dark .ProseMirror,
+.dark .article-content {
   color: #f1f5f9;
 }
 
-.dark .ProseMirror a {
+.dark .ProseMirror a,
+.dark .article-content a {
   color: #60a5fa;
 }
 
-.dark .ProseMirror blockquote {
+.dark .ProseMirror blockquote,
+.dark .article-content blockquote {
   color: #cbd5e1;
   background-color: rgba(96, 165, 250, 0.1);
 }
 
-.dark .ProseMirror code {
+.dark .ProseMirror code,
+.dark .article-content code {
   background-color: #1e293b;
   color: #e2e8f0;
 }
 
-.dark .ProseMirror pre {
+.dark .ProseMirror pre,
+.dark .article-content pre {
   background-color: #1e293b;
 }
