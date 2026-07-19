@@ -42,12 +42,29 @@ interface RichTextEditorProps {
   dir?: "ltr" | "rtl" | "auto";
 }
 
+export function parseYoutubeUrl(url: string): string | null {
+  if (!url) return null;
+  const trimmed = url.trim();
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = trimmed.match(regExp);
+  if (match && match[2] && match[2].length === 11) {
+    return `https://www.youtube.com/embed/${match[2]}`;
+  }
+  if (trimmed.includes("youtube.com/embed/")) {
+    return trimmed;
+  }
+  return null;
+}
+
 // Media NodeView Wrapper with Red 'X' Delete Badge
 function MediaNodeView(props: any) {
   const { node, deleteNode } = props;
   const isImage = node.type.name === "image";
   const isVideo = node.type.name === "videoNode";
   const isIframe = node.type.name === "iframeNode" || node.type.name === "youtube";
+
+  const rawSrc = node.attrs.src || "";
+  const iframeSrc = (isIframe || node.type.name === "youtube") ? (parseYoutubeUrl(rawSrc) || rawSrc) : rawSrc;
 
   return (
     <NodeViewWrapper className="relative group my-4 block max-w-full">
@@ -70,7 +87,7 @@ function MediaNodeView(props: any) {
       {/* Media Content */}
       {isImage && (
         <img
-          src={node.attrs.src}
+          src={rawSrc}
           alt={node.attrs.alt || "image"}
           className="rounded-xl max-w-full h-auto shadow-md border border-border"
         />
@@ -78,18 +95,19 @@ function MediaNodeView(props: any) {
 
       {isVideo && (
         <video
-          src={node.attrs.src}
+          src={rawSrc}
           controls
           className="w-full aspect-video rounded-xl shadow-lg border border-border"
         />
       )}
 
-      {isIframe && (
+      {isIframe && iframeSrc && (
         <div className="w-full aspect-video rounded-xl overflow-hidden shadow-lg border border-border bg-black">
           <iframe
-            src={node.attrs.src}
+            src={iframeSrc}
             className="w-full h-full"
             frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
         </div>
@@ -165,27 +183,6 @@ const CustomImageExtension = Image.extend({
   },
 });
 
-// Extend Youtube extension with NodeView Red X badge
-const CustomYoutubeExtension = Youtube.extend({
-  addNodeView() {
-    return ReactNodeViewRenderer(MediaNodeView);
-  },
-});
-
-export function parseYoutubeUrl(url: string): string | null {
-  if (!url) return null;
-  const trimmed = url.trim();
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  const match = trimmed.match(regExp);
-  if (match && match[2] && match[2].length === 11) {
-    return `https://www.youtube.com/embed/${match[2]}`;
-  }
-  if (trimmed.includes("youtube.com/embed/")) {
-    return trimmed;
-  }
-  return null;
-}
-
 export default function RichTextEditor({ value, onChange, placeholder, dir }: RichTextEditorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -219,7 +216,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         allowBase64: true,
         inline: false,
       }),
-      CustomYoutubeExtension.configure({
+      Youtube.configure({
         controls: true,
         nocookie: true,
         width: 640,
@@ -409,26 +406,18 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
 
   // YouTube Link Insert
   const handleInsertYoutube = () => {
-    if (!youtubePreviewEmbed && !youtubeUrlInput) {
+    const embedUrl = youtubePreviewEmbed || parseYoutubeUrl(youtubeUrlInput);
+
+    if (!embedUrl) {
       toast.error(isAr ? "يرجى أدخال رابط يوتيوب صحيح" : "Please enter a valid YouTube URL");
       return;
     }
 
-    const embedUrl = youtubePreviewEmbed || parseYoutubeUrl(youtubeUrlInput);
-
-    if (embedUrl) {
-      const setSuccess = editor.chain().focus().createParagraphNear().setYoutubeVideo({ src: youtubeUrlInput }).run();
-      
-      if (!setSuccess) {
-        editor.chain().focus().createParagraphNear().insertContent({
-          type: "iframeNode",
-          attrs: { src: embedUrl },
-        }).run();
-      }
-    } else {
-      toast.error(isAr ? "تعذر استخراج فيديو اليوتيوب" : "Could not parse YouTube URL");
-      return;
-    }
+    // Always insert as iframeNode with formatted embedUrl to guarantee playback
+    editor.chain().focus().createParagraphNear().insertContent({
+      type: "iframeNode",
+      attrs: { src: embedUrl },
+    }).run();
 
     setIsVideoModalOpen(false);
     setYoutubeUrlInput("");
