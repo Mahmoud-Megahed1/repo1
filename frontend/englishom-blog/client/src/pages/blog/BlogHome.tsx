@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { trpc } from "@/lib/trpc";
 import { useLocalization } from "@/contexts/LocalizationContext";
 import { t } from "@/i18n/translations";
@@ -64,7 +65,7 @@ export default function BlogHome() {
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       {/* Hero Section */}
-      <section className="py-16 px-4 md:py-24 md:px-6 bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-950 dark:to-slate-900 flex-1">
+      <section className="py-16 px-4 md:py-24 md:px-6 bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-950 dark:to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             {t("blog.title", language)}
@@ -148,7 +149,9 @@ export default function BlogHome() {
 
           {/* Categories */}
           <div className="mb-4">
-            <h3 className="text-sm font-semibold mb-2 text-foreground">Categories</h3>
+            <h3 className="text-sm font-semibold mb-2 text-foreground">
+              {language === "ar" ? "التصنيفات" : "Categories"}
+            </h3>
             <div className="flex flex-wrap gap-2">
               <Button
                 variant={selectedCategory === undefined && selectedTag === undefined ? "default" : "outline"}
@@ -178,7 +181,9 @@ export default function BlogHome() {
           {/* Tags */}
           {tags && tags.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold mb-2 text-foreground">Tags</h3>
+              <h3 className="text-sm font-semibold mb-2 text-foreground">
+                {language === "ar" ? "الوسوم" : "Tags"}
+              </h3>
               <div className="flex flex-wrap gap-2">
                 {tags.map((tag) => (
                   <Button
@@ -202,7 +207,7 @@ export default function BlogHome() {
       </section>
 
       {/* Articles Grid */}
-      <section className="py-12 px-4 md:py-16 md:px-6">
+      <section className="py-12 px-4 md:py-16 md:px-6 flex-1">
         <div className="max-w-6xl mx-auto">
           {isLoading ? (
             <div className="flex justify-center items-center py-12">
@@ -215,42 +220,55 @@ export default function BlogHome() {
           ) : (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                {posts.map((post) => (
+                {posts.map((post: any) => (
                   <Card
                     key={post.id}
-                    className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                    className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer flex flex-col justify-between"
                     onClick={() => {
                       window.location.href = `/blog/${post.slug}`;
                     }}
                   >
-                    {post.featuredImageUrl && (
-                      <div className="h-40 bg-gradient-to-br from-blue-400 to-purple-500 overflow-hidden">
-                        <img
-                          src={post.featuredImageUrl}
-                          alt={language === "ar" ? post.titleAr : post.titleEn}
-                          className="w-full h-full object-cover"
-                        />
+                    <div>
+                      {post.featuredImageUrl && (
+                        <div className="h-40 bg-gradient-to-br from-blue-400 to-purple-500 overflow-hidden">
+                          <img
+                            src={post.featuredImageUrl}
+                            alt={language === "ar" ? post.titleAr : post.titleEn}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                      <div className="p-4">
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                          <span
+                            className="px-2 py-1 rounded text-xs font-semibold text-white"
+                            style={{ backgroundColor: ENGLISHOM_COLORS.primary }}
+                          >
+                            {post.category ? (language === "ar" ? post.category.nameAr : post.category.nameEn) : (language === "ar" ? "غير مصنف" : "Uncategorized")}
+                          </span>
+                        </div>
+                        <h3 className="text-lg font-bold mb-2 line-clamp-2">
+                          {language === "ar" ? post.titleAr : post.titleEn}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                          {language === "ar" ? post.excerptAr : post.excerptEn}
+                        </p>
                       </div>
-                    )}
-                    <div className="p-4">
-                      <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <span
-                          className="px-2 py-1 rounded text-xs font-semibold text-white"
-                          style={{ backgroundColor: ENGLISHOM_COLORS.primary }}
-                        >
-                          {post.category ? (language === "ar" ? post.category.nameAr : post.category.nameEn) : (language === "ar" ? "غير مصنف" : "Uncategorized")}
+                    </div>
+
+                    <div className="p-4 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
+                      <span>
+                        {language === "ar"
+                          ? (post.customAuthorNameAr || post.author?.name || "فريق EnglishOM")
+                          : (post.customAuthorNameEn || post.author?.name || "EnglishOM Team")}
+                      </span>
+                      {post.dateDisplayType !== "hidden" && post.showDate !== false && (
+                        <span>
+                          {new Date(
+                            post.dateDisplayType === "updated" ? (post.updatedAt || post.createdAt) : (post.publishedAt || post.createdAt)
+                          ).toLocaleDateString(language)}
                         </span>
-                      </div>
-                      <h3 className="text-lg font-bold mb-2 line-clamp-2">
-                        {language === "ar" ? post.titleAr : post.titleEn}
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                        {language === "ar" ? post.excerptAr : post.excerptEn}
-                      </p>
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <span>{post.readingTimeMinutes} {t("blog.readingTime", language)}</span>
-                        <span>{new Date(post.publishedAt!).toLocaleDateString(language)}</span>
-                      </div>
+                      )}
                     </div>
                   </Card>
                 ))}
@@ -264,17 +282,19 @@ export default function BlogHome() {
                     onClick={() => setOffset(Math.max(0, offset - limit))}
                     disabled={offset === 0}
                   >
-                    Previous
+                    {language === "ar" ? "السابق" : "Previous"}
                   </Button>
-                  <span className="flex items-center px-4">
-                    Page {Math.floor(offset / limit) + 1} of {Math.ceil(total / limit)}
+                  <span className="flex items-center px-4 text-sm text-muted-foreground">
+                    {language === "ar"
+                      ? `الصفحة ${Math.floor(offset / limit) + 1} من ${Math.ceil(total / limit)}`
+                      : `Page ${Math.floor(offset / limit) + 1} of ${Math.ceil(total / limit)}`}
                   </span>
                   <Button
                     variant="outline"
                     onClick={() => setOffset(offset + limit)}
                     disabled={offset + limit >= total}
                   >
-                    Next
+                    {language === "ar" ? "التالي" : "Next"}
                   </Button>
                 </div>
               )}
@@ -282,6 +302,9 @@ export default function BlogHome() {
           )}
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }
+

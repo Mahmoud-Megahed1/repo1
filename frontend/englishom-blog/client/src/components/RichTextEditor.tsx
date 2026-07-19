@@ -3,8 +3,9 @@ import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
+import Youtube from "@tiptap/extension-youtube";
 import { Button } from "@/components/ui/button";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { useLocalization } from "@/contexts/LocalizationContext";
@@ -21,6 +22,8 @@ import {
   AlignJustify,
   AlignLeft,
   AlignRight,
+  Quote,
+  Video,
   Undo2,
   Redo2,
   Loader2,
@@ -31,12 +34,15 @@ interface RichTextEditorProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  dir?: "ltr" | "rtl" | "auto";
 }
 
-export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
+export default function RichTextEditor({ value, onChange, placeholder, dir }: RichTextEditorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { language } = useLocalization();
   const [isUploading, setIsUploading] = useState(false);
+
+  const defaultDir = dir || (language === "ar" ? "rtl" : "ltr");
 
   const uploadMediaMutation = trpc.blog.posts.uploadMedia.useMutation({
     onSuccess: (data) => {
@@ -58,25 +64,62 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         openOnClick: false,
       }),
       Image,
+      Youtube.configure({
+        controls: true,
+        nocookie: true,
+        width: 640,
+        height: 360,
+      }),
       TextAlign.configure({
-        types: ['heading', 'paragraph'],
+        types: ['heading', 'paragraph', 'blockquote'],
         alignments: ['left', 'center', 'right', 'justify'],
       }),
     ],
+    editorProps: {
+      attributes: {
+        dir: defaultDir,
+        class: defaultDir === "rtl" ? "rtl-editor" : "ltr-editor",
+      },
+    },
     content: value,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
   });
 
+  useEffect(() => {
+    if (editor && !editor.isDestroyed) {
+      editor.setOptions({
+        editorProps: {
+          attributes: {
+            dir: defaultDir,
+            class: defaultDir === "rtl" ? "rtl-editor" : "ltr-editor",
+          },
+        },
+      });
+    }
+  }, [defaultDir, editor]);
+
   if (!editor) {
     return null;
   }
 
   const addLink = () => {
-    const url = window.prompt("Enter URL:");
+    const url = window.prompt(language === "ar" ? "أدخل الرابط:" : "Enter URL:");
     if (url) {
       editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+    }
+  };
+
+  const addYoutubeVideo = () => {
+    const url = window.prompt(
+      language === "ar"
+        ? "أدخل رابط فيديو اليوتيوب:"
+        : "Enter YouTube Video URL:"
+    );
+
+    if (url) {
+      editor.chain().focus().setYoutubeVideo({ src: url }).run();
     }
   };
 
@@ -120,7 +163,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           size="sm"
           variant={editor.isActive("bold") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleBold().run()}
-          title="Bold"
+          title={language === "ar" ? "عريض" : "Bold"}
         >
           <Bold size={16} />
         </Button>
@@ -129,7 +172,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           size="sm"
           variant={editor.isActive("italic") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          title="Italic"
+          title={language === "ar" ? "مائل" : "Italic"}
         >
           <Italic size={16} />
         </Button>
@@ -140,7 +183,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           size="sm"
           variant={editor.isActive("heading", { level: 2 }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          title="Heading 2"
+          title={language === "ar" ? "عنوان فرعي 2" : "Heading 2"}
         >
           <Heading2 size={16} />
         </Button>
@@ -149,7 +192,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           size="sm"
           variant={editor.isActive("heading", { level: 3 }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          title="Heading 3"
+          title={language === "ar" ? "عنوان فرعي 3" : "Heading 3"}
         >
           <Heading3 size={16} />
         </Button>
@@ -160,7 +203,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           size="sm"
           variant={editor.isActive({ textAlign: 'left' }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().setTextAlign('left').run()}
-          title="Align Left"
+          title={language === "ar" ? "محاذاة لليسار" : "Align Left"}
         >
           <AlignLeft size={16} />
         </Button>
@@ -169,7 +212,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           size="sm"
           variant={editor.isActive({ textAlign: 'center' }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().setTextAlign('center').run()}
-          title="Align Center"
+          title={language === "ar" ? "محاذاة للوسط" : "Align Center"}
         >
           <AlignCenter size={16} />
         </Button>
@@ -178,7 +221,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           size="sm"
           variant={editor.isActive({ textAlign: 'right' }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().setTextAlign('right').run()}
-          title="Align Right"
+          title={language === "ar" ? "محاذاة لليمين" : "Align Right"}
         >
           <AlignRight size={16} />
         </Button>
@@ -187,7 +230,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           size="sm"
           variant={editor.isActive({ textAlign: 'justify' }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-          title="Justify"
+          title={language === "ar" ? "ضبط المحاذاة (Justify)" : "Justify"}
         >
           <AlignJustify size={16} />
         </Button>
@@ -196,9 +239,18 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
 
         <Button
           size="sm"
+          variant={editor.isActive("blockquote") ? "default" : "outline"}
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          title={language === "ar" ? "تنسيق اقتباس" : "Quote"}
+        >
+          <Quote size={16} />
+        </Button>
+
+        <Button
+          size="sm"
           variant={editor.isActive("bulletList") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          title="Bullet List"
+          title={language === "ar" ? "قائمة نقطية" : "Bullet List"}
         >
           <List size={16} />
         </Button>
@@ -207,7 +259,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           size="sm"
           variant={editor.isActive("orderedList") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          title="Ordered List"
+          title={language === "ar" ? "قائمة رقمية" : "Ordered List"}
         >
           <ListOrdered size={16} />
         </Button>
@@ -218,7 +270,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           size="sm"
           variant="outline"
           onClick={addLink}
-          title="Add Link"
+          title={language === "ar" ? "إضافة رابط" : "Add Link"}
         >
           <LinkIcon size={16} />
         </Button>
@@ -226,8 +278,17 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         <Button
           size="sm"
           variant="outline"
+          onClick={addYoutubeVideo}
+          title={language === "ar" ? "إدراج فيديو يوتيوب" : "Insert YouTube Video"}
+        >
+          <Video size={16} />
+        </Button>
+
+        <Button
+          size="sm"
+          variant="outline"
           onClick={() => fileInputRef.current?.click()}
-          title="Upload Image"
+          title={language === "ar" ? "رفع صورة" : "Upload Image"}
           disabled={isUploading}
         >
           {isUploading ? <Loader2 size={16} className="animate-spin" /> : <ImageIcon size={16} />}
@@ -240,7 +301,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           variant="outline"
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().undo()}
-          title="Undo"
+          title={language === "ar" ? "تراجع" : "Undo"}
         >
           <Undo2 size={16} />
         </Button>
@@ -250,7 +311,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           variant="outline"
           onClick={() => editor.chain().focus().redo().run()}
           disabled={!editor.can().redo()}
-          title="Redo"
+          title={language === "ar" ? "إعادة" : "Redo"}
         >
           <Redo2 size={16} />
         </Button>

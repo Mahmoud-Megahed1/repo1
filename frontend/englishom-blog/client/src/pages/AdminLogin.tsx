@@ -68,9 +68,9 @@ export default function AdminLogin() {
             <Button 
               type="submit" 
               className="w-full font-bold" 
-              disabled={loginMutation.isLoading}
+              disabled={loginMutation.isPending}
             >
-              {loginMutation.isLoading ? "جاري تسجيل الدخول..." : "دخول"}
+              {loginMutation.isPending ? "جاري تسجيل الدخول..." : "دخول"}
             </Button>
           </form>
         </CardContent>

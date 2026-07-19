@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useLocalization } from "@/contexts/LocalizationContext";
 import { t } from "@/i18n/translations";
 import { Button } from "@/components/ui/button";
-
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, User, Calendar, Eye } from "lucide-react";
 import { ENGLISHOM_COLORS } from "@/constants/colors";
-import { useAuth } from "@/_core/hooks/useAuth";
 import { Streamdown } from "streamdown";
 import RelatedArticles from "@/components/RelatedArticles";
 import ShareAndFavorite from "@/components/ShareAndFavorite";
 import StarRating from "@/components/StarRating";
 import CommentsSection from "@/components/CommentsSection";
+import Footer from "@/components/Footer";
 
 export default function BlogArticle() {
   const { slug } = useParams<{ slug: string }>();
   const { language } = useLocalization();
-  const { user, isAuthenticated } = useAuth();
+  const isAr = language === "ar";
+
   // Fetch post
   const { data: post, isLoading: postLoading } = trpc.blog.posts.getBySlug.useQuery({
     slug: slug || "",
@@ -34,16 +34,6 @@ export default function BlogArticle() {
       }
     }
   }, [post?.id]);
-
-  // Fetch related posts
-  const { data: relatedPosts } = trpc.blog.posts.related.useQuery(
-    {
-      postId: post?.id || 0,
-      categoryId: post?.categoryId || 0,
-      limit: 3,
-    },
-    { enabled: !!post?.id }
-  );
 
   if (postLoading) {
     return (
@@ -64,13 +54,39 @@ export default function BlogArticle() {
     );
   }
 
-  const title = language === "ar" ? post.titleAr : post.titleEn;
-  const content = language === "ar" ? post.contentAr : post.contentEn;
-  const excerpt = language === "ar" ? post.excerptAr : post.excerptEn;
+  const title = isAr ? post.titleAr : post.titleEn;
+  const content = isAr ? post.contentAr : post.contentEn;
+  const excerpt = isAr ? post.excerptAr : post.excerptEn;
+
+  // Author display name logic
+  const authorName = isAr
+    ? (post.customAuthorNameAr || post.author?.name || "فريق EnglishOM")
+    : (post.customAuthorNameEn || post.author?.name || "EnglishOM Team");
+
+  // Date display logic
+  const dateDisplay = () => {
+    if (post.dateDisplayType === "hidden" || post.showDate === false) return null;
+    
+    const dateObj = new Date(
+      post.dateDisplayType === "updated" ? (post.updatedAt || post.createdAt) : (post.publishedAt || post.createdAt)
+    );
+    const dateStr = dateObj.toLocaleDateString(isAr ? "ar-EG" : "en-US", {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    if (post.dateDisplayType === "updated") {
+      return `${isAr ? "آخر تحديث:" : "Last updated:"} ${dateStr}`;
+    }
+    return dateStr;
+  };
+
+  const formattedDate = dateDisplay();
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Top Navigation Bar */}
       <div className="border-b border-border py-4 px-4 md:px-6 sticky top-0 bg-background/95 backdrop-blur z-10">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <Button
@@ -86,12 +102,12 @@ export default function BlogArticle() {
         </div>
       </div>
 
-      {/* Article Content */}
-      <article className="py-8 px-4 md:py-12 md:px-6">
+      {/* Main Article Section */}
+      <article className="py-8 px-4 md:py-12 md:px-6 flex-1">
         <div className="max-w-4xl mx-auto">
           {/* Featured Image */}
           {post.featuredImageUrl && (
-            <div className="mb-8 rounded-lg overflow-hidden h-96 bg-gradient-to-br from-blue-500 to-purple-600">
+            <div className="mb-8 rounded-xl overflow-hidden h-72 md:h-96 shadow-lg">
               <img
                 src={post.featuredImageUrl}
                 alt={title}
@@ -108,7 +124,7 @@ export default function BlogArticle() {
                   className="px-3 py-1 rounded-full text-sm font-semibold text-white"
                   style={{ backgroundColor: post.category.colorHex || ENGLISHOM_COLORS.primary }}
                 >
-                  {language === "ar" ? post.category.nameAr : post.category.nameEn}
+                  {isAr ? post.category.nameAr : post.category.nameEn}
                 </span>
               )}
               <span className="text-sm text-muted-foreground">
@@ -116,26 +132,37 @@ export default function BlogArticle() {
               </span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{title}</h1>
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">{title}</h1>
 
             {excerpt && (
-              <p className="text-lg text-muted-foreground mb-6">{excerpt}</p>
+              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">{excerpt}</p>
             )}
 
-            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-              {post.author && (
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground border-y border-border py-3">
+              <span className="flex items-center gap-1.5 font-medium text-foreground">
+                <User size={16} className="text-primary" />
+                {authorName}
+              </span>
+
+              {formattedDate && (
                 <>
-                  <span>{post.author.name || "Unknown Author"}</span>
                   <span>•</span>
+                  <span className="flex items-center gap-1.5">
+                    <Calendar size={15} />
+                    {formattedDate}
+                  </span>
                 </>
               )}
-              <span>{new Date(post.publishedAt!).toLocaleDateString(language)}</span>
+
               <span>•</span>
-              <span>{post.viewsCount} {language === "ar" ? "مشاهدة" : "views"}</span>
+              <span className="flex items-center gap-1.5">
+                <Eye size={15} />
+                {post.viewsCount} {isAr ? "مشاهدة" : "views"}
+              </span>
             </div>
           </div>
 
-          {/* Article Content */}
+          {/* Article Body */}
           <div className="prose dark:prose-invert max-w-none mb-12">
             <Streamdown>{content}</Streamdown>
           </div>
@@ -156,6 +183,9 @@ export default function BlogArticle() {
           <RelatedArticles postId={post.id} categoryId={post.categoryId} />
         </div>
       </section>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

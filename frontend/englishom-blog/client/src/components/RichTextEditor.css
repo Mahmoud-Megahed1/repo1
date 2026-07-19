@@ -51,10 +51,26 @@
 
 .ProseMirror blockquote {
   border-left: 4px solid #2167d1;
-  padding-left: 1rem;
-  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  margin: 1.5rem 0;
   font-style: italic;
-  color: #666;
+  color: #475569;
+  background-color: rgba(33, 103, 209, 0.06);
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.ProseMirror[dir="rtl"] blockquote,
+.rtl-editor .ProseMirror blockquote {
+  border-left: none;
+  border-right: 4px solid #2167d1;
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.ProseMirror iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
 }
 
 .ProseMirror code {
@@ -77,6 +93,40 @@
   padding: 0;
 }
 
+/* RTL alignment rules */
+.ProseMirror[dir="rtl"],
+.rtl-editor .ProseMirror {
+  direction: rtl;
+  text-align: right;
+}
+
+.ProseMirror[dir="rtl"] p,
+.rtl-editor .ProseMirror p,
+.ProseMirror[dir="rtl"] h2,
+.rtl-editor .ProseMirror h2,
+.ProseMirror[dir="rtl"] h3,
+.rtl-editor .ProseMirror h3 {
+  text-align: right;
+}
+
+.ProseMirror[dir="rtl"] [style*="text-align: justify"],
+.rtl-editor .ProseMirror [style*="text-align: justify"] {
+  text-align: justify !important;
+  text-align-last: right !important;
+}
+
+.ProseMirror[dir="rtl"] [style*="text-align: left"],
+.rtl-editor .ProseMirror [style*="text-align: left"] {
+  text-align: left !important;
+  text-align-last: left !important;
+}
+
+.ProseMirror[dir="rtl"] [style*="text-align: center"],
+.rtl-editor .ProseMirror [style*="text-align: center"] {
+  text-align: center !important;
+  text-align-last: center !important;
+}
+
 .dark .ProseMirror {
   color: #f1f5f9;
 }
@@ -87,6 +137,7 @@
 
 .dark .ProseMirror blockquote {
   color: #cbd5e1;
+  background-color: rgba(96, 165, 250, 0.1);
 }
 
 .dark .ProseMirror code {

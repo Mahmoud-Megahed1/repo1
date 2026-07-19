@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { ENGLISHOM_COLORS } from "@/constants/colors";
+import Footer from "@/components/Footer";
 
 export default function BlogCategory() {
   const { slug } = useParams<{ slug: string }>();
@@ -139,6 +140,7 @@ export default function BlogCategory() {
           )}
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

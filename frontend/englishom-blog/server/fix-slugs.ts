@@ -1,9 +1,14 @@
-import { db } from "./db";
-import { blogPosts } from "@shared/schema";
+import { getDb } from "./db";
+import { blogPosts } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 
 async function fixSlugs() {
   console.log("Fetching all posts...");
+  const db = await getDb();
+  if (!db) {
+    console.error("Database not available.");
+    process.exit(1);
+  }
   const posts = await db.select().from(blogPosts);
   let fixedCount = 0;
 

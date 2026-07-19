@@ -15,7 +15,7 @@ export async function getDb() {
         uri: process.env.DATABASE_URL,
         charset: 'utf8mb4'
       });
-      _db = drizzle(pool);
+      _db = drizzle(pool) as any;
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
@@ -205,6 +205,10 @@ export async function createPost(data: {
   authorId: number;
   status: "draft" | "published" | "scheduled";
   readingTimeMinutes?: number;
+  customAuthorNameEn?: string;
+  customAuthorNameAr?: string;
+  showDate?: boolean;
+  dateDisplayType?: string;
   metaDescriptionEn?: string;
   metaDescriptionAr?: string;
   metaKeywordsEn?: string;

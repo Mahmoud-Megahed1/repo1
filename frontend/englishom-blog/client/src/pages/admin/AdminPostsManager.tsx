@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import RichTextEditor from "@/components/RichTextEditor";
 import ArticlePreview from "@/components/ArticlePreview";
-import { Loader2, Edit2, Trash2, Plus, Eye, ImagePlus, Clock } from "lucide-react";
+import { Loader2, Edit2, Trash2, Plus, Eye, ImagePlus, Clock, UserCheck, Calendar, X } from "lucide-react";
 import { ENGLISHOM_COLORS } from "@/constants/colors";
 import { toast } from "sonner";
 
@@ -26,6 +26,10 @@ export default function AdminPostsManager() {
   const [categoryId, setCategoryId] = useState<number | undefined>();
   const [status, setStatus] = useState<"draft" | "published">("draft");
   const [readingTimeMinutes, setReadingTimeMinutes] = useState<number>(5);
+  const [customAuthorNameAr, setCustomAuthorNameAr] = useState<string>("فريق EnglishOM");
+  const [customAuthorNameEn, setCustomAuthorNameEn] = useState<string>("EnglishOM Team");
+  const [showDate, setShowDate] = useState<boolean>(true);
+  const [dateDisplayType, setDateDisplayType] = useState<string>("published"); // 'published' | 'updated' | 'hidden'
   const [featuredImageFile, setFeaturedImageFile] = useState<File | null>(null);
   const [featuredImagePreview, setFeaturedImagePreview] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -44,11 +48,9 @@ export default function AdminPostsManager() {
   const createPostMutation = trpc.blog.posts.create.useMutation({
     onSuccess: (data: any) => {
       toast.success(language === "ar" ? "تم إنشاء المقال بنجاح" : "Post created successfully");
-      // If there's a featured image, upload it
       if (featuredImageFile && data?.[0]?.insertId) {
         handleUploadImage(data[0].insertId);
       }
-      resetForm();
       refetch();
     },
     onError: (error: any) => {
@@ -56,15 +58,13 @@ export default function AdminPostsManager() {
     },
   });
 
-  // Update post mutation
+  // Update post mutation - FIX: Stay in editor after update
   const updatePostMutation = trpc.blog.posts.update.useMutation({
     onSuccess: () => {
-      toast.success(language === "ar" ? "تم تحديث المقال بنجاح" : "Post updated successfully");
-      // If there's a new featured image, upload it
+      toast.success(language === "ar" ? "تم تحديث المقال بنجاح وستظل في صفحة التعديل" : "Post updated successfully (editor remains open)");
       if (featuredImageFile && editingId) {
         handleUploadImage(editingId);
       }
-      resetForm();
       refetch();
     },
     onError: (error: any) => {
@@ -146,6 +146,10 @@ export default function AdminPostsManager() {
     setCategoryId(undefined);
     setStatus("draft");
     setReadingTimeMinutes(5);
+    setCustomAuthorNameAr("فريق EnglishOM");
+    setCustomAuthorNameEn("EnglishOM Team");
+    setShowDate(true);
+    setDateDisplayType("published");
     setFeaturedImageFile(null);
     setFeaturedImagePreview("");
     setShowPreview(false);
@@ -172,10 +176,13 @@ export default function AdminPostsManager() {
       categoryId,
       status,
       readingTimeMinutes,
+      customAuthorNameAr,
+      customAuthorNameEn,
+      showDate: dateDisplayType !== "hidden",
+      dateDisplayType,
       slug: existingSlug || generatedSlug,
     };
 
-    // If there is an external URL and no file selected, save it directly
     if (!featuredImageFile && featuredImagePreview && !featuredImagePreview.startsWith("blob:")) {
       postData.featuredImageUrl = featuredImagePreview;
     }
@@ -201,6 +208,10 @@ export default function AdminPostsManager() {
     setCategoryId(post.categoryId);
     setStatus(post.status || "draft");
     setReadingTimeMinutes(post.readingTimeMinutes || 5);
+    setCustomAuthorNameAr(post.customAuthorNameAr || "فريق EnglishOM");
+    setCustomAuthorNameEn(post.customAuthorNameEn || "EnglishOM Team");
+    setShowDate(post.showDate !== false);
+    setDateDisplayType(post.dateDisplayType || (post.showDate === false ? "hidden" : "published"));
     setFeaturedImagePreview(post.featuredImageUrl || "");
     setFeaturedImageFile(null);
     setExistingSlug(post.slug || "");
@@ -244,15 +255,21 @@ export default function AdminPostsManager() {
       {/* Create/Edit Form */}
       {isCreating && (
         <Card className="p-6 border-2" style={{ borderColor: ENGLISHOM_COLORS.primary }}>
-          <h3 className="text-xl font-bold mb-6">
-            {editingId ? (language === "ar" ? "تعديل المقال" : "Edit Post") : (language === "ar" ? "إنشاء مقال جديد" : "Create New Post")}
-          </h3>
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-xl font-bold">
+              {editingId ? (language === "ar" ? "تعديل المقال" : "Edit Post") : (language === "ar" ? "إنشاء مقال جديد" : "Create New Post")}
+            </h3>
+            <Button variant="ghost" size="sm" onClick={resetForm} className="flex items-center gap-1 text-muted-foreground hover:text-foreground">
+              <X size={18} />
+              {language === "ar" ? "إغلاق محرّر المقال" : "Close Editor"}
+            </Button>
+          </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Form Section */}
             <div>
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* English Title */}
+                {/* Title (English) */}
                 <div>
                   <label className="block text-sm font-medium mb-2">Title (English)</label>
                   <Input
@@ -263,9 +280,9 @@ export default function AdminPostsManager() {
                   />
                 </div>
 
-                {/* Arabic Title */}
+                {/* Title (Arabic) */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">Title (Arabic)</label>
+                  <label className="block text-sm font-medium mb-2">العنوان (بالعربية)</label>
                   <Input
                     value={titleAr}
                     onChange={(e) => setTitleAr(e.target.value)}
@@ -275,7 +292,103 @@ export default function AdminPostsManager() {
                   />
                 </div>
 
-                {/* English Excerpt */}
+                {/* Author Name Control (كاتب المقال) */}
+                <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-border space-y-3">
+                  <label className="block text-sm font-bold text-foreground flex items-center gap-2">
+                    <UserCheck size={16} style={{ color: ENGLISHOM_COLORS.primary }} />
+                    {language === "ar" ? "التحكم باسم كاتب المقال" : "Author Name Control"}
+                  </label>
+
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setCustomAuthorNameAr("فريق EnglishOM");
+                        setCustomAuthorNameEn("EnglishOM Team");
+                      }}
+                    >
+                      فريق EnglishOM
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setCustomAuthorNameAr("بدر ، مؤسس المنصة");
+                        setCustomAuthorNameEn("Badr, Platform Founder");
+                      }}
+                    >
+                      بدر ، مؤسس المنصة
+                    </Button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <span className="text-xs text-muted-foreground mb-1 block">الاسم بالعربية:</span>
+                      <Input
+                        value={customAuthorNameAr}
+                        onChange={(e) => setCustomAuthorNameAr(e.target.value)}
+                        placeholder="مثال: فريق EnglishOM أو بدر"
+                        dir="rtl"
+                      />
+                    </div>
+                    <div>
+                      <span className="text-xs text-muted-foreground mb-1 block">Name in English:</span>
+                      <Input
+                        value={customAuthorNameEn}
+                        onChange={(e) => setCustomAuthorNameEn(e.target.value)}
+                        placeholder="e.g. EnglishOM Team"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Date Control (تاريخ المقال) */}
+                <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-border space-y-3">
+                  <label className="block text-sm font-bold text-foreground flex items-center gap-2">
+                    <Calendar size={16} style={{ color: ENGLISHOM_COLORS.primary }} />
+                    {language === "ar" ? "خيارات تاريخ المقال" : "Article Date Options"}
+                  </label>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <label className="flex items-center gap-2 cursor-pointer border p-2 rounded hover:bg-accent text-xs font-medium">
+                      <input
+                        type="radio"
+                        name="dateOption"
+                        value="published"
+                        checked={dateDisplayType === "published"}
+                        onChange={() => setDateDisplayType("published")}
+                      />
+                      {language === "ar" ? "تاريخ النشر" : "Published Date"}
+                    </label>
+
+                    <label className="flex items-center gap-2 cursor-pointer border p-2 rounded hover:bg-accent text-xs font-medium">
+                      <input
+                        type="radio"
+                        name="dateOption"
+                        value="updated"
+                        checked={dateDisplayType === "updated"}
+                        onChange={() => setDateDisplayType("updated")}
+                      />
+                      {language === "ar" ? 'عبارة "آخر تحديث"' : '"Last Updated"'}
+                    </label>
+
+                    <label className="flex items-center gap-2 cursor-pointer border p-2 rounded hover:bg-accent text-xs font-medium">
+                      <input
+                        type="radio"
+                        name="dateOption"
+                        value="hidden"
+                        checked={dateDisplayType === "hidden"}
+                        onChange={() => setDateDisplayType("hidden")}
+                      />
+                      {language === "ar" ? "إخفاء التاريخ" : "Hide Date"}
+                    </label>
+                  </div>
+                </div>
+
+                {/* Excerpt (English) */}
                 <div>
                   <label className="block text-sm font-medium mb-2">Excerpt (English)</label>
                   <Input
@@ -285,13 +398,13 @@ export default function AdminPostsManager() {
                   />
                 </div>
 
-                {/* Arabic Excerpt */}
+                {/* Excerpt (Arabic) */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">Excerpt (Arabic)</label>
+                  <label className="block text-sm font-medium mb-2">الملخص (بالعربية)</label>
                   <Input
                     value={excerptAr}
                     onChange={(e) => setExcerptAr(e.target.value)}
-                    placeholder="وصف موجز"
+                    placeholder="وصف موجز للمقال"
                     dir="rtl"
                   />
                 </div>
@@ -306,23 +419,18 @@ export default function AdminPostsManager() {
                     onChange={(e) => setExistingSlug(e.target.value.toLowerCase().replace(/\s+/g, "-"))}
                     placeholder={language === "ar" ? "مثال: my-new-post" : "e.g. my-new-post"}
                   />
-                  <p className="text-xs text-gray-500 mt-1">
-                    {language === "ar" 
-                      ? "اختياري: اتركه فارغاً ليتم توليده تلقائياً. تأكد من عدم استخدام مسافات أو رموز معقدة." 
-                      : "Optional: Leave empty to auto-generate. Avoid spaces and special characters."}
-                  </p>
                 </div>
 
                 {/* Category */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">Category</label>
+                  <label className="block text-sm font-medium mb-2">{language === "ar" ? "التصنيف" : "Category"}</label>
                   <select
                     value={categoryId || ""}
                     onChange={(e) => setCategoryId(Number(e.target.value))}
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full border rounded px-3 py-2 bg-background"
                     required
                   >
-                    <option value="">Select a category</option>
+                    <option value="">{language === "ar" ? "اختر التصنيف" : "Select a category"}</option>
                     {categories.map((cat: any) => (
                       <option key={cat.id} value={cat.id}>
                         {language === "ar" ? cat.nameAr : cat.nameEn}
@@ -333,11 +441,11 @@ export default function AdminPostsManager() {
 
                 {/* Status */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">Status</label>
+                  <label className="block text-sm font-medium mb-2">{language === "ar" ? "الحالة" : "Status"}</label>
                   <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value as "draft" | "published")}
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full border rounded px-3 py-2 bg-background"
                   >
                     <option value="draft">{language === "ar" ? "مسودة" : "Draft"}</option>
                     <option value="published">{language === "ar" ? "منشور" : "Published"}</option>
@@ -364,7 +472,6 @@ export default function AdminPostsManager() {
                       variant="outline"
                       size="sm"
                       onClick={calculateReadingTime}
-                      title={language === "ar" ? "حساب تلقائي من المحتوى" : "Auto-calculate from content"}
                     >
                       {language === "ar" ? "حساب تلقائي" : "Auto"}
                     </Button>
@@ -409,11 +516,6 @@ export default function AdminPostsManager() {
                         className="flex-1"
                       />
                     </div>
-                    {(featuredImagePreview || featuredImageFile) && (
-                      <span className="text-sm text-green-600">
-                        {featuredImageFile ? featuredImageFile.name : (language === "ar" ? "تم استخدام رابط خارجي" : "Using external URL")}
-                      </span>
-                    )}
                   </div>
                   {featuredImagePreview && (
                     <div className="mt-2 rounded-lg overflow-hidden border border-border h-40">
@@ -433,27 +535,29 @@ export default function AdminPostsManager() {
                     value={contentEn}
                     onChange={setContentEn}
                     placeholder="Write your content in English..."
+                    dir="ltr"
                   />
                 </div>
 
                 {/* Arabic Content */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">Content (Arabic)</label>
+                  <label className="block text-sm font-medium mb-2">المحتوى (بالعربية)</label>
                   <RichTextEditor
                     value={contentAr}
                     onChange={setContentAr}
                     placeholder="اكتب محتواك بالعربية..."
+                    dir="rtl"
                   />
                 </div>
 
                 {/* Submit Buttons */}
-                <div className="flex gap-2 justify-end">
+                <div className="flex gap-2 justify-end pt-4">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={resetForm}
                   >
-                    {language === "ar" ? "إلغاء" : "Cancel"}
+                    {language === "ar" ? "إغلاق التعديل" : "Close Editor"}
                   </Button>
                   <Button
                     type="submit"
@@ -467,7 +571,7 @@ export default function AdminPostsManager() {
                       </>
                     ) : (
                       editingId 
-                        ? (language === "ar" ? "تحديث المقال" : "Update Post")
+                        ? (language === "ar" ? "حفظ التغييرات" : "Update Post")
                         : (language === "ar" ? "إنشاء المقال" : "Create Post")
                     )}
                   </Button>
@@ -539,11 +643,15 @@ export default function AdminPostsManager() {
                     )}
                   </div>
                   <p className="text-sm text-gray-500">{post.titleAr}</p>
-                  {post.category && (
-                    <span className="text-xs text-muted-foreground">
-                      {language === "ar" ? post.category.nameAr : post.category.nameEn}
-                    </span>
-                  )}
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
+                    {post.category && (
+                      <span>
+                        {language === "ar" ? post.category.nameAr : post.category.nameEn}
+                      </span>
+                    )}
+                    <span>•</span>
+                    <span>الكاتب: {post.customAuthorNameAr || post.author?.name || "فريق EnglishOM"}</span>
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <Button
