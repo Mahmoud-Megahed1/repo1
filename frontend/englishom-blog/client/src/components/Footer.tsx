@@ -175,12 +175,22 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
-                <a href="/blog" className="hover:text-white transition-colors">
+                <a
+                  href={isAr ? "https://englishom.com/ar/signup" : "https://englishom.com/en/signup"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
                   {isAr ? "أبدأ الممارسة الذكية" : "Start Smart Practice"}
                 </a>
               </li>
               <li>
-                <a href="/blog/admin/login" className="hover:text-white transition-colors">
+                <a
+                  href={isAr ? "https://englishom.com/ar/app" : "https://englishom.com/en/app"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
                   {isAr ? "تسجيل الدخول" : "Login"}
                 </a>
               </li>
@@ -194,12 +204,22 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
-                <a href="/blog" className="hover:text-white transition-colors">
+                <a
+                  href={isAr ? "https://englishom.com/ar/user-guide" : "https://englishom.com/en/user-guide"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
                   {isAr ? "دليل المستخدم" : "User Guide"}
                 </a>
               </li>
               <li>
-                <a href="/blog" className="hover:text-white transition-colors">
+                <a
+                  href={isAr ? "https://englishom.com/ar/contact" : "https://englishom.com/en/contact"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
                   {isAr ? "اتصل بنا" : "Contact Us"}
                 </a>
               </li>
@@ -213,12 +233,22 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
-                <a href="/blog" className="hover:text-white transition-colors">
+                <a
+                  href={isAr ? "https://englishom.com/ar/terms-and-conditions" : "https://englishom.com/en/terms-and-conditions"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
                   {isAr ? "الشروط والأحكام" : "Terms & Conditions"}
                 </a>
               </li>
               <li>
-                <a href="/blog" className="hover:text-white transition-colors">
+                <a
+                  href={isAr ? "https://englishom.com/ar/privacy-policy" : "https://englishom.com/en/privacy-policy"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
                   {isAr ? "سياسة الخصوصية" : "Privacy Policy"}
                 </a>
               </li>
