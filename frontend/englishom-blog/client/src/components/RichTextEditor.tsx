@@ -1,4 +1,4 @@
-import { useEditor, EditorContent, Node, mergeAttributes } from "@tiptap/react";
+import { useEditor, EditorContent, Node, mergeAttributes, NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
@@ -31,7 +31,7 @@ import {
   Loader2,
   Youtube as YoutubeIcon,
   Upload,
-  Trash2,
+  X,
 } from "lucide-react";
 import "./RichTextEditor.css";
 
@@ -40,6 +40,62 @@ interface RichTextEditorProps {
   onChange: (value: string) => void;
   placeholder?: string;
   dir?: "ltr" | "rtl" | "auto";
+}
+
+// Media NodeView Wrapper with Red 'X' Delete Badge
+function MediaNodeView(props: any) {
+  const { node, deleteNode } = props;
+  const isImage = node.type.name === "image";
+  const isVideo = node.type.name === "videoNode";
+  const isIframe = node.type.name === "iframeNode" || node.type.name === "youtube";
+
+  return (
+    <NodeViewWrapper className="relative group my-4 block max-w-full">
+      {/* Red X Badge for Deleting */}
+      <button
+        type="button"
+        contentEditable={false}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          deleteNode();
+          toast.success("تم حذف العنصر المرفوع");
+        }}
+        className="absolute top-3 right-3 z-30 bg-red-600 hover:bg-red-700 text-white rounded-full p-1.5 shadow-lg transition-all scale-100 hover:scale-110 cursor-pointer border-2 border-white flex items-center justify-center"
+        title="حذف هذا العنصر"
+      >
+        <X size={16} />
+      </button>
+
+      {/* Media Content */}
+      {isImage && (
+        <img
+          src={node.attrs.src}
+          alt={node.attrs.alt || "image"}
+          className="rounded-xl max-w-full h-auto shadow-md border border-border"
+        />
+      )}
+
+      {isVideo && (
+        <video
+          src={node.attrs.src}
+          controls
+          className="w-full aspect-video rounded-xl shadow-lg border border-border"
+        />
+      )}
+
+      {isIframe && (
+        <div className="w-full aspect-video rounded-xl overflow-hidden shadow-lg border border-border bg-black">
+          <iframe
+            src={node.attrs.src}
+            className="w-full h-full"
+            frameBorder="0"
+            allowFullScreen
+          />
+        </div>
+      )}
+    </NodeViewWrapper>
+  );
 }
 
 // Custom TipTap Extension for raw <video> tags
@@ -64,6 +120,10 @@ const VideoExtension = Node.create({
 
   renderHTML({ HTMLAttributes }) {
     return ["video", mergeAttributes(HTMLAttributes, { controls: "controls" })];
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(MediaNodeView);
   },
 });
 
@@ -91,6 +151,24 @@ const IframeExtension = Node.create({
 
   renderHTML({ HTMLAttributes }) {
     return ["iframe", mergeAttributes(HTMLAttributes)];
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(MediaNodeView);
+  },
+});
+
+// Extend Image extension with NodeView Red X badge
+const CustomImageExtension = Image.extend({
+  addNodeView() {
+    return ReactNodeViewRenderer(MediaNodeView);
+  },
+});
+
+// Extend Youtube extension with NodeView Red X badge
+const CustomYoutubeExtension = Youtube.extend({
+  addNodeView() {
+    return ReactNodeViewRenderer(MediaNodeView);
   },
 });
 
@@ -137,11 +215,11 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
       Link.configure({
         openOnClick: false,
       }),
-      Image.configure({
+      CustomImageExtension.configure({
         allowBase64: true,
         inline: false,
       }),
-      Youtube.configure({
+      CustomYoutubeExtension.configure({
         controls: true,
         nocookie: true,
         width: 640,
@@ -190,19 +268,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
     }
   };
 
-  // Delete selected node (Image, Video, Iframe, Youtube, etc.)
-  const deleteSelectedMedia = () => {
-    editor.chain().focus().deleteSelection().run();
-    toast.success(isAr ? "تم حذف العنصر المحدد" : "Selected media deleted");
-  };
-
-  const isMediaSelected =
-    editor.isActive("image") ||
-    editor.isActive("youtube") ||
-    editor.isActive("videoNode") ||
-    editor.isActive("iframeNode");
-
-  // Image Upload with Clean Progress & Single Toast
+  // Image Upload with Clean Progress & Non-destructive Insertion
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -247,7 +313,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         setUploadStatusText(isAr ? "تم الرفع بنجاح!" : "Upload complete!");
 
         if (data?.url) {
-          editor.chain().focus().setImage({ src: data.url }).run();
+          editor.chain().focus().createParagraphNear().setImage({ src: data.url }).run();
           toast.success(isAr ? "تم إدراج الصورة بنجاح!" : "Image inserted successfully!");
         }
       } catch (err: any) {
@@ -319,7 +385,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         setUploadStatusText(isAr ? "تم رفع الفيديو بنجاح!" : "Video upload complete!");
 
         if (data?.url) {
-          editor.chain().focus().insertContent({
+          editor.chain().focus().createParagraphNear().insertContent({
             type: "videoNode",
             attrs: { src: data.url },
           }).run();
@@ -351,12 +417,10 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
     const embedUrl = youtubePreviewEmbed || parseYoutubeUrl(youtubeUrlInput);
 
     if (embedUrl) {
-      // 1. Try TipTap YouTube Extension
-      const setSuccess = editor.chain().focus().setYoutubeVideo({ src: youtubeUrlInput }).run();
+      const setSuccess = editor.chain().focus().createParagraphNear().setYoutubeVideo({ src: youtubeUrlInput }).run();
       
-      // 2. If TipTap youtube extension didn't run, use custom IframeExtension
       if (!setSuccess) {
-        editor.chain().focus().insertContent({
+        editor.chain().focus().createParagraphNear().insertContent({
           type: "iframeNode",
           attrs: { src: embedUrl },
         }).run();
@@ -535,20 +599,6 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         >
           <ImageIcon size={16} />
         </Button>
-
-        {/* Delete Selected Media Button */}
-        {isMediaSelected && (
-          <Button
-            size="sm"
-            variant="destructive"
-            onClick={deleteSelectedMedia}
-            title={isAr ? "حذف العنصر المحدد" : "Delete Selected Media"}
-            className="gap-1 animate-in fade-in"
-          >
-            <Trash2 size={15} />
-            <span className="text-xs font-semibold">{isAr ? "حذف" : "Delete"}</span>
-          </Button>
-        )}
 
         <div className="w-px bg-border mx-1 h-5" />
 
