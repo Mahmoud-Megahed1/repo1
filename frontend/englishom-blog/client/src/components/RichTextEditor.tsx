@@ -11,7 +11,6 @@ import { useRef, useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { useLocalization } from "@/contexts/LocalizationContext";
-import axios from "axios";
 import {
   Bold,
   Italic,
@@ -132,7 +131,9 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        link: false,
+      }),
       Link.configure({
         openOnClick: false,
       }),
@@ -201,90 +202,63 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
     editor.isActive("videoNode") ||
     editor.isActive("iframeNode");
 
-  // Image Upload with Progress Percentage
+  // Image Upload with Clean Progress & Single Toast
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     if (file.size > 20 * 1024 * 1024) {
       toast.error(isAr ? "حجم الصورة يجب أن يكون أقل من 20MB" : "Image size must be less than 20MB");
+      if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
 
     setIsUploading(true);
     setUploadProgress(10);
-    setUploadStatusText(isAr ? "جاري تجهيز الصورة..." : "Preparing image...");
+    setUploadStatusText(isAr ? "جاري قراءة الصورة..." : "Reading image file...");
 
     const reader = new FileReader();
     reader.onprogress = (event) => {
       if (event.lengthComputable) {
-        const percent = Math.round((event.loaded / event.total) * 30);
+        const percent = Math.round((event.loaded / event.total) * 40);
         setUploadProgress(percent);
       }
     };
 
     reader.onload = async () => {
-      setUploadStatusText(isAr ? "جاري رفع الصورة للسيرفر..." : "Uploading image to server...");
-      setUploadProgress(40);
+      setUploadStatusText(isAr ? "جاري رفع الصورة..." : "Uploading image...");
+      setUploadProgress(60);
       const base64String = (reader.result as string).split(",")[1];
 
-      try {
-        const res = await axios.post(
-          "/api/trpc/blog.posts.uploadMedia",
-          {
-            json: {
-              fileName: file.name,
-              fileData: base64String,
-            },
-          },
-          {
-            onUploadProgress: (progressEvent) => {
-              if (progressEvent.total) {
-                const progress = 40 + Math.round((progressEvent.loaded / progressEvent.total) * 55);
-                setUploadProgress(Math.min(98, progress));
-              }
-            },
-          }
-        );
+      let progressInterval: any = null;
 
+      try {
+        progressInterval = setInterval(() => {
+          setUploadProgress((prev) => (prev < 94 ? prev + 4 : prev));
+        }, 120);
+
+        const data = await uploadMediaMutation.mutateAsync({
+          fileName: file.name,
+          fileData: base64String,
+        });
+
+        if (progressInterval) clearInterval(progressInterval);
         setUploadProgress(100);
         setUploadStatusText(isAr ? "تم الرفع بنجاح!" : "Upload complete!");
 
-        const url = res.data?.result?.data?.json?.url || res.data?.result?.data?.url;
-
-        if (url) {
-          editor.chain().focus().setImage({ src: url }).run();
-          toast.success(isAr ? "تم إدراج الصورة بنجاح في المقالة" : "Image inserted successfully");
-        } else {
-          uploadMediaMutation.mutate(
-            { fileName: file.name, fileData: base64String },
-            {
-              onSuccess: (data) => {
-                editor.chain().focus().setImage({ src: data.url }).run();
-                toast.success(isAr ? "تم إدراج الصورة بنجاح!" : "Image inserted!");
-              },
-            }
-          );
+        if (data?.url) {
+          editor.chain().focus().setImage({ src: data.url }).run();
+          toast.success(isAr ? "تم إدراج الصورة بنجاح!" : "Image inserted successfully!");
         }
       } catch (err: any) {
-        uploadMediaMutation.mutate(
-          { fileName: file.name, fileData: base64String },
-          {
-            onSuccess: (data) => {
-              editor.chain().focus().setImage({ src: data.url }).run();
-              toast.success(isAr ? "تم إدراج الصورة بنجاح!" : "Image inserted!");
-            },
-            onError: (mutationErr) => {
-              toast.error(isAr ? `خطأ في رفع الصورة: ${mutationErr.message}` : `Image upload failed: ${mutationErr.message}`);
-            },
-          }
-        );
+        if (progressInterval) clearInterval(progressInterval);
+        toast.error(isAr ? `خطأ في رفع الصورة: ${err.message}` : `Image upload failed: ${err.message}`);
       } finally {
         setTimeout(() => {
           setIsUploading(false);
           setUploadProgress(0);
           setUploadStatusText("");
-        }, 600);
+        }, 500);
         if (fileInputRef.current) fileInputRef.current.value = "";
       }
     };
@@ -293,6 +267,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
       setIsUploading(false);
       setUploadProgress(0);
       toast.error(isAr ? "فشل قراءة ملف الصورة" : "Failed to read image file");
+      if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
     reader.readAsDataURL(file);
@@ -305,66 +280,60 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
 
     if (file.size > 50 * 1024 * 1024) {
       toast.error(isAr ? "حجم ملف الفيديو يجب أن يكون أقل من 50MB" : "Video file must be less than 50MB");
+      if (videoInputRef.current) videoInputRef.current.value = "";
       return;
     }
 
     setIsVideoModalOpen(false);
     setIsUploading(true);
     setUploadProgress(10);
-    setUploadStatusText(isAr ? "جاري معالجة الفيديو..." : "Processing video file...");
+    setUploadStatusText(isAr ? "جاري قراءة ملف الفيديو..." : "Reading video file...");
 
     const reader = new FileReader();
     reader.onprogress = (event) => {
       if (event.lengthComputable) {
-        const percent = Math.round((event.loaded / event.total) * 30);
+        const percent = Math.round((event.loaded / event.total) * 40);
         setUploadProgress(percent);
       }
     };
 
     reader.onload = async () => {
-      setUploadStatusText(isAr ? "جاري رفع الفيديو للسيرفر..." : "Uploading video to server...");
-      setUploadProgress(40);
+      setUploadStatusText(isAr ? "جاري رفع الفيديو..." : "Uploading video...");
+      setUploadProgress(60);
       const base64String = (reader.result as string).split(",")[1];
 
+      let progressInterval: any = null;
+
       try {
-        const res = await axios.post(
-          "/api/trpc/blog.posts.uploadMedia",
-          {
-            json: {
-              fileName: file.name,
-              fileData: base64String,
-            },
-          },
-          {
-            onUploadProgress: (progressEvent) => {
-              if (progressEvent.total) {
-                const progress = 40 + Math.round((progressEvent.loaded / progressEvent.total) * 55);
-                setUploadProgress(Math.min(98, progress));
-              }
-            },
-          }
-        );
+        progressInterval = setInterval(() => {
+          setUploadProgress((prev) => (prev < 94 ? prev + 3 : prev));
+        }, 150);
 
+        const data = await uploadMediaMutation.mutateAsync({
+          fileName: file.name,
+          fileData: base64String,
+        });
+
+        if (progressInterval) clearInterval(progressInterval);
         setUploadProgress(100);
-        setUploadStatusText(isAr ? "تم الرفع بنجاح!" : "Video upload complete!");
+        setUploadStatusText(isAr ? "تم رفع الفيديو بنجاح!" : "Video upload complete!");
 
-        const url = res.data?.result?.data?.json?.url || res.data?.result?.data?.url;
-
-        if (url) {
+        if (data?.url) {
           editor.chain().focus().insertContent({
             type: "videoNode",
-            attrs: { src: url },
+            attrs: { src: data.url },
           }).run();
           toast.success(isAr ? "تم إدراج الفيديو بنجاح!" : "Video inserted successfully!");
         }
       } catch (err: any) {
+        if (progressInterval) clearInterval(progressInterval);
         toast.error(isAr ? `فشل رفع الفيديو: ${err.message}` : `Video upload failed: ${err.message}`);
       } finally {
         setTimeout(() => {
           setIsUploading(false);
           setUploadProgress(0);
           setUploadStatusText("");
-        }, 600);
+        }, 500);
         if (videoInputRef.current) videoInputRef.current.value = "";
       }
     };
