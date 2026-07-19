@@ -452,6 +452,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
       {/* Toolbar */}
       <div className="bg-muted p-2 flex flex-wrap gap-1 border-b border-border items-center">
         <Button
+          type="button"
           size="sm"
           variant={editor.isActive("bold") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -461,6 +462,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         </Button>
 
         <Button
+          type="button"
           size="sm"
           variant={editor.isActive("italic") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleItalic().run()}
@@ -472,6 +474,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         <div className="w-px bg-border mx-1 h-5" />
 
         <Button
+          type="button"
           size="sm"
           variant={editor.isActive("heading", { level: 2 }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
@@ -481,6 +484,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         </Button>
 
         <Button
+          type="button"
           size="sm"
           variant={editor.isActive("heading", { level: 3 }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
@@ -492,6 +496,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         <div className="w-px bg-border mx-1 h-5" />
 
         <Button
+          type="button"
           size="sm"
           variant={editor.isActive({ textAlign: 'left' }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().setTextAlign('left').run()}
@@ -501,6 +506,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         </Button>
 
         <Button
+          type="button"
           size="sm"
           variant={editor.isActive({ textAlign: 'center' }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().setTextAlign('center').run()}
@@ -510,6 +516,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         </Button>
 
         <Button
+          type="button"
           size="sm"
           variant={editor.isActive({ textAlign: 'right' }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().setTextAlign('right').run()}
@@ -519,6 +526,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         </Button>
 
         <Button
+          type="button"
           size="sm"
           variant={editor.isActive({ textAlign: 'justify' }) ? "default" : "outline"}
           onClick={() => editor.chain().focus().setTextAlign('justify').run()}
@@ -530,6 +538,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         <div className="w-px bg-border mx-1 h-5" />
 
         <Button
+          type="button"
           size="sm"
           variant={editor.isActive("blockquote") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
@@ -539,6 +548,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         </Button>
 
         <Button
+          type="button"
           size="sm"
           variant={editor.isActive("bulletList") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -548,6 +558,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         </Button>
 
         <Button
+          type="button"
           size="sm"
           variant={editor.isActive("orderedList") ? "default" : "outline"}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
@@ -559,6 +570,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         <div className="w-px bg-border mx-1 h-5" />
 
         <Button
+          type="button"
           size="sm"
           variant="outline"
           onClick={addLink}
@@ -569,6 +581,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
 
         {/* Video Button */}
         <Button
+          type="button"
           size="sm"
           variant="outline"
           onClick={() => setIsVideoModalOpen(true)}
@@ -580,6 +593,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
 
         {/* Image Upload Button */}
         <Button
+          type="button"
           size="sm"
           variant="outline"
           onClick={() => fileInputRef.current?.click()}
@@ -592,6 +606,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         <div className="w-px bg-border mx-1 h-5" />
 
         <Button
+          type="button"
           size="sm"
           variant="outline"
           onClick={() => editor.chain().focus().undo().run()}
@@ -602,6 +617,7 @@ export default function RichTextEditor({ value, onChange, placeholder, dir }: Ri
         </Button>
 
         <Button
+          type="button"
           size="sm"
           variant="outline"
           onClick={() => editor.chain().focus().redo().run()}
