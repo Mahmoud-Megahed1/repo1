@@ -100,11 +100,18 @@ export default function AdminPostsManager() {
     const reader = new FileReader();
     reader.onload = () => {
       const base64String = (reader.result as string).split(",")[1];
-      uploadImageMutation.mutate({
-        postId,
-        fileName: featuredImageFile.name,
-        fileData: base64String,
-      });
+      uploadImageMutation.mutate(
+        {
+          postId,
+          fileName: featuredImageFile.name,
+          fileData: base64String,
+        },
+        {
+          onSuccess: () => {
+            setFeaturedImageFile(null);
+          },
+        }
+      );
     };
     reader.onerror = () => {
       toast.error(language === "ar" ? "فشل قراءة الملف" : "Failed to read file");
@@ -164,6 +171,23 @@ export default function AdminPostsManager() {
       return;
     }
 
+    // Auto sync media elements (iframes, videos, images) between contentEn and contentAr if missing
+    let finalContentEn = contentEn;
+    let finalContentAr = contentAr;
+
+    const extractMedia = (html: string) => {
+      return html.match(/<(iframe|video|img)[^>]*>.*?<\/\1>|<(iframe|video|img)[^>]*\/?>/gi) || [];
+    };
+
+    const enMedia = extractMedia(contentEn);
+    const arMedia = extractMedia(contentAr);
+
+    if (enMedia.length > 0 && arMedia.length === 0) {
+      finalContentAr = contentAr + "<p></p>" + enMedia.join("<p></p>");
+    } else if (arMedia.length > 0 && enMedia.length === 0) {
+      finalContentEn = contentEn + "<p></p>" + arMedia.join("<p></p>");
+    }
+
     const generatedSlug = titleEn.toLowerCase().replace(/\s+/g, "-").replace(/[^\w\u0600-\u06FF-]/g, "") || `post-${Date.now()}`;
 
     const postData: any = {
@@ -171,8 +195,8 @@ export default function AdminPostsManager() {
       titleAr,
       excerptEn,
       excerptAr,
-      contentEn,
-      contentAr,
+      contentEn: finalContentEn,
+      contentAr: finalContentAr,
       categoryId,
       status,
       readingTimeMinutes,
