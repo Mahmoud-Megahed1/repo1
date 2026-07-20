@@ -128,31 +128,31 @@ export default function Home() {
             {[
               {
                 number: 1,
-                title: "Visual Recognition",
+                title: t("stages.visualRecognition"),
                 description: t("stages.visual"),
                 color: "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400",
               },
               {
                 number: 2,
-                title: "Auditory Processing",
+                title: t("stages.auditoryProcessing"),
                 description: t("stages.auditory"),
                 color: "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400",
               },
               {
                 number: 3,
-                title: "Spelling & Structure",
+                title: t("stages.spellingStructure"),
                 description: t("stages.spelling"),
                 color: "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400",
               },
               {
                 number: 4,
-                title: "Reading Sprint",
+                title: t("stages.readingSprint"),
                 description: t("stages.reading"),
                 color: "bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400",
               },
               {
                 number: 5,
-                title: "Vocal Challenge",
+                title: t("stages.vocalChallenge"),
                 description: t("stages.vocal"),
                 color: "bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400",
               },
@@ -187,12 +187,20 @@ export default function Home() {
                   <span className={`inline-block px-3 py-1 rounded-full text-xs font-extrabold mb-3 ${item.badgeColor}`}>
                     {item.score}
                   </span>
-                  <p className="font-extrabold text-xl mb-1 text-gray-900 dark:text-white">
-                    {item.levelAr}
-                  </p>
-                  <p className="text-xs font-semibold uppercase text-slate-500 mb-3 tracking-wider">
-                    {item.levelEn}
-                  </p>
+                  {isAr ? (
+                    <>
+                      <p className="font-extrabold text-xl mb-1 text-gray-900 dark:text-white">
+                        {item.levelAr}
+                      </p>
+                      <p className="text-xs font-semibold uppercase text-slate-500 mb-3 tracking-wider">
+                        {item.levelEn}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="font-extrabold text-xl mb-4 text-gray-900 dark:text-white uppercase tracking-wide">
+                      {item.levelEn}
+                    </p>
+                  )}
                 </div>
                 <p className="text-xs leading-relaxed text-gray-700 dark:text-gray-300 font-medium border-t border-current/20 pt-3 mt-2">
                   {item.concept}
