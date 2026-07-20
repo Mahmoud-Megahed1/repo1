@@ -82,6 +82,17 @@ export default function Quiz() {
     { enabled: state === "loading", retry: 2 }
   );
 
+  const { data: contactLookup } = trpc.quiz.lookupStudentContact.useQuery(
+    { contact: studentPhone },
+    { enabled: studentPhone.trim().length >= 4 }
+  );
+
+  useEffect(() => {
+    if (contactLookup?.exists && contactLookup.studentName && !studentName) {
+      setStudentName(contactLookup.studentName);
+    }
+  }, [contactLookup]);
+
   // Auto-load questions when user selects a level
   useEffect(() => {
     if (state === "level-select") {
@@ -489,17 +500,6 @@ export default function Quiz() {
       </div>
     );
   }
-
-  const { data: contactLookup } = trpc.quiz.lookupStudentContact.useQuery(
-    { contact: studentPhone },
-    { enabled: studentPhone.trim().length >= 4 }
-  );
-
-  useEffect(() => {
-    if (contactLookup?.exists && contactLookup.studentName && !studentName) {
-      setStudentName(contactLookup.studentName);
-    }
-  }, [contactLookup]);
 
   if (state === "lead-capture") {
     return (
