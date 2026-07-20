@@ -1,141 +1,87 @@
-import { useAuth } from "@/_core/hooks/useAuth";
-import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useLocation } from "wouter";
-import { getLoginUrl } from "@/const";
-import { BookOpen, Settings, LogOut, Moon, Sun, Globe, Zap, BarChart } from "lucide-react";
+import { BookOpen, Zap, BarChart } from "lucide-react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 /**
- * Home page for EnglishOM Ques
+ * Home page for EnglishOM Ques (اختبار مستوى الكفاءة)
  */
 export default function Home() {
   const [, navigate] = useLocation();
-  const { theme, toggleTheme } = useTheme();
-  const { language, setLanguage, t } = useLanguage();
+  const { language, t } = useLanguage();
 
   return (
-    <div className={`min-h-screen bg-background transition-colors duration-300 ${language === "ar" ? "rtl" : "ltr"}`}>
+    <div className={`min-h-screen flex flex-col justify-between bg-background transition-colors duration-300 ${language === "ar" ? "rtl" : "ltr"}`}>
       {/* Header */}
-      <header className="bg-card border-b border-border">
-        <div className="max-w-6xl mx-auto px-4 py-6 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">{t("header.title")}</h1>
-            <p className="text-muted-foreground">{t("header.subtitle")}</p>
-          </div>
-          <div className="flex gap-4 items-center">
-            {/* Language Toggle */}
-            <div className="flex gap-2 bg-muted p-1 rounded-lg">
-              <Button
-                size="sm"
-                variant={language === "en" ? "default" : "ghost"}
-                onClick={() => setLanguage("en")}
-                className="gap-1"
-              >
-                <Globe className="w-4 h-4" />
-                EN
-              </Button>
-              <Button
-                size="sm"
-                variant={language === "ar" ? "default" : "ghost"}
-                onClick={() => setLanguage("ar")}
-                className="gap-1"
-              >
-                <Globe className="w-4 h-4" />
-                AR
-              </Button>
-            </div>
-
-            {/* Theme Toggle */}
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={toggleTheme}
-              className="gap-2"
-            >
-              {theme === "dark" ? (
-                <>
-                  <Sun className="w-4 h-4" />
-                  <span className="hidden sm:inline">{t("theme.light")}</span>
-                </>
-              ) : (
-                <>
-                  <Moon className="w-4 h-4" />
-                  <span className="hidden sm:inline">{t("theme.dark")}</span>
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-12">
+      <main className="max-w-6xl mx-auto px-4 py-12 flex-1 w-full">
         {/* Hero Section */}
-        <section className="mb-16">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+        <section className="mb-16 text-center">
+          <div className="max-w-3xl mx-auto flex flex-col items-center justify-center mb-10">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-6 leading-tight text-center">
               {t("home.hero.title")}
             </h2>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl text-center leading-relaxed">
               {t("home.hero.subtitle")}
             </p>
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <div className="flex gap-4">
-              <Button 
-                size="lg" 
-                className="gap-2 text-lg px-8"
-                onClick={() => navigate("/ques")}
-              >
-                <Zap className="w-5 h-5" />
-                {t("home.cta.start")}
-              </Button>
-            </div>
+          <div className="flex justify-center mb-12">
+            <Button 
+              size="lg" 
+              className="gap-2 text-lg px-10 py-6 rounded-xl font-bold bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-lg shadow-amber-500/20 hover:scale-105 transition-all"
+              onClick={() => navigate("/ques")}
+            >
+              <Zap className="w-6 h-6 fill-current" />
+              {t("home.cta.start")}
+            </Button>
           </div>
         </section>
 
         {/* Features Section */}
         <section className="mb-16">
-          <h3 className="text-3xl font-bold text-foreground mb-8 text-center">
+          <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-8 text-center">
             {t("features.title")}
           </h3>
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="p-6">
-              <div className="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center mb-4">
-                <BookOpen className="w-6 h-6 text-accent" />
+            <Card className="p-6 border border-border/80 hover:border-amber-500/50 transition-all shadow-sm flex flex-col items-center text-center">
+              <div className="w-14 h-14 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-4 text-amber-500">
+                <BookOpen className="w-7 h-7" />
               </div>
-              <h4 className="text-lg font-semibold text-foreground mb-2">
+              <h4 className="text-lg font-bold text-foreground mb-2">
                 {t("features.levels.title")}
               </h4>
-              <p className="text-muted-foreground">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {t("features.levels.desc")}
               </p>
             </Card>
 
-            <Card className="p-6">
-              <div className="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center mb-4">
-                <Zap className="w-6 h-6 text-accent" />
+            <Card className="p-6 border border-border/80 hover:border-amber-500/50 transition-all shadow-sm flex flex-col items-center text-center">
+              <div className="w-14 h-14 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-4 text-amber-500">
+                <Zap className="w-7 h-7" />
               </div>
-              <h4 className="text-lg font-semibold text-foreground mb-2">
+              <h4 className="text-lg font-bold text-foreground mb-2">
                 {t("features.fast.title")}
               </h4>
-              <p className="text-muted-foreground">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {t("features.fast.desc")}
               </p>
             </Card>
 
-            <Card className="p-6">
-              <div className="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center mb-4">
-                <BarChart className="w-6 h-6 text-accent" />
+            <Card className="p-6 border border-border/80 hover:border-amber-500/50 transition-all shadow-sm flex flex-col items-center text-center">
+              <div className="w-14 h-14 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-4 text-amber-500">
+                <BarChart className="w-7 h-7" />
               </div>
-              <h4 className="text-lg font-semibold text-foreground mb-2">
+              <h4 className="text-lg font-bold text-foreground mb-2">
                 {t("features.feedback.title")}
               </h4>
-              <p className="text-muted-foreground">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {t("features.feedback.desc")}
               </p>
             </Card>
@@ -144,7 +90,7 @@ export default function Home() {
 
         {/* Levels Section */}
         <section className="mb-16">
-          <h3 className="text-3xl font-bold text-foreground mb-8 text-center">
+          <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-8 text-center">
             {t("levels.title")}
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -156,40 +102,35 @@ export default function Home() {
               { code: "C1", name: t("levels.c1"), desc: t("levels.c1.desc") },
               { code: "C2", name: t("levels.c2"), desc: t("levels.c2.desc") },
             ].map((level) => (
-              <Card key={level.code} className="p-4 border-l-4 border-l-accent">
-                <p className="text-sm font-semibold text-accent mb-1">{level.code}</p>
-                <h4 className="text-lg font-bold text-foreground">{level.name}</h4>
-                <p className="text-sm text-muted-foreground">{level.desc}</p>
+              <Card key={level.code} className="p-5 border-l-4 border-l-amber-500 hover:shadow-md transition-all">
+                <p className="text-xs font-bold text-amber-500 mb-1">{level.code}</p>
+                <h4 className="text-base font-bold text-foreground mb-1">{level.name}</h4>
+                <p className="text-xs text-muted-foreground">{level.desc}</p>
               </Card>
             ))}
           </div>
         </section>
 
         {/* CTA Section */}
-        <section className="bg-card border border-border rounded-lg p-12 text-center">
-          <h3 className="text-2xl font-bold text-foreground mb-4">
+        <section className="bg-gradient-to-br from-card to-slate-900/50 border border-border rounded-2xl p-8 md:p-12 text-center shadow-md flex flex-col items-center">
+          <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4 text-center">
             {t("cta.title")}
           </h3>
-          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-muted-foreground mb-8 max-w-2xl text-center leading-relaxed text-sm md:text-base">
             {t("cta.subtitle")}
           </p>
           <Button
-          className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold py-6 px-8 text-lg gap-2"
-          onClick={() => navigate("/ques")}
-        >
-          <BookOpen className="w-5 h-5" />
-          {t("home.cta.start")}
-        </Button>
+            className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-6 px-8 text-base rounded-xl gap-2 shadow-lg shadow-amber-500/20"
+            onClick={() => navigate("/ques")}
+          >
+            <BookOpen className="w-5 h-5" />
+            {t("home.cta.start")}
+          </Button>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="bg-card border-t border-border mt-16">
-        <div className="max-w-6xl mx-auto px-4 py-8 text-center text-muted-foreground">
-          <p>{t("footer.copyright")}</p>
-          <p className="text-sm mt-2">{t("footer.part")}</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

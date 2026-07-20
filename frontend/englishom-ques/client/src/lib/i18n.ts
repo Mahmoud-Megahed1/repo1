@@ -3,7 +3,7 @@ export type Language = "en" | "ar";
 export const translations = {
   en: {
     // Header
-    "header.title": "EnglishOM Ques",
+    "header.title": "Proficiency Level Test",
     "header.subtitle": "Test your English knowledge",
     "header.admin": "Admin",
     "header.myResults": "My Results",
@@ -12,13 +12,13 @@ export const translations = {
 
     // Home Page
     "home.hero.title": "Master English with Speed",
-    "home.hero.subtitle": "Challenge yourself with our fast-paced English quiz. Test your knowledge across different proficiency levels from A1 (Beginner) to C2 (Proficiency).",
-    "home.cta.start": "Start Quiz",
+    "home.hero.subtitle": "Challenge yourself with our fast-paced English proficiency test. Test your knowledge across different proficiency levels from A1 (Beginner) to C2 (Proficiency).",
+    "home.cta.start": "Start Test",
     "home.cta.login": "Login to Start",
     "home.cta.signup": "Sign Up",
 
     // Features
-    "features.title": "Why Choose EnglishOM Ques?",
+    "features.title": "Why Choose Proficiency Level Test?",
     "features.levels.title": "Multiple Levels",
     "features.levels.desc": "Test your English at your own level, from A1 (Beginner) to C2 (Proficiency). Each level is carefully designed to match international standards.",
     "features.fast.title": "Fast-Paced",
@@ -42,12 +42,12 @@ export const translations = {
     "levels.c2.desc": "Mastery",
 
     // CTA Section
-    "cta.title": "Ready to Test Your English?",
-    "cta.subtitle": "Choose your proficiency level and start the quiz. Get instant feedback on your performance and track your progress.",
+    "cta.title": "Ready to Take the Proficiency Level Test?",
+    "cta.subtitle": "Choose your proficiency level and start the test. Get instant feedback on your performance and track your progress.",
 
     // Quiz Page
     "quiz.levelSelect": "Select your English level and test your knowledge",
-    "quiz.startQuiz": "Start Quiz",
+    "quiz.startQuiz": "Start Test",
     "quiz.loading": "Loading Questions...",
     "quiz.question": "Question",
     "quiz.of": "of",
@@ -56,7 +56,7 @@ export const translations = {
     "quiz.remaining": "Remaining",
     "quiz.tryAnotherLevel": "Try Another Level",
     "quiz.backToHome": "Back to Home",
-    "quiz.complete": "Quiz Complete!",
+    "quiz.complete": "Test Complete!",
     "quiz.accuracy": "Accuracy",
     "quiz.avgTime": "Avg. Time",
     "quiz.level": "Level",
@@ -67,6 +67,7 @@ export const translations = {
     "quiz.achievement": "Achievement Unlocked",
     "quiz.perfectScore": "Perfect Score",
     "quiz.highAccuracy": "High Accuracy",
+    "quiz.back": "Back",
 
     // Admin Dashboard
     "admin.title": "Admin Dashboard",
@@ -105,8 +106,8 @@ export const translations = {
     "admin.deleteConfirm": "Are you sure you want to delete this question?",
 
     // Footer
-    "footer.copyright": "© 2026 EnglishOM Ques. All rights reserved.",
-    "footer.part": "Part of the Englishom platform",
+    "footer.copyright": "© 2026 EnglishOM. All rights reserved.",
+    "footer.part": "Part of the EnglishOM platform",
 
     // Theme Toggle
     "theme.dark": "Dark",
@@ -114,7 +115,7 @@ export const translations = {
   },
   ar: {
     // Header
-    "header.title": "اختبار اللغة الإنجليزية",
+    "header.title": "اختبار مستوى الكفاءة",
     "header.subtitle": "اختبر معرفتك باللغة الإنجليزية",
     "header.admin": "الإدارة",
     "header.myResults": "نتائجي",
@@ -123,13 +124,13 @@ export const translations = {
 
     // Home Page
     "home.hero.title": "أتقن اللغة الإنجليزية بسرعة",
-    "home.hero.subtitle": "تحدَّ نفسك مع اختبار اللغة الإنجليزية السريع. اختبر معرفتك عبر مستويات كفاءة مختلفة من A1 (مبتدئ) إلى C2 (متقن).",
+    "home.hero.subtitle": "تحدَّ نفسك مع اختبار مستوى الكفاءة السريع. اختبر معرفتك عبر مستويات كفاءة مختلفة من A1 (مبتدئ) إلى C2 (متقن).",
     "home.cta.start": "ابدأ الاختبار",
     "home.cta.login": "سجل الدخول للبدء",
     "home.cta.signup": "إنشاء حساب",
 
     // Features
-    "features.title": "لماذا تختار اختبار اللغة الإنجليزية؟",
+    "features.title": "لماذا تختار اختبار مستوى الكفاءة؟",
     "features.levels.title": "مستويات متعددة",
     "features.levels.desc": "اختبر اللغة الإنجليزية على مستواك الخاص، من A1 (مبتدئ) إلى C2 (متقن). تم تصميم كل مستوى بعناية ليطابق المعايير الدولية.",
     "features.fast.title": "سريع الخطى",
@@ -145,7 +146,7 @@ export const translations = {
     "levels.a2.desc": "كفاءة عملية محدودة",
     "levels.b1": "متوسط",
     "levels.b1.desc": "كفاءة عملية",
-    "levels.b2": "متوسط متقدم",
+    "levels.b2": "متوسط متتقدم",
     "levels.b2.desc": "كفاءة عملية متقدمة",
     "levels.c1": "متقدم",
     "levels.c1.desc": "كفاءة عملية احترافية",
@@ -153,7 +154,7 @@ export const translations = {
     "levels.c2.desc": "إتقان كامل",
 
     // CTA Section
-    "cta.title": "هل أنت مستعد لاختبار اللغة الإنجليزية؟",
+    "cta.title": "هل أنت مستعد لاختبار مستوى الكفاءة؟",
     "cta.subtitle": "اختر مستوى الكفاءة الخاص بك وابدأ الاختبار. احصل على ملاحظات فورية حول أدائك وتابع تقدمك.",
 
     // Quiz Page
@@ -188,6 +189,7 @@ export const translations = {
     "quiz.achievement": "إنجاز مفتوح",
     "quiz.perfectScore": "درجة كاملة",
     "quiz.highAccuracy": "دقة عالية",
+    "quiz.back": "رجوع",
 
     // Admin Dashboard
     "admin.title": "لوحة تحكم الإدارة",
@@ -226,8 +228,8 @@ export const translations = {
     "admin.deleteConfirm": "هل أنت متأكد من رغبتك في حذف هذا السؤال؟",
 
     // Footer
-    "footer.copyright": "© 2026 اختبار اللغة الإنجليزية. جميع الحقوق محفوظة.",
-    "footer.part": "جزء من منصة Englishom",
+    "footer.copyright": "© 2026 إنجلشوم (EnglishOM). جميع الحقوق محفوظة.",
+    "footer.part": "جزء من منصة EnglishOM",
 
     // Theme Toggle
     "theme.dark": "داكن",

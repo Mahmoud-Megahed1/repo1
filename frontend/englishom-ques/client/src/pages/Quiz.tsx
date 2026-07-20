@@ -10,6 +10,8 @@ import { toast } from "sonner";
 import { ChevronLeft, Globe, Moon, Sun, Trophy, Star, Target, Twitter, MessageCircle, Facebook } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { formatTime } from "@/../../shared/timing";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 type QuizState = "loading" | "level-select" | "quiz" | "lead-capture" | "results";
 
@@ -251,82 +253,33 @@ export default function Quiz() {
     };
 
     return (
-      <div className={`min-h-screen flex flex-col bg-background p-4 ${language === "ar" ? "rtl" : "ltr"}`}>
-        {/* Header with Language and Theme Toggle */}
-        <div className="flex justify-between items-center mb-8 max-w-2xl mx-auto w-full">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate("/")}
-            className="text-muted-foreground hover:text-foreground"
-          >
-            <ChevronLeft className="w-4 h-4 mr-2" />
-            {t("quiz.back")}
-          </Button>
-          <div className="flex gap-2 items-center">
-            {/* Language Toggle */}
-            <div className="flex gap-1 bg-muted p-1 rounded-lg">
-              <Button
-                size="sm"
-                variant={language === "en" ? "default" : "ghost"}
-                onClick={() => setLanguage("en")}
-                className="gap-1"
-              >
-                <Globe className="w-4 h-4" />
-                EN
-              </Button>
-              <Button
-                size="sm"
-                variant={language === "ar" ? "default" : "ghost"}
-                onClick={() => setLanguage("ar")}
-                className="gap-1"
-              >
-                <Globe className="w-4 h-4" />
-                AR
-              </Button>
-            </div>
-            {/* Theme Toggle */}
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={toggleTheme}
-              className="gap-2"
-            >
-              {theme === "dark" ? (
-                <Sun className="w-4 h-4" />
-              ) : (
-                <Moon className="w-4 h-4" />
-              )}
-            </Button>
-          </div>
-        </div>
+      <div className={`min-h-screen flex flex-col justify-between bg-background ${language === "ar" ? "rtl" : "ltr"}`}>
+        <Header />
 
-        <div className="flex items-center justify-center flex-1">
-          <Card className="w-full max-w-2xl p-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2 text-center">
-              {t("quiz.levelSelect")}
+        <div className="flex items-center justify-center flex-1 max-w-4xl mx-auto w-full px-4 py-12">
+          <Card className="w-full max-w-2xl p-8 border border-border shadow-lg">
+            <h1 className="text-3xl font-extrabold text-foreground mb-3 text-center">
+              {t("header.title")}
             </h1>
-            <p className="text-center text-muted-foreground mb-8">
+            <p className="text-center text-muted-foreground mb-8 text-sm md:text-base leading-relaxed">
               {t("quiz.levelSelect")}
             </p>
 
-            <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
               {["A1", "A2", "B1", "B2", "C1", "C2"].map((level) => {
-                const info = levelDescriptions[level];
                 return (
                   <button
                     key={level}
+                    type="button"
                     onClick={() => setSelectedLevel(level)}
-                    className={`p-4 rounded-lg border-2 transition-all ${
+                    className={`p-4 rounded-xl border-2 transition-all text-center flex flex-col items-center justify-center ${
                       selectedLevel === level
-                        ? "border-accent bg-accent/10"
-                        : "border-border hover:border-accent/50"
+                        ? "border-amber-500 bg-amber-500/10 shadow-md scale-105"
+                        : "border-border hover:border-amber-500/50 hover:bg-accent/50"
                     }`}
                   >
-                    <div className="text-left">
-                      <p className="text-lg font-semibold text-foreground">{level}</p>
-                      <p className="text-xs text-accent mt-1">{levelDescriptions[level].time}</p>
-                    </div>
+                    <p className="text-xl font-black text-foreground">{level}</p>
+                    <p className="text-xs text-amber-500 font-medium mt-1">{levelDescriptions[level].time}</p>
                   </button>
                 );
               })}
@@ -335,12 +288,14 @@ export default function Quiz() {
             <Button
               onClick={() => setState("loading")}
               disabled={questionsLoading}
-              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold py-3"
+              className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-6 text-base rounded-xl shadow-lg shadow-amber-500/20"
             >
               {questionsLoading ? t("quiz.loading") : t("quiz.startQuiz")}
             </Button>
           </Card>
         </div>
+
+        <Footer />
       </div>
     );
   }
