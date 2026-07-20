@@ -88,24 +88,24 @@ export default function Footer() {
   const isAr = language === "ar";
 
   return (
-    <footer className="bg-slate-950 text-slate-200 border-t border-slate-800 py-12 px-4 md:px-8" dir={isAr ? "rtl" : "ltr"}>
+    <footer className="bg-card text-foreground border-t border-border py-12 px-4 md:px-8 transition-colors" dir={isAr ? "rtl" : "ltr"}>
       <div className="max-w-6xl mx-auto space-y-10">
         
-        {/* Ques Dedicated Section */}
-        <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 md:p-8 backdrop-blur text-center md:text-start flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Banner Section */}
+        <div className="bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/10 border border-[#4A3B32]/20 dark:border-[#FCDFC2]/20 rounded-2xl p-6 md:p-8 backdrop-blur text-center md:text-start flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-2 max-w-3xl">
-            <h3 className="text-2xl font-bold tracking-tight text-white flex items-center justify-center md:justify-start gap-3">
-              <span className="w-3.5 h-3.5 rounded-full bg-amber-500" />
+            <h3 className="text-2xl font-bold tracking-tight text-foreground flex items-center justify-center md:justify-start gap-3">
+              <span className="w-3.5 h-3.5 rounded-full bg-[#4A3B32] dark:bg-[#FCDFC2]" />
               {isAr ? "إنجلشوم | مستوى الكفاءة" : "EnglishOM | Proficiency Level"}
             </h3>
-            <p className="text-slate-300 text-sm md:text-base leading-relaxed">
+            <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
               {isAr
                 ? `"مقياسك الدقيق لمعرفة قدراتك الحقيقية. نعتمد في إنجلشوم على أنظمة تقييم متقدمة لتحديد كفاءتك اللغوية الشاملة، ووضعك على مسار التعلم الأمثل بذكاء وموثوقية"`
                 : `"Your precise benchmark for measuring your true abilities. At EnglishOM, we rely on advanced assessment systems to determine your comprehensive language proficiency and place you on the optimal learning path with intelligence and reliability."`}
             </p>
           </div>
           
-          {/* Social Icons - App Style Icons */}
+          {/* Social Icons */}
           <div className="flex flex-wrap items-center justify-center gap-2.5">
             {SocialIcons.map((social) => (
               <a
@@ -127,18 +127,18 @@ export default function Footer() {
           
           {/* Column 1: Test Your Language (اختبر لغتك) */}
           <div className="space-y-4">
-            <h4 className="text-base font-bold text-white border-b-2 border-amber-500 pb-2 inline-block">
+            <h4 className="text-base font-extrabold text-foreground border-b-2 border-[#4A3B32] dark:border-[#FCDFC2] pb-2 inline-block">
               {isAr ? "اختبر لغتك" : "Test Your Language"}
             </h4>
-            <ul className="space-y-2.5 text-sm text-slate-400">
+            <ul className="space-y-2.5 text-sm text-muted-foreground">
               <li>
                 <a
                   href="https://englishom.com/ques"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors flex items-center gap-2"
+                  className="hover:text-foreground transition-colors flex items-center gap-2"
                 >
-                  <span className="text-xs text-amber-500">●</span>
+                  <span className="text-xs text-[#4A3B32] dark:text-[#FCDFC2]">●</span>
                   {isAr ? "مستوى الكفاءة" : "Proficiency Level"}
                 </a>
               </li>
@@ -147,9 +147,9 @@ export default function Footer() {
                   href="https://englishom.com/test"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors flex items-center gap-2"
+                  className="hover:text-foreground transition-colors flex items-center gap-2"
                 >
-                  <span className="text-xs text-amber-500">●</span>
+                  <span className="text-xs text-[#4A3B32] dark:text-[#FCDFC2]">●</span>
                   {isAr ? "اكتشف مستواك" : "Discover Your Level"}
                 </a>
               </li>
@@ -158,9 +158,9 @@ export default function Footer() {
                   href="https://englishom.com/test1"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors flex items-center gap-2"
+                  className="hover:text-foreground transition-colors flex items-center gap-2"
                 >
-                  <span className="text-xs text-amber-500">●</span>
+                  <span className="text-xs text-[#4A3B32] dark:text-[#FCDFC2]">●</span>
                   {isAr ? "مؤشر الإنجاز" : "Achievement Indicator"}
                 </a>
               </li>
@@ -169,16 +169,16 @@ export default function Footer() {
 
           {/* Column 2: Training & Practice */}
           <div className="space-y-4">
-            <h4 className="text-base font-bold text-white border-b-2 border-amber-500 pb-2 inline-block">
+            <h4 className="text-base font-extrabold text-foreground border-b-2 border-[#4A3B32] dark:border-[#FCDFC2] pb-2 inline-block">
               {isAr ? "التدريب والممارسة" : "Training & Practice"}
             </h4>
-            <ul className="space-y-2.5 text-sm text-slate-400">
+            <ul className="space-y-2.5 text-sm text-muted-foreground">
               <li>
                 <a
                   href={isAr ? "https://englishom.com/ar/signup" : "https://englishom.com/en/signup"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-foreground transition-colors"
                 >
                   {isAr ? "أبدأ الممارسة الذكية" : "Start Smart Practice"}
                 </a>
@@ -188,7 +188,7 @@ export default function Footer() {
                   href={isAr ? "https://englishom.com/ar/app" : "https://englishom.com/en/app"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-foreground transition-colors"
                 >
                   {isAr ? "تسجيل الدخول" : "Login"}
                 </a>
@@ -198,16 +198,16 @@ export default function Footer() {
 
           {/* Column 3: Support */}
           <div className="space-y-4">
-            <h4 className="text-base font-bold text-white border-b-2 border-amber-500 pb-2 inline-block">
+            <h4 className="text-base font-extrabold text-foreground border-b-2 border-[#4A3B32] dark:border-[#FCDFC2] pb-2 inline-block">
               {isAr ? "الدعم" : "Support"}
             </h4>
-            <ul className="space-y-2.5 text-sm text-slate-400">
+            <ul className="space-y-2.5 text-sm text-muted-foreground">
               <li>
                 <a
                   href={isAr ? "https://englishom.com/ar/user-guide" : "https://englishom.com/en/user-guide"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-foreground transition-colors"
                 >
                   {isAr ? "دليل المستخدم" : "User Guide"}
                 </a>
@@ -217,7 +217,7 @@ export default function Footer() {
                   href={isAr ? "https://englishom.com/ar/contact" : "https://englishom.com/en/contact"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-foreground transition-colors"
                 >
                   {isAr ? "اتصل بنا" : "Contact Us"}
                 </a>
@@ -227,16 +227,16 @@ export default function Footer() {
 
           {/* Column 4: Legal */}
           <div className="space-y-4">
-            <h4 className="text-base font-bold text-white border-b-2 border-amber-500 pb-2 inline-block">
+            <h4 className="text-base font-extrabold text-foreground border-b-2 border-[#4A3B32] dark:border-[#FCDFC2] pb-2 inline-block">
               {isAr ? "قانوني" : "Legal"}
             </h4>
-            <ul className="space-y-2.5 text-sm text-slate-400">
+            <ul className="space-y-2.5 text-sm text-muted-foreground">
               <li>
                 <a
                   href={isAr ? "https://englishom.com/ar/terms-and-conditions" : "https://englishom.com/en/terms-and-conditions"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-foreground transition-colors"
                 >
                   {isAr ? "الشروط والأحكام" : "Terms & Conditions"}
                 </a>
@@ -246,7 +246,7 @@ export default function Footer() {
                   href={isAr ? "https://englishom.com/ar/privacy-policy" : "https://englishom.com/en/privacy-policy"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-foreground transition-colors"
                 >
                   {isAr ? "سياسة الخصوصية" : "Privacy Policy"}
                 </a>
@@ -257,13 +257,13 @@ export default function Footer() {
         </div>
 
         {/* Bottom copyright */}
-        <div className="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+        <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-muted-foreground gap-4">
           <p>© 2026 {isAr ? "إنجلشوم (EnglishOM). جميع الحقوق محفوظة." : "EnglishOM. All rights reserved."}</p>
           <div className="flex gap-4">
-            <a href="https://englishom.com/blog" className="hover:text-slate-300 transition-colors">
+            <a href="https://englishom.com/blog" className="hover:text-foreground transition-colors">
               {isAr ? "المدونة" : "Blog"}
             </a>
-            <a href="https://englishom.com" className="hover:text-slate-300 transition-colors">
+            <a href="https://englishom.com" className="hover:text-foreground transition-colors">
               EnglishOM.com
             </a>
           </div>

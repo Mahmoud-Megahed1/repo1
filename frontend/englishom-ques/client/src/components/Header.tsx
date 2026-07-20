@@ -5,10 +5,15 @@ import EnglishomLogo from "./EnglishomLogo";
 import { Globe, Moon, Sun, Shield, BarChart2 } from "lucide-react";
 import { useLocation } from "wouter";
 
+import { useAuth } from "@/_core/hooks/useAuth";
+
 export default function Header() {
+  const { user } = useAuth();
   const { language, setLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const [, navigate] = useLocation();
+
+  const isAdmin = user && user.role === "admin";
 
   return (
     <header className="bg-card border-b border-border sticky top-0 z-50">
@@ -35,20 +40,22 @@ export default function Header() {
             onClick={() => navigate("/results")}
             className="gap-1 text-xs text-muted-foreground hover:text-foreground font-semibold"
           >
-            <BarChart2 className="w-4 h-4 text-amber-500" />
+            <BarChart2 className="w-4 h-4 text-[#4A3B32] dark:text-[#FCDFC2]" />
             <span>{t("header.myResults")}</span>
           </Button>
 
-          {/* Admin Link */}
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => navigate("/admin")}
-            className="gap-1 text-xs text-muted-foreground hover:text-foreground hidden sm:flex"
-          >
-            <Shield className="w-4 h-4" />
-            <span>{t("header.admin")}</span>
-          </Button>
+          {/* Admin Link (Only visible if logged in as Admin) */}
+          {isAdmin && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => navigate("/admin")}
+              className="gap-1 text-xs text-muted-foreground hover:text-foreground hidden sm:flex"
+            >
+              <Shield className="w-4 h-4 text-[#4A3B32] dark:text-[#FCDFC2]" />
+              <span>{t("header.admin")}</span>
+            </Button>
+          )}
 
           {/* Language Toggle */}
           <button

@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
-import { ChevronLeft, Globe, Moon, Sun, Trophy, Star, Target, Twitter, MessageCircle, Facebook } from "lucide-react";
+import { ChevronLeft, Globe, Moon, Sun, Trophy, Star, Target, Twitter, MessageCircle, Facebook, Wind, Radio, Rocket, Flame, AlertTriangle, Zap } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { formatTime } from "@/../../shared/timing";
 import Header from "@/components/Header";
@@ -253,7 +253,7 @@ export default function Quiz() {
     const customLevels = [
       {
         code: "A1",
-        icon: "🧘",
+        icon: Wind,
         seconds: "15",
         titleAr: "منطقة التنفس (15 ثانية)",
         descAr: "محطة البداية؛ الوقت صديقك لتستدعي الكلمات وتجيب بهدوء ودون ضغط.",
@@ -262,7 +262,7 @@ export default function Quiz() {
       },
       {
         code: "A2",
-        icon: "⏳",
+        icon: Radio,
         seconds: "12",
         titleAr: "التقاط الإشارة (12 ثانية)",
         descAr: "ينكمش الوقت ليرتفع إدراكك؛ لا مجال للتردد، فقط ألمع الإجابة الصحيحة.",
@@ -271,7 +271,7 @@ export default function Quiz() {
       },
       {
         code: "B1",
-        icon: "🚀",
+        icon: Rocket,
         seconds: "10",
         titleAr: "حافة الانطلاق (10 ثواني)",
         descAr: "محطة كسر البطء؛ تضعك على أول طريق التفكير المباشر بالإنجليزية.",
@@ -280,7 +280,7 @@ export default function Quiz() {
       },
       {
         code: "B2",
-        icon: "🔥",
+        icon: Flame,
         seconds: "8",
         titleAr: "المواجهة السريعة (8 ثواني)",
         descAr: "الخوض في العمق؛ يداهمك الوقت لتختبر سرعة استجابتك في مواقف حقيقية.",
@@ -289,7 +289,7 @@ export default function Quiz() {
       },
       {
         code: "C1",
-        icon: "⚠️",
+        icon: AlertTriangle,
         seconds: "6",
         titleAr: "الثواني الحرجة (6 ثواني)",
         descAr: "محطة التعثر الإيجابي؛ هنا تخطئ وتتعثر لتجبر عقلك على إلغاء الترجمة الحرفية.",
@@ -298,7 +298,7 @@ export default function Quiz() {
       },
       {
         code: "C2",
-        icon: "⚡",
+        icon: Zap,
         seconds: "4",
         titleAr: "الرد اللحظي (4 ثواني)",
         descAr: "ذروة الطلاقة؛ لا وقت للتفكير، الإجابة تخرج تلقائياً من عقلك الباطن.",
@@ -323,6 +323,7 @@ export default function Quiz() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               {customLevels.map((lvl) => {
                 const isSelected = selectedLevel === lvl.code;
+                const IconComp = lvl.icon;
                 return (
                   <button
                     key={lvl.code}
@@ -336,7 +337,13 @@ export default function Quiz() {
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <span className="text-xl">{lvl.icon}</span>
+                        <div className={`p-2 rounded-xl transition-colors ${
+                          isSelected 
+                            ? "bg-[#4A3B32] text-[#FCDFC2] dark:bg-[#FCDFC2] dark:text-[#120F0D]" 
+                            : "bg-muted text-muted-foreground"
+                        }`}>
+                          <IconComp className="w-5 h-5" />
+                        </div>
                         <h3 className="font-extrabold text-base md:text-lg text-foreground">
                           {language === "ar" ? lvl.titleAr : lvl.titleEn}
                         </h3>
