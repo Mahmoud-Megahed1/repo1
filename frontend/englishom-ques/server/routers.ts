@@ -216,15 +216,16 @@ export const appRouter = router({
       }),
 
     /**
-     * Get user progress and statistics
-     * Made public to support guest/anonymous users
+     * Get user progress and statistics (supports both logged in users and guest studentPhone)
      */
     getUserProgress: publicProcedure
-      .query(async ({ ctx }) => {
+      .input(z.object({ studentPhone: z.string().optional() }).optional())
+      .query(async ({ ctx, input }) => {
         try {
-          // Return empty progress for guest users
-          if (!ctx.user) {
-            return {
+          const db = await getDb();
+          if (ctx.user) {
+            const progress = await getUserProgress(ctx.user.id);
+            return progress || {
               totalQuizzesTaken: 0,
               totalCorrectAnswers: 0,
               totalQuestionsAnswered: 0,
@@ -234,8 +235,28 @@ export const appRouter = router({
               totalTimeSpent: 0,
             };
           }
-          const progress = await getUserProgress(ctx.user.id);
-          return progress || {
+          if (input?.studentPhone && db) {
+            const results = await db.select().from(testResults).where(eq(testResults.studentPhone, input.studentPhone));
+            if (results.length > 0) {
+              const totalQuizzes = results.length;
+              const totalCorrect = results.reduce((sum, r) => sum + r.correctAnswers, 0);
+              const totalQuestions = results.reduce((sum, r) => sum + r.totalQuestions, 0);
+              const avgAccuracy = Math.round(results.reduce((sum, r) => sum + r.accuracy, 0) / totalQuizzes);
+              const bestAcc = Math.max(...results.map(r => r.accuracy));
+              const bestRes = results.find(r => r.accuracy === bestAcc);
+              const totalTime = results.reduce((sum, r) => sum + (r.averageResponseTime ? r.averageResponseTime * r.totalQuestions : 0), 0);
+              return {
+                totalQuizzesTaken: totalQuizzes,
+                totalCorrectAnswers: totalCorrect,
+                totalQuestionsAnswered: totalQuestions,
+                averageAccuracy: avgAccuracy,
+                bestLevel: bestRes?.level || null,
+                bestAccuracy: bestAcc,
+                totalTimeSpent: totalTime,
+              };
+            }
+          }
+          return {
             totalQuizzesTaken: 0,
             totalCorrectAnswers: 0,
             totalQuestionsAnswered: 0,
@@ -251,18 +272,46 @@ export const appRouter = router({
       }),
 
     /**
-     * Get user achievements
-     * Made public to support guest/anonymous users
+     * Get user achievements (supports both logged in users and guest studentPhone)
      */
     getUserAchievements: publicProcedure
-      .query(async ({ ctx }) => {
+      .input(z.object({ studentPhone: z.string().optional() }).optional())
+      .query(async ({ ctx, input }) => {
         try {
-          // Return empty achievements for guest users
-          if (!ctx.user) {
-            return [];
+          const db = await getDb();
+          if (ctx.user) {
+            return await getUserAchievements(ctx.user.id);
           }
-          const achievements = await getUserAchievements(ctx.user.id);
-          return achievements;
+          if (input?.studentPhone && db) {
+            const results = await db.select().from(testResults).where(eq(testResults.studentPhone, input.studentPhone));
+            if (results.length > 0) {
+              const totalQuizzes = results.length;
+              const avgAccuracy = Math.round(results.reduce((sum, r) => sum + r.accuracy, 0) / totalQuizzes);
+              const bestAcc = Math.max(...results.map(r => r.accuracy));
+              const bestRes = results.find(r => r.accuracy === bestAcc);
+
+              const badges: { id: number; badgeType: string; badgeName: string; badgeDescription: string }[] = [];
+              if (bestAcc === 100) {
+                badges.push({ id: 1, badgeType: "perfect_score", badgeName: "Perfect Score", badgeDescription: "Achieve 100% accuracy in a quiz" });
+              }
+              if (bestAcc >= 90) {
+                badges.push({ id: 2, badgeType: "accuracy_90", badgeName: "Accuracy 90%", badgeDescription: "Achieve 90% or higher accuracy in a quiz" });
+              }
+              if (totalQuizzes >= 10) {
+                badges.push({ id: 3, badgeType: "quiz_enthusiast", badgeName: "Quiz Enthusiast", badgeDescription: "Complete 10 quizzes" });
+              }
+              const a1Quizzes = results.filter(r => r.level === "A1" && r.accuracy >= 80).length;
+              if (a1Quizzes >= 5) {
+                badges.push({ id: 4, badgeType: "a1_master", badgeName: "A1 Master", badgeDescription: "Complete 5 quizzes at A1 level with 80%+ accuracy" });
+              }
+              const a2Quizzes = results.filter(r => r.level === "A2" && r.accuracy >= 80).length;
+              if (a2Quizzes >= 5) {
+                badges.push({ id: 5, badgeType: "a2_master", badgeName: "A2 Master", badgeDescription: "Complete 5 quizzes at A2 level with 80%+ accuracy" });
+              }
+              return badges;
+            }
+          }
+          return [];
         } catch (error) {
           console.error("Failed to get user achievements:", error);
           throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
@@ -270,19 +319,25 @@ export const appRouter = router({
       }),
 
     /**
-     * Get user quiz history
-     * Made public to support guest/anonymous users
+     * Get user quiz history (supports both logged in users and guest studentPhone)
      */
     getQuizHistory: publicProcedure
-      .input(z.object({ limit: z.number().default(10) }))
+      .input(z.object({ limit: z.number().default(10), studentPhone: z.string().optional() }))
       .query(async ({ ctx, input }) => {
         try {
-          // Return empty history for guest users
-          if (!ctx.user) {
-            return [];
+          const db = await getDb();
+          if (ctx.user) {
+            return await getUserQuizHistory(ctx.user.id, input.limit);
           }
-          const history = await getUserQuizHistory(ctx.user.id, input.limit);
-          return history;
+          if (input?.studentPhone && db) {
+            return await db
+              .select()
+              .from(testResults)
+              .where(eq(testResults.studentPhone, input.studentPhone))
+              .orderBy(desc(testResults.completedAt))
+              .limit(input.limit);
+          }
+          return [];
         } catch (error) {
           console.error("Failed to get quiz history:", error);
           throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });

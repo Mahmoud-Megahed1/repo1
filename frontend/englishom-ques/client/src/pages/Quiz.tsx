@@ -181,6 +181,14 @@ export default function Quiz() {
       return;
     }
 
+    // Save to localStorage for history retrieval
+    try {
+      localStorage.setItem("englishom_student_phone", studentPhone.trim());
+      localStorage.setItem("englishom_student_name", studentName.trim());
+    } catch (e) {
+      console.error(e);
+    }
+
     setState("results");
     
     submitResult({
@@ -231,7 +239,6 @@ export default function Quiz() {
   };
 
   // Level Selection Screen
-  // Show loading state while fetching questions
   if (state === "loading" && questionsLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background" dir={language === "ar" ? "rtl" : "ltr"}>
@@ -243,43 +250,104 @@ export default function Quiz() {
   }
 
   if (state === "level-select") {
-    const levelDescriptions: Record<string, { time: string }> = {
-      A1: { time: "15s per question" },
-      A2: { time: "12s per question" },
-      B1: { time: "10s per question" },
-      B2: { time: "8s per question" },
-      C1: { time: "6s per question" },
-      C2: { time: "5s per question" },
-    };
+    const customLevels = [
+      {
+        code: "A1",
+        icon: "🧘",
+        seconds: "15",
+        titleAr: "منطقة التنفس (15 ثانية)",
+        descAr: "محطة البداية؛ الوقت صديقك لتستدعي الكلمات وتجيب بهدوء ودون ضغط.",
+        titleEn: "Breathing Zone (15s)",
+        descEn: "Starting station; time is your friend to recall words calmly.",
+      },
+      {
+        code: "A2",
+        icon: "⏳",
+        seconds: "12",
+        titleAr: "التقاط الإشارة (12 ثانية)",
+        descAr: "ينكمش الوقت ليرتفع إدراكك؛ لا مجال للتردد، فقط ألمع الإجابة الصحيحة.",
+        titleEn: "Signal Catch (12s)",
+        descEn: "Time shrinks to heighten awareness; no hesitation, pick the right answer.",
+      },
+      {
+        code: "B1",
+        icon: "🚀",
+        seconds: "10",
+        titleAr: "حافة الانطلاق (10 ثواني)",
+        descAr: "محطة كسر البطء؛ تضعك على أول طريق التفكير المباشر بالإنجليزية.",
+        titleEn: "Launch Edge (10s)",
+        descEn: "Break the slowness; puts you on the direct English thinking path.",
+      },
+      {
+        code: "B2",
+        icon: "🔥",
+        seconds: "8",
+        titleAr: "المواجهة السريعة (8 ثواني)",
+        descAr: "الخوض في العمق؛ يداهمك الوقت لتختبر سرعة استجابتك في مواقف حقيقية.",
+        titleEn: "Fast Faceoff (8s)",
+        descEn: "Diving deep; time rushes you to test real-life reaction speed.",
+      },
+      {
+        code: "C1",
+        icon: "⚠️",
+        seconds: "6",
+        titleAr: "الثواني الحرجة (6 ثواني)",
+        descAr: "محطة التعثر الإيجابي؛ هنا تخطئ وتتعثر لتجبر عقلك على إلغاء الترجمة الحرفية.",
+        titleEn: "Critical Seconds (6s)",
+        descEn: "Positive stumble station; forces your brain to eliminate literal translation.",
+      },
+      {
+        code: "C2",
+        icon: "⚡",
+        seconds: "4",
+        titleAr: "الرد اللحظي (4 ثواني)",
+        descAr: "ذروة الطلاقة؛ لا وقت للتفكير، الإجابة تخرج تلقائياً من عقلك الباطن.",
+        titleEn: "Instant Response (4s)",
+        descEn: "Peak fluency; no time to overthink, answers spring automatically.",
+      },
+    ];
 
     return (
       <div className={`min-h-screen flex flex-col justify-between bg-background ${language === "ar" ? "rtl" : "ltr"}`}>
         <Header />
 
-        <div className="flex items-center justify-center flex-1 max-w-4xl mx-auto w-full px-4 py-12">
-          <Card className="w-full max-w-2xl p-8 border border-border shadow-lg">
-            <h1 className="text-3xl font-extrabold text-foreground mb-3 text-center">
-              {t("header.title")}
+        <div className="flex items-center justify-center flex-1 max-w-5xl mx-auto w-full px-4 py-8">
+          <Card className="w-full max-w-4xl p-6 md:p-8 border border-border shadow-xl rounded-2xl">
+            <h1 className="text-2xl md:text-3xl font-black text-foreground mb-2 text-center">
+              {language === "ar" ? "اختر مستوى اللغة الإنجليزية الخاص بك واختبر معرفتك" : "Choose your English level & test your knowledge"}
             </h1>
-            <p className="text-center text-muted-foreground mb-8 text-sm md:text-base leading-relaxed">
-              {t("quiz.levelSelect")}
+            <p className="text-center text-muted-foreground mb-8 text-sm md:text-base italic">
+              {language === "ar" ? '"اضبط بوصلة وقتك.. وتتبع رحلة عقلك من الهدوء إلى الطلاقة"' : '"Set your timing compass.. track your journey from calm to fluency"'}
             </p>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
-              {["A1", "A2", "B1", "B2", "C1", "C2"].map((level) => {
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              {customLevels.map((lvl) => {
+                const isSelected = selectedLevel === lvl.code;
                 return (
                   <button
-                    key={level}
+                    key={lvl.code}
                     type="button"
-                    onClick={() => setSelectedLevel(level)}
-                    className={`p-4 rounded-xl border-2 transition-all text-center flex flex-col items-center justify-center ${
-                      selectedLevel === level
-                        ? "border-amber-500 bg-amber-500/10 shadow-md scale-105"
-                        : "border-border hover:border-amber-500/50 hover:bg-accent/50"
+                    onClick={() => setSelectedLevel(lvl.code)}
+                    className={`p-5 rounded-2xl border-2 transition-all text-start flex flex-col justify-between relative overflow-hidden ${
+                      isSelected
+                        ? "border-amber-500 bg-amber-500/10 shadow-lg ring-2 ring-amber-500/30"
+                        : "border-border/80 hover:border-amber-500/50 hover:bg-card/80"
                     }`}
                   >
-                    <p className="text-xl font-black text-foreground">{level}</p>
-                    <p className="text-xs text-amber-500 font-medium mt-1">{levelDescriptions[level].time}</p>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl">{lvl.icon}</span>
+                        <h3 className="font-extrabold text-base md:text-lg text-foreground">
+                          {language === "ar" ? lvl.titleAr : lvl.titleEn}
+                        </h3>
+                      </div>
+                      <span className="text-xs font-black px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400">
+                        {lvl.code}
+                      </span>
+                    </div>
+                    <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+                      {language === "ar" ? lvl.descAr : lvl.descEn}
+                    </p>
                   </button>
                 );
               })}
@@ -288,9 +356,9 @@ export default function Quiz() {
             <Button
               onClick={() => setState("loading")}
               disabled={questionsLoading}
-              className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-6 text-base rounded-xl shadow-lg shadow-amber-500/20"
+              className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-6 text-lg rounded-xl shadow-xl shadow-amber-500/20 transition-all hover:scale-[1.01]"
             >
-              {questionsLoading ? t("quiz.loading") : t("quiz.startQuiz")}
+              {questionsLoading ? t("quiz.loading") : (language === "ar" ? "ابدأ الاختبار" : "Start Quiz")}
             </Button>
           </Card>
         </div>
@@ -616,15 +684,22 @@ export default function Quiz() {
 
             <div className="space-y-3">
               <Button
+                onClick={() => navigate("/results")}
+                className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-6 text-base rounded-xl shadow-lg shadow-amber-500/20"
+              >
+                {language === "ar" ? "عرض كافة نتائجي ورجلة التقدم 📊" : "View Full Results & Progress Journey 📊"}
+              </Button>
+              <Button
                 onClick={resetQuiz}
-                className="w-full bg-accent hover:bg-accent/90"
+                variant="outline"
+                className="w-full"
               >
                 {t("quiz.tryAgain")}
               </Button>
               <Button
                 onClick={() => navigate("/")}
-                variant="outline"
-                className="w-full"
+                variant="ghost"
+                className="w-full text-muted-foreground"
               >
                 {t("quiz.backToHome")}
               </Button>

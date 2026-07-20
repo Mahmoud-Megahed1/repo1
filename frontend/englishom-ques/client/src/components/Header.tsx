@@ -2,7 +2,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import EnglishomLogo from "./EnglishomLogo";
-import { Globe, Moon, Sun, Shield } from "lucide-react";
+import { Globe, Moon, Sun, Shield, BarChart2 } from "lucide-react";
 import { useLocation } from "wouter";
 
 export default function Header() {
@@ -27,7 +27,18 @@ export default function Header() {
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-4 sm:gap-6">
+        <div className="flex items-center gap-3 sm:gap-5">
+          {/* My Results Link */}
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => navigate("/results")}
+            className="gap-1 text-xs text-muted-foreground hover:text-foreground font-semibold"
+          >
+            <BarChart2 className="w-4 h-4 text-amber-500" />
+            <span>{t("header.myResults")}</span>
+          </Button>
+
           {/* Admin Link */}
           <Button
             size="sm"

@@ -1,107 +1,65 @@
+import { useState, useEffect } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useTheme } from "@/contexts/ThemeContext";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Loader2, Share2, TrendingUp, Award, Globe, Moon, Sun, ArrowLeft } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Loader2, Share2, TrendingUp, Award, Clock, ArrowLeft, Search, Star, Trophy } from "lucide-react";
 import { useLocation } from "wouter";
-import { getLoginUrl } from "@/const";
 import { ProgressJourney } from "@/components/ProgressJourney";
-
-const t = (key: string, lang: string = "en") => {
-  const translations: Record<string, Record<string, string>> = {
-    en: {
-      "myresults.title": "My Results",
-      "myresults.statistics": "Your Statistics",
-      "myresults.quizzesTaken": "Quizzes Taken",
-      "myresults.averageAccuracy": "Average Accuracy",
-      "myresults.bestLevel": "Best Level",
-      "myresults.totalTimeSpent": "Total Time Spent",
-      "myresults.achievements": "Achievements",
-      "myresults.noAchievements": "No achievements yet. Keep practicing!",
-      "myresults.quizHistory": "Quiz History",
-      "myresults.noHistory": "No quiz history yet.",
-      "myresults.level": "Level",
-      "myresults.accuracy": "Accuracy",
-      "myresults.date": "Date",
-      "myresults.share": "Share Results",
-      "myresults.backToHome": "Back to Home",
-    },
-    ar: {
-      "myresults.title": "نتائجي",
-      "myresults.statistics": "إحصائياتك",
-      "myresults.quizzesTaken": "الاختبارات المأخوذة",
-      "myresults.averageAccuracy": "متوسط الدقة",
-      "myresults.bestLevel": "أفضل مستوى",
-      "myresults.totalTimeSpent": "الوقت الإجمالي المستغرق",
-      "myresults.achievements": "الإنجازات",
-      "myresults.noAchievements": "لا توجد إنجازات حتى الآن. استمر في الممارسة!",
-      "myresults.quizHistory": "سجل الاختبارات",
-      "myresults.noHistory": "لا يوجد سجل اختبارات حتى الآن.",
-      "myresults.level": "المستوى",
-      "myresults.accuracy": "الدقة",
-      "myresults.date": "التاريخ",
-      "myresults.share": "مشاركة النتائج",
-      "myresults.backToHome": "العودة إلى الرئيسية",
-    },
-  };
-  return translations[lang]?.[key] || key;
-};
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function MyResults() {
   const { user } = useAuth();
-  const { language, setLanguage } = useLanguage();
-  const { theme, toggleTheme } = useTheme();
+  const { language } = useLanguage();
   const [, setLocation] = useLocation();
 
-  const { data: progress, isLoading: progressLoading } = trpc.quiz.getUserProgress.useQuery();
-  const { data: achievements, isLoading: achievementsLoading } = trpc.quiz.getUserAchievements.useQuery();
-  const { data: history, isLoading: historyLoading } = trpc.quiz.getQuizHistory.useQuery({ limit: 10 });
+  // Student phone for guest users
+  const [studentPhone, setStudentPhone] = useState<string>("");
+  const [searchPhoneInput, setSearchPhoneInput] = useState<string>("");
+  const isAr = language === "ar";
 
-  if (!user) {
-    return (
-      <div className={`min-h-screen bg-background transition-colors duration-300 ${language === "ar" ? "rtl" : "ltr"}`}>
-        <div className="container max-w-4xl mx-auto p-4 py-8">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-bold text-foreground">{t("myresults.title", language)}</h1>
-            <div className="flex gap-2 items-center">
-              <button
-                onClick={() => setLanguage(language === "en" ? "ar" : "en")}
-                className="px-3 py-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                {language === "en" ? "AR" : "EN"}
-              </button>
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-              </button>
-            </div>
-          </div>
+  useEffect(() => {
+    try {
+      const savedPhone = localStorage.getItem("englishom_student_phone");
+      if (savedPhone) {
+        setStudentPhone(savedPhone);
+        setSearchPhoneInput(savedPhone);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
 
-          {/* Guest Message */}
-          <Card className="p-8 text-center">
-            <p className="text-lg text-foreground mb-4">
-              {language === "en" 
-                ? "Please log in to view your results and track your progress." 
-                : "يرجى تسجيل الدخول لعرض نتائجك وتتبع تقدمك."}
-            </p>
-            <button
-              onClick={() => window.location.href = getLoginUrl()}
-              className="px-6 py-2 bg-accent text-accent-foreground rounded-lg hover:opacity-90 transition-opacity"
-            >
-              {language === "en" ? "Log In" : "تسجيل الدخول"}
-            </button>
-          </Card>
-        </div>
-      </div>
-    );
-  }
+  const { data: progress, isLoading: progressLoading } = trpc.quiz.getUserProgress.useQuery(
+    { studentPhone: studentPhone || undefined },
+    { enabled: true }
+  );
+
+  const { data: achievements = [], isLoading: achievementsLoading } = trpc.quiz.getUserAchievements.useQuery(
+    { studentPhone: studentPhone || undefined },
+    { enabled: true }
+  );
+
+  const { data: history = [], isLoading: historyLoading } = trpc.quiz.getQuizHistory.useQuery(
+    { limit: 20, studentPhone: studentPhone || undefined },
+    { enabled: true }
+  );
 
   const isLoading = progressLoading || achievementsLoading || historyLoading;
+
+  const handleSearchPhone = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchPhoneInput.trim()) return;
+    setStudentPhone(searchPhoneInput.trim());
+    try {
+      localStorage.setItem("englishom_student_phone", searchPhoneInput.trim());
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -111,7 +69,9 @@ export default function MyResults() {
   };
 
   const shareResults = () => {
-    const text = `I scored ${progress?.averageAccuracy || 0}% on EnglishOM Ques! 🎯 My best level: ${progress?.bestLevel || "N/A"}`;
+    const text = isAr 
+      ? `حصلت على متوسط دقة ${progress?.averageAccuracy || 0}% في اختبار كفاءة اللغة الإنجليزية (EnglishOM)! 🎯 أفضل مستوى لي: ${progress?.bestLevel || "N/A"}`
+      : `I scored ${progress?.averageAccuracy || 0}% on EnglishOM Ques! 🎯 My best level: ${progress?.bestLevel || "N/A"}`;
     const url = window.location.origin;
     
     if (navigator.share) {
@@ -122,168 +82,192 @@ export default function MyResults() {
       });
     } else {
       navigator.clipboard.writeText(`${text}\n${url}`);
-      alert("Results copied to clipboard!");
+      alert(isAr ? "تم نسخ النتائج إلى الحافظة!" : "Results copied to clipboard!");
     }
   };
 
   return (
-    <div className={`min-h-screen bg-background transition-colors duration-300 ${language === "ar" ? "rtl" : "ltr"}`}>
-      <div className="container max-w-4xl mx-auto p-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-foreground">{t("myresults.title", language)}</h1>
-          <div className="flex gap-2 items-center">
-            {/* Language Toggle */}
-            <div className="flex gap-1 bg-muted p-1 rounded-lg">
-              <Button
-                size="sm"
-                variant={language === "en" ? "default" : "ghost"}
-                onClick={() => setLanguage("en")}
-                className="gap-1"
-              >
-                <Globe className="w-4 h-4" />
-                EN
-              </Button>
-              <Button
-                size="sm"
-                variant={language === "ar" ? "default" : "ghost"}
-                onClick={() => setLanguage("ar")}
-                className="gap-1"
-              >
-                <Globe className="w-4 h-4" />
-                AR
-              </Button>
-            </div>
+    <div className={`min-h-screen flex flex-col justify-between bg-background transition-colors duration-300 ${isAr ? "rtl" : "ltr"}`}>
+      <Header />
 
-            {/* Theme Toggle */}
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={toggleTheme}
-              className="gap-2"
-            >
-              {theme === "dark" ? (
-                <Sun className="w-4 h-4" />
-              ) : (
-                <Moon className="w-4 h-4" />
-              )}
-            </Button>
-
-            <Button variant="outline" onClick={() => setLocation("/")} className="gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              {t("myresults.backToHome", language)}
-            </Button>
+      <main className="max-w-5xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        {/* Title & Top Bar */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-border pb-4">
+          <div>
+            <h1 className="text-3xl font-black text-foreground">
+              {isAr ? "نتائجي" : "My Results"}
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              {isAr ? "سجل اختباراتك ورحلة تقدمك وإنجازاتك الشخصية" : "Your quiz history, progress journey, and achievements"}
+            </p>
           </div>
+
+          <Button variant="outline" onClick={() => setLocation("/")} className="gap-2 rounded-xl">
+            <ArrowLeft className="w-4 h-4" />
+            {isAr ? "العودة إلى الرئيسية" : "Back to Home"}
+          </Button>
         </div>
 
+        {/* Search Phone Bar for Guests */}
+        {!user && (
+          <Card className="p-4 border border-amber-500/20 bg-amber-500/5 rounded-2xl shadow-sm">
+            <form onSubmit={handleSearchPhone} className="flex flex-col sm:flex-row items-center gap-3">
+              <span className="text-sm font-bold text-foreground whitespace-nowrap">
+                {isAr ? "البحث برقم الهاتف / الإيميل:" : "Search by Phone / Email:"}
+              </span>
+              <Input
+                type="text"
+                value={searchPhoneInput}
+                onChange={(e) => setSearchPhoneInput(e.target.value)}
+                placeholder={isAr ? "أدخل رقمك الذي امتحنت به..." : "Enter your phone or email..."}
+                className="bg-background max-w-md"
+                dir="ltr"
+              />
+              <Button type="submit" className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold gap-1.5 w-full sm:w-auto px-6 rounded-xl">
+                <Search className="w-4 h-4" />
+                {isAr ? "بحث" : "Search"}
+              </Button>
+            </form>
+          </Card>
+        )}
+
         {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="animate-spin" />
+          <div className="flex flex-col items-center justify-center py-16 space-y-3">
+            <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
+            <p className="text-muted-foreground text-sm">{isAr ? "جاري تحميل البيانات..." : "Loading results..."}</p>
           </div>
         ) : (
           <>
-            {/* Statistics Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <Card className="p-6">
+            {/* Top 4 Statistics Section */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card className="p-5 border border-border/80 rounded-2xl shadow-sm hover:border-amber-500/40 transition-all">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">{t("myresults.quizzesTaken", language)}</p>
-                    <p className="text-2xl font-bold text-foreground">{progress?.totalQuizzesTaken || 0}</p>
+                    <p className="text-xs font-semibold text-muted-foreground mb-1">
+                      {isAr ? "الاختبارات المأخوذة" : "Quizzes Taken"}
+                    </p>
+                    <p className="text-3xl font-extrabold text-foreground">{progress?.totalQuizzesTaken || 0}</p>
                   </div>
-                  <TrendingUp className="text-accent" size={24} />
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                    <TrendingUp className="w-5 h-5" />
+                  </div>
                 </div>
               </Card>
 
-              <Card className="p-6">
+              <Card className="p-5 border border-border/80 rounded-2xl shadow-sm hover:border-amber-500/40 transition-all">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">{t("myresults.averageAccuracy", language)}</p>
-                    <p className="text-2xl font-bold text-foreground">{progress?.averageAccuracy || 0}%</p>
+                    <p className="text-xs font-semibold text-muted-foreground mb-1">
+                      {isAr ? "متوسط الدقة" : "Average Accuracy"}
+                    </p>
+                    <p className="text-3xl font-extrabold text-foreground">{progress?.averageAccuracy || 0}%</p>
                   </div>
-                  <Award className="text-accent" size={24} />
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                    <Award className="w-5 h-5" />
+                  </div>
                 </div>
               </Card>
 
-              <Card className="p-6">
+              <Card className="p-5 border border-border/80 rounded-2xl shadow-sm hover:border-amber-500/40 transition-all">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">{t("myresults.bestLevel", language)}</p>
-                    <p className="text-2xl font-bold text-foreground">{progress?.bestLevel || "N/A"}</p>
+                    <p className="text-xs font-semibold text-muted-foreground mb-1">
+                      {isAr ? "أفضل مستوى" : "Best Level"}
+                    </p>
+                    <p className="text-3xl font-extrabold text-amber-500">{progress?.bestLevel || "A1"}</p>
                   </div>
-                  <Award className="text-accent" size={24} />
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                    <Trophy className="w-5 h-5" />
+                  </div>
                 </div>
               </Card>
 
-              <Card className="p-6">
+              <Card className="p-5 border border-border/80 rounded-2xl shadow-sm hover:border-amber-500/40 transition-all">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">{t("myresults.totalTimeSpent", language)}</p>
-                    <p className="text-2xl font-bold text-foreground">{formatTime(progress?.totalTimeSpent || 0)}</p>
+                    <p className="text-xs font-semibold text-muted-foreground mb-1">
+                      {isAr ? "الوقت الإجمالي المستغرق" : "Total Time Spent"}
+                    </p>
+                    <p className="text-3xl font-extrabold text-foreground">{formatTime(progress?.totalTimeSpent || 0)}</p>
                   </div>
-                  <TrendingUp className="text-accent" size={24} />
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                    <Clock className="w-5 h-5" />
+                  </div>
                 </div>
               </Card>
             </div>
 
             {/* Achievements Section */}
-            <Card className="p-6 mb-8">
-              <h2 className="text-xl font-bold text-foreground mb-4">{t("myresults.achievements", language)}</h2>
+            <Card className="p-6 md:p-8 border border-border shadow-sm rounded-2xl">
+              <h2 className="text-xl font-extrabold text-foreground mb-6 flex items-center gap-2">
+                <Star className="w-5 h-5 text-amber-500 fill-current" />
+                {isAr ? "الإنجازات" : "Achievements"}
+              </h2>
+
               {achievements && achievements.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {achievements.map((achievement) => (
-                    <div key={achievement.id} className="flex flex-col items-center text-center p-4 bg-accent/10 rounded-lg">
-                      <span className="text-3xl mb-2">⭐</span>
-                      <p className="font-semibold text-sm text-foreground">{achievement.badgeName}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{achievement.badgeDescription}</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  {achievements.map((achievement: any) => (
+                    <div key={achievement.id} className="flex flex-col items-center text-center p-5 bg-card border border-border/80 rounded-2xl shadow-sm hover:border-amber-500/50 transition-all">
+                      <div className="w-12 h-12 rounded-full bg-amber-500/15 text-amber-500 flex items-center justify-center text-2xl mb-3 shadow-inner">
+                        ⭐
+                      </div>
+                      <p className="font-extrabold text-sm text-foreground mb-1">{achievement.badgeName}</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{achievement.badgeDescription}</p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground">{t("myresults.noAchievements", language)}</p>
+                <div className="text-center py-8 text-muted-foreground text-sm bg-muted/30 rounded-xl border border-dashed">
+                  {isAr ? "لا توجد إنجازات مسجلة حتى الآن. استمر في إجراء الاختبارات لفتح الإنجازات!" : "No achievements yet. Keep taking quizzes to unlock badges!"}
+                </div>
               )}
             </Card>
 
             {/* Progress Journey */}
-            {history && history.length > 0 && (
-              <Card className="p-6 mb-8">
-                <ProgressJourney
-                  attempts={history.map(h => ({
-                    date: new Date(h.completedAt),
-                    accuracy: h.accuracy,
-                    level: h.level,
-                  }))}
-                />
-              </Card>
-            )}
+            <Card className="p-6 md:p-8 border border-border shadow-sm rounded-2xl">
+              <ProgressJourney
+                attempts={history.map((h: any) => ({
+                  date: new Date(h.completedAt),
+                  accuracy: h.accuracy,
+                  level: h.level,
+                }))}
+              />
 
-            {/* Share Button */}
-            <div className="mb-8">
-              <Button onClick={shareResults} className="w-full gap-2 bg-accent hover:bg-accent/90">
-                <Share2 size={18} />
-                {t("myresults.share", language)}
-              </Button>
-            </div>
+              <div className="mt-6 pt-4 border-t border-border">
+                <Button onClick={shareResults} className="w-full gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-6 text-base rounded-xl shadow-lg shadow-amber-500/20">
+                  <Share2 size={18} />
+                  {isAr ? "مشاركة النتائج" : "Share Results"}
+                </Button>
+              </div>
+            </Card>
 
-            {/* Quiz History Section */}
-            <Card className="p-6">
-              <h2 className="text-xl font-bold text-foreground mb-4">{t("myresults.quizHistory", language)}</h2>
+            {/* Quiz History Table Section */}
+            <Card className="p-6 md:p-8 border border-border shadow-sm rounded-2xl">
+              <h2 className="text-xl font-extrabold text-foreground mb-6">
+                {isAr ? "سجل الاختبارات" : "Quiz History"}
+              </h2>
+
               {history && history.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
+                <div className="overflow-x-auto rounded-xl border border-border">
+                  <table className="w-full text-sm text-start">
+                    <thead className="bg-muted/70 text-foreground font-bold">
                       <tr className="border-b border-border">
-                        <th className="text-start py-2 px-2 font-semibold text-foreground">{t("myresults.level", language)}</th>
-                        <th className="text-start py-2 px-2 font-semibold text-foreground">{t("myresults.accuracy", language)}</th>
-                        <th className="text-start py-2 px-2 font-semibold text-foreground">{t("myresults.date", language)}</th>
+                        <th className="text-start py-3 px-4">{isAr ? "المستوى" : "Level"}</th>
+                        <th className="text-start py-3 px-4">{isAr ? "الدقة" : "Accuracy"}</th>
+                        <th className="text-start py-3 px-4">{isAr ? "التاريخ" : "Date"}</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      {history.map((result) => (
-                        <tr key={result.id} className="border-b border-border hover:bg-accent/5">
-                          <td className="py-2 px-2 text-foreground font-medium">{result.level}</td>
-                          <td className="py-2 px-2 text-foreground">{result.accuracy}%</td>
-                          <td className="py-2 px-2 text-muted-foreground">
-                            {new Date(result.completedAt).toLocaleDateString(language === "ar" ? "ar-SA" : "en-US")}
+                    <tbody className="divide-y divide-border">
+                      {history.map((result: any) => (
+                        <tr key={result.id} className="hover:bg-muted/30 transition-colors">
+                          <td className="py-3 px-4 text-foreground font-extrabold">
+                            <span className="inline-block px-3 py-1 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                              {result.level}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-foreground font-bold">{result.accuracy}%</td>
+                          <td className="py-3 px-4 text-muted-foreground text-xs" dir="ltr">
+                            {new Date(result.completedAt).toLocaleString(isAr ? "ar-SA" : "en-US")}
                           </td>
                         </tr>
                       ))}
@@ -291,12 +275,16 @@ export default function MyResults() {
                   </table>
                 </div>
               ) : (
-                <p className="text-muted-foreground">{t("myresults.noHistory", language)}</p>
+                <div className="text-center py-8 text-muted-foreground text-sm bg-muted/30 rounded-xl border border-dashed">
+                  {isAr ? "لا يوجد سجل اختبارات حتى الآن." : "No quiz history recorded yet."}
+                </div>
               )}
             </Card>
           </>
         )}
-      </div>
+      </main>
+
+      <Footer />
     </div>
   );
 }
