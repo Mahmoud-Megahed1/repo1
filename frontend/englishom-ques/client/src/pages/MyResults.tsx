@@ -252,22 +252,22 @@ export default function MyResults() {
                   <table className="w-full text-sm text-start">
                     <thead className="bg-muted/70 text-foreground font-bold">
                       <tr className="border-b border-border">
-                        <th className="text-start py-3 px-4">{isAr ? "المستوى" : "Level"}</th>
-                        <th className="text-start py-3 px-4">{isAr ? "الدقة" : "Accuracy"}</th>
-                        <th className="text-start py-3 px-4">{isAr ? "التاريخ" : "Date"}</th>
+                        <th className="text-start py-3 px-6 w-1/3">{isAr ? "المستوى" : "Level"}</th>
+                        <th className="text-center py-3 px-6 w-1/3">{isAr ? "الدقة" : "Accuracy"}</th>
+                        <th className="text-start py-3 px-6 w-1/3">{isAr ? "التاريخ" : "Date"}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
                       {history.map((result: any) => (
                         <tr key={result.id} className="hover:bg-muted/30 transition-colors">
-                          <td className="py-3 px-4 text-foreground font-extrabold">
+                          <td className="py-3 px-6 text-foreground font-extrabold text-start">
                             <span className="inline-block px-3 py-1 rounded-lg bg-[#4A3B32]/10 text-[#4A3B32] dark:bg-[#FCDFC2]/15 dark:text-[#FCDFC2] font-bold border border-[#4A3B32]/20 dark:border-[#FCDFC2]/30">
                               {result.level}
                             </span>
                           </td>
-                          <td className="py-3 px-4 text-foreground font-bold">{result.accuracy}%</td>
-                          <td className="py-3 px-4 text-muted-foreground text-xs" dir="ltr">
-                            {new Date(result.completedAt).toLocaleString(isAr ? "ar-SA" : "en-US")}
+                          <td className="py-3 px-6 text-foreground font-bold text-center">{result.accuracy}%</td>
+                          <td className="py-3 px-6 text-muted-foreground text-xs text-start font-medium">
+                            {new Date(result.completedAt).toLocaleDateString(isAr ? "ar-EG" : "en-US", { year: "numeric", month: "short", day: "numeric" })} - {new Date(result.completedAt).toLocaleTimeString(isAr ? "ar-EG" : "en-US", { hour: "2-digit", minute: "2-digit" })}
                           </td>
                         </tr>
                       ))}

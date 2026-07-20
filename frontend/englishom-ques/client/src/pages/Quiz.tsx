@@ -490,30 +490,79 @@ export default function Quiz() {
     );
   }
 
+  const { data: contactLookup } = trpc.quiz.lookupStudentContact.useQuery(
+    { contact: studentPhone },
+    { enabled: studentPhone.trim().length >= 4 }
+  );
+
+  useEffect(() => {
+    if (contactLookup?.exists && contactLookup.studentName && !studentName) {
+      setStudentName(contactLookup.studentName);
+    }
+  }, [contactLookup]);
+
   if (state === "lead-capture") {
     return (
       <div className={`min-h-screen flex flex-col items-center justify-center bg-background p-4 relative overflow-hidden ${language === "ar" ? "rtl" : "ltr"}`}>
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-          <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-primary/10 blur-[120px]" />
-          <div className="absolute top-[60%] -right-[10%] w-[50%] h-[50%] rounded-full bg-secondary/10 blur-[120px]" />
+          <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/10 blur-[120px]" />
+          <div className="absolute top-[60%] -right-[10%] w-[50%] h-[50%] rounded-full bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/10 blur-[120px]" />
         </div>
 
-        <Card className="w-full max-w-lg p-8 relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-700 shadow-xl border-t-4 border-t-primary">
+        <Card className="w-full max-w-lg p-8 relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-700 shadow-xl border-t-4 border-t-[#4A3B32] dark:border-t-[#FCDFC2] rounded-2xl">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#4A3B32]/10 text-[#4A3B32] dark:bg-[#FCDFC2]/15 dark:text-[#FCDFC2] mb-4">
               <Trophy className="w-8 h-8" />
             </div>
-            <h2 className="text-3xl font-bold text-foreground mb-2">
-              {language === "ar" ? "لقد أتممت الاختبار بنجاح!" : "You've successfully completed the test!"}
+            <h2 className="text-3xl font-black text-foreground mb-2">
+              {language === "ar" ? "أنت جاهز لرؤية النتيجة!" : "Your Results Are Ready!"}
             </h2>
-            <p className="text-muted-foreground text-lg">
-              {language === "ar" ? "أدخل بياناتك بالأسفل لنعرض لك النتيجة فوراً." : "Enter your details below to see your results immediately."}
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              {language === "ar" ? "أدخل بياناتك بالأسفل لحفظ نتيجة الاختبار واستعراض تقريرك التفصيلي." : "Enter your details below to save your test results and view your detailed report."}
             </p>
           </div>
 
-          <form onSubmit={handleLeadCaptureSubmit} className="space-y-6">
+          <form onSubmit={handleLeadCaptureSubmit} className="space-y-5">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-foreground">
+              <label className="text-sm font-bold text-foreground block">
+                {language === "ar" ? "رقم الموبايل أو البريد الإلكتروني" : "Phone Number or Email Address"}
+              </label>
+              <input
+                type="text"
+                required
+                value={studentPhone}
+                onChange={(e) => setStudentPhone(e.target.value)}
+                placeholder={language === "ar" ? "مثال: 01012345678 أو email@example.com" : "e.g., 01012345678 or email@example.com"}
+                className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-[#4A3B32] dark:focus:ring-[#FCDFC2] transition-all text-start"
+                dir="ltr"
+              />
+            </div>
+
+            {/* Smart Lookup Memory Alert */}
+            {studentPhone.trim().length >= 4 && (
+              contactLookup?.exists ? (
+                <div className="p-3.5 bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/15 border border-[#4A3B32]/30 dark:border-[#FCDFC2]/40 rounded-xl text-xs font-bold text-[#4A3B32] dark:text-[#FCDFC2] flex items-center gap-2">
+                  <Star className="w-4 h-4 fill-current shrink-0" />
+                  <span>
+                    {language === "ar"
+                      ? `مرحباً بعودتك! تم العثور على سجل سابق باسم (${contactLookup.studentName}). سيتم ربط النتيجة بسجلك فوراً.`
+                      : `Welcome back! Found existing record for (${contactLookup.studentName}). Results will be linked automatically.`}
+                  </span>
+                </div>
+              ) : studentPhone.trim().length >= 6 ? (
+                <div className="p-3.5 bg-muted/70 border border-border rounded-xl text-xs font-semibold text-muted-foreground flex items-center gap-2">
+                  <Target className="w-4 h-4 text-[#4A3B32] dark:text-[#FCDFC2] shrink-0" />
+                  <span>
+                    {language === "ar"
+                      ? "أهلاً بك معنا لأول مرة! يرجى كتابة اسمك بالأسفل لإنشاء ملف إنجازاتك."
+                      : "Welcome! First time using this contact details. Please enter your name below."}
+                  </span>
+                </div>
+              ) : null
+            )}
+
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-foreground block">
                 {language === "ar" ? "الاسم بالكامل" : "Full Name"}
               </label>
               <input
@@ -521,31 +570,17 @@ export default function Quiz() {
                 required
                 value={studentName}
                 onChange={(e) => setStudentName(e.target.value)}
-                placeholder={language === "ar" ? "اكتب اسمك هنا" : "Enter your name"}
-                className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-foreground">
-                {language === "ar" ? "رقم الموبايل أو الإيميل" : "Phone Number or Email"}
-              </label>
-              <input
-                type="text"
-                required
-                value={studentPhone}
-                onChange={(e) => setStudentPhone(e.target.value)}
-                placeholder={language === "ar" ? "مثال: 01012345678" : "e.g., 01012345678"}
-                className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-left"
-                dir="ltr"
+                placeholder={language === "ar" ? "اكتب اسمك هنا..." : "Enter your full name"}
+                className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-[#4A3B32] dark:focus:ring-[#FCDFC2] transition-all"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
+              className="w-full py-6 text-base font-bold bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] rounded-xl shadow-md transition-all mt-2"
               size="lg"
             >
-              {language === "ar" ? "إظهار نتيجتي الآن" : "Show My Results Now"}
+              {language === "ar" ? "إظهار نتيجتي وتقييمي المفصل" : "Show My Results & Evaluation"}
             </Button>
           </form>
         </Card>

@@ -151,8 +151,8 @@ export const appRouter = router({
           // Insert result for both guests and logged in users
           await db.insert(testResults).values({
             userId: ctx.user?.id,
-            studentName: input.studentName,
-            studentPhone: input.studentPhone,
+            studentName: input.studentName.trim(),
+            studentPhone: input.studentPhone.trim().toLowerCase(),
             level: input.level,
             totalQuestions: totalQuestions,
             correctAnswers: correctAnswersCount,
@@ -216,6 +216,38 @@ export const appRouter = router({
       }),
 
     /**
+     * Check if a student contact (phone or email) already exists in testResults
+     */
+    lookupStudentContact: publicProcedure
+      .input(z.object({ contact: z.string() }))
+      .query(async ({ input }) => {
+        try {
+          const db = await getDb();
+          if (!db || !input.contact.trim()) return { exists: false };
+          const cleanContact = input.contact.trim().toLowerCase();
+          
+          const existing = await db
+            .select()
+            .from(testResults)
+            .where(eq(testResults.studentPhone, cleanContact))
+            .orderBy(desc(testResults.completedAt))
+            .limit(1);
+
+          if (existing.length > 0) {
+            return {
+              exists: true,
+              studentName: existing[0].studentName || "",
+              studentPhone: existing[0].studentPhone || "",
+            };
+          }
+          return { exists: false };
+        } catch (error) {
+          console.error("Error looking up student contact:", error);
+          return { exists: false };
+        }
+      }),
+
+    /**
      * Get user progress and statistics (supports both logged in users and guest studentPhone)
      */
     getUserProgress: publicProcedure
@@ -235,8 +267,9 @@ export const appRouter = router({
               totalTimeSpent: 0,
             };
           }
-          if (input?.studentPhone && db) {
-            const results = await db.select().from(testResults).where(eq(testResults.studentPhone, input.studentPhone));
+          const cleanPhone = input?.studentPhone?.trim().toLowerCase();
+          if (cleanPhone && db) {
+            const results = await db.select().from(testResults).where(eq(testResults.studentPhone, cleanPhone));
             if (results.length > 0) {
               const totalQuizzes = results.length;
               const totalCorrect = results.reduce((sum, r) => sum + r.correctAnswers, 0);
@@ -282,8 +315,9 @@ export const appRouter = router({
           if (ctx.user) {
             return await getUserAchievements(ctx.user.id);
           }
-          if (input?.studentPhone && db) {
-            const results = await db.select().from(testResults).where(eq(testResults.studentPhone, input.studentPhone));
+          const cleanPhone = input?.studentPhone?.trim().toLowerCase();
+          if (cleanPhone && db) {
+            const results = await db.select().from(testResults).where(eq(testResults.studentPhone, cleanPhone));
             if (results.length > 0) {
               const totalQuizzes = results.length;
               const avgAccuracy = Math.round(results.reduce((sum, r) => sum + r.accuracy, 0) / totalQuizzes);
@@ -329,11 +363,12 @@ export const appRouter = router({
           if (ctx.user) {
             return await getUserQuizHistory(ctx.user.id, input.limit);
           }
-          if (input?.studentPhone && db) {
+          const cleanPhone = input?.studentPhone?.trim().toLowerCase();
+          if (cleanPhone && db) {
             return await db
               .select()
               .from(testResults)
-              .where(eq(testResults.studentPhone, input.studentPhone))
+              .where(eq(testResults.studentPhone, cleanPhone))
               .orderBy(desc(testResults.completedAt))
               .limit(input.limit);
           }
