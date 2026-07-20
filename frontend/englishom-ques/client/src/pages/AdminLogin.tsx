@@ -7,19 +7,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { ShieldCheck } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function AdminLogin() {
   const [, setLocation] = useLocation();
+  const { language, t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+  const isAr = language === "ar";
+
   const loginMutation = trpc.auth.adminLogin.useMutation({
     onSuccess: () => {
-      toast.success("تم تسجيل الدخول بنجاح");
+      toast.success(isAr ? "تم تسجيل الدخول بنجاح" : "Logged in successfully");
       window.location.href = "/ques/admin"; // Force reload to apply cookie and clear TRPC cache
     },
     onError: (error) => {
-      toast.error(error.message || "خطأ في تسجيل الدخول");
+      toast.error(error.message || (isAr ? "خطأ في تسجيل الدخول" : "Login failed"));
     }
   });
 
@@ -29,52 +34,65 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md shadow-lg border-primary/20">
-        <CardHeader className="text-center space-y-2">
-          <div className="mx-auto bg-primary/10 p-3 rounded-full w-fit mb-2">
-            <ShieldCheck className="w-8 h-8 text-primary" />
-          </div>
-          <CardTitle className="text-2xl font-bold">تسجيل دخول المشرفين</CardTitle>
-          <CardDescription>
-            قم بتسجيل الدخول للوصول إلى لوحة تحكم الأسئلة
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">البريد الإلكتروني</Label>
-              <Input 
-                id="email" 
-                type="email" 
-                placeholder="admin@englishom.com" 
-                required 
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                dir="ltr"
-              />
+    <div className={`min-h-screen flex flex-col justify-between bg-background ${isAr ? "rtl" : "ltr"}`}>
+      <Header />
+
+      <div className="flex flex-1 items-center justify-center p-4 my-8">
+        <Card className="w-full max-w-md shadow-xl border border-amber-500/20">
+          <CardHeader className="text-center space-y-2">
+            <div className="mx-auto bg-amber-500/10 p-4 rounded-2xl w-fit mb-2 text-amber-500">
+              <ShieldCheck className="w-9 h-9" />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">كلمة المرور</Label>
-              <Input 
-                id="password" 
-                type="password" 
-                required 
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                dir="ltr"
-              />
-            </div>
-            <Button 
-              type="submit" 
-              className="w-full font-bold" 
-              disabled={loginMutation.isLoading}
-            >
-              {loginMutation.isLoading ? "جاري تسجيل الدخول..." : "دخول"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+            <CardTitle className="text-2xl font-extrabold text-foreground">
+              {t("admin.login")}
+            </CardTitle>
+            <CardDescription className="text-sm">
+              {t("admin.loginDesc")}
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email" className="font-bold">{t("admin.email")}</Label>
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="admin@englishom.com" 
+                  required 
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  dir="ltr"
+                  className="bg-background"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password" className="font-bold">{t("admin.password")}</Label>
+                <Input 
+                  id="password" 
+                  type="password" 
+                  required 
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  dir="ltr"
+                  className="bg-background"
+                />
+              </div>
+
+              <Button 
+                type="submit" 
+                className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-6 text-base shadow-md rounded-xl" 
+                disabled={loginMutation.isPending}
+              >
+                {loginMutation.isPending ? t("admin.loggingIn") : t("admin.submitLogin")}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Footer />
     </div>
   );
 }

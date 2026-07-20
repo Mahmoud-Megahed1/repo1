@@ -9,8 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
-import { Trash2, Edit2, Plus, Globe, Moon, Sun } from "lucide-react";
-import { useTheme } from "@/contexts/ThemeContext";
+import { Trash2, Edit2, Plus, Users, BarChart2, HelpCircle } from "lucide-react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 type AdminTab = "questions" | "add" | "stats" | "leads";
 
@@ -28,8 +29,7 @@ interface FormData {
 
 export default function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
-  const { language, setLanguage, t } = useLanguage();
-  const { theme, toggleTheme } = useTheme();
+  const { language, t } = useLanguage();
   const [, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState<AdminTab>("questions");
   const [filterLevel, setFilterLevel] = useState<string>("all");
@@ -46,6 +46,8 @@ export default function AdminDashboard() {
     timePerQuestion: 10,
   });
 
+  const isAr = language === "ar";
+
   // Fetch all questions
   const { data: questions = [], refetch: refetchQuestions } = trpc.admin.getAllQuestions.useQuery(undefined, {
     enabled: !!user && user.role === "admin",
@@ -59,54 +61,54 @@ export default function AdminDashboard() {
   // Mutations
   const createMutation = trpc.admin.createQuestion.useMutation({
     onSuccess: () => {
-      toast.success("Question created successfully!");
+      toast.success(t("admin.successCreate"));
       resetForm();
       refetchQuestions();
       setActiveTab("questions");
     },
     onError: () => {
-      toast.error("Failed to create question");
+      toast.error(t("admin.errorCreate"));
     },
   });
 
   const updateMutation = trpc.admin.updateQuestion.useMutation({
     onSuccess: () => {
-      toast.success("Question updated successfully!");
+      toast.success(t("admin.successUpdate"));
       resetForm();
       refetchQuestions();
       setActiveTab("questions");
     },
     onError: () => {
-      toast.error("Failed to update question");
+      toast.error(t("admin.errorUpdate"));
     },
   });
 
   const deleteMutation = trpc.admin.deleteQuestion.useMutation({
     onSuccess: () => {
-      toast.success("Question deleted successfully!");
+      toast.success(t("admin.successDelete"));
       refetchQuestions();
     },
     onError: () => {
-      toast.error("Failed to delete question");
+      toast.error(t("admin.errorDelete"));
     },
   });
 
   const deleteLeadMutation = trpc.admin.deleteTestResult.useMutation({
     onSuccess: () => {
-      toast.success("Result deleted successfully!");
+      toast.success(isAr ? "تم حذف النتيجة بنجاح!" : "Result deleted successfully!");
       refetchLeads();
     },
     onError: () => {
-      toast.error("Failed to delete result");
+      toast.error(isAr ? "فشل في حذف النتيجة" : "Failed to delete result");
     },
   });
 
   // Check authorization
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-background" dir={isAr ? "rtl" : "ltr"}>
         <Card className="p-8">
-          <p className="text-foreground">Loading...</p>
+          <p className="text-foreground">{t("quiz.loading")}</p>
         </Card>
       </div>
     );
@@ -114,19 +116,23 @@ export default function AdminDashboard() {
 
   if (!user || user.role !== "admin") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-4">
-        <Card className="p-8 text-center">
-          <h2 className="text-2xl font-bold text-foreground mb-4">Access Denied</h2>
-          <p className="text-muted-foreground mb-6">You need admin privileges to access this page.</p>
-          <div className="flex gap-4 justify-center">
-            <Button onClick={() => navigate("/")} variant="outline">
-              Back to Home
-            </Button>
-            <Button onClick={() => navigate("/admin/login")} className="bg-accent text-accent-foreground">
-              Admin Login
-            </Button>
-          </div>
-        </Card>
+      <div className={`min-h-screen flex flex-col justify-between bg-background ${isAr ? "rtl" : "ltr"}`}>
+        <Header />
+        <div className="flex items-center justify-center flex-1 p-4">
+          <Card className="p-8 text-center max-w-md w-full shadow-lg">
+            <h2 className="text-2xl font-bold text-foreground mb-4">{t("admin.accessDenied")}</h2>
+            <p className="text-muted-foreground mb-6">{t("admin.accessDeniedMsg")}</p>
+            <div className="flex gap-4 justify-center">
+              <Button onClick={() => navigate("/")} variant="outline">
+                {t("admin.backToHome")}
+              </Button>
+              <Button onClick={() => navigate("/admin/login")} className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold">
+                {t("admin.login")}
+              </Button>
+            </div>
+          </Card>
+        </div>
+        <Footer />
       </div>
     );
   }
@@ -150,7 +156,7 @@ export default function AdminDashboard() {
     e.preventDefault();
 
     if (!formData.question || !formData.choiceA || !formData.choiceB || !formData.choiceC || !formData.choiceD) {
-      toast.error("Please fill in all required fields");
+      toast.error(t("admin.fillAllFields"));
       return;
     }
 
@@ -185,7 +191,7 @@ export default function AdminDashboard() {
   };
 
   const handleDelete = (id: number) => {
-    if (window.confirm("Are you sure you want to delete this question?")) {
+    if (window.confirm(t("admin.deleteConfirm"))) {
       deleteMutation.mutate({ id });
     }
   };
@@ -207,162 +213,156 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className={`min-h-screen bg-background ${language === "ar" ? "rtl" : "ltr"}`}>
+    <div className={`min-h-screen flex flex-col justify-between bg-background ${isAr ? "rtl" : "ltr"}`}>
       {/* Header */}
-      <div className="bg-card border-b border-border p-6">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-foreground">Admin Dashboard</h1>
-          <div className="flex gap-2 items-center">
-            {/* Language Toggle */}
-            <div className="flex gap-1 bg-muted p-1 rounded-lg">
-              <Button
-                size="sm"
-                variant={language === "en" ? "default" : "ghost"}
-                onClick={() => setLanguage("en")}
-                className="gap-1"
-              >
-                <Globe className="w-4 h-4" />
-                EN
-              </Button>
-              <Button
-                size="sm"
-                variant={language === "ar" ? "default" : "ghost"}
-                onClick={() => setLanguage("ar")}
-                className="gap-1"
-              >
-                <Globe className="w-4 h-4" />
-                AR
-              </Button>
-            </div>
+      <Header />
 
-            {/* Theme Toggle */}
+      <main className="max-w-6xl mx-auto px-4 py-8 flex-1 w-full space-y-6">
+        {/* Title & Tabs */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-card border border-border rounded-xl p-4 md:p-6 shadow-sm">
+          <div>
+            <h1 className="text-2xl font-extrabold text-foreground tracking-tight">
+              {t("admin.title")}
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+              {isAr ? "إدارة بنك الأسئلة ومتابعة نتائج اختبارات الطلاب" : "Manage questions bank & view student test results"}
+            </p>
+          </div>
+
+          {/* Navigation Tabs */}
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
             <Button
               size="sm"
-              variant="outline"
-              onClick={toggleTheme}
-              className="gap-2"
+              variant={activeTab === "questions" ? "default" : "outline"}
+              onClick={() => setActiveTab("questions")}
+              className={`gap-1.5 ${activeTab === "questions" ? "bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold" : ""}`}
             >
-              {theme === "dark" ? (
-                <Sun className="w-4 h-4" />
-              ) : (
-                <Moon className="w-4 h-4" />
-              )}
+              <HelpCircle className="w-4 h-4" />
+              {t("admin.questions")}
             </Button>
 
             <Button
-              variant="outline"
-              onClick={() => navigate("/")}
+              size="sm"
+              variant={activeTab === "add" ? "default" : "outline"}
+              onClick={() => {
+                resetForm();
+                setActiveTab("add");
+              }}
+              className={`gap-1.5 ${activeTab === "add" ? "bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold" : ""}`}
             >
-              Back to Home
+              <Plus className="w-4 h-4" />
+              {editingId ? t("admin.editQuestion") : t("admin.addQuestion")}
+            </Button>
+
+            <Button
+              size="sm"
+              variant={activeTab === "stats" ? "default" : "outline"}
+              onClick={() => setActiveTab("stats")}
+              className={`gap-1.5 ${activeTab === "stats" ? "bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold" : ""}`}
+            >
+              <BarChart2 className="w-4 h-4" />
+              {t("admin.statistics")}
+            </Button>
+
+            <Button
+              size="sm"
+              variant={activeTab === "leads" ? "default" : "outline"}
+              onClick={() => setActiveTab("leads")}
+              className={`gap-1.5 ${activeTab === "leads" ? "bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold" : ""}`}
+            >
+              <Users className="w-4 h-4" />
+              {t("admin.studentResults")}
             </Button>
           </div>
         </div>
-      </div>
 
-      {/* Navigation Tabs */}
-      <div className="bg-card border-b border-border">
-        <div className="max-w-6xl mx-auto flex gap-4 p-4">
-          <Button
-            variant={activeTab === "questions" ? "default" : "ghost"}
-            onClick={() => setActiveTab("questions")}
-            className={activeTab === "questions" ? "bg-accent text-accent-foreground" : ""}
-          >
-            Questions
-          </Button>
-          <Button
-            variant={activeTab === "add" ? "default" : "ghost"}
-            onClick={() => {
-              resetForm();
-              setActiveTab("add");
-            }}
-            className={activeTab === "add" ? "bg-accent text-accent-foreground" : ""}
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Question
-          </Button>
-          <Button
-            variant={activeTab === "stats" ? "default" : "ghost"}
-            onClick={() => setActiveTab("stats")}
-            className={activeTab === "stats" ? "bg-accent text-accent-foreground" : ""}
-          >
-            Statistics
-          </Button>
-          <Button
-            variant={activeTab === "leads" ? "default" : "ghost"}
-            onClick={() => setActiveTab("leads")}
-            className={activeTab === "leads" ? "bg-accent text-accent-foreground" : ""}
-          >
-            Student Results
-          </Button>
-        </div>
-      </div>
+        {/* Tab Content */}
 
-      {/* Content */}
-      <div className="max-w-6xl mx-auto p-6">
-        {/* Questions Tab */}
+        {/* 1. Questions Tab */}
         {activeTab === "questions" && (
-          <div>
-            <div className="mb-6">
-              <Label className="text-foreground mb-2 block">Filter by Level</Label>
-              <Select value={filterLevel} onValueChange={setFilterLevel}>
-                <SelectTrigger className="w-48">
+          <div className="space-y-6">
+            <div className="flex items-center gap-4 bg-card border border-border p-4 rounded-xl">
+              <Label className="text-sm font-bold text-foreground whitespace-nowrap">
+                {t("admin.filterByLevel")}:
+              </Label>
+              <Select value={filterLevel} onValueChange={setFilterLevel} dir={isAr ? "rtl" : "ltr"}>
+                <SelectTrigger className="w-56 bg-background">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Levels</SelectItem>
-                  <SelectItem value="A1">A1 - Beginner</SelectItem>
-                  <SelectItem value="A2">A2 - Elementary</SelectItem>
-                  <SelectItem value="B1">B1 - Intermediate</SelectItem>
-                  <SelectItem value="B2">B2 - Upper-Intermediate</SelectItem>
-                  <SelectItem value="C1">C1 - Advanced</SelectItem>
-                  <SelectItem value="C2">C2 - Proficiency</SelectItem>
+                <SelectContent dir={isAr ? "rtl" : "ltr"}>
+                  <SelectItem value="all">{t("admin.allLevels")}</SelectItem>
+                  <SelectItem value="A1">A1 - {t("levels.a1")}</SelectItem>
+                  <SelectItem value="A2">A2 - {t("levels.a2")}</SelectItem>
+                  <SelectItem value="B1">B1 - {t("levels.b1")}</SelectItem>
+                  <SelectItem value="B2">B2 - {t("levels.b2")}</SelectItem>
+                  <SelectItem value="C1">C1 - {t("levels.c1")}</SelectItem>
+                  <SelectItem value="C2">C2 - {t("levels.c2")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-4">
               {filteredQuestions.length === 0 ? (
-                <Card className="p-8 text-center">
-                  <p className="text-muted-foreground">No questions found</p>
+                <Card className="p-12 text-center border border-dashed">
+                  <p className="text-muted-foreground">{t("admin.noQuestions")}</p>
                 </Card>
               ) : (
-                filteredQuestions.map((question: any) => (
-                  <Card key={question.id} className="p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="flex-1">
-                        <p className="font-semibold text-foreground mb-2">{question.question}</p>
-                        <div className="space-y-1 text-sm text-muted-foreground">
-                          <p>A. {question.choiceA}</p>
-                          <p>B. {question.choiceB}</p>
-                          <p>C. {question.choiceC}</p>
-                          <p>D. {question.choiceD}</p>
+                filteredQuestions.map((q: any) => (
+                  <Card key={q.id} className="p-6 border border-border hover:shadow-md transition-shadow">
+                    <div className="flex flex-col md:flex-row justify-between items-start gap-4">
+                      <div className="flex-1 space-y-3">
+                        <p className="font-bold text-base text-foreground leading-relaxed">
+                          {q.question}
+                        </p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                          <p className={`p-2 rounded bg-muted/60 ${q.correctAnswer === 'A' ? 'border-2 border-green-500/50 bg-green-500/10 font-bold text-green-600 dark:text-green-400' : ''}`}>
+                            <strong>أ.</strong> {q.choiceA}
+                          </p>
+                          <p className={`p-2 rounded bg-muted/60 ${q.correctAnswer === 'B' ? 'border-2 border-green-500/50 bg-green-500/10 font-bold text-green-600 dark:text-green-400' : ''}`}>
+                            <strong>ب.</strong> {q.choiceB}
+                          </p>
+                          <p className={`p-2 rounded bg-muted/60 ${q.correctAnswer === 'C' ? 'border-2 border-green-500/50 bg-green-500/10 font-bold text-green-600 dark:text-green-400' : ''}`}>
+                            <strong>ج.</strong> {q.choiceC}
+                          </p>
+                          <p className={`p-2 rounded bg-muted/60 ${q.correctAnswer === 'D' ? 'border-2 border-green-500/50 bg-green-500/10 font-bold text-green-600 dark:text-green-400' : ''}`}>
+                            <strong>د.</strong> {q.choiceD}
+                          </p>
                         </div>
-                        <div className="mt-3 flex gap-4 text-sm">
-                          <span className="bg-muted px-2 py-1 rounded">
-                            Correct: <strong>{question.correctAnswer}</strong>
+
+                        <div className="pt-2 flex flex-wrap gap-2 text-xs">
+                          <span className="bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-md font-bold">
+                            {t("admin.correctAnswer")}: {q.correctAnswer}
                           </span>
-                          <span className="bg-muted px-2 py-1 rounded">
-                            Level: <strong>{question.level}</strong>
+                          <span className="bg-slate-200 dark:bg-slate-800 px-2.5 py-1 rounded-md font-bold">
+                            {t("admin.levelLabel")}: {q.level}
                           </span>
-                          {question.category && (
-                            <span className="bg-muted px-2 py-1 rounded">
-                              Category: <strong>{question.category}</strong>
+                          {q.category && (
+                            <span className="bg-slate-200 dark:bg-slate-800 px-2.5 py-1 rounded-md">
+                              {t("admin.categoryLabel")}: {q.category}
+                            </span>
+                          )}
+                          {q.timePerQuestion && (
+                            <span className="bg-slate-200 dark:bg-slate-800 px-2.5 py-1 rounded-md">
+                              {q.timePerQuestion} {isAr ? "ثانية" : "sec"}
                             </span>
                           )}
                         </div>
                       </div>
-                      <div className="flex gap-2 ml-4">
+
+                      <div className="flex items-center gap-2 self-end md:self-start">
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => handleEdit(question)}
+                          onClick={() => handleEdit(q)}
+                          className="gap-1"
                         >
-                          <Edit2 className="w-4 h-4" />
+                          <Edit2 className="w-4 h-4 text-amber-500" />
+                          <span>{t("admin.editQuestion")}</span>
                         </Button>
                         <Button
                           size="sm"
                           variant="destructive"
-                          onClick={() => handleDelete(question.id)}
+                          onClick={() => handleDelete(q.id)}
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -375,132 +375,147 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Add/Edit Question Tab */}
+        {/* 2. Add / Edit Question Tab */}
         {activeTab === "add" && (
-          <Card className="p-8 max-w-2xl">
-            <h2 className="text-2xl font-bold text-foreground mb-6">
-              {editingId ? "Edit Question" : "Add New Question"}
+          <Card className="p-6 md:p-8 max-w-3xl mx-auto border border-border shadow-md">
+            <h2 className="text-2xl font-extrabold text-foreground mb-6">
+              {editingId ? t("admin.editQuestion") : t("admin.addNewQuestion")}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <Label htmlFor="question" className="text-foreground">
-                  Question *
+                <Label htmlFor="question" className="text-foreground font-bold mb-2 block">
+                  {t("admin.questionText")} *
                 </Label>
                 <Input
                   id="question"
                   value={formData.question}
                   onChange={(e) => setFormData({ ...formData, question: e.target.value })}
-                  placeholder="Enter the question"
-                  className="mt-2"
+                  placeholder={isAr ? "أدخل نص السؤال هنا..." : "Enter question text..."}
+                  className="bg-background"
+                  dir={isAr ? "rtl" : "ltr"}
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="choiceA" className="text-foreground">
-                    Choice A *
+                  <Label htmlFor="choiceA" className="text-foreground font-bold mb-1.5 block">
+                    {t("admin.choiceA")} *
                   </Label>
                   <Input
                     id="choiceA"
                     value={formData.choiceA}
                     onChange={(e) => setFormData({ ...formData, choiceA: e.target.value })}
-                    placeholder="Enter choice A"
-                    className="mt-2"
+                    placeholder={isAr ? "الخيار أ..." : "Choice A..."}
+                    className="bg-background"
+                    dir={isAr ? "rtl" : "ltr"}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="choiceB" className="text-foreground">
-                    Choice B *
+                  <Label htmlFor="choiceB" className="text-foreground font-bold mb-1.5 block">
+                    {t("admin.choiceB")} *
                   </Label>
                   <Input
                     id="choiceB"
                     value={formData.choiceB}
                     onChange={(e) => setFormData({ ...formData, choiceB: e.target.value })}
-                    placeholder="Enter choice B"
-                    className="mt-2"
+                    placeholder={isAr ? "الخيار ب..." : "Choice B..."}
+                    className="bg-background"
+                    dir={isAr ? "rtl" : "ltr"}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="choiceC" className="text-foreground">
-                    Choice C *
+                  <Label htmlFor="choiceC" className="text-foreground font-bold mb-1.5 block">
+                    {t("admin.choiceC")} *
                   </Label>
                   <Input
                     id="choiceC"
                     value={formData.choiceC}
                     onChange={(e) => setFormData({ ...formData, choiceC: e.target.value })}
-                    placeholder="Enter choice C"
-                    className="mt-2"
+                    placeholder={isAr ? "الخيار ج..." : "Choice C..."}
+                    className="bg-background"
+                    dir={isAr ? "rtl" : "ltr"}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="choiceD" className="text-foreground">
-                    Choice D *
+                  <Label htmlFor="choiceD" className="text-foreground font-bold mb-1.5 block">
+                    {t("admin.choiceD")} *
                   </Label>
                   <Input
                     id="choiceD"
                     value={formData.choiceD}
                     onChange={(e) => setFormData({ ...formData, choiceD: e.target.value })}
-                    placeholder="Enter choice D"
-                    className="mt-2"
+                    placeholder={isAr ? "الخيار د..." : "Choice D..."}
+                    className="bg-background"
+                    dir={isAr ? "rtl" : "ltr"}
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="correctAnswer" className="text-foreground">
-                    Correct Answer *
+                  <Label htmlFor="correctAnswer" className="text-foreground font-bold mb-1.5 block">
+                    {t("admin.correctAnswerLabel")} *
                   </Label>
-                  <Select value={formData.correctAnswer} onValueChange={(value) => setFormData({ ...formData, correctAnswer: value as "A" | "B" | "C" | "D" })}>
-                    <SelectTrigger className="mt-2">
+                  <Select
+                    value={formData.correctAnswer}
+                    onValueChange={(val) => setFormData({ ...formData, correctAnswer: val as any })}
+                    dir={isAr ? "rtl" : "ltr"}
+                  >
+                    <SelectTrigger className="bg-background">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="A">A</SelectItem>
-                      <SelectItem value="B">B</SelectItem>
-                      <SelectItem value="C">C</SelectItem>
-                      <SelectItem value="D">D</SelectItem>
+                    <SelectContent dir={isAr ? "rtl" : "ltr"}>
+                      <SelectItem value="A">{isAr ? "الخيار أ (A)" : "Choice A"}</SelectItem>
+                      <SelectItem value="B">{isAr ? "الخيار ب (B)" : "Choice B"}</SelectItem>
+                      <SelectItem value="C">{isAr ? "الخيار ج (C)" : "Choice C"}</SelectItem>
+                      <SelectItem value="D">{isAr ? "الخيار د (D)" : "Choice D"}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
-                  <Label htmlFor="level" className="text-foreground">
-                    Level *
+                  <Label htmlFor="level" className="text-foreground font-bold mb-1.5 block">
+                    {t("admin.levelLabel")} *
                   </Label>
-                  <Select value={formData.level} onValueChange={(value) => setFormData({ ...formData, level: value as "A1" | "A2" | "B1" | "B2" | "C1" | "C2" })}> 
-                    <SelectTrigger className="mt-2">
+                  <Select
+                    value={formData.level}
+                    onValueChange={(val) => setFormData({ ...formData, level: val as any })}
+                    dir={isAr ? "rtl" : "ltr"}
+                  >
+                    <SelectTrigger className="bg-background">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="A1">A1 - Beginner</SelectItem>
-                      <SelectItem value="A2">A2 - Elementary</SelectItem>
-                      <SelectItem value="B1">B1 - Intermediate</SelectItem>
-                      <SelectItem value="B2">B2 - Upper-Intermediate</SelectItem>
-                      <SelectItem value="C1">C1 - Advanced</SelectItem>
-                      <SelectItem value="C2">C2 - Proficiency</SelectItem>
+                    <SelectContent dir={isAr ? "rtl" : "ltr"}>
+                      <SelectItem value="A1">A1 - {t("levels.a1")}</SelectItem>
+                      <SelectItem value="A2">A2 - {t("levels.a2")}</SelectItem>
+                      <SelectItem value="B1">B1 - {t("levels.b1")}</SelectItem>
+                      <SelectItem value="B2">B2 - {t("levels.b2")}</SelectItem>
+                      <SelectItem value="C1">C1 - {t("levels.c1")}</SelectItem>
+                      <SelectItem value="C2">C2 - {t("levels.c2")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="category" className="text-foreground">
-                    Category (Optional)
+                  <Label htmlFor="category" className="text-foreground font-bold mb-1.5 block">
+                    {t("admin.categoryOptional")}
                   </Label>
                   <Input
                     id="category"
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    placeholder="Enter category (e.g., Grammar, Vocabulary)"
-                    className="mt-2"
+                    placeholder={isAr ? "مثال: القواعد، المفردات..." : "e.g. Grammar, Vocabulary"}
+                    className="bg-background"
+                    dir={isAr ? "rtl" : "ltr"}
                   />
                 </div>
+
                 <div>
-                  <Label htmlFor="timePerQuestion" className="text-foreground">
-                    Time per Question (seconds)
+                  <Label htmlFor="timePerQuestion" className="text-foreground font-bold mb-1.5 block">
+                    {t("admin.timePerQuestion")}
                   </Label>
                   <Input
                     id="timePerQuestion"
@@ -509,28 +524,29 @@ export default function AdminDashboard() {
                     max="120"
                     value={formData.timePerQuestion}
                     onChange={(e) => setFormData({ ...formData, timePerQuestion: parseInt(e.target.value) || 10 })}
-                    placeholder="Enter time in seconds"
-                    className="mt-2"
+                    className="bg-background"
+                    dir="ltr"
                   />
                 </div>
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex gap-3 pt-4">
                 <Button
                   type="submit"
-                  className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold py-6 flex-1"
+                  className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-6 flex-1 shadow-md"
                   disabled={createMutation.isPending || updateMutation.isPending}
                 >
-                  {editingId ? "Update Question" : "Add Question"}
+                  {editingId ? t("admin.updateQuestion") : t("admin.addQuestion")}
                 </Button>
+
                 {editingId && (
                   <Button
                     type="button"
                     variant="outline"
                     onClick={resetForm}
-                    className="py-6"
+                    className="py-6 px-6"
                   >
-                    Cancel
+                    {t("admin.cancel")}
                   </Button>
                 )}
               </div>
@@ -538,25 +554,30 @@ export default function AdminDashboard() {
           </Card>
         )}
 
-        {/* Statistics Tab */}
+        {/* 3. Statistics Tab */}
         {activeTab === "stats" && (
           <div className="space-y-6">
-            <Card className="p-8">
-              <h2 className="text-2xl font-bold text-foreground mb-6">Statistics</h2>
+            <Card className="p-6 md:p-8 border border-border shadow-sm">
+              <h2 className="text-2xl font-extrabold text-foreground mb-6">
+                {t("admin.statistics")}
+              </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-muted p-6 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-2">Total Questions</p>
-                  <p className="text-4xl font-bold text-accent">{stats.total}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                <div className="bg-amber-500/10 border border-amber-500/30 p-6 rounded-xl text-center">
+                  <p className="text-sm font-bold text-amber-600 dark:text-amber-400 mb-1">{t("admin.totalQuestions")}</p>
+                  <p className="text-4xl font-black text-foreground">{stats.total}</p>
                 </div>
               </div>
 
-              <h3 className="text-lg font-semibold text-foreground mt-8 mb-4">Questions by Level</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {Object.entries(stats.byLevel).map(([level, count]) => (
-                  <div key={level} className="bg-muted p-4 rounded-lg text-center">
-                    <p className="text-sm text-muted-foreground mb-1">{level}</p>
-                    <p className="text-2xl font-bold text-accent">{count}</p>
+              <h3 className="text-lg font-bold text-foreground mb-4">
+                {t("admin.questionsByLevel")}
+              </h3>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                {Object.entries(stats.byLevel).map(([lvl, count]) => (
+                  <div key={lvl} className="bg-muted p-4 rounded-xl text-center border border-border">
+                    <p className="text-sm font-bold text-muted-foreground mb-1">{lvl}</p>
+                    <p className="text-2xl font-extrabold text-amber-500">{count}</p>
                   </div>
                 ))}
               </div>
@@ -564,50 +585,61 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Leads / Student Results Tab */}
+        {/* 4. Student Results Tab */}
         {activeTab === "leads" && (
-          <Card className="p-6">
-            <h2 className="text-xl font-bold mb-6 text-foreground">Student Results & Leads</h2>
+          <Card className="p-6 md:p-8 border border-border shadow-sm">
+            <h2 className="text-2xl font-extrabold mb-6 text-foreground">
+              {t("admin.studentResults")}
+            </h2>
+
             {leadsLoading ? (
-              <p className="text-muted-foreground text-center py-8">Loading results...</p>
+              <p className="text-muted-foreground text-center py-12">{t("quiz.loading")}</p>
             ) : leads.length === 0 ? (
-              <p className="text-muted-foreground text-center py-8">No results recorded yet.</p>
+              <p className="text-muted-foreground text-center py-12">{t("admin.noResults")}</p>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-start">
-                  <thead>
+              <div className="overflow-x-auto rounded-xl border border-border">
+                <table className="w-full text-sm text-start">
+                  <thead className="bg-muted/70 text-foreground font-bold">
                     <tr className="border-b border-border">
-                      <th className="text-start py-3 px-4 text-foreground font-semibold">Name</th>
-                      <th className="text-start py-3 px-4 text-foreground font-semibold">Phone/Email</th>
-                      <th className="text-start py-3 px-4 text-foreground font-semibold">Level</th>
-                      <th className="text-start py-3 px-4 text-foreground font-semibold">Score</th>
-                      <th className="text-start py-3 px-4 text-foreground font-semibold">Accuracy</th>
-                      <th className="text-start py-3 px-4 text-foreground font-semibold">Date</th>
-                      <th className="text-end py-3 px-4 text-foreground font-semibold">Actions</th>
+                      <th className="py-3 px-4 text-start">{t("admin.studentName")}</th>
+                      <th className="py-3 px-4 text-start">{t("admin.phoneEmail")}</th>
+                      <th className="py-3 px-4 text-start">{t("admin.levelLabel")}</th>
+                      <th className="py-3 px-4 text-start">{t("admin.score")}</th>
+                      <th className="py-3 px-4 text-start">{t("admin.accuracy")}</th>
+                      <th className="py-3 px-4 text-start">{t("admin.date")}</th>
+                      <th className="py-3 px-4 text-end">{t("admin.actions")}</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="divide-y divide-border">
                     {leads.map((lead: any) => (
-                      <tr key={lead.id} className="border-b border-border hover:bg-muted/50 transition-colors">
-                        <td className="text-start py-3 px-4 text-foreground">{lead.studentName || "Guest"}</td>
-                        <td className="text-start py-3 px-4 text-foreground" dir="ltr">{lead.studentPhone || "-"}</td>
-                        <td className="text-start py-3 px-4">
-                          <span className="inline-block px-2 py-1 rounded bg-primary/10 text-primary text-sm font-medium">
+                      <tr key={lead.id} className="hover:bg-muted/30 transition-colors">
+                        <td className="py-3 px-4 font-bold text-foreground">
+                          {lead.studentName || t("admin.guest")}
+                        </td>
+                        <td className="py-3 px-4 text-muted-foreground" dir="ltr">
+                          {lead.studentPhone || "-"}
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className="inline-block px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold border border-amber-500/30 text-xs">
                             {lead.level}
                           </span>
                         </td>
-                        <td className="text-start py-3 px-4 text-foreground">{lead.correctAnswers} / {lead.totalQuestions}</td>
-                        <td className="text-start py-3 px-4 text-foreground">{lead.accuracy}%</td>
-                        <td className="text-start py-3 px-4 text-muted-foreground text-sm">
-                          {new Date(lead.completedAt).toLocaleDateString()}
+                        <td className="py-3 px-4 text-foreground font-semibold">
+                          {lead.correctAnswers} / {lead.totalQuestions}
                         </td>
-                        <td className="text-end py-3 px-4">
+                        <td className="py-3 px-4 text-foreground font-semibold">
+                          {lead.accuracy}%
+                        </td>
+                        <td className="py-3 px-4 text-muted-foreground text-xs" dir="ltr">
+                          {new Date(lead.completedAt).toLocaleString()}
+                        </td>
+                        <td className="py-3 px-4 text-end">
                           <Button
                             variant="destructive"
                             size="sm"
                             className="h-8 px-2"
                             onClick={() => {
-                              if (window.confirm("Are you sure you want to delete this result?")) {
+                              if (window.confirm(isAr ? "هل أنت متأكد من حذف هذه النتيجة؟" : "Are you sure you want to delete this result?")) {
                                 deleteLeadMutation.mutate({ id: lead.id });
                               }
                             }}
@@ -624,7 +656,10 @@ export default function AdminDashboard() {
             )}
           </Card>
         )}
-      </div>
+      </main>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
