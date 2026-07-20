@@ -27,59 +27,40 @@ export default function Header() {
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4 sm:gap-6">
           {/* Admin Link */}
           <Button
             size="sm"
             variant="ghost"
             onClick={() => navigate("/admin")}
-            className="gap-1 text-xs text-muted-foreground hover:text-foreground"
+            className="gap-1 text-xs text-muted-foreground hover:text-foreground hidden sm:flex"
           >
             <Shield className="w-4 h-4" />
-            <span className="hidden sm:inline">{t("header.admin")}</span>
+            <span>{t("header.admin")}</span>
           </Button>
 
           {/* Language Toggle */}
-          <div className="flex gap-1 bg-muted p-1 rounded-lg">
-            <Button
-              size="sm"
-              variant={language === "en" ? "default" : "ghost"}
-              onClick={() => setLanguage("en")}
-              className="gap-1 text-xs px-2 h-7"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              EN
-            </Button>
-            <Button
-              size="sm"
-              variant={language === "ar" ? "default" : "ghost"}
-              onClick={() => setLanguage("ar")}
-              className="gap-1 text-xs px-2 h-7"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              AR
-            </Button>
-          </div>
+          <button
+            onClick={() => setLanguage(language === "ar" ? "en" : "ar")}
+            className="flex items-center gap-1.5 text-sm font-semibold text-[#4B3D34] dark:text-[#F1E5D8] hover:opacity-80 transition-opacity"
+          >
+            <Globe className="w-4 h-4" />
+            <span>{language === "ar" ? "الانجليزية" : "العربية"}</span>
+          </button>
 
           {/* Theme Toggle */}
-          <Button
-            size="sm"
-            variant="outline"
+          <button 
             onClick={toggleTheme}
-            className="gap-2 text-xs h-9"
+            className="flex items-center p-1 rounded-full cursor-pointer transition-colors bg-[#F1E5D8] dark:bg-[#3b2d26] border-none outline-none"
+            aria-label="Toggle theme"
           >
-            {theme === "dark" ? (
-              <>
-                <Sun className="w-4 h-4 text-amber-400" />
-                <span className="hidden sm:inline">{t("theme.light")}</span>
-              </>
-            ) : (
-              <>
-                <Moon className="w-4 h-4 text-slate-700" />
-                <span className="hidden sm:inline">{t("theme.dark")}</span>
-              </>
-            )}
-          </Button>
+            <div className={`p-1.5 rounded-full transition-colors flex items-center justify-center ${theme === 'dark' ? 'bg-[#F1E5D8] text-[#3b2d26]' : 'text-[#4B3D34]'}`}>
+              <Moon className="w-4 h-4 fill-current" />
+            </div>
+            <div className={`p-1.5 rounded-full transition-colors flex items-center justify-center ${theme === 'light' ? 'bg-[#4B3D34] text-[#F1E5D8]' : 'text-[#F1E5D8] dark:text-[#a89b94]'}`}>
+              <Sun className="w-4 h-4 fill-current" />
+            </div>
+          </button>
         </div>
       </div>
     </header>
