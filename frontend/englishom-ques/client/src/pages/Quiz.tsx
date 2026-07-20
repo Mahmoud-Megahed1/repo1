@@ -15,6 +15,28 @@ import Footer from "@/components/Footer";
 
 import { getLoginUrl } from "@/const";
 
+declare global {
+  interface Window {
+    google?: any;
+  }
+}
+
+function parseJwt(token: string) {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return null;
+  }
+}
+
 type QuizState = "loading" | "level-select" | "quiz" | "lead-capture" | "results";
 
 interface QuizQuestion {
@@ -136,22 +158,97 @@ export default function Quiz() {
     }
   }, [user]);
 
-  const handleGoogleSignIn = () => {
+  const handleGoogleCredentialResponse = (response: any) => {
     try {
-      localStorage.setItem(
-        "englishom_pending_quiz",
-        JSON.stringify({
-          selectedLevel,
-          userAnswers: userAnswersRef.current,
-          averageResponseTime: results?.averageResponseTime,
-          totalTimeSpent: results?.totalTimeSpent,
-        })
-      );
+      const payload = parseJwt(response.credential);
+      if (payload && payload.email) {
+        const googleEmail = payload.email;
+        const googleName = payload.name || payload.given_name || googleEmail.split("@")[0];
+
+        setStudentPhone(googleEmail);
+        setStudentName(googleName);
+
+        submitResult({
+          level: selectedLevel,
+          answers: userAnswersRef.current,
+          averageResponseTime: results?.averageResponseTime || 0,
+          totalTimeSpent: results?.totalTimeSpent || 0,
+          studentName: googleName,
+          studentPhone: googleEmail,
+        });
+
+        setState("results");
+        toast.success(
+          language === "ar"
+            ? `أهلاً بك (${googleName})! تم حفظ النتيجة بنجاح.`
+            : `Welcome (${googleName})! Results saved.`
+        );
+      }
     } catch (e) {
-      console.error("Failed to cache pending quiz", e);
+      console.error("Failed to parse Google credential", e);
+      toast.error(language === "ar" ? "تعذر تسجيل الدخول بواسطة جوجل" : "Failed to sign in with Google");
     }
-    window.location.href = getLoginUrl();
   };
+
+  const handleGoogleSignIn = () => {
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+    if (window.google?.accounts?.id && googleClientId) {
+      window.google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: handleGoogleCredentialResponse,
+      });
+      window.google.accounts.id.prompt();
+    } else if (window.google?.accounts?.id) {
+      // Prompt user to enter Google email if Client ID environment variable is missing
+      const promptEmail = window.prompt(
+        language === "ar"
+          ? "أدخل البريد الإلكتروني لحساب جوجل الخاص بك للتسجيل السريع:"
+          : "Enter your Google email address for quick registration:"
+      );
+      if (promptEmail && promptEmail.includes("@")) {
+        const defaultName = promptEmail.split("@")[0];
+        setStudentPhone(promptEmail);
+        setStudentName(defaultName);
+
+        submitResult({
+          level: selectedLevel,
+          answers: userAnswersRef.current,
+          averageResponseTime: results?.averageResponseTime || 0,
+          totalTimeSpent: results?.totalTimeSpent || 0,
+          studentName: defaultName,
+          studentPhone: promptEmail,
+        });
+
+        setState("results");
+        toast.success(
+          language === "ar"
+            ? `تم الربط بحساب (${promptEmail}) بنجاح!`
+            : `Linked to (${promptEmail}) successfully!`
+        );
+      }
+    } else {
+      toast.error(
+        language === "ar"
+          ? "خدمة تسجيل دخول جوجل قيد التحميل، يرجى المحاولة بعد لحظات"
+          : "Google Sign-In is loading, please try again in a moment"
+      );
+    }
+  };
+
+  useEffect(() => {
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    if (state === "lead-capture" && window.google?.accounts?.id && googleClientId) {
+      try {
+        window.google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: handleGoogleCredentialResponse,
+        });
+      } catch (e) {
+        console.error("GIS init failed", e);
+      }
+    }
+  }, [state]);
 
   // Auto-load questions when user selects a level
   useEffect(() => {
