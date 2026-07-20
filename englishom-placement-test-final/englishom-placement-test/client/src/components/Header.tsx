@@ -26,9 +26,17 @@ export default function Header() {
             className="flex items-center gap-3 cursor-pointer"
             onClick={() => navigate("/")}
           >
-            <div className="w-9 h-9 bg-[#4A3B32] dark:bg-[#FCDFC2] rounded-xl flex items-center justify-center shadow-md">
-              <span className="text-[#FCDFC2] dark:text-[#120F0D] font-extrabold text-xl">E</span>
-            </div>
+            <img
+              src="/logo.jpeg"
+              onError={(e) => {
+                if (!e.currentTarget.dataset.retried) {
+                  e.currentTarget.dataset.retried = "true";
+                  e.currentTarget.src = "https://englishom.com/logo.jpeg";
+                }
+              }}
+              alt="EnglishOM Logo"
+              className="h-10 w-auto rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 shrink-0"
+            />
             <div className="flex flex-col">
               <h1 className="text-lg font-extrabold text-gray-900 dark:text-white leading-tight">
                 {t("nav.englishom")}
