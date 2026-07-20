@@ -416,10 +416,10 @@ export default function Admin() {
 
         {/* Add / Edit Form */}
         {showForm && (
-          <Card className="mb-6 shadow-lg border-2 border-primary/20">
-            <CardHeader className="pb-4">
+          <Card className="mb-6 shadow-xl border-2 border-[#4A3B32] bg-[#1E1916] text-[#FCDFC2]">
+            <CardHeader className="pb-4 border-b border-[#4A3B32]/60">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-xl flex items-center gap-2">
+                <CardTitle className="text-xl flex items-center gap-2 text-[#FCDFC2]">
                   {isEditing ? (
                     <>
                       <Edit2 className="w-5 h-5" /> Edit Question #{editingId}
@@ -430,17 +430,17 @@ export default function Admin() {
                     </>
                   )}
                 </CardTitle>
-                <Button variant="ghost" size="icon" onClick={resetForm}>
+                <Button variant="ghost" size="icon" onClick={resetForm} className="text-slate-400 hover:text-white hover:bg-[#25201C]">
                   <X className="w-5 h-5" />
                 </Button>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-6">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Row 1: Stage, Difficulty, Time */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold mb-2">
+                    <label className="block text-sm font-semibold mb-2 text-[#FCDFC2]">
                       Stage
                     </label>
                     <Select
@@ -449,12 +449,12 @@ export default function Admin() {
                         setFormData({ ...formData, stage: parseInt(v) })
                       }
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-[#25201C] border-[#4A3B32] text-[#FCDFC2]">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-[#1E1916] border-[#4A3B32] text-[#FCDFC2]">
                         {Object.entries(STAGE_NAMES).map(([k, v]) => (
-                          <SelectItem key={k} value={k}>
+                          <SelectItem key={k} value={k} className="hover:bg-[#2A231F] focus:bg-[#2A231F] text-[#FCDFC2]">
                             {v}
                           </SelectItem>
                         ))}
@@ -462,7 +462,7 @@ export default function Admin() {
                     </Select>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-2">
+                    <label className="block text-sm font-semibold mb-2 text-[#FCDFC2]">
                       Difficulty
                     </label>
                     <Select
@@ -471,18 +471,18 @@ export default function Admin() {
                         setFormData({ ...formData, difficulty: v })
                       }
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-[#25201C] border-[#4A3B32] text-[#FCDFC2]">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="easy">🟢 Easy</SelectItem>
-                        <SelectItem value="medium">🟡 Medium</SelectItem>
-                        <SelectItem value="hard">🔴 Hard</SelectItem>
+                      <SelectContent className="bg-[#1E1916] border-[#4A3B32] text-[#FCDFC2]">
+                        <SelectItem value="easy" className="hover:bg-[#2A231F] focus:bg-[#2A231F] text-[#FCDFC2]">🟢 Easy</SelectItem>
+                        <SelectItem value="medium" className="hover:bg-[#2A231F] focus:bg-[#2A231F] text-[#FCDFC2]">🟡 Medium</SelectItem>
+                        <SelectItem value="hard" className="hover:bg-[#2A231F] focus:bg-[#2A231F] text-[#FCDFC2]">🔴 Hard</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-2">
+                    <label className="block text-sm font-semibold mb-2 text-[#FCDFC2]">
                       Time Limit (seconds)
                     </label>
                     <Input
@@ -496,17 +496,18 @@ export default function Admin() {
                           timeLimit: parseInt(e.target.value) || 30,
                         })
                       }
+                      className="bg-[#25201C] border-[#4A3B32] text-[#FCDFC2]"
                     />
                   </div>
                 </div>
 
                 {/* Question Text */}
                 <div>
-                  <label className="block text-sm font-semibold mb-2">
+                  <label className="block text-sm font-semibold mb-2 text-[#FCDFC2]">
                     Question Text
                   </label>
                   <textarea
-                    className="w-full min-h-[80px] px-3 py-2 border rounded-md text-sm resize-y focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full min-h-[80px] px-3 py-2 border border-[#4A3B32] bg-[#25201C] text-[#FCDFC2] rounded-md text-sm resize-y focus:outline-none focus:ring-2 focus:ring-[#FCDFC2]/50 placeholder:text-slate-500"
                     placeholder="Enter your question here..."
                     value={formData.questionText}
                     onChange={(e) =>
@@ -518,7 +519,7 @@ export default function Admin() {
                 {/* Options */}
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <label className="text-sm font-semibold">
+                    <label className="text-sm font-semibold text-[#FCDFC2]">
                       Answer Options
                     </label>
                     <Button
@@ -527,6 +528,7 @@ export default function Admin() {
                       size="sm"
                       onClick={addOption}
                       disabled={formData.options.length >= 6}
+                      className="border-[#4A3B32] text-[#FCDFC2] hover:bg-[#25201C]"
                     >
                       <Plus className="w-3 h-3 mr-1" /> Add Option
                     </Button>
@@ -538,8 +540,8 @@ export default function Admin() {
                         <div
                           className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
                             formData.correctAnswer === opt && opt.trim()
-                              ? "bg-emerald-500 text-white"
-                              : "bg-slate-200 text-slate-600"
+                              ? "bg-emerald-600 text-white"
+                              : "bg-[#25201C] text-[#FCDFC2] border border-[#4A3B32]"
                           }`}
                         >
                           {optionLabel(idx)}
@@ -551,9 +553,9 @@ export default function Admin() {
                           onChange={(e) =>
                             handleOptionChange(idx, e.target.value)
                           }
-                          className={`flex-1 ${
+                          className={`flex-1 bg-[#25201C] border-[#4A3B32] text-[#FCDFC2] ${
                             formData.correctAnswer === opt && opt.trim()
-                              ? "border-emerald-500 ring-1 ring-emerald-300"
+                              ? "border-emerald-500 ring-1 ring-emerald-400"
                               : ""
                           }`}
                         />
@@ -568,8 +570,8 @@ export default function Admin() {
                           size="sm"
                           className={`shrink-0 ${
                             formData.correctAnswer === opt && opt.trim()
-                              ? "bg-emerald-500 hover:bg-emerald-600"
-                              : ""
+                              ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+                              : "border-[#4A3B32] text-[#FCDFC2] hover:bg-[#25201C]"
                           }`}
                           onClick={() => {
                             if (opt.trim()) {
@@ -590,7 +592,7 @@ export default function Admin() {
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="shrink-0 text-red-400 hover:text-red-600"
+                          className="shrink-0 text-red-400 hover:text-red-300 hover:bg-red-950/40"
                           onClick={() => removeOption(idx)}
                           disabled={formData.options.length <= 2}
                         >
@@ -600,7 +602,7 @@ export default function Admin() {
                     ))}
                   </div>
                   {formData.correctAnswer && (
-                    <p className="mt-2 text-sm text-emerald-600 flex items-center gap-1">
+                    <p className="mt-2 text-sm text-emerald-400 flex items-center gap-1">
                       <CheckCircle2 className="w-4 h-4" />
                       Correct answer: <strong>{formData.correctAnswer}</strong>
                     </p>
@@ -609,11 +611,11 @@ export default function Admin() {
 
                 {/* Preview */}
                 {formData.questionText.trim() && formData.options.some(o => o.trim()) && (
-                  <div className="border rounded-lg p-4 bg-slate-50">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase mb-2">
+                  <div className="border border-[#4A3B32] rounded-lg p-4 bg-[#25201C] text-[#FCDFC2]">
+                    <p className="text-xs font-semibold text-slate-400 uppercase mb-2">
                       Preview
                     </p>
-                    <p className="font-medium mb-3">{formData.questionText}</p>
+                    <p className="font-medium mb-3 text-[#FCDFC2]">{formData.questionText}</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {formData.options
                         .filter((o) => o.trim())
@@ -622,16 +624,16 @@ export default function Admin() {
                             key={idx}
                             className={`px-3 py-2 rounded-md border text-sm ${
                               formData.correctAnswer === opt
-                                ? "bg-emerald-50 border-emerald-300 text-emerald-800 font-medium"
-                                : "bg-white border-slate-200"
+                                ? "bg-emerald-950/60 border-emerald-500 text-emerald-300 font-medium"
+                                : "bg-[#1E1916] border-[#4A3B32] text-[#FCDFC2]"
                             }`}
                           >
-                            <span className="font-semibold mr-2">
+                            <span className="font-semibold mr-2 text-[#FCDFC2]">
                               {optionLabel(idx)}.
                             </span>
                             {opt}
                             {formData.correctAnswer === opt && (
-                              <CheckCircle2 className="w-4 h-4 inline ml-2 text-emerald-500" />
+                              <CheckCircle2 className="w-4 h-4 inline ml-2 text-emerald-400" />
                             )}
                           </div>
                         ))}
@@ -646,7 +648,7 @@ export default function Admin() {
                     disabled={
                       createMutation.isPending || updateMutation.isPending
                     }
-                    className="px-8"
+                    className="px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold"
                   >
                     {createMutation.isPending || updateMutation.isPending ? (
                       <>
@@ -665,7 +667,7 @@ export default function Admin() {
                       </>
                     )}
                   </Button>
-                  <Button type="button" variant="outline" onClick={resetForm}>
+                  <Button type="button" variant="outline" onClick={resetForm} className="border-[#4A3B32] text-[#FCDFC2] hover:bg-[#25201C]">
                     Cancel
                   </Button>
                 </div>
@@ -750,12 +752,12 @@ export default function Admin() {
         </div>
 
         {/* Questions List */}
-        <Card className="shadow-sm">
+        <Card className="shadow-xl bg-[#1E1916] border border-[#4A3B32] text-[#FCDFC2]">
           <CardContent className="p-0">
             {filteredQuestions.length === 0 ? (
-              <div className="text-center py-16 text-muted-foreground">
+              <div className="text-center py-16 text-slate-400">
                 <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                <p className="text-lg font-medium">No questions found</p>
+                <p className="text-lg font-medium text-[#FCDFC2]">No questions found</p>
                 <p className="text-sm">
                   {questions.length === 0
                     ? "Add your first question above!"
@@ -766,18 +768,18 @@ export default function Admin() {
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-slate-50">
-                      <TableHead className="w-[50px] text-center">#</TableHead>
-                      <TableHead>Question</TableHead>
-                      <TableHead className="w-[120px]">Stage</TableHead>
-                      <TableHead className="w-[100px]">Difficulty</TableHead>
-                      <TableHead className="w-[80px] text-center">
+                    <TableRow className="bg-[#25201C] border-[#4A3B32]">
+                      <TableHead className="w-[50px] text-center text-[#FCDFC2]">#</TableHead>
+                      <TableHead className="text-[#FCDFC2]">Question</TableHead>
+                      <TableHead className="w-[120px] text-[#FCDFC2]">Stage</TableHead>
+                      <TableHead className="w-[100px] text-[#FCDFC2]">Difficulty</TableHead>
+                      <TableHead className="w-[80px] text-center text-[#FCDFC2]">
                         Options
                       </TableHead>
-                      <TableHead className="w-[80px] text-center">
+                      <TableHead className="w-[80px] text-center text-[#FCDFC2]">
                         Time
                       </TableHead>
-                      <TableHead className="w-[120px] text-center">
+                      <TableHead className="w-[120px] text-center text-[#FCDFC2]">
                         Actions
                       </TableHead>
                     </TableRow>
@@ -800,27 +802,26 @@ export default function Admin() {
                           : [];
 
                       return (
-                        <>
+                        <React.Fragment key={question.id}>
                           <TableRow
-                            key={question.id}
-                            className={`cursor-pointer hover:bg-slate-50 transition-colors ${
-                              isExpanded ? "bg-slate-50" : ""
+                            className={`cursor-pointer hover:bg-[#2A231F] transition-colors border-[#4A3B32] ${
+                              isExpanded ? "bg-[#25201C]" : ""
                             }`}
                             onClick={() =>
                               setExpandedQuestion(isExpanded ? null : question.id)
                             }
                           >
-                            <TableCell className="text-center text-muted-foreground text-xs">
+                            <TableCell className="text-center text-slate-400 text-xs">
                               {question.id}
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="text-[#FCDFC2]">
                               <div className="flex items-center gap-2">
                                 {isExpanded ? (
-                                  <ChevronUp className="w-4 h-4 text-muted-foreground shrink-0" />
+                                  <ChevronUp className="w-4 h-4 text-slate-400 shrink-0" />
                                 ) : (
-                                  <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
+                                  <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
                                 )}
-                                <span className="text-sm font-medium truncate max-w-md">
+                                <span className="text-sm font-medium truncate max-w-md text-[#FCDFC2]">
                                   {question.questionText}
                                 </span>
                               </div>
@@ -843,10 +844,10 @@ export default function Admin() {
                                 {question.difficulty}
                               </span>
                             </TableCell>
-                            <TableCell className="text-center text-sm">
+                            <TableCell className="text-center text-sm text-[#FCDFC2]">
                               {qOptions.length}
                             </TableCell>
-                            <TableCell className="text-center text-sm">
+                            <TableCell className="text-center text-sm text-[#FCDFC2]">
                               {question.timeLimit}s
                             </TableCell>
                             <TableCell>
@@ -857,7 +858,7 @@ export default function Admin() {
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  className="h-8 w-8 p-0"
+                                  className="h-8 w-8 p-0 border-[#4A3B32] text-[#FCDFC2] hover:bg-[#25201C]"
                                   onClick={() => handleEdit(question)}
                                   title="Edit question"
                                 >
@@ -866,7 +867,7 @@ export default function Admin() {
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  className="h-8 w-8 p-0 text-red-500 hover:bg-red-50 hover:text-red-600"
+                                  className="h-8 w-8 p-0 border-[#4A3B32] text-red-400 hover:bg-red-950/40 hover:text-red-300"
                                   onClick={() => handleDelete(question.id)}
                                   title="Delete question"
                                 >
@@ -877,11 +878,11 @@ export default function Admin() {
                           </TableRow>
                           {/* Expanded details */}
                           {isExpanded && (
-                            <TableRow key={`${question.id}-detail`}>
+                            <TableRow key={`${question.id}-detail`} className="bg-[#181412] border-[#4A3B32]">
                               <TableCell></TableCell>
                               <TableCell colSpan={6}>
                                 <div className="py-3 space-y-3">
-                                  <p className="font-medium text-sm">
+                                  <p className="font-medium text-sm text-[#FCDFC2]">
                                     {question.questionText}
                                   </p>
                                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -891,24 +892,24 @@ export default function Admin() {
                                           key={optIdx}
                                           className={`px-3 py-2 rounded-md border text-sm flex items-center gap-2 ${
                                             question.correctAnswer === opt
-                                              ? "bg-emerald-50 border-emerald-300 text-emerald-800 font-medium"
-                                              : "bg-white border-slate-200"
+                                              ? "bg-emerald-950/60 border-emerald-500 text-emerald-300 font-medium"
+                                              : "bg-[#25201C] border-[#4A3B32] text-[#FCDFC2]"
                                           }`}
                                         >
-                                          <span className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold shrink-0">
+                                          <span className="w-6 h-6 rounded-full bg-[#4A3B32] text-[#FCDFC2] flex items-center justify-center text-xs font-bold shrink-0">
                                             {optionLabel(optIdx)}
                                           </span>
                                           {opt}
                                           {question.correctAnswer === opt && (
-                                            <CheckCircle2 className="w-4 h-4 text-emerald-500 ml-auto shrink-0" />
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-400 ml-auto shrink-0" />
                                           )}
                                         </div>
                                       )
                                     )}
                                   </div>
-                                  <p className="text-xs text-muted-foreground">
+                                  <p className="text-xs text-slate-400">
                                     Correct Answer:{" "}
-                                    <strong className="text-emerald-600">
+                                    <strong className="text-emerald-400">
                                       {question.correctAnswer}
                                     </strong>{" "}
                                     | Time: {question.timeLimit}s | Difficulty:{" "}
@@ -918,7 +919,7 @@ export default function Admin() {
                               </TableCell>
                             </TableRow>
                           )}
-                        </>
+                        </React.Fragment>
                       );
                     })}
                   </TableBody>
