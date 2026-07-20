@@ -327,19 +327,19 @@ export default function Admin() {
     String.fromCharCode(65 + index); // A, B, C, D, E, F
 
   return (
-    <div dir="ltr" className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div dir="ltr" className="min-h-screen bg-[#120F0D] text-[#FCDFC2] dark">
       {/* Top Bar */}
-      <div className="bg-white border-b shadow-sm sticky top-0 z-50">
+      <div className="bg-[#1E1916] border-b border-[#4A3B32] shadow-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-              <BarChart3 className="w-5 h-5 text-primary-foreground" />
+            <div className="w-10 h-10 rounded-lg bg-[#4A3B32] flex items-center justify-center border border-[#FCDFC2]/30">
+              <BarChart3 className="w-5 h-5 text-[#FCDFC2]" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-foreground">
+              <h1 className="text-lg font-bold text-[#FCDFC2]">
                 Question Manager
               </h1>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-slate-400">
                 Englishom Level Test Admin
               </p>
             </div>
@@ -349,6 +349,7 @@ export default function Admin() {
               variant="outline"
               size="sm"
               onClick={() => (window.location.href = "/test")}
+              className="border-[#4A3B32] text-[#FCDFC2] hover:bg-[#25201C]"
             >
               ← Back to Test
             </Button>
@@ -361,6 +362,7 @@ export default function Admin() {
                 setFormData({ ...emptyForm, options: ["", "", "", ""] });
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
+              className="bg-[#4A3B32] hover:bg-[#5C4A3E] text-[#FCDFC2] border border-[#FCDFC2]/30"
             >
               <Plus className="w-4 h-4 mr-1" /> Add Question
             </Button>

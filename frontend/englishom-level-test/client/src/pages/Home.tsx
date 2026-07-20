@@ -4,6 +4,7 @@ import { useLocation } from "wouter";
 import { CheckCircle2, BookOpen, Headphones, PenTool, Eye, Keyboard } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 export default function Home() {
   const [, navigate] = useLocation();
@@ -49,11 +50,16 @@ export default function Home() {
       <section className="container py-20 md:py-32">
         <div className="max-w-3xl mx-auto text-center space-y-8">
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
-              {t.home.title}
+            <h1 className="text-5xl md:text-7xl font-extrabold text-foreground leading-tight tracking-tight">
+              {language === "ar" ? "اكتشف مستواك" : "Discover Your Level"}
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground">
-              {t.home.subtitle}
+            <h2 className="text-xl md:text-3xl font-bold text-[#4A3B32] dark:text-[#FCDFC2]">
+              {language === "ar" ? "اكتشف مستوى اللغة الإنجليزية لديك" : "Discover Your English Language Proficiency"}
+            </h2>
+            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+              {language === "ar"
+                ? "خذ اختبار تقييم شامل لتحديد مستوى كفاءتك في اللغة الإنجليزية وفقاً للإطار الأوروبي المرجعي (A1-C2). الاختبار مجاني تماماً بدون تسجيل."
+                : "Take a comprehensive evaluation test to determine your English proficiency level according to the CEFR standard (A1-C2). The test is completely free without registration."}
             </p>
           </div>
 
@@ -254,45 +260,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border/50 bg-background/50 backdrop-blur-sm">
-        <div className="container py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="font-bold text-foreground mb-4">Englishom</h3>
-              <p className="text-sm text-muted-foreground">
-                {language === "ar"
-                  ? "أتقن اللغة الإنجليزية بثقة من خلال منصة التعلم الشاملة لدينا."
-                  : "Master English with confidence through our comprehensive learning platform."}
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">{language === "ar" ? "المنتج" : "Product"}</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#features" className="hover:text-foreground transition-colors">{t.nav.features}</a></li>
-                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/#faq`} className="hover:text-foreground transition-colors">{t.nav.faq}</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">{language === "ar" ? "الشركة" : "Company"}</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/#about`} className="hover:text-foreground transition-colors">{t.nav.about}</a></li>
-                <li><a href="https://englishom.com/blog/" className="hover:text-foreground transition-colors">{language === "ar" ? "المدونة" : "Blog"}</a></li>
-                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/contact`} className="hover:text-foreground transition-colors">{language === "ar" ? "اتصل بنا" : "Contact"}</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">{language === "ar" ? "القانوني" : "Legal"}</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/privacy-policy`} className="hover:text-foreground transition-colors">{language === "ar" ? "الخصوصية" : "Privacy"}</a></li>
-                <li><a href={`https://englishom.com/${language === "ar" ? "ar" : "en"}/terms-and-conditions`} className="hover:text-foreground transition-colors">{language === "ar" ? "الشروط" : "Terms"}</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-border/50 pt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2026 Englishom. {language === "ar" ? "جميع الحقوق محفوظة." : "All rights reserved."}</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
