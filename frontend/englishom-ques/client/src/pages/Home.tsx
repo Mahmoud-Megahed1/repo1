@@ -35,7 +35,7 @@ export default function Home() {
           <div className="flex justify-center mb-12">
             <Button 
               size="lg" 
-              className="gap-2 text-lg px-10 py-6 rounded-xl font-bold bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-lg shadow-amber-500/20 hover:scale-105 transition-all"
+              className="gap-2 text-lg px-10 py-6 rounded-xl font-bold bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] shadow-lg hover:scale-105 transition-all"
               onClick={() => navigate("/ques")}
             >
               <Zap className="w-6 h-6 fill-current" />
@@ -50,8 +50,8 @@ export default function Home() {
             {t("features.title")}
           </h3>
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="p-6 border border-border/80 hover:border-amber-500/50 transition-all shadow-sm flex flex-col items-center text-center">
-              <div className="w-14 h-14 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-4 text-amber-500">
+            <Card className="p-6 border border-border/80 hover:border-[#4A3B32]/40 dark:hover:border-[#FCDFC2]/40 transition-all shadow-sm flex flex-col items-center text-center">
+              <div className="w-14 h-14 bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/15 rounded-2xl flex items-center justify-center mb-4 text-[#4A3B32] dark:text-[#FCDFC2]">
                 <BookOpen className="w-7 h-7" />
               </div>
               <h4 className="text-lg font-bold text-foreground mb-2">
@@ -62,8 +62,8 @@ export default function Home() {
               </p>
             </Card>
 
-            <Card className="p-6 border border-border/80 hover:border-amber-500/50 transition-all shadow-sm flex flex-col items-center text-center">
-              <div className="w-14 h-14 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-4 text-amber-500">
+            <Card className="p-6 border border-border/80 hover:border-[#4A3B32]/40 dark:hover:border-[#FCDFC2]/40 transition-all shadow-sm flex flex-col items-center text-center">
+              <div className="w-14 h-14 bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/15 rounded-2xl flex items-center justify-center mb-4 text-[#4A3B32] dark:text-[#FCDFC2]">
                 <Zap className="w-7 h-7" />
               </div>
               <h4 className="text-lg font-bold text-foreground mb-2">
@@ -74,8 +74,8 @@ export default function Home() {
               </p>
             </Card>
 
-            <Card className="p-6 border border-border/80 hover:border-amber-500/50 transition-all shadow-sm flex flex-col items-center text-center">
-              <div className="w-14 h-14 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-4 text-amber-500">
+            <Card className="p-6 border border-border/80 hover:border-[#4A3B32]/40 dark:hover:border-[#FCDFC2]/40 transition-all shadow-sm flex flex-col items-center text-center">
+              <div className="w-14 h-14 bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/15 rounded-2xl flex items-center justify-center mb-4 text-[#4A3B32] dark:text-[#FCDFC2]">
                 <BarChart className="w-7 h-7" />
               </div>
               <h4 className="text-lg font-bold text-foreground mb-2">
@@ -102,8 +102,8 @@ export default function Home() {
               { code: "C1", name: t("levels.c1"), desc: t("levels.c1.desc") },
               { code: "C2", name: t("levels.c2"), desc: t("levels.c2.desc") },
             ].map((level) => (
-              <Card key={level.code} className="p-5 border-l-4 border-l-amber-500 hover:shadow-md transition-all">
-                <p className="text-xs font-bold text-amber-500 mb-1">{level.code}</p>
+              <Card key={level.code} className="p-5 border-l-4 border-l-[#4A3B32] dark:border-l-[#FCDFC2] hover:shadow-md transition-all">
+                <p className="text-xs font-bold text-[#4A3B32] dark:text-[#FCDFC2] mb-1">{level.code}</p>
                 <h4 className="text-base font-bold text-foreground mb-1">{level.name}</h4>
                 <p className="text-xs text-muted-foreground">{level.desc}</p>
               </Card>
@@ -112,7 +112,7 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="bg-gradient-to-br from-card to-slate-900/50 border border-border rounded-2xl p-8 md:p-12 text-center shadow-md flex flex-col items-center">
+        <section className="bg-card border border-border rounded-2xl p-8 md:p-12 text-center shadow-md flex flex-col items-center">
           <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4 text-center">
             {t("cta.title")}
           </h3>
@@ -120,7 +120,7 @@ export default function Home() {
             {t("cta.subtitle")}
           </p>
           <Button
-            className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-6 px-8 text-base rounded-xl gap-2 shadow-lg shadow-amber-500/20"
+            className="bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] font-bold py-6 px-8 text-base rounded-xl gap-2 shadow-lg"
             onClick={() => navigate("/ques")}
           >
             <BookOpen className="w-5 h-5" />

@@ -110,7 +110,7 @@ export default function MyResults() {
 
         {/* Search Phone Bar for Guests */}
         {!user && (
-          <Card className="p-4 border border-amber-500/20 bg-amber-500/5 rounded-2xl shadow-sm">
+          <Card className="p-4 border border-[#4A3B32]/20 dark:border-[#FCDFC2]/30 bg-card rounded-2xl shadow-sm">
             <form onSubmit={handleSearchPhone} className="flex flex-col sm:flex-row items-center gap-3">
               <span className="text-sm font-bold text-foreground whitespace-nowrap">
                 {isAr ? "البحث برقم الهاتف / الإيميل:" : "Search by Phone / Email:"}
@@ -123,7 +123,7 @@ export default function MyResults() {
                 className="bg-background max-w-md"
                 dir="ltr"
               />
-              <Button type="submit" className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold gap-1.5 w-full sm:w-auto px-6 rounded-xl">
+              <Button type="submit" className="bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] font-bold gap-1.5 w-full sm:w-auto px-6 rounded-xl">
                 <Search className="w-4 h-4" />
                 {isAr ? "بحث" : "Search"}
               </Button>
@@ -133,14 +133,14 @@ export default function MyResults() {
 
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-16 space-y-3">
-            <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#4A3B32] dark:text-[#FCDFC2]" />
             <p className="text-muted-foreground text-sm">{isAr ? "جاري تحميل البيانات..." : "Loading results..."}</p>
           </div>
         ) : (
           <>
             {/* Top 4 Statistics Section */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card className="p-5 border border-border/80 rounded-2xl shadow-sm hover:border-amber-500/40 transition-all">
+              <Card className="p-5 border border-border/80 rounded-2xl shadow-sm hover:border-[#4A3B32]/40 dark:hover:border-[#FCDFC2]/40 transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-semibold text-muted-foreground mb-1">
@@ -148,13 +148,13 @@ export default function MyResults() {
                     </p>
                     <p className="text-3xl font-extrabold text-foreground">{progress?.totalQuizzesTaken || 0}</p>
                   </div>
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/15 text-[#4A3B32] dark:text-[#FCDFC2] flex items-center justify-center">
                     <TrendingUp className="w-5 h-5" />
                   </div>
                 </div>
               </Card>
 
-              <Card className="p-5 border border-border/80 rounded-2xl shadow-sm hover:border-amber-500/40 transition-all">
+              <Card className="p-5 border border-border/80 rounded-2xl shadow-sm hover:border-[#4A3B32]/40 dark:hover:border-[#FCDFC2]/40 transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-semibold text-muted-foreground mb-1">
@@ -162,27 +162,27 @@ export default function MyResults() {
                     </p>
                     <p className="text-3xl font-extrabold text-foreground">{progress?.averageAccuracy || 0}%</p>
                   </div>
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/15 text-[#4A3B32] dark:text-[#FCDFC2] flex items-center justify-center">
                     <Award className="w-5 h-5" />
                   </div>
                 </div>
               </Card>
 
-              <Card className="p-5 border border-border/80 rounded-2xl shadow-sm hover:border-amber-500/40 transition-all">
+              <Card className="p-5 border border-border/80 rounded-2xl shadow-sm hover:border-[#4A3B32]/40 dark:hover:border-[#FCDFC2]/40 transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-semibold text-muted-foreground mb-1">
                       {isAr ? "أفضل مستوى" : "Best Level"}
                     </p>
-                    <p className="text-3xl font-extrabold text-amber-500">{progress?.bestLevel || "A1"}</p>
+                    <p className="text-3xl font-extrabold text-[#4A3B32] dark:text-[#FCDFC2]">{progress?.bestLevel || "A1"}</p>
                   </div>
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/15 text-[#4A3B32] dark:text-[#FCDFC2] flex items-center justify-center">
                     <Trophy className="w-5 h-5" />
                   </div>
                 </div>
               </Card>
 
-              <Card className="p-5 border border-border/80 rounded-2xl shadow-sm hover:border-amber-500/40 transition-all">
+              <Card className="p-5 border border-border/80 rounded-2xl shadow-sm hover:border-[#4A3B32]/40 dark:hover:border-[#FCDFC2]/40 transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-semibold text-muted-foreground mb-1">
@@ -190,7 +190,7 @@ export default function MyResults() {
                     </p>
                     <p className="text-3xl font-extrabold text-foreground">{formatTime(progress?.totalTimeSpent || 0)}</p>
                   </div>
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/15 text-[#4A3B32] dark:text-[#FCDFC2] flex items-center justify-center">
                     <Clock className="w-5 h-5" />
                   </div>
                 </div>
@@ -200,15 +200,15 @@ export default function MyResults() {
             {/* Achievements Section */}
             <Card className="p-6 md:p-8 border border-border shadow-sm rounded-2xl">
               <h2 className="text-xl font-extrabold text-foreground mb-6 flex items-center gap-2">
-                <Star className="w-5 h-5 text-amber-500 fill-current" />
+                <Star className="w-5 h-5 text-[#4A3B32] dark:text-[#FCDFC2] fill-current" />
                 {isAr ? "الإنجازات" : "Achievements"}
               </h2>
 
               {achievements && achievements.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                   {achievements.map((achievement: any) => (
-                    <div key={achievement.id} className="flex flex-col items-center text-center p-5 bg-card border border-border/80 rounded-2xl shadow-sm hover:border-amber-500/50 transition-all">
-                      <div className="w-12 h-12 rounded-full bg-amber-500/15 text-amber-500 flex items-center justify-center text-2xl mb-3 shadow-inner">
+                    <div key={achievement.id} className="flex flex-col items-center text-center p-5 bg-card border border-border/80 rounded-2xl shadow-sm hover:border-[#4A3B32]/40 dark:hover:border-[#FCDFC2]/40 transition-all">
+                      <div className="w-12 h-12 rounded-full bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/15 text-[#4A3B32] dark:text-[#FCDFC2] flex items-center justify-center text-2xl mb-3 shadow-inner">
                         ⭐
                       </div>
                       <p className="font-extrabold text-sm text-foreground mb-1">{achievement.badgeName}</p>
@@ -234,7 +234,7 @@ export default function MyResults() {
               />
 
               <div className="mt-6 pt-4 border-t border-border">
-                <Button onClick={shareResults} className="w-full gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-6 text-base rounded-xl shadow-lg shadow-amber-500/20">
+                <Button onClick={shareResults} className="w-full gap-2 bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] font-bold py-6 text-base rounded-xl shadow-lg">
                   <Share2 size={18} />
                   {isAr ? "مشاركة النتائج" : "Share Results"}
                 </Button>
@@ -261,7 +261,7 @@ export default function MyResults() {
                       {history.map((result: any) => (
                         <tr key={result.id} className="hover:bg-muted/30 transition-colors">
                           <td className="py-3 px-4 text-foreground font-extrabold">
-                            <span className="inline-block px-3 py-1 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                            <span className="inline-block px-3 py-1 rounded-lg bg-[#4A3B32]/10 text-[#4A3B32] dark:bg-[#FCDFC2]/15 dark:text-[#FCDFC2] font-bold border border-[#4A3B32]/20 dark:border-[#FCDFC2]/30">
                               {result.level}
                             </span>
                           </td>

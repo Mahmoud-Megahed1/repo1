@@ -38,9 +38,9 @@ export default function AdminLogin() {
       <Header />
 
       <div className="flex flex-1 items-center justify-center p-4 my-8">
-        <Card className="w-full max-w-md shadow-xl border border-amber-500/20">
+        <Card className="w-full max-w-md shadow-xl border border-border">
           <CardHeader className="text-center space-y-2">
-            <div className="mx-auto bg-amber-500/10 p-4 rounded-2xl w-fit mb-2 text-amber-500">
+            <div className="mx-auto bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/15 p-4 rounded-2xl w-fit mb-2 text-[#4A3B32] dark:text-[#FCDFC2]">
               <ShieldCheck className="w-9 h-9" />
             </div>
             <CardTitle className="text-2xl font-extrabold text-foreground">
@@ -82,7 +82,7 @@ export default function AdminLogin() {
 
               <Button 
                 type="submit" 
-                className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-6 text-base shadow-md rounded-xl" 
+                className="w-full bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] font-bold py-6 text-base shadow-md rounded-xl" 
                 disabled={loginMutation.isPending}
               >
                 {loginMutation.isPending ? t("admin.loggingIn") : t("admin.submitLogin")}

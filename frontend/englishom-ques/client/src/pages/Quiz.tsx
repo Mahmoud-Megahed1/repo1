@@ -330,8 +330,8 @@ export default function Quiz() {
                     onClick={() => setSelectedLevel(lvl.code)}
                     className={`p-5 rounded-2xl border-2 transition-all text-start flex flex-col justify-between relative overflow-hidden ${
                       isSelected
-                        ? "border-amber-500 bg-amber-500/10 shadow-lg ring-2 ring-amber-500/30"
-                        : "border-border/80 hover:border-amber-500/50 hover:bg-card/80"
+                        ? "border-[#4A3B32] dark:border-[#FCDFC2] bg-[#F7F2ED] dark:bg-[#251E19] shadow-lg ring-2 ring-[#4A3B32]/20 dark:ring-[#FCDFC2]/30"
+                        : "border-border hover:border-[#4A3B32]/40 dark:hover:border-[#FCDFC2]/40 hover:bg-card/80"
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
@@ -341,7 +341,11 @@ export default function Quiz() {
                           {language === "ar" ? lvl.titleAr : lvl.titleEn}
                         </h3>
                       </div>
-                      <span className="text-xs font-black px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400">
+                      <span className={`text-xs font-black px-2.5 py-1 rounded-lg transition-colors ${
+                        isSelected 
+                          ? "bg-[#4A3B32] text-[#FCDFC2] dark:bg-[#FCDFC2] dark:text-[#120F0D]" 
+                          : "bg-muted text-muted-foreground"
+                      }`}>
                         {lvl.code}
                       </span>
                     </div>
@@ -356,7 +360,7 @@ export default function Quiz() {
             <Button
               onClick={() => setState("loading")}
               disabled={questionsLoading}
-              className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-6 text-lg rounded-xl shadow-xl shadow-amber-500/20 transition-all hover:scale-[1.01]"
+              className="w-full bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] font-extrabold py-6 text-lg rounded-xl shadow-xl transition-all hover:scale-[1.01]"
             >
               {questionsLoading ? t("quiz.loading") : (language === "ar" ? "ابدأ الاختبار" : "Start Quiz")}
             </Button>
@@ -685,7 +689,7 @@ export default function Quiz() {
             <div className="space-y-3">
               <Button
                 onClick={() => navigate("/results")}
-                className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-6 text-base rounded-xl shadow-lg shadow-amber-500/20"
+                className="w-full bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] font-bold py-6 text-base rounded-xl shadow-lg"
               >
                 {language === "ar" ? "عرض كافة نتائجي ورجلة التقدم 📊" : "View Full Results & Progress Journey 📊"}
               </Button>

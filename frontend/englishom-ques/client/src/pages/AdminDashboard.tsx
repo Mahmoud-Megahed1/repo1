@@ -126,7 +126,7 @@ export default function AdminDashboard() {
               <Button onClick={() => navigate("/")} variant="outline">
                 {t("admin.backToHome")}
               </Button>
-              <Button onClick={() => navigate("/admin/login")} className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold">
+              <Button onClick={() => navigate("/admin/login")} className="bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] font-bold">
                 {t("admin.login")}
               </Button>
             </div>
@@ -212,6 +212,8 @@ export default function AdminDashboard() {
     },
   };
 
+  const activeTabBtnStyle = "bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] font-bold";
+
   return (
     <div className={`min-h-screen flex flex-col justify-between bg-background ${isAr ? "rtl" : "ltr"}`}>
       {/* Header */}
@@ -235,7 +237,7 @@ export default function AdminDashboard() {
               size="sm"
               variant={activeTab === "questions" ? "default" : "outline"}
               onClick={() => setActiveTab("questions")}
-              className={`gap-1.5 ${activeTab === "questions" ? "bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold" : ""}`}
+              className={`gap-1.5 ${activeTab === "questions" ? activeTabBtnStyle : ""}`}
             >
               <HelpCircle className="w-4 h-4" />
               {t("admin.questions")}
@@ -248,7 +250,7 @@ export default function AdminDashboard() {
                 resetForm();
                 setActiveTab("add");
               }}
-              className={`gap-1.5 ${activeTab === "add" ? "bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold" : ""}`}
+              className={`gap-1.5 ${activeTab === "add" ? activeTabBtnStyle : ""}`}
             >
               <Plus className="w-4 h-4" />
               {editingId ? t("admin.editQuestion") : t("admin.addQuestion")}
@@ -258,7 +260,7 @@ export default function AdminDashboard() {
               size="sm"
               variant={activeTab === "stats" ? "default" : "outline"}
               onClick={() => setActiveTab("stats")}
-              className={`gap-1.5 ${activeTab === "stats" ? "bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold" : ""}`}
+              className={`gap-1.5 ${activeTab === "stats" ? activeTabBtnStyle : ""}`}
             >
               <BarChart2 className="w-4 h-4" />
               {t("admin.statistics")}
@@ -268,7 +270,7 @@ export default function AdminDashboard() {
               size="sm"
               variant={activeTab === "leads" ? "default" : "outline"}
               onClick={() => setActiveTab("leads")}
-              className={`gap-1.5 ${activeTab === "leads" ? "bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold" : ""}`}
+              className={`gap-1.5 ${activeTab === "leads" ? activeTabBtnStyle : ""}`}
             >
               <Users className="w-4 h-4" />
               {t("admin.studentResults")}
@@ -330,19 +332,19 @@ export default function AdminDashboard() {
                         </div>
 
                         <div className="pt-2 flex flex-wrap gap-2 text-xs">
-                          <span className="bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-md font-bold">
+                          <span className="bg-[#4A3B32]/10 text-[#4A3B32] dark:bg-[#FCDFC2]/15 dark:text-[#FCDFC2] border border-[#4A3B32]/20 dark:border-[#FCDFC2]/30 px-2.5 py-1 rounded-md font-bold">
                             {t("admin.correctAnswer")}: {q.correctAnswer}
                           </span>
-                          <span className="bg-slate-200 dark:bg-slate-800 px-2.5 py-1 rounded-md font-bold">
+                          <span className="bg-muted px-2.5 py-1 rounded-md font-bold text-foreground">
                             {t("admin.levelLabel")}: {q.level}
                           </span>
                           {q.category && (
-                            <span className="bg-slate-200 dark:bg-slate-800 px-2.5 py-1 rounded-md">
+                            <span className="bg-muted px-2.5 py-1 rounded-md text-foreground">
                               {t("admin.categoryLabel")}: {q.category}
                             </span>
                           )}
                           {q.timePerQuestion && (
-                            <span className="bg-slate-200 dark:bg-slate-800 px-2.5 py-1 rounded-md">
+                            <span className="bg-muted px-2.5 py-1 rounded-md text-foreground">
                               {q.timePerQuestion} {isAr ? "ثانية" : "sec"}
                             </span>
                           )}
@@ -356,7 +358,7 @@ export default function AdminDashboard() {
                           onClick={() => handleEdit(q)}
                           className="gap-1"
                         >
-                          <Edit2 className="w-4 h-4 text-amber-500" />
+                          <Edit2 className="w-4 h-4 text-[#4A3B32] dark:text-[#FCDFC2]" />
                           <span>{t("admin.editQuestion")}</span>
                         </Button>
                         <Button
@@ -533,7 +535,7 @@ export default function AdminDashboard() {
               <div className="flex gap-3 pt-4">
                 <Button
                   type="submit"
-                  className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-6 flex-1 shadow-md"
+                  className="bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] font-bold py-6 flex-1 shadow-md"
                   disabled={createMutation.isPending || updateMutation.isPending}
                 >
                   {editingId ? t("admin.updateQuestion") : t("admin.addQuestion")}
@@ -563,8 +565,8 @@ export default function AdminDashboard() {
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-                <div className="bg-amber-500/10 border border-amber-500/30 p-6 rounded-xl text-center">
-                  <p className="text-sm font-bold text-amber-600 dark:text-amber-400 mb-1">{t("admin.totalQuestions")}</p>
+                <div className="bg-[#4A3B32]/10 border border-[#4A3B32]/20 dark:bg-[#FCDFC2]/10 dark:border-[#FCDFC2]/30 p-6 rounded-xl text-center">
+                  <p className="text-sm font-bold text-[#4A3B32] dark:text-[#FCDFC2] mb-1">{t("admin.totalQuestions")}</p>
                   <p className="text-4xl font-black text-foreground">{stats.total}</p>
                 </div>
               </div>
@@ -577,7 +579,7 @@ export default function AdminDashboard() {
                 {Object.entries(stats.byLevel).map(([lvl, count]) => (
                   <div key={lvl} className="bg-muted p-4 rounded-xl text-center border border-border">
                     <p className="text-sm font-bold text-muted-foreground mb-1">{lvl}</p>
-                    <p className="text-2xl font-extrabold text-amber-500">{count}</p>
+                    <p className="text-2xl font-extrabold text-[#4A3B32] dark:text-[#FCDFC2]">{count}</p>
                   </div>
                 ))}
               </div>
@@ -620,7 +622,7 @@ export default function AdminDashboard() {
                           {lead.studentPhone || "-"}
                         </td>
                         <td className="py-3 px-4">
-                          <span className="inline-block px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold border border-amber-500/30 text-xs">
+                          <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#4A3B32]/10 text-[#4A3B32] dark:bg-[#FCDFC2]/15 dark:text-[#FCDFC2] font-bold border border-[#4A3B32]/20 dark:border-[#FCDFC2]/30 text-xs">
                             {lead.level}
                           </span>
                         </td>
