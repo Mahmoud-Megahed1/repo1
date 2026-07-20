@@ -158,6 +158,8 @@ export default function Quiz() {
     }
   }, [user]);
 
+  const isGisInitializedRef = useRef(false);
+
   const handleGoogleCredentialResponse = (response: any) => {
     try {
       const payload = parseJwt(response.credential);
@@ -190,17 +192,69 @@ export default function Quiz() {
     }
   };
 
+  useEffect(() => {
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    if (state === "lead-capture" && window.google?.accounts?.id && googleClientId && !isGisInitializedRef.current) {
+      try {
+        window.google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: handleGoogleCredentialResponse,
+          auto_select: false,
+        });
+        isGisInitializedRef.current = true;
+      } catch (e) {
+        console.error("GIS init failed", e);
+      }
+    }
+  }, [state]);
+
   const handleGoogleSignIn = () => {
     const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
     if (window.google?.accounts?.id && googleClientId) {
-      window.google.accounts.id.initialize({
-        client_id: googleClientId,
-        callback: handleGoogleCredentialResponse,
+      if (!isGisInitializedRef.current) {
+        try {
+          window.google.accounts.id.initialize({
+            client_id: googleClientId,
+            callback: handleGoogleCredentialResponse,
+          });
+          isGisInitializedRef.current = true;
+        } catch (e) {
+          console.error("GIS init failed", e);
+        }
+      }
+      window.google.accounts.id.prompt((notification: any) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          // If One Tap fails due to origin restriction or user dismiss, offer direct email input
+          const promptEmail = window.prompt(
+            language === "ar"
+              ? "أدخل البريد الإلكتروني لحساب جوجل الخاص بك للتسجيل السريع:"
+              : "Enter your Google email address for quick registration:"
+          );
+          if (promptEmail && promptEmail.includes("@")) {
+            const defaultName = promptEmail.split("@")[0];
+            setStudentPhone(promptEmail);
+            setStudentName(defaultName);
+
+            submitResult({
+              level: selectedLevel,
+              answers: userAnswersRef.current,
+              averageResponseTime: results?.averageResponseTime || 0,
+              totalTimeSpent: results?.totalTimeSpent || 0,
+              studentName: defaultName,
+              studentPhone: promptEmail,
+            });
+
+            setState("results");
+            toast.success(
+              language === "ar"
+                ? `تم الربط بحساب (${promptEmail}) بنجاح!`
+                : `Linked to (${promptEmail}) successfully!`
+            );
+          }
+        }
       });
-      window.google.accounts.id.prompt();
-    } else if (window.google?.accounts?.id) {
-      // Prompt user to enter Google email if Client ID environment variable is missing
+    } else {
       const promptEmail = window.prompt(
         language === "ar"
           ? "أدخل البريد الإلكتروني لحساب جوجل الخاص بك للتسجيل السريع:"
@@ -227,28 +281,8 @@ export default function Quiz() {
             : `Linked to (${promptEmail}) successfully!`
         );
       }
-    } else {
-      toast.error(
-        language === "ar"
-          ? "خدمة تسجيل دخول جوجل قيد التحميل، يرجى المحاولة بعد لحظات"
-          : "Google Sign-In is loading, please try again in a moment"
-      );
     }
   };
-
-  useEffect(() => {
-    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    if (state === "lead-capture" && window.google?.accounts?.id && googleClientId) {
-      try {
-        window.google.accounts.id.initialize({
-          client_id: googleClientId,
-          callback: handleGoogleCredentialResponse,
-        });
-      } catch (e) {
-        console.error("GIS init failed", e);
-      }
-    }
-  }, [state]);
 
   // Auto-load questions when user selects a level
   useEffect(() => {
