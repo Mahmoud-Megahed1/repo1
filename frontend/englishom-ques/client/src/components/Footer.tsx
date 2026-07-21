@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const SocialIcons = [
@@ -86,9 +87,11 @@ const SocialIcons = [
 export default function Footer() {
   const { language } = useLanguage();
   const isAr = language === "ar";
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   return (
-    <footer className="bg-card text-foreground border-t border-border py-12 px-4 md:px-8 transition-colors" dir={isAr ? "rtl" : "ltr"}>
+    <>
+      <footer className="bg-card text-foreground border-t border-border py-12 px-4 md:px-8 transition-colors" dir={isAr ? "rtl" : "ltr"}>
       <div className="max-w-6xl mx-auto space-y-10">
         
         {/* Banner Section */}
@@ -251,6 +254,15 @@ export default function Footer() {
                   {isAr ? "سياسة الخصوصية" : "Privacy Policy"}
                 </a>
               </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => setShowDisclaimer(true)}
+                  className="hover:text-foreground transition-colors text-left rtl:text-right w-full bg-transparent border-0 p-0 cursor-pointer"
+                >
+                  {isAr ? "إخلاء المسؤولية" : "Disclaimer"}
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -271,5 +283,46 @@ export default function Footer() {
 
       </div>
     </footer>
+
+      {showDisclaimer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div 
+            className="bg-card border border-border rounded-2xl max-w-xl w-full p-6 shadow-2xl relative animate-in zoom-in-95 duration-200 text-right text-foreground"
+            dir={isAr ? "rtl" : "ltr"}
+          >
+            <button
+              onClick={() => setShowDisclaimer(false)}
+              className="absolute top-4 left-4 rtl:left-auto rtl:right-4 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Close"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            <h3 className="text-xl font-bold mb-4 mt-2 text-center md:text-start">
+              {isAr ? "إخلاء المسؤولية" : "Disclaimer"}
+            </h3>
+            
+            <p className="text-muted-foreground text-sm md:text-base leading-relaxed text-justify mb-2 whitespace-pre-line">
+              {isAr ? (
+                "جميع المقالات والمحتويات المنشورة في هذه المدونة هي لأغراض تثقيفية وتعليمية عامة، وتُمثل وجهات نظر كتابها بناءً على الأبحاث والمصادر المتاحة. المسميات الوظيفية والتحريرية المذكورة (مثل: خبير، مستشار، أخصائي) تُستخدم في سياقها التحريري لإبراز زاوية الطرح وتخصص المقال، ولا تُعد بديلة عن الاستشارات المهنية والرسمية المباشرة. لا تتحمل المنصة أي مسؤولية قانونية عن قرارات يُتخذ بناءً على المعلومات الواردة في الموقع."
+              ) : (
+                "All articles and content published on this blog are provided for general educational and informational purposes only, based on available research and resources. Editorial titles (such as Expert, Consultant, or Specialist) are used in a stylistic context to define the topic's scope and do not constitute legal, medical, or formal professional advice. The platform assumes no liability for actions taken based on the information provided herein."
+              )}
+            </p>
+            
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={() => setShowDisclaimer(false)}
+                className="px-5 py-2.5 rounded-xl font-bold text-sm bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] transition-all"
+              >
+                {isAr ? "إغلاق" : "Close"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

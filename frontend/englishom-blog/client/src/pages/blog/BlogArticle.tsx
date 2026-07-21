@@ -107,11 +107,11 @@ export default function BlogArticle() {
         <div className="max-w-4xl mx-auto">
           {/* Featured Image */}
           {post.featuredImageUrl && (
-            <div className="mb-8 rounded-xl overflow-hidden h-72 md:h-96 shadow-lg">
+            <div className="mb-8 rounded-xl overflow-hidden h-auto md:h-96 shadow-lg bg-black/5 dark:bg-black/25 flex items-center justify-center">
               <img
                 src={post.featuredImageUrl}
                 alt={title}
-                className="w-full h-full object-cover"
+                className="w-full h-auto max-h-[300px] md:max-h-none md:h-full object-contain md:object-cover"
               />
             </div>
           )}
@@ -163,7 +163,20 @@ export default function BlogArticle() {
           </div>
 
           {/* Article Body */}
-          <ArticleContentRenderer content={content} className="mb-12" />
+          <ArticleContentRenderer content={content} className="mb-6" />
+
+          {/* Blog Disclaimer Banner */}
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs md:text-sm text-slate-500 mb-8 leading-relaxed">
+            {isAr ? (
+              <p>
+                <strong>إخلاء مسؤولية:</strong> المحتوى المنشور في هذه المدونة مخصص لأغراض تعليمية وتثقيفية عامة، ويعتمد على أبحاث ومعلومات موثوقة. المسميات التحريرية لا تشكل استشارات رسمية أو مرخصة.
+              </p>
+            ) : (
+              <p>
+                <strong>Disclaimer:</strong> The content on this blog is for general educational and informational purposes only. Editorial titles do not constitute formal or licensed professional advice.
+              </p>
+            )}
+          </div>
 
           {/* Star Rating Section */}
           <div className="border-t border-border pt-8 mb-8">
