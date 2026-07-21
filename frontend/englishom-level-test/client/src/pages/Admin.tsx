@@ -96,6 +96,34 @@ export default function Admin() {
   const [expandedQuestion, setExpandedQuestion] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
 
+  const [isTestAvailable, setIsTestAvailable] = useState<boolean>(() => {
+    if (typeof localStorage === 'undefined') return true;
+    const saved = localStorage.getItem('englishom_tests_availability');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed.test !== false;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return true;
+  });
+
+  const handleTestAvailabilityToggle = () => {
+    const newVal = !isTestAvailable;
+    setIsTestAvailable(newVal);
+    const saved = localStorage.getItem('englishom_tests_availability');
+    let parsed: any = {};
+    if (saved) {
+      try { parsed = JSON.parse(saved); } catch (e) {}
+    }
+    parsed.test = newVal;
+    localStorage.setItem('englishom_tests_availability', JSON.stringify(parsed));
+    window.dispatchEvent(new Event('storage'));
+    toast.success(`Test availability set to ${newVal ? "ON" : "OFF"}`);
+  };
+
   // Queries
   const {
     data: questions = [],
@@ -322,37 +350,6 @@ export default function Admin() {
     stage: s,
     count: questions.filter((q: any) => q.stage === s).length,
   }));
-
-  const optionLabel = (index: number) =>
-    String.fromCharCode(65 + index); // A, B, C, D, E, F
-
-  const [isTestAvailable, setIsTestAvailable] = useState<boolean>(() => {
-    if (typeof localStorage === 'undefined') return true;
-    const saved = localStorage.getItem('englishom_tests_availability');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        return parsed.test !== false;
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    return true;
-  });
-
-  const handleTestAvailabilityToggle = () => {
-    const newVal = !isTestAvailable;
-    setIsTestAvailable(newVal);
-    const saved = localStorage.getItem('englishom_tests_availability');
-    let parsed: any = {};
-    if (saved) {
-      try { parsed = JSON.parse(saved); } catch (e) {}
-    }
-    parsed.test = newVal;
-    localStorage.setItem('englishom_tests_availability', JSON.stringify(parsed));
-    window.dispatchEvent(new Event('storage'));
-    toast.success(`Test availability set to ${newVal ? "ON" : "OFF"}`);
-  };
 
   return (
     <div dir="ltr" className="min-h-screen bg-[#120F0D] text-[#FCDFC2] dark">
