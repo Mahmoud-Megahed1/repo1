@@ -28,7 +28,7 @@ const TESTS: TestItem[] = [
     descAr: 'اختبار تحدي أسئلة خيارات متعددة سريع لقياس المستوى العام.',
     descEn: 'Fast-paced multiple choice question challenge for general level assessment.',
     publicUrl: 'https://englishom.com/ques/',
-    adminUrl: 'https://englishom.com/ques/admin',
+    adminUrl: 'https://englishom.com/ques/admin?admin=1',
     icon: Zap,
   },
   {
@@ -38,7 +38,7 @@ const TESTS: TestItem[] = [
     descAr: 'اختبار التقييم التفاعلي لمهارات اللغة الإنجليزية الأساسية.',
     descEn: 'Interactive assessment test for core English language skills.',
     publicUrl: 'https://englishom.com/test/',
-    adminUrl: 'https://englishom.com/test/admin',
+    adminUrl: 'https://englishom.com/test/admin?admin=1',
     icon: BookOpen,
   },
   {
@@ -48,7 +48,7 @@ const TESTS: TestItem[] = [
     descAr: 'مقياس التمكن وبناء مهارات التأسيس من إنجلشوم.',
     descEn: 'Mastery Scale & Foundation Building assessment by EnglishOM.',
     publicUrl: 'https://englishom.com/test1/',
-    adminUrl: 'https://englishom.com/test1/admin',
+    adminUrl: 'https://englishom.com/test1/admin?admin=1',
     icon: Award,
   },
 ];
