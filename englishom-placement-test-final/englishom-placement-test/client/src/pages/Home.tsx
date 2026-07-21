@@ -18,19 +18,30 @@ export default function Home() {
 
   useEffect(() => {
     const checkAvailability = () => {
-      const saved = localStorage.getItem('englishom_tests_availability');
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          if (parsed.test1 === false) {
+      fetch('https://admin.englishom.com/api/settings')
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.testsAvailability && data.testsAvailability.test1 === false) {
             setIsAvailable(false);
-            return;
+          } else {
+            setIsAvailable(true);
           }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      setIsAvailable(true);
+        })
+        .catch(() => {
+          const saved = localStorage.getItem('englishom_tests_availability');
+          if (saved) {
+            try {
+              const parsed = JSON.parse(saved);
+              if (parsed.test1 === false) {
+                setIsAvailable(false);
+                return;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          }
+          setIsAvailable(true);
+        });
     };
 
     checkAvailability();

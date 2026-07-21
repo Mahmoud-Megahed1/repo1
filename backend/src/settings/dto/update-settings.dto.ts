@@ -7,4 +7,7 @@ export class UpdateSettingsDto {
   @Min(0, { each: true })
   @Max(100, { each: true })
   repurchaseDiscounts?: number[];
+
+  @IsOptional()
+  testsAvailability?: Record<string, boolean>;
 }

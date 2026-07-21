@@ -14,6 +14,16 @@ export class SettingsController {
     return await this.settingsService.getGlobalSettings();
   }
 
+  @Patch('tests-availability')
+  async updateTestsAvailability(@Body() body: { testsAvailability: Record<string, boolean> }) {
+    const current = await this.settingsService.getGlobalSettings();
+    const updatedMap = {
+      ...(current.testsAvailability || { ques: true, test: true, test1: true }),
+      ...body.testsAvailability,
+    };
+    return await this.settingsService.updateSettings({ testsAvailability: updatedMap });
+  }
+
   @UseGuards(AdminJwtGuard)
   @AdminRoles(AdminRole.SUPER, AdminRole.MANAGER)
   @Patch()

@@ -2,6 +2,7 @@ import React from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Header from "./Header";
 import Footer from "./Footer";
+import bannerImg from "../../public/coming-soon-banner.png";
 
 export default function ComingSoon() {
   const { language } = useLanguage();
@@ -22,13 +23,7 @@ export default function ComingSoon() {
             <div className="order-2 lg:order-1 flex justify-center">
               <div className="relative rounded-2xl overflow-hidden border border-[#4A3B32]/60 shadow-xl max-w-lg w-full">
                 <img
-                  src="/coming-soon-banner.png"
-                  onError={(e) => {
-                    if (!e.currentTarget.dataset.retried) {
-                      e.currentTarget.dataset.retried = "true";
-                      e.currentTarget.src = "https://englishom.com/coming-soon-banner.png";
-                    }
-                  }}
+                  src={bannerImg}
                   alt="اختبارات إنجلشوم الذكية"
                   className="w-full h-auto object-cover"
                 />

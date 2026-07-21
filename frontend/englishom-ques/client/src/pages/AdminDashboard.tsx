@@ -105,21 +105,20 @@ export default function AdminDashboard() {
 
   const isSuperAdminBypass = typeof document !== 'undefined' && (document.cookie.includes("super_admin_session") || window.location.search.includes("admin=1"));
 
-  const [isAvailable, setIsAvailable] = useState<boolean>(() => {
-    if (typeof localStorage === 'undefined') return true;
-    const saved = localStorage.getItem('englishom_tests_availability');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        return parsed.ques !== false;
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    return true;
-  });
+  const [isAvailable, setIsAvailable] = useState<boolean>(true);
 
-  const handleAvailabilityToggle = () => {
+  useEffect(() => {
+    fetch('https://admin.englishom.com/api/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.testsAvailability && typeof data.testsAvailability.ques === 'boolean') {
+          setIsAvailable(data.testsAvailability.ques);
+        }
+      })
+      .catch((e) => console.error(e));
+  }, []);
+
+  const handleAvailabilityToggle = async () => {
     const newVal = !isAvailable;
     setIsAvailable(newVal);
     const saved = localStorage.getItem('englishom_tests_availability');
@@ -130,6 +129,17 @@ export default function AdminDashboard() {
     parsed.ques = newVal;
     localStorage.setItem('englishom_tests_availability', JSON.stringify(parsed));
     window.dispatchEvent(new Event('storage'));
+
+    try {
+      await fetch('https://admin.englishom.com/api/settings/tests-availability', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ testsAvailability: { ques: newVal } }),
+      });
+    } catch (e) {
+      console.error(e);
+    }
+
     toast.success(isAr ? `تم ${newVal ? "تفعيل" : "إيقاف"} إتاحة هذا الاختبار` : `Test availability set to ${newVal ? "ON" : "OFF"}`);
   };
 

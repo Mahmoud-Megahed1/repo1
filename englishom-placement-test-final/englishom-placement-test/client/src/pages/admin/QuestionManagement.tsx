@@ -183,21 +183,20 @@ export default function QuestionManagement() {
 
   const filteredQuestions = getQuestionsForFilter();
 
-  const [isTestAvailable, setIsTestAvailable] = useState<boolean>(() => {
-    if (typeof localStorage === 'undefined') return true;
-    const saved = localStorage.getItem('englishom_tests_availability');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        return parsed.test1 !== false;
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    return true;
-  });
+  const [isTestAvailable, setIsTestAvailable] = useState<boolean>(true);
 
-  const handleTest1AvailabilityToggle = () => {
+  useEffect(() => {
+    fetch('https://admin.englishom.com/api/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.testsAvailability && typeof data.testsAvailability.test1 === 'boolean') {
+          setIsTestAvailable(data.testsAvailability.test1);
+        }
+      })
+      .catch((e) => console.error(e));
+  }, []);
+
+  const handleTest1AvailabilityToggle = async () => {
     const newVal = !isTestAvailable;
     setIsTestAvailable(newVal);
     const saved = localStorage.getItem('englishom_tests_availability');
@@ -208,6 +207,16 @@ export default function QuestionManagement() {
     parsed.test1 = newVal;
     localStorage.setItem('englishom_tests_availability', JSON.stringify(parsed));
     window.dispatchEvent(new Event('storage'));
+
+    try {
+      await fetch('https://admin.englishom.com/api/settings/tests-availability', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ testsAvailability: { test1: newVal } }),
+      });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (

@@ -64,25 +64,38 @@ export default function TestsAdminPage() {
   });
 
   useEffect(() => {
-    // Load saved availability states from localStorage / backend
-    const saved = localStorage.getItem('englishom_tests_availability');
-    if (saved) {
-      try {
-        setAvailability(JSON.parse(saved));
-      } catch (e) {
-        console.error(e);
-      }
-    }
+    fetch('/api/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.testsAvailability) {
+          setAvailability(data.testsAvailability);
+          localStorage.setItem('englishom_tests_availability', JSON.stringify(data.testsAvailability));
+        }
+      })
+      .catch(() => {
+        const saved = localStorage.getItem('englishom_tests_availability');
+        if (saved) {
+          try { setAvailability(JSON.parse(saved)); } catch (e) {}
+        }
+      });
   }, []);
 
-  const handleToggle = (id: string, currentVal: boolean) => {
+  const handleToggle = async (id: string, currentVal: boolean) => {
     const newVal = !currentVal;
     const updated = { ...availability, [id]: newVal };
     setAvailability(updated);
     localStorage.setItem('englishom_tests_availability', JSON.stringify(updated));
-    
-    // Broadcast via BroadcastChannel or localStorage event
     window.dispatchEvent(new Event('storage'));
+
+    try {
+      await fetch('/api/settings/tests-availability', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ testsAvailability: { [id]: newVal } }),
+      });
+    } catch (e) {
+      console.error('Failed to sync backend settings:', e);
+    }
 
     toast.success(
       isAr

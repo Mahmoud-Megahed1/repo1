@@ -96,21 +96,20 @@ export default function Admin() {
   const [expandedQuestion, setExpandedQuestion] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
 
-  const [isTestAvailable, setIsTestAvailable] = useState<boolean>(() => {
-    if (typeof localStorage === 'undefined') return true;
-    const saved = localStorage.getItem('englishom_tests_availability');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        return parsed.test !== false;
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    return true;
-  });
+  const [isTestAvailable, setIsTestAvailable] = useState<boolean>(true);
 
-  const handleTestAvailabilityToggle = () => {
+  useEffect(() => {
+    fetch('https://admin.englishom.com/api/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.testsAvailability && typeof data.testsAvailability.test === 'boolean') {
+          setIsTestAvailable(data.testsAvailability.test);
+        }
+      })
+      .catch((e) => console.error(e));
+  }, []);
+
+  const handleTestAvailabilityToggle = async () => {
     const newVal = !isTestAvailable;
     setIsTestAvailable(newVal);
     const saved = localStorage.getItem('englishom_tests_availability');
@@ -121,6 +120,17 @@ export default function Admin() {
     parsed.test = newVal;
     localStorage.setItem('englishom_tests_availability', JSON.stringify(parsed));
     window.dispatchEvent(new Event('storage'));
+
+    try {
+      await fetch('https://admin.englishom.com/api/settings/tests-availability', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ testsAvailability: { test: newVal } }),
+      });
+    } catch (e) {
+      console.error(e);
+    }
+
     toast.success(`Test availability set to ${newVal ? "ON" : "OFF"}`);
   };
 

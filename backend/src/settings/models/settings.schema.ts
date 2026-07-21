@@ -7,6 +7,9 @@ export class Settings extends AbstractDocument {
   // Example: [15, 20] means 15% discount for 2nd course, 20% for 3rd course and onwards.
   @Prop({ type: [Number], default: [] })
   repurchaseDiscounts: number[];
+
+  @Prop({ type: Object, default: { ques: true, test: true, test1: true } })
+  testsAvailability: Record<string, boolean>;
 }
 
 export const SettingsSchema = SchemaFactory.createForClass(Settings);
