@@ -189,44 +189,44 @@ export default {
     contact: {
       title: 'Contact Us',
       subtitle:
-        "We're here to help you on your English learning journey. Reach out to us via email or social media.",
+        'We are here to assist you on your English practice journey via our smart system. Contact us directly via email or social media.',
       emailsSection: {
-        title: 'Email Contact',
+        title: 'Email',
         description:
-          'Get in touch with us directly via email for support and assistance.',
+          'Contact us directly via email for technical and operational support.',
       },
       emails: {
         support: {
           type: 'Technical Support',
-          description: 'For technical help and support',
+          description: 'For instant technical assistance and account management',
         },
         info: {
-          type: 'General Information',
-          description: 'For general inquiries and information',
+          type: 'General Inquiries',
+          description: 'For general information about the system and workflow',
         },
         billing: {
-          type: 'Billing & Payments',
-          description: 'For billing and payment inquiries',
+          type: 'Operations & Payments',
+          description: 'For billing and digital subscription inquiries',
         },
         admin: {
-          type: 'Administration & Complaints',
-          description: 'For contacting administration and complaints',
+          type: 'Administration & Reports',
+          description: 'For direct contact with platform management',
         },
       },
       socialSection: {
         title: 'Social Media',
         description:
-          'Follow us on social media for the latest news and updates.',
+          'Follow us on social media for the latest technical news and updates.',
       },
       social: {
-        facebook: 'Follow us for latest news and tips',
-        instagram: 'Visual learning content',
-        snapchat: 'Quick and fun content',
-        telegram: 'Join our learning community',
-        whatsapp: 'Quick and direct contact',
-        tiktok: 'Short educational videos',
-        twitter: 'Latest news and updates',
-        youtube: 'Detailed video lessons',
+        facebook: 'Follow us for the latest technical news and tips',
+        instagram: 'Watch interactive and distinguished visual content',
+        snapchat: 'Quick and fun content about the system',
+        telegram: 'Join the channel for updates and practitioners',
+        whatsapp: 'Fast and direct communication',
+        tiktok: 'Interactive and fast video clips',
+        twitter: 'Latest technical news and instant updates',
+        youtube: 'Detailed interactive video guides for system interfaces',
       },
       additionalInfo: {
         title: 'Additional Information',
@@ -380,61 +380,62 @@ export default {
         },
         commitment: {
           title:
-            'Our Commitment to Quality… Your Effort is the Key to Success!',
+            'The Mastery Equation: A high-quality software system from us, and smart interaction & effort from you',
           description:
-            'We are committed to providing an unparalleled learning experience, built on the latest methods to ensure your mastery of English. Every day, you will find a complete and integrated learning module meticulously designed:',
+            'We are committed to delivering an unparalleled technical experience, built on the latest algorithms to ensure your mastery of English speaking. Every day, you will find a complete, integrated software module meticulously designed:',
           features: {
             words: {
               title: 'Selected Daily Words',
-              description: 'New words carefully chosen to suit your level.',
+              description: 'New words carefully chosen to suit your software track.',
             },
             images: {
               title: 'Illustrative Images',
               description:
-                "To visually reinforce the word's meaning in your mind.",
+                'Smart advance visual feed that imprints the word meaning into your memory first, paving the way for reading, pronunciation, and writing.',
             },
             translation: {
               title: 'Accurate Translation',
-              description: 'To ensure your complete understanding.',
+              description:
+                'Provides the word meaning in English so you start thinking in the language itself and ensure direct understanding without a mediator.',
             },
             sentences: {
               title: 'Sample Sentences',
               description:
-                'To see how the word is used in a realistic context.',
+                'To see how the word is used in a realistic and interactive context.',
             },
             audio: {
               title: 'Audio Files',
-              description: 'To hear and repeat the correct pronunciation.',
+              description: 'To hear and repeat the correct pronunciation through the system.',
             },
             recording: {
               title: 'Voice Recording Feature',
               description:
-                'To say the word and sentence, and compare your performance with the correct pronunciation.',
+                'To practice word and sentence pronunciation, and compare your digital performance with the correct pronunciation.',
             },
             writing: {
-              title: 'Writing Practice',
+              title: 'Targeted Vocabulary Documentation',
               description:
-                'You will practice writing the same words and sentences you have learned to pronounce, hear, and see, to enhance your memory and consolidate the information.',
+                'The system allows you to write the specified words for the day after practicing them visually, audibly, and verbally, ensuring data retention in your active memory.',
             },
             grammar: {
-              title: 'Daily Grammar Lesson',
+              title: 'Continuous Grammar Processing',
               description:
-                'Every day, you will learn a simple grammar rule, clearly and easily explained for direct application.',
+                'A single grammar rule accompanies your software track for 5 days, which the system reformulates and applies in different ways daily to fix it in your mind firmly.',
             },
             idiom: {
-              title: 'New Idiom',
+              title: 'New Expression',
               description:
-                'Add a common idiom used in daily conversations to your daily vocabulary.',
+                'The system adds a common expression used in daily conversations to your active vocabulary.',
             },
             phrasal: {
               title: 'New Phrasal Verb',
               description:
-                'Learn one new phrasal verb every day to understand English more deeply and speak more fluently.',
+                'Activates one new phrasal verb every day to understand English more deeply and speak more fluently.',
             },
             mission: {
-              title: 'Your Daily Mission',
+              title: 'Your Daily Software Tasks',
               description:
-                '11 Steps to Mastery! Every day, 11 interactive tasks await you, ensuring comprehensive and intensive learning.',
+                '11 Steps to Mastery! Every day, 11 interactive tasks await you, ensuring comprehensive and intensive practice through our system.',
             },
           },
           success: {
