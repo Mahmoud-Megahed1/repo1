@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -5,6 +6,7 @@ import { useLocation } from "wouter";
 import { BookOpen, Zap, BarChart } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ComingSoon from "@/components/ComingSoon";
 
 /**
  * Home page for EnglishOM Ques (اختبار مستوى الكفاءة)
@@ -12,6 +14,34 @@ import Footer from "@/components/Footer";
 export default function Home() {
   const [, navigate] = useLocation();
   const { language, t } = useLanguage();
+
+  const [isAvailable, setIsAvailable] = useState<boolean>(true);
+
+  useEffect(() => {
+    const checkAvailability = () => {
+      const saved = localStorage.getItem('englishom_tests_availability');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed.ques === false) {
+            setIsAvailable(false);
+            return;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      setIsAvailable(true);
+    };
+
+    checkAvailability();
+    window.addEventListener('storage', checkAvailability);
+    return () => window.removeEventListener('storage', checkAvailability);
+  }, []);
+
+  if (!isAvailable) {
+    return <ComingSoon />;
+  }
 
   return (
     <div className={`min-h-screen flex flex-col justify-between bg-background transition-colors duration-300 ${language === "ar" ? "rtl" : "ltr"}`}>

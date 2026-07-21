@@ -337,6 +337,7 @@
       "orders": "Orders",
       "admins": "Admins",
       "themes": "Themes",
+      "tests": "Tests",
       "cms": "CMS"
     },
     "formErrors": {

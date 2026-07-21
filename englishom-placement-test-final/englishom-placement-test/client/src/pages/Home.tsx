@@ -1,9 +1,11 @@
+import { useState, useEffect } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { BookOpen, Zap, TrendingUp, Award } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ComingSoon from "@/components/ComingSoon";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Home() {
@@ -11,6 +13,34 @@ export default function Home() {
   const { user, loading, isAuthenticated, logout } = useAuth();
   const { language, t } = useLanguage();
   const isAr = language === "ar";
+
+  const [isAvailable, setIsAvailable] = useState<boolean>(true);
+
+  useEffect(() => {
+    const checkAvailability = () => {
+      const saved = localStorage.getItem('englishom_tests_availability');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed.test1 === false) {
+            setIsAvailable(false);
+            return;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      setIsAvailable(true);
+    };
+
+    checkAvailability();
+    window.addEventListener('storage', checkAvailability);
+    return () => window.removeEventListener('storage', checkAvailability);
+  }, []);
+
+  if (!isAvailable) {
+    return <ComingSoon />;
+  }
 
   const levelItems = [
     {

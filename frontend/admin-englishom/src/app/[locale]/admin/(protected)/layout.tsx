@@ -13,7 +13,7 @@ import {
 import { LessonIdEnum } from '@/constants';
 import useLessonsItems from '@/hooks/useLessonsItems';
 import { usePathname } from '@/i18n/routing';
-import { MessageSquare, PenBox, Bot, Palette, Settings } from 'lucide-react';
+import { MessageSquare, PenBox, Bot, Palette, Settings, FileQuestion } from 'lucide-react';
 import { parseAsStringEnum, useQueryState } from 'nuqs';
 import React, { useEffect, useMemo } from 'react';
 import { useAuth } from './_components/auth-provider';
@@ -127,6 +127,12 @@ const useAdminLayoutSetup = () => {
         href: '/admin/admins',
         label: t('admins'),
         isHidden: adminRole !== 'super',
+      },
+      {
+        href: '/admin/tests',
+        label: t('tests'),
+        icon: FileQuestion,
+        isHidden: false,
       },
       {
         href: '/admin/cms/themes',

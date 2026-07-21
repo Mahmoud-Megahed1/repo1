@@ -326,6 +326,34 @@ export default function Admin() {
   const optionLabel = (index: number) =>
     String.fromCharCode(65 + index); // A, B, C, D, E, F
 
+  const [isTestAvailable, setIsTestAvailable] = useState<boolean>(() => {
+    if (typeof localStorage === 'undefined') return true;
+    const saved = localStorage.getItem('englishom_tests_availability');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed.test !== false;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return true;
+  });
+
+  const handleTestAvailabilityToggle = () => {
+    const newVal = !isTestAvailable;
+    setIsTestAvailable(newVal);
+    const saved = localStorage.getItem('englishom_tests_availability');
+    let parsed: any = {};
+    if (saved) {
+      try { parsed = JSON.parse(saved); } catch (e) {}
+    }
+    parsed.test = newVal;
+    localStorage.setItem('englishom_tests_availability', JSON.stringify(parsed));
+    window.dispatchEvent(new Event('storage'));
+    toast.success(`Test availability set to ${newVal ? "ON" : "OFF"}`);
+  };
+
   return (
     <div dir="ltr" className="min-h-screen bg-[#120F0D] text-[#FCDFC2] dark">
       {/* Top Bar */}
@@ -344,7 +372,21 @@ export default function Admin() {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
+            {/* Availability Toggle */}
+            <div className="flex items-center gap-2 bg-[#25201C] border border-[#4A3B32] px-3 py-1.5 rounded-lg">
+              <span className="text-xs font-semibold text-[#FCDFC2]">Availability:</span>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={isTestAvailable}
+                  onChange={handleTestAvailabilityToggle}
+                  className="sr-only peer"
+                />
+                <div className="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+              </label>
+            </div>
+
             <Button
               variant="outline"
               size="sm"

@@ -183,9 +183,58 @@ export default function QuestionManagement() {
 
   const filteredQuestions = getQuestionsForFilter();
 
+  const [isTestAvailable, setIsTestAvailable] = useState<boolean>(() => {
+    if (typeof localStorage === 'undefined') return true;
+    const saved = localStorage.getItem('englishom_tests_availability');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed.test1 !== false;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return true;
+  });
+
+  const handleTest1AvailabilityToggle = () => {
+    const newVal = !isTestAvailable;
+    setIsTestAvailable(newVal);
+    const saved = localStorage.getItem('englishom_tests_availability');
+    let parsed: any = {};
+    if (saved) {
+      try { parsed = JSON.parse(saved); } catch (e) {}
+    }
+    parsed.test1 = newVal;
+    localStorage.setItem('englishom_tests_availability', JSON.stringify(parsed));
+    window.dispatchEvent(new Event('storage'));
+  };
+
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Availability Control Bar */}
+      <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 flex items-center justify-between shadow-sm">
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-bold text-gray-900 dark:text-white">
+            إتاحة الاختبار للزوار (Availability):
+          </span>
+          <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${isTestAvailable ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'}`}>
+            {isTestAvailable ? "مفعل (نشط)" : "غير مفعل (قريباً)"}
+          </span>
+        </div>
+
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            checked={isTestAvailable}
+            onChange={handleTest1AvailabilityToggle}
+            className="sr-only peer"
+          />
+          <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+        </label>
+      </div>
+
+      {/* Select Stage & Level */}
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
           Question Bank Management

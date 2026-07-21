@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLocation } from "wouter";
@@ -5,10 +6,39 @@ import { CheckCircle2, BookOpen, Headphones, PenTool, Eye, Keyboard } from "luci
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import ComingSoon from "@/components/ComingSoon";
 
 export default function Home() {
   const [, navigate] = useLocation();
   const { language, t } = useLanguage();
+
+  const [isAvailable, setIsAvailable] = useState<boolean>(true);
+
+  useEffect(() => {
+    const checkAvailability = () => {
+      const saved = localStorage.getItem('englishom_tests_availability');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed.test === false) {
+            setIsAvailable(false);
+            return;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      setIsAvailable(true);
+    };
+
+    checkAvailability();
+    window.addEventListener('storage', checkAvailability);
+    return () => window.removeEventListener('storage', checkAvailability);
+  }, []);
+
+  if (!isAvailable) {
+    return <ComingSoon />;
+  }
 
   const features = [
     {
