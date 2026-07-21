@@ -272,7 +272,7 @@ export function LandingFooter() {
             
             <p className="text-muted-foreground text-sm md:text-base leading-relaxed text-justify mb-2 whitespace-pre-line">
               {useLocale() === 'ar' ? (
-                "جميع المقالات والمحتويات المنشورة في هذه المدونة هي لأغراض تثقيفية وتعليمية عامة، وتُمثل وجهات نظر كتابها بناءً على الأبحاث والمصادر المتاحة. المسميات الوظيفية والتحريرية المذكورة (مثل: خبير، مستشار، أخصائي) تُستخدم في سياقها التحريري لإبراز زاوية الطرح وتخصص المقال، ولا تُعد بديلة عن الاستشارات المهنية والرسمية المباشرة. لا تتحمل المنصة أي مسؤولية قانونية عن قرارات يُتخذ بناءً على المعلومات الواردة في الموقع."
+                "جميع المقالات والمحتويات المنشورة في هذه المدونة هي لأغراض تثقيفية وتعليمية عامة، وتُمثل وجهات نظر كتابها بناءً على الأبحاث والمصادر المتاحة. المسميات الوظيفية والتحريرية المذكورة (مثل: خبير، مستشار، أخصائي) تُستخدم في سياقها التحريري لإبراز زاوية الطرح وتخصص المقال، ولا تُعد بديلة عن الاستشارات المهنية والرسمية المباشرة. لا تتحمل المنصة أي مسؤولية قانونية عن قرار يُتخذ بناءً على المعلومات الواردة في الموقع."
               ) : (
                 "All articles and content published on this blog are provided for general educational and informational purposes only, based on available research and resources. Editorial titles (such as Expert, Consultant, or Specialist) are used in a stylistic context to define the topic's scope and do not constitute legal, medical, or formal professional advice. The platform assumes no liability for actions taken based on the information provided herein."
               )}
