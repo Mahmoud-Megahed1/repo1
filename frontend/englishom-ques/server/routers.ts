@@ -151,8 +151,8 @@ export const appRouter = router({
           // Insert result for both guests and logged in users
           await db.insert(testResults).values({
             userId: ctx.user?.id,
-            studentName: input.studentName.trim(),
-            studentPhone: input.studentPhone.trim().toLowerCase(),
+            studentName: input.studentName?.trim() || null,
+            studentPhone: input.studentPhone?.trim().toLowerCase() || null,
             level: input.level,
             totalQuestions: totalQuestions,
             correctAnswers: correctAnswersCount,
