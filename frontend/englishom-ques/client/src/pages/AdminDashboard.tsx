@@ -108,7 +108,7 @@ export default function AdminDashboard() {
   const [isAvailable, setIsAvailable] = useState<boolean>(true);
 
   useEffect(() => {
-    fetch('https://admin.englishom.com/api/settings')
+    fetch(`https://admin.englishom.com/api/settings?t=${Date.now()}`, { cache: 'no-store' })
       .then((res) => res.json())
       .then((data) => {
         if (data && data.testsAvailability && typeof data.testsAvailability.ques === 'boolean') {
