@@ -64,7 +64,7 @@ export default function TestsAdminPage() {
   });
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch(`https://admin.englishom.com/api/settings?t=${Date.now()}`, { cache: 'no-store' })
       .then((res) => res.json())
       .then((data) => {
         if (data && data.testsAvailability) {
@@ -88,7 +88,7 @@ export default function TestsAdminPage() {
     window.dispatchEvent(new Event('storage'));
 
     try {
-      await fetch('/api/settings/tests-availability', {
+      await fetch('https://admin.englishom.com/api/settings/tests-availability', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ testsAvailability: { [id]: newVal } }),
