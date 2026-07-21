@@ -242,16 +242,16 @@ export const translations = {
 
     // CTA Section
     cta: {
-      title: "هل أنت مستعد لفك الشفرة؟",
-      description: "ابدأ رحلتك نحو إتقان اللغة الإنجليزية اليوم. 60 يوماً فقط تفصلك عن نتيجة مذهلة.",
+      title: "هل أنت مستعد لإحداث التحوّل؟",
+      description: "انطلق في مضمار الممارسة الذاتية الآن عبر منظومتنا التقنية\n50 يوماً من الانضباط الذكي تفصلك عن فارق ملموس ونتيجة استثنائية",
       button: "ابدأ الآن",
       price: "السعر: 999 ريال",
-      note: "لا توجد فترة تجريبية مجانية. ابدأ الآن.",
+      note: "",
     },
 
     // Footer
     footer: {
-      brand: "نظام هندسي لغوي مصمم لبناء لغتك من الصفر وحتى الإتقان في 60 يوماً.",
+      brand: "نظام لغوي مصمم لبناء لغتك من الصفر وحتى الإتقان في 50 يوماً.",
       quickLinks: "الروابط السريعة",
       resources: "الموارد",
       contact: "تواصل معنا",
@@ -262,7 +262,7 @@ export const translations = {
         { label: "المدونة", href: "https://englishom.com/blog/" },
       ],
       resourceLinks: [
-        { label: "اختبار تحديد المستوى", href: "https://englishom.com/ques/" },
+        { label: "اكتشف مسارك", href: "https://englishom.com/ques/" },
         { label: "تتبع مسارك", href: "https://englishom.com/progress/" },
         { label: "لوحة التحكم", href: "https://englishom.com/dashboard/" },
         { label: "شفرة الذكاء", href: "https://englishom.com/Landingpage/" },
@@ -511,16 +511,16 @@ export const translations = {
 
     // CTA Section
     cta: {
-      title: "Ready to Crack the Code?",
-      description: "Start your journey to mastering English today. Just 60 days separate you from amazing results.",
+      title: "Are you ready to create a transformation?",
+      description: "Launch into self-practice now via our technical system.\n50 days of smart discipline separate you from a tangible difference and extraordinary results.",
       button: "Start Now",
       price: "Price: 999 SAR",
-      note: "No free trial period. Start now.",
+      note: "",
     },
 
     // Footer
     footer: {
-      brand: "An engineered linguistic system designed to build your language from zero to mastery in 60 days.",
+      brand: "A linguistic system designed to build your language from zero to mastery in 50 days.",
       quickLinks: "Quick Links",
       resources: "Resources",
       contact: "Contact Us",
@@ -531,7 +531,7 @@ export const translations = {
         { label: "Blog", href: "https://englishom.com/blog/" },
       ],
       resourceLinks: [
-        { label: "Level Test", href: "https://englishom.com/ques/" },
+        { label: "Discover Your Path", href: "https://englishom.com/ques/" },
         { label: "Track Progress", href: "https://englishom.com/progress/" },
         { label: "Dashboard", href: "https://englishom.com/dashboard/" },
         { label: "The A1 Code", href: "https://englishom.com/Landingpage/" },

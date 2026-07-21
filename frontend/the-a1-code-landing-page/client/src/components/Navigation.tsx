@@ -27,17 +27,17 @@ export default function Navigation() {
     <header className="sticky top-0 z-50 bg-white dark:bg-[#1a1a1a] shadow-md transition-colors duration-300">
       <nav className="container flex items-center justify-between py-4">
         {/* Logo with Englishom Brand */}
-        <a href="https://englishom.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+        <a href="https://englishom.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
           <img 
             src="/logo.jpeg" 
             alt="Englishom" 
-            className="w-10 h-10 rounded-lg"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg"
           />
-          <div className="hidden sm:block">
-            <h1 className="text-xl font-bold text-[#1F6BF6] dark:text-[#F5BB41]">
+          <div className="block">
+            <h1 className="text-base sm:text-xl font-bold text-[#1F6BF6] dark:text-[#F5BB41] leading-tight">
               Englishom
             </h1>
-            <p className="text-xs text-[#666666] dark:text-[#CCCCCC]">
+            <p className="text-[10px] sm:text-xs text-[#666666] dark:text-[#CCCCCC] leading-tight">
               {language === "ar" ? "شفرتك الخاصة" : "Your Code"}
             </p>
           </div>
@@ -57,9 +57,9 @@ export default function Navigation() {
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-4">
-          {/* Language Switcher */}
-          <div className="flex items-center gap-2 bg-[#F8F9FA] dark:bg-[#2a2a2a] rounded-lg p-1">
+        <div className="flex items-center gap-2 sm:gap-4">
+          {/* Desktop Language Switcher */}
+          <div className="hidden sm:flex items-center gap-2 bg-[#F8F9FA] dark:bg-[#2a2a2a] rounded-lg p-1">
             <button
               onClick={() => setLanguage("ar")}
               className={`px-3 py-1.5 rounded transition-all duration-300 ${
@@ -82,12 +82,21 @@ export default function Navigation() {
             </button>
           </div>
 
-          {/* WhatsApp Support Button */}
+          {/* Mobile Single Language Toggle Button */}
+          <button
+            onClick={() => setLanguage(language === "ar" ? "en" : "ar")}
+            className="sm:hidden px-2.5 py-1.5 bg-[#F5BB41] dark:bg-[#1F6BF6] text-[#222222] dark:text-white font-bold text-xs rounded-lg transition-all shadow-sm"
+            title={language === "ar" ? "Switch to English" : "التحويل للعربية"}
+          >
+            {language === "ar" ? "EN" : "عربي"}
+          </button>
+
+          {/* WhatsApp Support Button (Desktop Only) */}
           <a
             href={`https://wa.me/${t.footer.whatsapp}?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B+%D8%A8%D9%83+%D9%81%D9%8A+Englishom+-+%D9%87%D9%84+%D9%84%D8%AF%D9%8A%D9%83+%D8%A3%D9%8A+%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%D8%A7%D8%AA%D8%9F`}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 bg-[#25D366] hover:bg-[#1FA855] rounded-lg transition-all duration-300 hover:scale-110"
+            className="hidden sm:flex p-2 bg-[#25D366] hover:bg-[#1FA855] rounded-lg transition-all duration-300 hover:scale-110 items-center justify-center"
             title={language === "ar" ? "الدعم عبر واتساب" : "WhatsApp Support"}
           >
             <MessageCircle className="w-5 h-5 text-white" />
