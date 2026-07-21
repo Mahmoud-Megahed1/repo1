@@ -180,9 +180,9 @@ export default {
     cta: {
       title: 'Are you ready to start your English practice journey?',
       subtitle:
-        'Join thousands who have developed their language and opened new opportunities for themselves',
+        'Join us today on your journey towards exploring our smart system,',
       description:
-        'Start today with our comprehensive software platform, and unleash your potential with confidence step by step',
+        'and discover the power of daily practice through our advanced software solution in every software track you undertake',
       primary: 'Explore the Programming Environment',
       secondary: 'View Pricing',
     },
