@@ -28,8 +28,9 @@ export default {
       watchDemo: 'Watch Demo',
     },
     features: {
-      title: 'Why Englishom Technical Platform?',
-      subtitle: 'An integrated software environment and automated interactive tools for self-practicing and developing linguistic performance',
+      title: 'Why Choose Englishom System?',
+      subtitle:
+        'Your advanced technical tool for automated pronunciation control and English voice calibration',
       items: {
         interactive: {
           title: 'Interactive Content',
@@ -54,12 +55,12 @@ export default {
         daily: {
           title: 'Daily Challenges',
           description:
-            'Build consistent practice habits with daily challenges, smart assessment tests, and speaking simulation exercises.',
+            'Build consistent practice habits with daily challenges, smart measurement tests, and automated pronunciation simulation exercises.',
         },
         certificate: {
-          title: 'Digital Progress Reports',
+          title: 'Digital Achievement Reports',
           description:
-            'Get a digital progress report showing your progress in the system and the completion of language level simulations.',
+            'Get a digital achievement report showing your progress percentage in the system and the completion of voice pronunciation simulation and calibration.',
         },
       },
     },
@@ -284,28 +285,28 @@ export default {
     ourVision: {
       title: 'Our Vision',
       subtitle:
-        'Empowering individuals to break the barrier of fear and express themselves fluently and confidently through intensive and interactive learning.',
+        'Empowering individuals to break the barrier of fear and speak fluently and confidently, through a smart software environment and an automated methodology offering an intensive, interactive practice experience.',
       sections: {
         vision: {
           title: 'Our Vision',
           description:
-            "To be the world's leading platform for teaching English speaking, empowering individuals to break the barrier of fear and express themselves fluently and confidently, through an intensive and interactive learning methodology focused on daily practice.",
+            "To be the world's leading software system for practicing and developing English speaking, where we harness innovative technical solutions to empower individuals to break the barrier of fear and express themselves fluently, through an automated digital system focused on continuous daily practice.",
         },
         goal: {
           title: 'Our Goal',
           description:
-            'To build confident speakers capable of communicating in English. We commit you to focused, enjoyable daily effort to reach an advanced level of fluency, where you will be able to speak about yourself and your background continuously for 15 minutes, all within the vocabulary you have learned and mastered.',
+            'Developing English speaking skills with confidence and efficiency through our software system. The system is committed to providing an interactive interface and an enjoyable daily automated path that gradually leads you toward an advanced level of fluency, enabling you to speak about yourself and your background continuously for up to 18 minutes, relying fully on the terms and vocabulary programmed and fixed into your linguistic memory by the system.',
         },
         methodology: {
           title: 'How We Achieve This?',
           subtitle:
-            ' Our unique methodology that divides your learning journey into clear levels.',
+            'Our smart software system that divides your interactive track into clear levels.',
           description:
-            'Our website relies on an intensive and meticulously structured methodology that divides your learning journey into clear levels, from Beginner (A1) to Advanced (C1), with each level carefully designed to ensure your progress:',
-          ourStructureApproach: 'Our Structure & Approach',
+            'Our software system relies on an intensive and meticulously structured algorithm that divides your interactive journey into clear tracks, from track (A1) to track (C2), with each level precisely programmed to ensure your technical progress:',
+          ourStructureApproach: 'System Structure & Track',
           points: {
             wordsPerLevel: {
-              title: '1000 Words Per Level',
+              title: '1000 Words Per Track',
               description:
                 'Each level focuses on mastering 1000 essential words. You will learn these words with correct pronunciation, within contextual sentences, practice writing them, hear them repeatedly, and associate them with illustrative images to solidify their meaning.',
             },
@@ -315,19 +316,19 @@ export default {
                 'To ensure continuity and effectiveness, you will learn 20 new words daily, meaning each level will be completed in 50 study days.',
             },
             pronunciation: {
-              title: 'Daily Speaking Practice (25 seconds)',
+              title: 'Automated Daily Pronunciation Feature (25 seconds)',
               description:
-                'Every day, you will record your voice for 25 seconds. You will find pre-written sentences about yourself (like your name, where you live, your interests), tailored to your current vocabulary level. This daily exercise will force you to practice effective pronunciation and repetition.',
+                'Daily, the system allows you to record your voice for 25 seconds based on smart, pre-written sentences that appear automatically based on your data (such as your name, residence, and interests), tailored specifically for your current track\'s words. This daily software practice forces active pronunciation and repetition.',
             },
             speaking: {
-              title: 'Building Continuous Speaking Ability',
+              title: 'Capacity Building & Continuous Speaking',
               description:
-                'Over these 50 days, these sentences and words will accumulate in your active memory. By the last day of each level, you will find yourself able to speak about yourself, give an overview, or present your biography for 15 consecutive minutes, using the 1000 words you have mastered.',
+                'Over 50 days, the system archives and retains the accumulation of these sentences and words in your active memory. On the final day of each track, the system opens a dedicated interface enabling you to speak about yourself, give an overview, or present your CV continuously for 20 minutes, using the 1000 words completed through the system.',
             },
             scenarios: {
-              title: 'Inspiring Daily Scenarios',
+              title: 'Inspiring Daily Scenarios & Simulations',
               description:
-                'Our website provides daily conversation scenarios of what you can say within the vocabulary range specified for your level, making it easy for you to apply what you learn directly in realistic dialogues.',
+                'The software system generates daily interactive simulation scenarios for what you can say within the specified vocabulary scope of your current track, making it easy for you to apply what the system presents directly in real-life dialogues.',
             },
           },
         },
@@ -337,33 +338,33 @@ export default {
             'We believe that the key to fluency lies in continuous daily practice and conscious repetition. Our website not only provides you with knowledge but also imposes a daily, enjoyable challenge that makes you speak and progress steadily towards your bigger goal: unparalleled fluency.',
           missionTitle: 'Our Mission',
           missionDescription:
-            'To empower every learner to achieve their full potential in speaking English, by building a bridge between linguistic knowledge and practical application, with a focus on self-confidence and fluency.',
+            'Empowering every user to achieve their full potential in English speaking, by building a technical bridge between linguistic knowledge and automated practical application, with a focus on boosting self-confidence and fluency.',
           valuesTitle: 'Our Values',
           values: {
             results: {
               title: 'Commitment to Results',
               description:
-                'We focus on achieving tangible and measurable progress for our learners.',
+                'We focus on achieving tangible and digitally measurable progress for users of our system.',
             },
             practice: {
               title: 'Guided Practice',
               description:
-                'We believe that real learning happens through structured and purposeful practice.',
+                'We believe real speaking happens through structured and targeted practice within the software system.',
             },
             support: {
               title: 'Support & Motivation',
               description:
-                'We provide a positive and supportive learning environment that encourages perseverance.',
+                'We provide a smart, software-supported interactive environment to encourage your perseverance.',
             },
             clarity: {
               title: 'Clarity & Simplicity',
               description:
-                'We offer clear content and an easy-to-understand methodology for all levels.',
+                'We offer a smart and easy-to-understand technical interface for all software tracks.',
             },
             innovation: {
               title: 'Continuous Innovation',
               description:
-                'We constantly strive to develop our tools and curricula to provide the best learning experience.',
+                'We constantly strive to develop our system and algorithms to deliver the best interactive experience.',
             },
           },
         },
