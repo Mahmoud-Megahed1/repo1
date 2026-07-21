@@ -323,29 +323,33 @@ export default function AdminPostsManager() {
                     {language === "ar" ? "التحكم باسم كاتب المقال" : "Author Name Control"}
                   </label>
 
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        setCustomAuthorNameAr("فريق EnglishOM");
-                        setCustomAuthorNameEn("EnglishOM Team");
-                      }}
-                    >
-                      فريق EnglishOM
-                    </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        setCustomAuthorNameAr("بدر ، مؤسس المنصة");
-                        setCustomAuthorNameEn("Badr, Platform Founder");
-                      }}
-                    >
-                      بدر ، مؤسس المنصة
-                    </Button>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {[
+                      { ar: "فريق EnglishOM", en: "EnglishOM Team" },
+                      { ar: "مؤسس المنصة", en: "Platform Founder" },
+                      { ar: "خبير لغوي", en: "Language Expert" },
+                      { ar: "أخصائي اكتساب لغات", en: "Language Acquisition Specialist" },
+                      { ar: "خبير تعليمي", en: "Educational Expert" },
+                      { ar: "مستشار طرق تدريس", en: "Pedagogy Consultant" },
+                      { ar: "خبير مناهج", en: "Curriculum Expert" },
+                      { ar: "أخصائي تعلم رقمي", en: "Digital Learning Specialist" },
+                      { ar: "مستشار تطوير مهارات", en: "Skill Development Advisor" },
+                      { ar: "مستشار التوجيه التعليمي", en: "Educational Guidance Advisor" },
+                    ].map((author) => (
+                      <Button
+                        key={author.ar}
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="text-xs py-1 h-auto"
+                        onClick={() => {
+                          setCustomAuthorNameAr(author.ar);
+                          setCustomAuthorNameEn(author.en);
+                        }}
+                      >
+                        {author.ar}
+                      </Button>
+                    ))}
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -354,7 +358,7 @@ export default function AdminPostsManager() {
                       <Input
                         value={customAuthorNameAr}
                         onChange={(e) => setCustomAuthorNameAr(e.target.value)}
-                        placeholder="مثال: فريق EnglishOM أو بدر"
+                        placeholder="مثال: فريق EnglishOM أو خبير لغوي"
                         dir="rtl"
                       />
                     </div>
