@@ -19,19 +19,19 @@ export const translations = {
 
     // Hero Section
     hero: {
-      badge: "نظام تعليمي هندسي متقدم",
+      badge: "منظومة تقنية متطورة",
       title: "شفرة الذكاء",
       subtitle: "شفرتك الخاصة",
-      description: "لاختراق حاجز اللغة في 60 يوماً فقط. نظام هندسي لغوي مصمم لبناء لغتك من الصفر وحتى الإتقان.",
+      description: "اختراق حاجز اللغة في 50 يوماً فقط. نظام لغوي مصمم لبناء لغتك من الصفر وحتى الإتقان.",
       features: [
         { label: "كلمة", value: "1000" },
         { label: "يوم", value: "50" },
         { label: "تحدث يومياً", value: "مع نظام ذكي" },
-        { label: "أساس فولاذي", value: "للمستويات العليا" },
+        { label: "أساس فولاذي", value: "للمسارات المتقدمة" },
       ],
       cta1: "ابدأ رحلتك الآن",
       cta2: "تعرف على المزيد",
-      successCount: "انضم إلى آلاف المتعلمين الناجحين",
+      successCount: "انضم إلى آلاف الممارسين الناجحين",
     },
 
     // Why Choose Section
@@ -42,8 +42,8 @@ export const translations = {
       features: [
         {
           icon: <GraduationCap className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
-          title: "نظام هندسي متقدم",
-          description: "مصمم بناءً على أحدث الأبحاث اللغوية والتعليمية العالمية",
+          title: "نظام متقدم",
+          description: "مصمم بناءً على أحدث الأبحاث اللغوية العالمية",
         },
         {
           icon: <Mic className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
@@ -68,7 +68,7 @@ export const translations = {
         {
           icon: <Trophy className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
           title: "أساس فولاذي",
-          description: "استعداد كامل للمستوى الثاني مع أساس قوي جداً",
+          description: "استعداد كامل للمسارات المتقدمة مع أساس قوي جداً",
         },
       ],
     },
@@ -77,7 +77,7 @@ export const translations = {
     engine: {
       title: "المحرك التشغيلي",
       titleEn: "عشر خطوات متقدمة",
-      subtitle: "كل يوم دراسي هو عبارة عن دورة حياة لغوية كاملة تمر بـ 10 مراحل تقنية محترفة",
+      subtitle: "كل يوم هو عبارة عن دورة حياة لغوية كاملة تمر بـ 10 مراحل تقنية محترفة",
       note: "كل مرحلة مصممة بدقة لضمان تقدمك المستمر",
       noteWarning: "لا يمكنك تخطي أي مرحلة أو الانتقال للأمام إلا بإتقانك الكامل",
       steps: [
@@ -107,7 +107,7 @@ export const translations = {
           icon: <Edit3 className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
           title: "بناء الهيكل",
           titleAr: "بناء الهيكل",
-          description: "اختبار كتابي دقيق لسد الفراغات وترسيخ الإملاء.",
+          description: "ممارسة الكتابة الدقيقة لسد الفراغات وترسيخ الإملاء.",
         },
         {
           number: 5,
@@ -142,14 +142,14 @@ export const translations = {
           icon: <Star className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" fill="currentColor" />,
           title: "اللمسة الأصلية",
           titleAr: "اللمسة الأصلية",
-          description: "تعلم التعابير والجمل الطبيعية واحداً يومياً لتبدو كمتحدث أصلي.",
+          description: "ممارسة التعابير والجمل الطبيعية واحداً يومياً لتبدو كمتحدث أصلي.",
         },
         {
           number: 10,
           icon: <Key className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
           title: "نقطة العبور",
           titleAr: "نقطة العبور",
-          description: "اختبار ذكاء نهائي يقيس مدى استيعابك، وهو المفتاح الوحيد لفتح محتوى اليوم التالي.",
+          description: "تقييم نهائي يقيس مدى استيعابك، وهو المفتاح الوحيد لفتح محتوى اليوم التالي.",
         },
       ],
     },
@@ -158,11 +158,11 @@ export const translations = {
     outcomes: {
       title: "مخرجات النظام",
       titleEn: "النتائج المضمونة",
-      subtitle: "عند إتمامك لهذا البرنامج، ستخرج بالنتائج التالية",
+      subtitle: "عند إتمامك لهذه التجربة الرقمية، ستخرج بالنتائج التالية:",
       items: [
         {
           title: "بناء مخزون 1000 كلمة",
-          description: "الكلمات الأكثر استخداماً في العالم، موزعة على 50 يوماً دراسياً مكثفاً.",
+          description: "1000 كلمة من الأكثر استخداماً عالمياً، موزعة على 50 يوم ممارسة مكثفة.",
           icon: <BookOpen className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
           color: "from-[#F5BB41] to-[#FFC857]",
           guarantee: "مضمون 100%",
@@ -176,26 +176,23 @@ export const translations = {
         },
         {
           title: "المرونة اللغوية",
-          description: "10 أيام إضافية مخصصة للمراجعة والترسيخ لضمان عدم نسيان أي معلومة.",
+          description: "10 أيام إضافية مخصصة للطوارئ والانقطاع لضمان المرونة والاستمرارية دون فقد النتائج.",
           icon: <RefreshCw className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
           color: "from-[#4CA853] to-[#66E066]",
           guarantee: "مضمون 100%",
         },
         {
           title: "الجاهزية التامة",
-          description: "ستكون مؤهلاً تماماً للانتقال للمستوى الثاني وأنت تمتلك أساساً فولاذياً.",
+          description: "ستكون مؤهلاً تماماً للانتقال إلى المسار التالي وأنت تمتلك أساساً فولاذياً.",
           icon: <Trophy className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
           color: "from-[#FF9933] to-[#FFB366]",
           guarantee: "مضمون 100%",
         },
       ],
-      whyChooseTitle: "لماذا تختار هذا البرنامج؟",
-      whyChooseDesc: "نحن لا نبيعك محتوىً مسجلاً، بل نبيعك \"انضباطاً ذاتياً\". النظام مصمم بحيث لا يسمح لك بالتراخي أو القفز فوق الأساسيات.",
+      whyChooseTitle: "لماذا هذه المنظومة تحديداً؟",
+      whyChooseDesc: "لأن النجاح يبدأ من انضباطك الذاتي، نحن نوفر لك البيئة والأدوات التفاعلية المتكاملة في مكان واحد، والنظام يتكفل بتوجيه محاولاتك اليومية لضمان الثبات والارتقاء دون قفز على الأساسيات.",
       whyChoosePoints: [
-        "كل يوم هو لبنة في بناء بيتك اللغوي",
-        "بعد 60 يوماً، ستجد نفسك واقفاً على أرض صلبة",
-        "تتحدث وتفهم وتكتب بوضوح",
-        "أساس فولاذي للمستويات العليا",
+        "أساس فولاذي للمسارات المتقدمة",
       ],
       cta: "هل أنت مستعد لفك الشفرة؟",
       button: "ابدأ رحلتك الآن",
@@ -203,9 +200,9 @@ export const translations = {
 
     // Testimonials
     testimonials: {
-      title: "آراء المتعلمين",
-      titleEn: "قصص النجاح",
-      subtitle: "انضم إلى آلاف المتعلمين الذين حققوا أحلامهم",
+      title: "أصداء التجربة",
+      titleEn: "قصص التحول",
+      subtitle: "من الالتزام الذاتي إلى النتائج الاستثنائية",
       items: [
         {
           name: "أحمد محمد",
@@ -291,19 +288,19 @@ export const translations = {
 
     // Hero Section
     hero: {
-      badge: "Advanced Linguistic Engineering System",
+      badge: "Advanced Technical System",
       title: "The A1 Code",
       subtitle: "Your Code to Break Language Barriers",
-      description: "Master English in just 60 days. An engineered linguistic system designed to build your language from zero to mastery.",
+      description: "Break the language barrier in just 50 days. A linguistic system designed to build your language from zero to mastery.",
       features: [
         { label: "Words", value: "1000" },
         { label: "Days", value: "50" },
         { label: "Speak Daily", value: "With AI System" },
-        { label: "Steel Foundation", value: "For Advanced Levels" },
+        { label: "Steel Foundation", value: "For Advanced Tracks" },
       ],
       cta1: "Start Your Journey",
       cta2: "Learn More",
-      successCount: "Join Thousands of Successful Learners",
+      successCount: "Join Thousands of Successful Practitioners",
     },
 
     // Why Choose Section
@@ -314,8 +311,8 @@ export const translations = {
       features: [
         {
           icon: <GraduationCap className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
-          title: "Advanced Engineering System",
-          description: "Designed based on the latest linguistic and educational research",
+          title: "Advanced System",
+          description: "Designed based on the latest global linguistic research",
         },
         {
           icon: <Mic className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
@@ -340,7 +337,7 @@ export const translations = {
         {
           icon: <Trophy className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
           title: "Steel Foundation",
-          description: "Complete readiness for A2 level with a very strong foundation",
+          description: "Complete readiness for advanced tracks with a very strong foundation",
         },
       ],
     },
@@ -349,7 +346,7 @@ export const translations = {
     engine: {
       title: "The Operating Engine",
       titleEn: "Ten Advanced Steps",
-      subtitle: "Each study day is a complete linguistic lifecycle passing through 10 professional technical stages",
+      subtitle: "Every day is a complete linguistic lifecycle passing through 10 professional technical stages",
       note: "Each stage is carefully designed to ensure your continuous progress",
       noteWarning: "You cannot skip any stage or move forward without complete mastery",
       steps: [
@@ -379,7 +376,7 @@ export const translations = {
           icon: <Edit3 className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
           title: "The Structure Fill",
           titleAr: "The Structure Fill",
-          description: "Precise written test to fill gaps and reinforce spelling.",
+          description: "Precise writing practice to fill gaps and reinforce spelling.",
         },
         {
           number: 5,
@@ -414,14 +411,14 @@ export const translations = {
           icon: <Star className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" fill="currentColor" />,
           title: "The Native Edge",
           titleAr: "The Native Edge",
-          description: "Learn authentic expressions and natural sentences daily to sound like a native speaker.",
+          description: "Practice authentic expressions and natural sentences daily to sound like a native speaker.",
         },
         {
           number: 10,
           icon: <Key className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
           title: "The Checkpoint",
           titleAr: "The Checkpoint",
-          description: "Final intelligence test that measures your understanding, the only key to unlock tomorrow's content.",
+          description: "Final assessment measuring your comprehension, the only key to unlock tomorrow's content.",
         },
       ],
     },
@@ -430,11 +427,11 @@ export const translations = {
     outcomes: {
       title: "System Outcomes",
       titleEn: "Guaranteed Results",
-      subtitle: "Upon completing this program, you will achieve the following results",
+      subtitle: "Upon completing this digital experience, you will achieve the following results:",
       items: [
         {
           title: "Build 1000-Word Vocabulary",
-          description: "The most commonly used words in the world, distributed over 50 intensive study days.",
+          description: "1000 of the most commonly used words globally, distributed over 50 intensive practice days.",
           icon: <BookOpen className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
           color: "from-[#F5BB41] to-[#FFC857]",
           guarantee: "100% Guaranteed",
@@ -448,26 +445,23 @@ export const translations = {
         },
         {
           title: "Linguistic Flexibility",
-          description: "10 additional days dedicated to review and reinforcement to ensure no information is forgotten.",
+          description: "10 additional days dedicated for emergencies and gaps to ensure flexibility and continuity without losing results.",
           icon: <RefreshCw className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
           color: "from-[#4CA853] to-[#66E066]",
           guarantee: "100% Guaranteed",
         },
         {
           title: "Complete Readiness",
-          description: "You will be fully qualified to move to A2 level with a very strong foundation.",
+          description: "You will be fully qualified to move to the next track with a solid foundation.",
           icon: <Trophy className="w-10 h-10 mx-auto text-primary dark:text-[#F5BB41]" />,
           color: "from-[#FF9933] to-[#FFB366]",
           guarantee: "100% Guaranteed",
         },
       ],
-      whyChooseTitle: "Why Choose This Program?",
-      whyChooseDesc: "We're not selling you recorded content, we're selling you \"self-discipline\". The system is designed so that you can't slack off or skip the fundamentals.",
+      whyChooseTitle: "Why This Specific System?",
+      whyChooseDesc: "Because success starts with self-discipline. We provide an integrated environment and interactive tools all in one place, and the system guides your daily attempts to ensure stability and progress without skipping fundamentals.",
       whyChoosePoints: [
-        "Every day is a brick in building your linguistic house",
-        "After 60 days, you'll find yourself standing on solid ground",
-        "You speak, understand, and write clearly",
-        "Steel foundation for higher levels",
+        "Steel foundation for advanced tracks",
       ],
       cta: "Ready to Crack the Code?",
       button: "Start Your Journey",
@@ -475,9 +469,9 @@ export const translations = {
 
     // Testimonials
     testimonials: {
-      title: "Learner Reviews",
-      titleEn: "Success Stories",
-      subtitle: "Join thousands of learners who achieved their dreams",
+      title: "Experience Echoes",
+      titleEn: "Transformation Stories",
+      subtitle: "From Self-Discipline to Extraordinary Results",
       items: [
         {
           name: "Ahmed Mohammed",
