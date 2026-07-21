@@ -181,6 +181,21 @@ export default function QuestionManagement() {
     }
   };
 
+  const handleAudioUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        alert("Audio must be smaller than 10MB");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, audioUrl: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const filteredQuestions = getQuestionsForFilter();
 
   const [isTestAvailable, setIsTestAvailable] = useState<boolean>(true);
@@ -362,23 +377,44 @@ export default function QuestionManagement() {
               </div>
             )}
 
-            {selectedStage === "auditory_processing" && (
+            {(selectedStage === "auditory_processing" || selectedStage === "vocal_challenge") && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Audio URL
+                  Audio URL / Upload
                 </label>
-                <Input
-                  type="text"
-                  value={formData.audioUrl}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      audioUrl: e.target.value,
-                    })
-                  }
-                  placeholder="Enter audio URL"
-                  className="w-full bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
-                />
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    value={formData.audioUrl}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        audioUrl: e.target.value,
+                      })
+                    }
+                    placeholder="Enter audio URL or Base64"
+                    className="flex-1 bg-white dark:bg-slate-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+                  />
+                  <div className="relative">
+                    <Input
+                      type="file"
+                      accept="audio/*"
+                      onChange={handleAudioUpload}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                    <Button type="button" variant="outline" className="h-full bg-indigo-50 hover:bg-indigo-100 text-indigo-600 border-indigo-200">
+                      Upload Audio
+                    </Button>
+                  </div>
+                </div>
+                {formData.audioUrl && (
+                  <div className="mt-2 flex items-center gap-2">
+                    <audio src={formData.audioUrl} controls className="h-8 w-full max-w-md" />
+                    {formData.audioUrl.startsWith("data:audio") && (
+                      <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">Uploaded</span>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 

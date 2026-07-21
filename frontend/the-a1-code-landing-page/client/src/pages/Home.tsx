@@ -264,9 +264,7 @@ export default function Home() {
             )}
           </div>
 
-          <p className="text-white/70 text-sm">
-            {t.cta.note}
-          </p>
+
         </div>
       </section>
 

@@ -108,28 +108,7 @@ export default function MyResults() {
           </Button>
         </div>
 
-        {/* Search Phone Bar for Guests */}
-        {!user && (
-          <Card className="p-4 border border-[#4A3B32]/20 dark:border-[#FCDFC2]/30 bg-card rounded-2xl shadow-sm">
-            <form onSubmit={handleSearchPhone} className="flex flex-col sm:flex-row items-center gap-3">
-              <span className="text-sm font-bold text-foreground whitespace-nowrap">
-                {isAr ? "البحث برقم الهاتف / الإيميل:" : "Search by Phone / Email:"}
-              </span>
-              <Input
-                type="text"
-                value={searchPhoneInput}
-                onChange={(e) => setSearchPhoneInput(e.target.value)}
-                placeholder={isAr ? "أدخل رقمك الذي امتحنت به..." : "Enter your phone or email..."}
-                className="bg-background max-w-md"
-                dir="ltr"
-              />
-              <Button type="submit" className="bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] font-bold gap-1.5 w-full sm:w-auto px-6 rounded-xl">
-                <Search className="w-4 h-4" />
-                {isAr ? "بحث" : "Search"}
-              </Button>
-            </form>
-          </Card>
-        )}
+
 
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-16 space-y-3">
