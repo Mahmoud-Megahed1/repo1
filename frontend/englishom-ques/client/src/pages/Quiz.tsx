@@ -193,7 +193,7 @@ export default function Quiz() {
   };
 
   useEffect(() => {
-    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "624886421398-gsqv2b6r9vh4o8uirr18tckbv2r4saqc.apps.googleusercontent.com";
     if (state === "lead-capture" && window.google?.accounts?.id && googleClientId && !isGisInitializedRef.current) {
       try {
         window.google.accounts.id.initialize({
@@ -209,7 +209,7 @@ export default function Quiz() {
   }, [state]);
 
   const handleGoogleSignIn = () => {
-    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "624886421398-gsqv2b6r9vh4o8uirr18tckbv2r4saqc.apps.googleusercontent.com";
 
     if (window.google?.accounts?.id && googleClientId) {
       if (!isGisInitializedRef.current) {
