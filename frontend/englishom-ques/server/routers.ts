@@ -150,7 +150,7 @@ export const appRouter = router({
           const avgResponseTime = input.averageResponseTime != null ? Math.round(input.averageResponseTime) : null;
 
           // Insert result for both guests and logged in users
-          await db.insert(testResults).values({
+          const insertValues = {
             userId: ctx.user?.id ?? null,
             studentName: input.studentName?.trim() || null,
             studentPhone: input.studentPhone?.trim().toLowerCase() || null,
@@ -159,7 +159,19 @@ export const appRouter = router({
             correctAnswers: correctAnswersCount,
             accuracy: accuracy,
             averageResponseTime: avgResponseTime,
-          });
+          };
+
+          try {
+            await db.insert(testResults).values(insertValues);
+          } catch (insertErr: any) {
+            // If FK constraint fails (userId not in users table), retry without userId
+            if (insertErr?.cause?.code === 'ER_NO_REFERENCED_ROW_2' || insertErr?.code === 'ER_NO_REFERENCED_ROW_2') {
+              console.warn(`[submitTestResult] userId ${insertValues.userId} not found in users table, saving without userId`);
+              await db.insert(testResults).values({ ...insertValues, userId: null });
+            } else {
+              throw insertErr;
+            }
+          }
 
           if (ctx.user) {
             try {
