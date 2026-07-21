@@ -16,7 +16,7 @@ export default function Home() {
 
   useEffect(() => {
     const checkAvailability = () => {
-      fetch('https://admin.englishom.com/api/settings')
+      fetch(`https://admin.englishom.com/api/settings?t=${Date.now()}`, { cache: 'no-store' })
         .then((res) => res.json())
         .then((data) => {
           if (data && data.testsAvailability && data.testsAvailability.test === false) {
