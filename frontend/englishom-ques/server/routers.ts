@@ -147,58 +147,64 @@ export const appRouter = router({
           
           const totalQuestions = input.answers.length;
           const accuracy = totalQuestions > 0 ? Math.round((correctAnswersCount / totalQuestions) * 100) : 0;
+          const avgResponseTime = input.averageResponseTime != null ? Math.round(input.averageResponseTime) : null;
 
           // Insert result for both guests and logged in users
           await db.insert(testResults).values({
-            userId: ctx.user?.id,
+            userId: ctx.user?.id ?? null,
             studentName: input.studentName?.trim() || null,
             studentPhone: input.studentPhone?.trim().toLowerCase() || null,
             level: input.level,
             totalQuestions: totalQuestions,
             correctAnswers: correctAnswersCount,
             accuracy: accuracy,
-            averageResponseTime: input.averageResponseTime,
+            averageResponseTime: avgResponseTime,
           });
 
           if (ctx.user) {
-            // Update user progress
-            await updateUserProgress(
-              ctx.user.id,
-              accuracy,
-              input.level,
-              input.totalTimeSpent || 0,
-              correctAnswersCount,
-              totalQuestions
-            );
-
-            // Check for new achievements
-            const userStats = await getUserProgress(ctx.user.id);
-            const existingAchievements = await getUserAchievements(ctx.user.id);
-            const existingBadgeTypes = existingAchievements.map(a => a.badgeType);
-
-            if (userStats) {
-              const newBadges = checkNewBadges(
-                {
-                  accuracy: accuracy,
-                  totalQuizzes: userStats.totalQuizzesTaken,
-                  bestLevel: userStats.bestLevel || input.level,
-                  averageResponseTime: input.averageResponseTime || 0,
-                  totalTimeSpent: userStats.totalTimeSpent,
-                },
-                existingBadgeTypes
+            try {
+              // Update user progress
+              await updateUserProgress(
+                ctx.user.id,
+                accuracy,
+                input.level,
+                input.totalTimeSpent || 0,
+                correctAnswersCount,
+                totalQuestions
               );
 
-              for (const badgeType of newBadges) {
-                const badgeInfo = getBadgeInfo(badgeType);
-                if (badgeInfo) {
-                  await addAchievement(
-                    ctx.user.id,
-                    badgeType,
-                    badgeInfo.name,
-                    badgeInfo.description
-                  );
+              // Check for new achievements
+              const userStats = await getUserProgress(ctx.user.id);
+              const existingAchievements = await getUserAchievements(ctx.user.id);
+              const existingBadgeTypes = existingAchievements.map(a => a.badgeType);
+
+              if (userStats) {
+                const newBadges = checkNewBadges(
+                  {
+                    accuracy: accuracy,
+                    totalQuizzes: userStats.totalQuizzesTaken,
+                    bestLevel: userStats.bestLevel || input.level,
+                    averageResponseTime: input.averageResponseTime || 0,
+                    totalTimeSpent: userStats.totalTimeSpent,
+                  },
+                  existingBadgeTypes
+                );
+
+                for (const badgeType of newBadges) {
+                  const badgeInfo = getBadgeInfo(badgeType);
+                  if (badgeInfo) {
+                    await addAchievement(
+                      ctx.user.id,
+                      badgeType,
+                      badgeInfo.name,
+                      badgeInfo.description
+                    );
+                  }
                 }
               }
+            } catch (progressError) {
+              console.error("[submitTestResult] Error updating user progress:", progressError);
+              // Don't throw - result was already saved
             }
           }
 
