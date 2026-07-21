@@ -70,7 +70,8 @@ export function LandingFooter() {
     useGrouping: false,
   }).format(currentYear);
   return (
-    <footer className="bg-muted/30 border-t">
+    <>
+      <footer className="bg-muted/30 border-t">
       <div className="container mx-auto py-12">
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
           {/* Brand */}
