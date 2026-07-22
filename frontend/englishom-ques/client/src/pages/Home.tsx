@@ -143,10 +143,16 @@ export default function Home() {
               { code: "C1", name: t("levels.c1"), desc: t("levels.c1.desc") },
               { code: "C2", name: t("levels.c2"), desc: t("levels.c2.desc") },
             ].map((level) => (
-              <Card key={level.code} className="p-5 border-l-4 border-l-[#4A3B32] dark:border-l-[#FCDFC2] hover:shadow-md transition-all">
-                <p className="text-xs font-bold text-[#4A3B32] dark:text-[#FCDFC2] mb-1">{level.code}</p>
-                <h4 className="text-base font-bold text-foreground mb-1">{level.name}</h4>
-                <p className="text-xs text-muted-foreground">{level.desc}</p>
+              <Card 
+                key={level.code} 
+                className="p-6 border border-border/80 hover:border-[#4A3B32] dark:hover:border-[#FCDFC2] hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between min-h-[140px] rounded-2xl"
+                onClick={() => navigate(`/ques?level=${level.code}`)}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-extrabold text-[#4A3B32] dark:text-[#FCDFC2] bg-muted/60 px-2.5 py-0.5 rounded-lg">{level.code}</span>
+                </div>
+                <h4 className="text-xl md:text-2xl font-bold text-foreground text-center my-3">{level.name}</h4>
+                <p className="text-xs md:text-sm text-muted-foreground text-start">{level.desc}</p>
               </Card>
             ))}
           </div>

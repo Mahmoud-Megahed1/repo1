@@ -455,57 +455,45 @@ export default function Quiz() {
     const customLevels = [
       {
         code: "A1",
-        icon: Wind,
-        seconds: "15",
-        titleAr: "منطقة التنفس (15 ثانية)",
-        descAr: "محطة البداية؛ الوقت صديقك لتستدعي الكلمات وتجيب بهدوء ودون ضغط.",
-        titleEn: "Breathing Zone (15s)",
-        descEn: "Starting station; time is your friend to recall words calmly.",
+        titleAr: "مبتدئ",
+        descAr: "كفاءة أساسية",
+        titleEn: "Beginner",
+        descEn: "Elementary proficiency",
       },
       {
         code: "A2",
-        icon: Radio,
-        seconds: "12",
-        titleAr: "التقاط الإشارة (12 ثانية)",
-        descAr: "ينكمش الوقت ليرتفع إدراكك؛ لا مجال للتردد، فقط ألمع الإجابة الصحيحة.",
-        titleEn: "Signal Catch (12s)",
-        descEn: "Time shrinks to heighten awareness; no hesitation, pick the right answer.",
+        titleAr: "ابتدائي",
+        descAr: "كفاءة عملية محدودة",
+        titleEn: "Elementary",
+        descEn: "Limited working proficiency",
       },
       {
         code: "B1",
-        icon: Rocket,
-        seconds: "10",
-        titleAr: "حافة الانطلاق (10 ثواني)",
-        descAr: "محطة كسر البطء؛ تضعك على أول طريق التفكير المباشر بالإنجليزية.",
-        titleEn: "Launch Edge (10s)",
-        descEn: "Break the slowness; puts you on the direct English thinking path.",
+        titleAr: "متوسط",
+        descAr: "كفاءة عملية",
+        titleEn: "Intermediate",
+        descEn: "Working proficiency",
       },
       {
         code: "B2",
-        icon: Flame,
-        seconds: "8",
-        titleAr: "المواجهة السريعة (8 ثواني)",
-        descAr: "الخوض في العمق؛ يداهمك الوقت لتختبر سرعة استجابتك في مواقف حقيقية.",
-        titleEn: "Fast Faceoff (8s)",
-        descEn: "Diving deep; time rushes you to test real-life reaction speed.",
+        titleAr: "متوسط متقدم",
+        descAr: "كفاءة عملية متقدمة",
+        titleEn: "Upper-Intermediate",
+        descEn: "Upper working proficiency",
       },
       {
         code: "C1",
-        icon: AlertTriangle,
-        seconds: "6",
-        titleAr: "الثواني الحرجة (6 ثواني)",
-        descAr: "محطة التعثر الإيجابي؛ هنا تخطئ وتتعثر لتجبر عقلك على إلغاء الترجمة الحرفية.",
-        titleEn: "Critical Seconds (6s)",
-        descEn: "Positive stumble station; forces your brain to eliminate literal translation.",
+        titleAr: "متقدم",
+        descAr: "كفاءة عملية احترافية",
+        titleEn: "Advanced",
+        descEn: "Professional working proficiency",
       },
       {
         code: "C2",
-        icon: Zap,
-        seconds: "4",
-        titleAr: "الرد اللحظي (4 ثواني)",
-        descAr: "ذروة الطلاقة؛ لا وقت للتفكير، الإجابة تخرج تلقائياً من عقلك الباطن.",
-        titleEn: "Instant Response (4s)",
-        descEn: "Peak fluency; no time to overthink, answers spring automatically.",
+        titleAr: "متقن",
+        descAr: "إتقان كامل",
+        titleEn: "Proficiency",
+        descEn: "Full mastery",
       },
     ];
 
@@ -515,50 +503,37 @@ export default function Quiz() {
 
         <div className="flex items-center justify-center flex-1 max-w-5xl mx-auto w-full px-4 py-8">
           <Card className="w-full max-w-4xl p-6 md:p-8 border border-border shadow-xl rounded-2xl">
-            <h1 className="text-2xl md:text-3xl font-black text-foreground mb-2 text-center">
-              {language === "ar" ? "اختر مستوى اللغة الإنجليزية الخاص بك واختبر معرفتك" : "Choose your English level & test your knowledge"}
+            <h1 className="text-2xl md:text-3xl font-black text-foreground mb-8 text-center">
+              {language === "ar" ? "مستويات الكفاءة في اللغة الإنجليزية" : "English Proficiency Levels"}
             </h1>
-            <p className="text-center text-muted-foreground mb-8 text-sm md:text-base italic">
-              {language === "ar" ? '"اضبط بوصلة وقتك.. وتتبع رحلة عقلك من الهدوء إلى الطلاقة"' : '"Set your timing compass.. track your journey from calm to fluency"'}
-            </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
               {customLevels.map((lvl) => {
                 const isSelected = selectedLevel === lvl.code;
-                const IconComp = lvl.icon;
                 return (
                   <button
                     key={lvl.code}
                     type="button"
                     onClick={() => setSelectedLevel(lvl.code)}
-                    className={`p-5 rounded-2xl border-2 transition-all text-start flex flex-col justify-between relative overflow-hidden ${
+                    className={`p-6 rounded-2xl border-2 transition-all text-start flex flex-col justify-between min-h-[140px] relative overflow-hidden ${
                       isSelected
                         ? "border-[#4A3B32] dark:border-[#FCDFC2] bg-[#F7F2ED] dark:bg-[#251E19] shadow-lg ring-2 ring-[#4A3B32]/20 dark:ring-[#FCDFC2]/30"
-                        : "border-border hover:border-[#4A3B32]/40 dark:hover:border-[#FCDFC2]/40 hover:bg-card/80"
+                        : "border-border hover:border-[#4A3B32]/40 dark:hover:border-[#FCDFC2]/40 hover:bg-card/80 bg-card"
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <div className={`p-2 rounded-xl transition-colors ${
-                          isSelected 
-                            ? "bg-[#4A3B32] text-[#FCDFC2] dark:bg-[#FCDFC2] dark:text-[#120F0D]" 
-                            : "bg-muted text-muted-foreground"
-                        }`}>
-                          <IconComp className="w-5 h-5" />
-                        </div>
-                        <h3 className="font-extrabold text-base md:text-lg text-foreground">
-                          {language === "ar" ? lvl.titleAr : lvl.titleEn}
-                        </h3>
-                      </div>
-                      <span className={`text-xs font-black px-2.5 py-1 rounded-lg transition-colors ${
+                    <div className="flex items-center justify-between">
+                      <span className={`text-sm font-extrabold px-2.5 py-0.5 rounded-lg transition-colors ${
                         isSelected 
                           ? "bg-[#4A3B32] text-[#FCDFC2] dark:bg-[#FCDFC2] dark:text-[#120F0D]" 
-                          : "bg-muted text-muted-foreground"
+                          : "text-[#4A3B32] dark:text-[#FCDFC2] bg-muted/60"
                       }`}>
                         {lvl.code}
                       </span>
                     </div>
-                    <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+                    <h3 className="font-extrabold text-xl md:text-2xl text-foreground my-3 text-center">
+                      {language === "ar" ? lvl.titleAr : lvl.titleEn}
+                    </h3>
+                    <p className="text-xs md:text-sm text-muted-foreground text-start">
                       {language === "ar" ? lvl.descAr : lvl.descEn}
                     </p>
                   </button>
