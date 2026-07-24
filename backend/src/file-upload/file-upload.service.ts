@@ -54,10 +54,38 @@ export class FileUploadService {
     const configUrl = this.configService.get<string>('BASE_URL')?.replace(/\/$/, '') || '';
     this.baseUrl = configUrl.replace(/^http:/, 'https:');
     this.logger.log(`FileUploadService initialized with baseUrl: ${this.baseUrl} (from config: ${configUrl})`);
-    // Configure ffmpeg binary path if available
-    if (ffmpegPath) {
-      ffmpeg.setFfmpegPath(ffmpegPath);
+    // Configure ffmpeg binary path – try ffmpeg-static first, then common system paths
+    const resolvedFfmpegPath = this.resolveFfmpegPath();
+    if (resolvedFfmpegPath) {
+      ffmpeg.setFfmpegPath(resolvedFfmpegPath);
+      this.logger.log(`ffmpeg binary resolved at: ${resolvedFfmpegPath}`);
+    } else {
+      this.logger.warn('ffmpeg binary NOT found – audio concatenation will fail. Install ffmpeg on the server: sudo apt-get install -y ffmpeg');
     }
+  }
+
+  /**
+   * Resolve the ffmpeg binary path. Tries ffmpeg-static first,
+   * then common Linux system paths.
+   */
+  private resolveFfmpegPath(): string | null {
+    const fs = require('fs');
+    // 1. ffmpeg-static package path
+    if (ffmpegPath && fs.existsSync(ffmpegPath)) {
+      return ffmpegPath;
+    }
+    // 2. Common system paths (Linux)
+    const systemPaths = [
+      '/usr/bin/ffmpeg',
+      '/usr/local/bin/ffmpeg',
+      '/snap/bin/ffmpeg',
+    ];
+    for (const p of systemPaths) {
+      if (fs.existsSync(p)) {
+        return p;
+      }
+    }
+    return null;
   }
 
   /**
@@ -400,7 +428,9 @@ export class FileUploadService {
     try {
       const listContent = inputFiles.map(file => `file '${file.replace(/\\/g, '/')}'`).join('\n');
       fs.writeFileSync(listFilePath, listContent, 'utf8');
-      const ffbin = ffmpegPath ? `"${ffmpegPath}"` : 'ffmpeg';
+      const resolvedPath = this.resolveFfmpegPath();
+      const ffbin = resolvedPath ? `"${resolvedPath}"` : 'ffmpeg';
+      this.logger.log(`Audio concat using ffmpeg at: ${ffbin}`);
       const ffmpegCommand = [
         ffbin,
         '-f', 'concat',
