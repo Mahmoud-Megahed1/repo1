@@ -104,7 +104,13 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
             </div>
           </div>
 
-             <div className="flex gap-3 flex-wrap">
+          {/* Social Media */}
+          <div>
+            <h3 className="text-cyan-400 font-bold text-lg mb-4 flex items-center gap-2">
+              <Smartphone className="w-6 h-6 text-cyan-400" />
+              {t.followUs}
+            </h3>
+            <div className="flex gap-3 flex-wrap">
               {[
                 { icon: Facebook, href: 'https://www.facebook.com/share/1JunPviNMg/', label: 'Facebook', color: 'bg-blue-600' },
                 { icon: Twitter, href: 'https://x.com/Englishom_sa', label: 'Twitter', color: 'bg-black' },
