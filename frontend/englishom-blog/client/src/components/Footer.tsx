@@ -5,7 +5,7 @@ import { ENGLISHOM_COLORS } from "@/constants/colors";
 const SocialIcons = [
   {
     name: "YouTube",
-    href: "https://youtube.com",
+    href: "https://www.youtube.com/@Englishom_sa",
     bg: "bg-[#FF0000]",
     svg: (
       <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
@@ -15,7 +15,7 @@ const SocialIcons = [
   },
   {
     name: "X",
-    href: "https://x.com",
+    href: "https://x.com/Englishom_sa",
     bg: "bg-[#0f1419] border border-slate-700",
     svg: (
       <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
@@ -25,7 +25,7 @@ const SocialIcons = [
   },
   {
     name: "TikTok",
-    href: "https://tiktok.com",
+    href: "https://www.tiktok.com/@englishom_sa",
     bg: "bg-[#111111] border border-slate-800",
     svg: (
       <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
@@ -35,7 +35,7 @@ const SocialIcons = [
   },
   {
     name: "WhatsApp",
-    href: "https://whatsapp.com",
+    href: "https://wa.me/966542577250",
     bg: "bg-[#25D366]",
     svg: (
       <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
@@ -45,7 +45,7 @@ const SocialIcons = [
   },
   {
     name: "Telegram",
-    href: "https://t.me",
+    href: "https://t.me/Englishom_sa",
     bg: "bg-[#229ED9]",
     svg: (
       <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
@@ -55,7 +55,7 @@ const SocialIcons = [
   },
   {
     name: "Instagram",
-    href: "https://instagram.com",
+    href: "https://www.instagram.com/englishom_sa",
     bg: "bg-gradient-to-tr from-amber-500 via-pink-600 to-purple-600",
     svg: (
       <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
@@ -65,17 +65,17 @@ const SocialIcons = [
   },
   {
     name: "Snapchat",
-    href: "https://snapchat.com",
+    href: "https://www.snapchat.com/add/englishom_sa",
     bg: "bg-[#FFFC00]",
     svg: (
       <svg className="w-5 h-5 fill-slate-900" viewBox="0 0 24 24">
-        <path d="M12.007 0C8.031 0 5.617 2.738 5.617 5.688c0 1.09.289 2.05.612 2.879.167.433.208.571.127.81-.077.228-.35.393-.728.524-.766.265-1.761.642-2.207 1.472-.34.633-.186 1.417.379 1.906.592.512 1.341.65 2.083.786.195.035.39.07.574.11.393.084.58.261.54.549-.036.262-.259.626-.527 1.066-.372.609-.894 1.464-.894 2.502 0 1.996 2.016 3.197 4.908 3.197 1.025 0 2.029-.168 2.915-.499 1.037.331 2.04.499 3.065.499 2.893 0 4.909-1.201 4.909-3.197 0-1.038-.522-1.893-.895-2.502-.268-.44-.491-.804-.526-1.066-.041-.288.146-.465.539-.549.184-.04.379-.075.574-.11.742-.136 1.491-.274 2.083-.786.565-.489.719-1.273.379-1.906-.446-.83-.1.441-1.238-2.207-1.472-.378-.131-.651-.296-.728-.524-.081-.239-.04-.377.127-.81.323-.829.612-1.789.612-2.879C18.397 2.738 15.983 0 12.007 0z"/>
+        <path d="M12.007 0C8.031 0 5.617 2.738 5.617 5.688c0 1.09.289 2.05.612 2.879.167.433.208.571.127.81-.077.228-.35.393-.728.524-.766.265-1.761.642-2.207 1.472-.34.633-.186 1.417.379 1.906.592.512 1.341.65 2.083.786.195.035.39.07.574.11.393.084.58.261.54.549-.036.262-.259.626-.527 1.066-.372.609-.894 1.464-.894 2.502 0 1.996 2.016 3.197 4.908 3.197 1.025 0 2.029-.168 2.915-.499 1.037.331 2.04.499 3.065.499 2.893 0 4.909-1.201 4.909-3.197 0-1.038-.522-1.893-.895-2.502-.268-.44-.491-.804-.526-1.066-.041-.288.146-.465.539-.549.184-.04.379-.075.574-.11.742-.136 1.491-.274 2.083-.786.565-.489.719-1.273.379-1.906-.446-.83-.441-1.238-2.207-1.472-.378-.131-.651-.296-.728-.524-.081-.239-.04-.377.127-.81.323-.829.612-1.789.612-2.879C18.397 2.738 15.983 0 12.007 0z"/>
       </svg>
     ),
   },
   {
     name: "Facebook",
-    href: "https://facebook.com",
+    href: "https://www.facebook.com/share/1JunPviNMg/",
     bg: "bg-[#1877F2]",
     svg: (
       <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">

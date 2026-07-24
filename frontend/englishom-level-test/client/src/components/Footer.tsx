@@ -3,7 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const SocialIcons = [
   {
     name: "YouTube",
-    href: "https://youtube.com",
+    href: "https://www.youtube.com/@Englishom_sa",
     bg: "bg-[#FF0000]",
     svg: (
       <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
@@ -13,7 +13,7 @@ const SocialIcons = [
   },
   {
     name: "X",
-    href: "https://x.com",
+    href: "https://x.com/Englishom_sa",
     bg: "bg-[#0f1419] border border-slate-700",
     svg: (
       <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
@@ -23,7 +23,7 @@ const SocialIcons = [
   },
   {
     name: "TikTok",
-    href: "https://tiktok.com",
+    href: "https://www.tiktok.com/@englishom_sa",
     bg: "bg-[#111111] border border-slate-800",
     svg: (
       <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
@@ -33,7 +33,7 @@ const SocialIcons = [
   },
   {
     name: "WhatsApp",
-    href: "https://whatsapp.com",
+    href: "https://wa.me/966542577250",
     bg: "bg-[#25D366]",
     svg: (
       <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
@@ -43,7 +43,7 @@ const SocialIcons = [
   },
   {
     name: "Telegram",
-    href: "https://t.me",
+    href: "https://t.me/Englishom_sa",
     bg: "bg-[#229ED9]",
     svg: (
       <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
@@ -53,7 +53,7 @@ const SocialIcons = [
   },
   {
     name: "Instagram",
-    href: "https://instagram.com",
+    href: "https://www.instagram.com/englishom_sa",
     bg: "bg-gradient-to-tr from-amber-500 via-pink-600 to-purple-600",
     svg: (
       <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
@@ -63,7 +63,7 @@ const SocialIcons = [
   },
   {
     name: "Snapchat",
-    href: "https://snapchat.com",
+    href: "https://www.snapchat.com/add/englishom_sa",
     bg: "bg-[#FFFC00]",
     svg: (
       <svg className="w-5 h-5 fill-slate-900" viewBox="0 0 24 24">
@@ -73,7 +73,7 @@ const SocialIcons = [
   },
   {
     name: "Facebook",
-    href: "https://facebook.com",
+    href: "https://www.facebook.com/share/1JunPviNMg/",
     bg: "bg-[#1877F2]",
     svg: (
       <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
@@ -81,7 +81,7 @@ const SocialIcons = [
       </svg>
     ),
   },
-];
+];;
 
 export function Footer() {
   const { language } = useLanguage();

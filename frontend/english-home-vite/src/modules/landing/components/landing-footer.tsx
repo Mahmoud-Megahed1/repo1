@@ -44,25 +44,25 @@ export function LandingFooter() {
   ] as const;
   const socialLinks = [
     {
-      href: 'https://www.facebook.com/share/19wWacNacT/',
+      href: 'https://www.facebook.com/share/1JunPviNMg/',
       icon: FacebookIcon,
     },
     {
-      href: 'https://www.snapchat.com/add/englishom25',
+      href: 'https://www.snapchat.com/add/englishom_sa',
       icon: SnapchatIcon,
     },
     {
-      href: 'https://www.instagram.com/englishom1',
+      href: 'https://www.instagram.com/englishom_sa',
       icon: InstagramIcon,
     },
-    { href: 'https://t.me/+xlzna51reL1hNzc0', icon: TelegramIcon },
+    { href: 'https://t.me/Englishom_sa', icon: TelegramIcon },
     { href: 'https://wa.me/966542577250', icon: WhatsappIcon },
     {
-      href: 'https://www.tiktok.com/@englishom1?_t=ZS-8zrqZgIC37K&_r=1',
+      href: 'https://www.tiktok.com/@englishom_sa',
       icon: TiktokIcon,
     },
-    { href: 'https://x.com/englishom28264', icon: XIcon },
-    { href: 'https://www.youtube.com/@EglishHOM', icon: YoutubeIcon },
+    { href: 'https://x.com/Englishom_sa', icon: XIcon },
+    { href: 'https://www.youtube.com/@Englishom_sa', icon: YoutubeIcon },
   ] as const;
   const locale = useLocale() === 'ar' ? 'ar-EG' : 'en-US';
   let currentYear: number | string = new Date().getFullYear();

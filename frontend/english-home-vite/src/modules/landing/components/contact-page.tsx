@@ -56,25 +56,25 @@ export function ContactPage() {
   const socialLinks = [
     {
       name: 'Facebook',
-      href: 'https://www.facebook.com/share/19wWacNacT/',
+      href: 'https://www.facebook.com/share/1JunPviNMg/',
       icon: FacebookIcon,
       description: t('Landing.contact.social.facebook'),
     },
     {
       name: 'Instagram',
-      href: 'https://www.instagram.com/englishom1',
+      href: 'https://www.instagram.com/englishom_sa',
       icon: InstagramIcon,
       description: t('Landing.contact.social.instagram'),
     },
     {
       name: 'Snapchat',
-      href: 'https://www.snapchat.com/add/englishom25',
+      href: 'https://www.snapchat.com/add/englishom_sa',
       icon: SnapchatIcon,
       description: t('Landing.contact.social.snapchat'),
     },
     {
       name: 'Telegram',
-      href: 'https://t.me/+xlzna51reL1hNzc0',
+      href: 'https://t.me/Englishom_sa',
       icon: TelegramIcon,
       description: t('Landing.contact.social.telegram'),
     },
@@ -86,19 +86,19 @@ export function ContactPage() {
     },
     {
       name: 'TikTok',
-      href: 'https://www.tiktok.com/@englishom1?_t=ZS-8zrqZgIC37K&_r=1',
+      href: 'https://www.tiktok.com/@englishom_sa',
       icon: TiktokIcon,
       description: t('Landing.contact.social.tiktok'),
     },
     {
       name: 'X (Twitter)',
-      href: 'https://x.com/englishom28264',
+      href: 'https://x.com/Englishom_sa',
       icon: XIcon,
       description: t('Landing.contact.social.twitter'),
     },
     {
       name: 'YouTube',
-      href: 'https://www.youtube.com/@EglishHOM',
+      href: 'https://www.youtube.com/@Englishom_sa',
       icon: YoutubeIcon,
       description: t('Landing.contact.social.youtube'),
     },

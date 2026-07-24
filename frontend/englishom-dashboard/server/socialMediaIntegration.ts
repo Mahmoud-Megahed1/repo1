@@ -80,7 +80,7 @@ export class FacebookIntegration {
       likes: Math.floor(Math.random() * 500),
       shares: Math.floor(Math.random() * 100),
       comments: Math.floor(Math.random() * 50),
-      url: 'https://facebook.com/englishom',
+      url: 'https://www.facebook.com/share/1JunPviNMg/',
     }));
   }
 }
@@ -134,12 +134,12 @@ export class TwitterIntegration {
       id: `tw_${i}`,
       platform: 'twitter',
       content: `Learn English with Englishom - Tip #${i + 1}: ${['Pronunciation', 'Grammar', 'Vocabulary', 'Listening', 'Speaking'][i % 5]}`,
-      author: '@englishom',
+      author: '@Englishom_sa',
       timestamp: new Date(Date.now() - i * 3600000),
       likes: Math.floor(Math.random() * 1000),
       shares: Math.floor(Math.random() * 300),
       comments: Math.floor(Math.random() * 200),
-      url: 'https://twitter.com/englishom',
+      url: 'https://x.com/Englishom_sa',
     }));
   }
 }
@@ -206,13 +206,13 @@ export class YouTubeIntegration {
       id: `yt_${i}`,
       platform: 'youtube',
       content: titles[i % titles.length],
-      author: 'Englishom',
+      author: 'Englishom_sa',
       timestamp: new Date(Date.now() - i * 604800000),
       likes: Math.floor(Math.random() * 5000),
       shares: Math.floor(Math.random() * 1000),
       comments: Math.floor(Math.random() * 500),
       mediaUrl: `https://img.youtube.com/vi/video${i}/maxresdefault.jpg`,
-      url: 'https://youtube.com/englishom',
+      url: 'https://www.youtube.com/@Englishom_sa',
     }));
   }
 }
@@ -266,13 +266,13 @@ export class InstagramIntegration {
       id: `ig_${i}`,
       platform: 'instagram',
       content: `Daily English Tip #${i + 1} 📚✨ #EnglishLearning #Englishom`,
-      author: '@englishom',
+      author: '@englishom_sa',
       timestamp: new Date(Date.now() - i * 86400000),
       likes: Math.floor(Math.random() * 2000),
       shares: Math.floor(Math.random() * 500),
       comments: Math.floor(Math.random() * 300),
-      mediaUrl: `https://instagram.com/englishom/p/post${i}`,
-      url: 'https://instagram.com/englishom',
+      mediaUrl: `https://www.instagram.com/englishom_sa/p/post${i}`,
+      url: 'https://www.instagram.com/englishom_sa',
     }));
   }
 }
@@ -339,13 +339,13 @@ export class TikTokIntegration {
       id: `tk_${i}`,
       platform: 'tiktok',
       content: titles[i % titles.length],
-      author: '@englishom',
+      author: '@englishom_sa',
       timestamp: new Date(Date.now() - i * 86400000),
       likes: Math.floor(Math.random() * 10000),
       shares: Math.floor(Math.random() * 5000),
       comments: Math.floor(Math.random() * 2000),
-      mediaUrl: `https://tiktok.com/@englishom/video${i}`,
-      url: 'https://tiktok.com/@englishom',
+      mediaUrl: `https://www.tiktok.com/@englishom_sa/video${i}`,
+      url: 'https://www.tiktok.com/@englishom_sa',
     }));
   }
 }
