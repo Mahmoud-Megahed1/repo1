@@ -552,7 +552,7 @@ export default function LiveDashboard() {
               <span>X</span>
             </a>
             <a
-              href="https://www.instagram.com/englishom_sa"
+              href="https://www.instagram.com/englishom_sa?igsh=cTB6czYwYXR2Zmty"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 px-4 py-3 rounded transition-colors text-white"

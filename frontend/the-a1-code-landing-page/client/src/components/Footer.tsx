@@ -180,7 +180,7 @@ export default function Footer({ courseData }: { courseData?: any }) {
             <a href="https://t.me/Englishom_sa" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 text-white/60 hover:text-white hover:bg-[#0088cc] flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(0,136,204,0.4)]" title="Telegram">
               <Send className="w-5 h-5" />
             </a>
-            <a href="https://www.instagram.com/englishom_sa" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 text-white/60 hover:text-white hover:bg-gradient-to-r hover:from-[#f09433] hover:to-[#e6683c] flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(230,104,60,0.4)]" title="Instagram">
+            <a href="https://www.instagram.com/englishom_sa?igsh=cTB6czYwYXR2Zmty" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 text-white/60 hover:text-white hover:bg-gradient-to-r hover:from-[#f09433] hover:to-[#e6683c] flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(230,104,60,0.4)]" title="Instagram">
               <Instagram className="w-5 h-5" />
             </a>
             <a href="https://www.snapchat.com/add/englishom_sa" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 text-white/60 hover:text-black hover:bg-[#FFFC00] flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(255,252,0,0.4)]" title="Snapchat">

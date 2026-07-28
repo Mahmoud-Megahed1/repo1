@@ -43,7 +43,7 @@ const SocialMediaFeed: React.FC = () => {
         likes: 3450,
         comments: 234,
         shares: 567,
-        link: 'https://www.instagram.com/englishom_sa',
+        link: 'https://www.instagram.com/englishom_sa?igsh=cTB6czYwYXR2Zmty',
       },
       {
         id: '3',

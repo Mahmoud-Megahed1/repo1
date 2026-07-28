@@ -272,7 +272,7 @@ export class InstagramIntegration {
       shares: Math.floor(Math.random() * 500),
       comments: Math.floor(Math.random() * 300),
       mediaUrl: `https://www.instagram.com/englishom_sa/p/post${i}`,
-      url: 'https://www.instagram.com/englishom_sa',
+      url: 'https://www.instagram.com/englishom_sa?igsh=cTB6czYwYXR2Zmty',
     }));
   }
 }

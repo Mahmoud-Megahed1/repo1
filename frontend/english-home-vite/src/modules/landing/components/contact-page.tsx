@@ -62,7 +62,7 @@ export function ContactPage() {
     },
     {
       name: 'Instagram',
-      href: 'https://www.instagram.com/englishom_sa',
+      href: 'https://www.instagram.com/englishom_sa?igsh=cTB6czYwYXR2Zmty',
       icon: InstagramIcon,
       description: t('Landing.contact.social.instagram'),
     },

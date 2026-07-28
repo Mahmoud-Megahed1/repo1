@@ -114,7 +114,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
               {[
                 { icon: Facebook, href: 'https://www.facebook.com/share/1JunPviNMg/', label: 'Facebook', color: 'bg-blue-600' },
                 { icon: Twitter, href: 'https://x.com/Englishom_sa', label: 'Twitter', color: 'bg-black' },
-                { icon: Instagram, href: 'https://www.instagram.com/englishom_sa', label: 'Instagram', color: 'bg-pink-600' },
+                { icon: Instagram, href: 'https://www.instagram.com/englishom_sa?igsh=cTB6czYwYXR2Zmty', label: 'Instagram', color: 'bg-pink-600' },
                 { icon: Youtube, href: 'https://www.youtube.com/@Englishom_sa', label: 'YouTube', color: 'bg-red-600' },
               ].map((social) => {
                 const Icon = social.icon;

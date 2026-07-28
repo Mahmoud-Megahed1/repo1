@@ -52,7 +52,7 @@ export function LandingFooter() {
       icon: SnapchatIcon,
     },
     {
-      href: 'https://www.instagram.com/englishom_sa',
+      href: 'https://www.instagram.com/englishom_sa?igsh=cTB6czYwYXR2Zmty',
       icon: InstagramIcon,
     },
     { href: 'https://t.me/Englishom_sa', icon: TelegramIcon },
