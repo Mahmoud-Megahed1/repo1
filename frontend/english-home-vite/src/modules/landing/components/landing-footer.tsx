@@ -16,6 +16,8 @@ import { useTranslation } from 'react-i18next';
 export function LandingFooter() {
   const { t } = useTranslation();
   const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const currentLocale = useLocale();
+  const isAr = currentLocale === 'ar';
   const keys = [
     {
       key: 'features',
@@ -64,7 +66,7 @@ export function LandingFooter() {
     { href: 'https://x.com/Englishom_sa', icon: XIcon },
     { href: 'https://www.youtube.com/@Englishom_sa', icon: YoutubeIcon },
   ] as const;
-  const locale = useLocale() === 'ar' ? 'ar-EG' : 'en-US';
+  const locale = isAr ? 'ar-EG' : 'en-US';
   let currentYear: number | string = new Date().getFullYear();
   currentYear = new Intl.NumberFormat(locale, {
     useGrouping: false,
@@ -96,7 +98,7 @@ export function LandingFooter() {
           {/* Test Your Language */}
           <div>
             <h3 className="mb-4 font-semibold">
-              {useLocale() === 'ar' ? 'اختبر لغتك' : 'Test Your Language'}
+              {isAr ? 'اختبر لغتك' : 'Test Your Language'}
             </h3>
             <ul className="space-y-2 text-sm">
               <li>
@@ -104,7 +106,7 @@ export function LandingFooter() {
                   href="/ques"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  {useLocale() === 'ar' ? 'مستوى الكفاءة' : 'Proficiency Level'}
+                  {isAr ? 'مستوى الكفاءة' : 'Proficiency Level'}
                 </a>
               </li>
               <li>
@@ -112,15 +114,15 @@ export function LandingFooter() {
                   href="/test"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  {useLocale() === 'ar' ? 'اكتشف مستواك' : 'Discover Your Level'}
+                  {isAr ? 'اكتشف مستواك' : 'Discover Your Level'}
                 </a>
               </li>
               <li>
                 <a
-                  href="/progress"
+                  href="/test1"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  {useLocale() === 'ar' ? 'مؤشر الإنجاز' : 'Achievement Index'}
+                  {isAr ? 'مؤشر الإنجاز' : 'Achievement Index'}
                 </a>
               </li>
               <li>
@@ -128,7 +130,7 @@ export function LandingFooter() {
                   href="/blog"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  {useLocale() === 'ar' ? 'المدونة' : 'Blog'}
+                  {isAr ? 'المدونة' : 'Blog'}
                 </a>
               </li>
             </ul>
@@ -212,7 +214,7 @@ export function LandingFooter() {
                   onClick={() => setShowDisclaimer(true)}
                   className="text-muted-foreground hover:text-primary transition-colors text-left rtl:text-right w-full bg-transparent border-0 p-0 cursor-pointer"
                 >
-                  {useLocale() === 'ar' ? 'إخلاء المسؤولية' : 'Disclaimer'}
+                  {isAr ? 'إخلاء المسؤولية' : 'Disclaimer'}
                 </button>
               </li>
             </ul>
@@ -275,7 +277,7 @@ export function LandingFooter() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div 
             className="bg-card text-foreground border rounded-2xl max-w-xl w-full p-6 shadow-2xl relative animate-in zoom-in-95 duration-200 text-right"
-            dir={useLocale() === 'ar' ? "rtl" : "ltr"}
+            dir={isAr ? "rtl" : "ltr"}
           >
             <button
               onClick={() => setShowDisclaimer(false)}
@@ -288,11 +290,11 @@ export function LandingFooter() {
             </button>
             
             <h3 className="text-xl font-bold mb-4 mt-2 text-center md:text-start">
-              {useLocale() === 'ar' ? "إخلاء المسؤولية" : "Disclaimer"}
+              {isAr ? "إخلاء المسؤولية" : "Disclaimer"}
             </h3>
             
             <p className="text-muted-foreground text-sm md:text-base leading-relaxed text-justify mb-2 whitespace-pre-line">
-              {useLocale() === 'ar' ? (
+              {isAr ? (
                 "جميع المقالات والمحتويات المنشورة في هذه المدونة هي لأغراض تثقيفية وتعليمية عامة، وتُمثل وجهات نظر كتابها بناءً على الأبحاث والمصادر المتاحة. المسميات الوظيفية والتحريرية المذكورة (مثل: خبير، مستشار، أخصائي) تُستخدم في سياقها التحريري لإبراز زاوية الطرح وتخصص المقال، ولا تُعد بديلة عن الاستشارات المهنية والرسمية المباشرة. لا تتحمل المنصة أي مسؤولية قانونية عن قرار يُتخذ بناءً على المعلومات الواردة في الموقع."
               ) : (
                 "All articles and content published on this blog are provided for general educational and informational purposes only, based on available research and resources. Editorial titles (such as Expert, Consultant, or Specialist) are used in a stylistic context to define the topic's scope and do not constitute legal, medical, or formal professional advice. The platform assumes no liability for actions taken based on the information provided herein."
@@ -304,7 +306,7 @@ export function LandingFooter() {
                 onClick={() => setShowDisclaimer(false)}
                 className="px-5 py-2.5 rounded-xl font-bold text-sm bg-primary text-primary-foreground hover:opacity-90 transition-all"
               >
-                {useLocale() === 'ar' ? "إغلاق" : "Close"}
+                {isAr ? "إغلاق" : "Close"}
               </button>
             </div>
           </div>

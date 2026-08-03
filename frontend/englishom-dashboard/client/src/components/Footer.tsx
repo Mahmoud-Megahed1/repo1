@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
 
 interface FooterProps {
@@ -7,6 +7,8 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
   const isArabic = language === 'ar';
+  const langPath = isArabic ? '/ar' : '/en';
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   const translations = {
     ar: {
@@ -25,6 +27,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
       legal: 'قانوني',
       terms: 'الشروط والأحكام',
       privacy: 'سياسة الخصوصية',
+      disclaimer: 'إخلاء المسؤولية',
       copyright: '© 2026 إنجلشوم. جميع الحقوق محفوظة.',
     },
     en: {
@@ -43,6 +46,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
       legal: 'Legal',
       terms: 'Terms & Conditions',
       privacy: 'Privacy Policy',
+      disclaimer: 'Disclaimer',
       copyright: '© 2026 Englishom. All rights reserved.',
     }
   };
@@ -146,22 +150,22 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
             </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <a href="/ques" className="text-gray-400 hover:text-cyan-400 transition-colors">
+                <a href="https://englishom.com/ques" className="text-gray-400 hover:text-cyan-400 transition-colors">
                   {t.proficiencyLevel}
                 </a>
               </li>
               <li>
-                <a href="/test" className="text-gray-400 hover:text-cyan-400 transition-colors">
+                <a href="https://englishom.com/test" className="text-gray-400 hover:text-cyan-400 transition-colors">
                   {t.discoverLevel}
                 </a>
               </li>
               <li>
-                <a href="/progress" className="text-gray-400 hover:text-cyan-400 transition-colors">
+                <a href="https://englishom.com/test1" className="text-gray-400 hover:text-cyan-400 transition-colors">
                   {t.achievementIndex}
                 </a>
               </li>
               <li>
-                <a href="/blog" className="text-gray-400 hover:text-cyan-400 transition-colors">
+                <a href="https://englishom.com/blog" className="text-gray-400 hover:text-cyan-400 transition-colors">
                   {t.blog}
                 </a>
               </li>
@@ -175,12 +179,12 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
             </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <a href="/signup" className="text-gray-400 hover:text-cyan-400 transition-colors">
+                <a href={`https://englishom.com${langPath}/signup`} className="text-gray-400 hover:text-cyan-400 transition-colors">
                   {t.startLearning}
                 </a>
               </li>
               <li>
-                <a href="/login" className="text-gray-400 hover:text-cyan-400 transition-colors">
+                <a href={`https://englishom.com${langPath}/login`} className="text-gray-400 hover:text-cyan-400 transition-colors">
                   {t.login}
                 </a>
               </li>
@@ -194,12 +198,12 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
             </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <a href="/user-guide" className="text-gray-400 hover:text-cyan-400 transition-colors">
+                <a href={`https://englishom.com${langPath}/user-guide`} className="text-gray-400 hover:text-cyan-400 transition-colors">
                   {t.userGuide}
                 </a>
               </li>
               <li>
-                <a href="/contact" className="text-gray-400 hover:text-cyan-400 transition-colors">
+                <a href={`https://englishom.com${langPath}/contact`} className="text-gray-400 hover:text-cyan-400 transition-colors">
                   {t.contactUs}
                 </a>
               </li>
@@ -213,14 +217,22 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
             </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <a href="/terms-and-conditions" className="text-gray-400 hover:text-cyan-400 transition-colors">
+                <a href={`https://englishom.com${langPath}/terms-and-conditions`} className="text-gray-400 hover:text-cyan-400 transition-colors">
                   {t.terms}
                 </a>
               </li>
               <li>
-                <a href="/privacy-policy" className="text-gray-400 hover:text-cyan-400 transition-colors">
+                <a href={`https://englishom.com${langPath}/privacy-policy`} className="text-gray-400 hover:text-cyan-400 transition-colors">
                   {t.privacy}
                 </a>
+              </li>
+              <li>
+                <button
+                  onClick={() => setShowDisclaimer(true)}
+                  className="text-gray-400 hover:text-cyan-400 transition-colors text-right rtl:text-right w-full bg-transparent border-0 p-0 cursor-pointer text-sm"
+                >
+                  {t.disclaimer}
+                </button>
               </li>
             </ul>
           </div>
@@ -234,8 +246,53 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
           <p className="text-gray-400 text-sm">{t.copyright}</p>
         </div>
       </div>
+      <DisclaimerModal show={showDisclaimer} isAr={isArabic} onClose={() => setShowDisclaimer(false)} />
     </footer>
   );
 };
 
 export default Footer;
+
+// Disclaimer Modal Rendered Outside
+const DisclaimerModal: React.FC<{ show: boolean; isAr: boolean; onClose: () => void }> = ({ show, isAr, onClose }) => {
+  if (!show) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div 
+        className="bg-slate-900 text-white border border-cyan-500/30 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative text-right"
+        dir={isAr ? "rtl" : "ltr"}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 left-4 rtl:left-auto rtl:right-4 text-gray-400 hover:text-cyan-400 transition-colors"
+          aria-label="Close"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        
+        <h3 className="text-xl font-bold mb-4 mt-2 text-cyan-400 text-center md:text-start">
+          {isAr ? "إخلاء المسؤولية" : "Disclaimer"}
+        </h3>
+        
+        <p className="text-gray-300 text-sm md:text-base leading-relaxed text-justify mb-2 whitespace-pre-line">
+          {isAr ? (
+            "جميع المقالات والمحتويات المنشورة في هذه المدونة هي لأغراض تثقيفية وتعليمية عامة، وتُمثل وجهات نظر كتابها بناءً على الأبحاث والمصادر المتاحة. المسميات الوظيفية والتحريرية المذكورة (مثل: خبير، مستشار، أخصائي) تُستخدم في سياقها التحريري لإبراز زاوية الطرح وتخصص المقال، ولا تُعد بديلة عن الاستشارات المهنية والرسمية المباشرة. لا تتحمل المنصة أي مسؤولية قانونية عن قرار يُتخذ بناءً على المعلومات الواردة في الموقع."
+          ) : (
+            "All articles and content published on this blog are provided for general educational and informational purposes only, based on available research and resources. Editorial titles (such as Expert, Consultant, or Specialist) are used in a stylistic context to define the topic's scope and do not constitute legal, medical, or formal professional advice. The platform assumes no liability for actions taken based on the information provided herein."
+          )}
+        </p>
+        
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={onClose}
+            className="px-5 py-2.5 rounded-xl font-bold text-sm bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/40 transition-all"
+          >
+            {isAr ? "إغلاق" : "Close"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

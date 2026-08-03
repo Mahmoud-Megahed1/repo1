@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 export default function Home() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
   const [coursesData, setCoursesData] = useState<any[]>([]);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   useEffect(() => {
     fetch('https://api.englishom.com/api/courses')
@@ -550,9 +551,9 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-[#222222] dark:bg-[#0a0a0a] text-white py-16 transition-colors duration-300 border-t border-gray-800" dir="rtl">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 text-right">
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5 mb-12 text-right">
             {/* Brand */}
-            <div className="space-y-4">
+            <div className="col-span-full space-y-4 lg:col-span-1">
               <a href="https://englishom.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                 <img 
                   src="https://englishom.com/logo.jpeg" 
@@ -566,54 +567,50 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Quick Links */}
+            {/* Test Your Language */}
             <div className="space-y-4">
-              <h4 className="font-bold text-lg">روابط سريعة</h4>
-              <ul className="space-y-2 text-[#CCCCCC]">
-                <li><a href="https://englishom.com" className="hover:text-[#F5BB41] transition-colors duration-300">الرئيسية</a></li>
-                <li>من نحن</li>
-                <li><a href="#faq" className="hover:text-[#F5BB41] transition-colors duration-300">الأسئلة الشائعة</a></li>
-                <li><a href="https://englishom.com/blog/" className="hover:text-[#F5BB41] transition-colors duration-300">المدونة</a></li>
+              <h4 className="font-bold text-lg">اختبر لغتك</h4>
+              <ul className="space-y-2 text-[#CCCCCC] text-sm">
+                <li><a href="https://englishom.com/ques" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">مستوى الكفاءة</a></li>
+                <li><a href="https://englishom.com/test" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">اكتشف مستواك</a></li>
+                <li><a href="https://englishom.com/test1" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">مؤشر الإنجاز</a></li>
+                <li><a href="https://englishom.com/blog" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">المدونة</a></li>
               </ul>
             </div>
 
-            {/* Resources */}
+            {/* Training & Practice */}
             <div className="space-y-4">
-              <h4 className="font-bold text-lg">المصادر</h4>
-              <ul className="space-y-2 text-[#CCCCCC]">
-                <li>الشروط والأحكام</li>
-                <li>سياسة الخصوصية</li>
-                <li>سياسة الاسترجاع</li>
-                <li>شهادة معروف</li>
+              <h4 className="font-bold text-lg">التدريب والممارسة</h4>
+              <ul className="space-y-2 text-[#CCCCCC] text-sm">
+                <li><a href="https://englishom.com/ar/signup" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">ابدأ الممارسة الذكية</a></li>
+                <li><a href="https://englishom.com/ar/login" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">تسجيل الدخول</a></li>
               </ul>
             </div>
 
-            {/* Contact */}
+            {/* Support */}
             <div className="space-y-4">
-              <h4 className="font-bold text-lg">تواصل معنا</h4>
-              <div className="space-y-3 text-[#CCCCCC]">
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-[#F5BB41] flex-shrink-0" />
-                  <a href="mailto:support@englishom.com" className="hover:text-[#F5BB41] transition-colors">
-                    support@englishom.com
-                  </a>
-                </div>
-                <div className="flex items-center gap-3">
-                  <MessageCircle className="w-5 h-5 text-[#F5BB41] flex-shrink-0" />
-                  <a
-                    href="https://wa.me/966542577250?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B+%D8%A8%D9%83+%D9%81%D9%8A+Englishom+-+%D9%87%D9%84+%D9%84%D8%AF%D9%8A%D9%83+%D8%A3%D9%8A+%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%D8%A7%D8%AA%D8%9F"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-[#F5BB41] transition-colors"
+              <h4 className="font-bold text-lg">الدعم</h4>
+              <ul className="space-y-2 text-[#CCCCCC] text-sm">
+                <li><a href="https://englishom.com/ar/user-guide" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">دليل المستخدم</a></li>
+                <li><a href="https://englishom.com/ar/contact" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">اتصل بنا</a></li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div className="space-y-4">
+              <h4 className="font-bold text-lg">قانوني</h4>
+              <ul className="space-y-2 text-[#CCCCCC] text-sm">
+                <li><a href="https://englishom.com/ar/terms-and-conditions" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">الشروط والأحكام</a></li>
+                <li><a href="https://englishom.com/ar/privacy-policy" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">سياسة الخصوصية</a></li>
+                <li>
+                  <button
+                    onClick={() => setShowDisclaimer(true)}
+                    className="hover:text-[#F5BB41] transition-colors duration-300 text-right w-full bg-transparent border-0 p-0 cursor-pointer text-sm font-inherit text-[#CCCCCC]"
                   >
-                    واتساب
-                  </a>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-[#F5BB41] mt-1 flex-shrink-0" />
-                  <span>المملكة العربية السعودية، الرياض</span>
-                </div>
-              </div>
+                    إخلاء المسؤولية
+                  </button>
+                </li>
+              </ul>
             </div>
           </div>
 
@@ -715,6 +712,42 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {showDisclaimer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div 
+            className="bg-[#222222] text-white border border-gray-800 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative text-right"
+            dir="rtl"
+          >
+            <button
+              onClick={() => setShowDisclaimer(false)}
+              className="absolute top-4 left-4 text-gray-400 hover:text-[#F5BB41] transition-colors"
+              aria-label="Close"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            <h3 className="text-xl font-bold mb-4 mt-2 text-[#F5BB41]">
+              إخلاء المسؤولية
+            </h3>
+            
+            <p className="text-gray-300 text-sm md:text-base leading-relaxed text-justify mb-2 whitespace-pre-line">
+              جميع المقالات والمحتويات المنشورة في هذه المدونة هي لأغراض تثقيفية وتعليمية عامة، وتُمثل وجهات نظر كتابها بناءً على الأبحاث والمصادر المتاحة. المسميات الوظيفية والتحريرية المذكورة (مثل: خبير، مستشار، أخصائي) تُستخدم في سياقها التحريري لإبراز زاوية الطرح وتخصص المقال، ولا تُعد بديلة عن الاستشارات المهنية والرسمية المباشرة. لا تتحمل المنصة أي مسؤولية قانونية عن قرار يُتخذ بناءً على المعلومات الواردة في الموقع.
+            </p>
+            
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={() => setShowDisclaimer(false)}
+                className="px-5 py-2.5 rounded-xl font-bold text-sm bg-[#F5BB41] text-black hover:opacity-95 transition-all"
+              >
+                إغلاق
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
