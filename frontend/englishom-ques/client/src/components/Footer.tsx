@@ -99,12 +99,12 @@ export default function Footer() {
           <div className="space-y-2 max-w-3xl">
             <h3 className="text-2xl font-bold tracking-tight text-foreground flex items-center justify-center md:justify-start gap-3">
               <span className="w-3.5 h-3.5 rounded-full bg-[#4A3B32] dark:bg-[#FCDFC2]" />
-              {isAr ? "إنجلشوم | اكتشف مستواك" : "EnglishOM | Discover Your Level"}
+              {isAr ? "إنجلشوم | مستوى الكفاءة" : "EnglishOM | Proficiency Level"}
             </h3>
             <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
               {isAr
-                ? `"البداية الذكية لرحلتك اللغوية. صممنا هذه الأداة التفاعلية لتشخيص مهاراتك الحالية بدقة، لتنطلق في ممارستك الذاتية من نقطة تناسبك تماماً."`
-                : `"The smart start to your language journey. We designed this interactive tool to diagnose your current skills with precision, empowering your self-practice from your exact right starting point."`}
+                ? `"مقياسك الدقيق لمعرفة قدراتك الحقيقية. نعتمد في إنجلشوم على أنظمة تقييم متقدمة لتحديد كفاءتك اللغوية الشاملة، ووضعك على مسار التعلم الأمثل بذكاء وموثوقية"`
+                : `"Your precise metric to discover your true capabilities. At EnglishOM, we rely on advanced assessment systems to determine your comprehensive language proficiency, intelligently and reliably placing you on the optimal learning path."`}
             </p>
           </div>
           
