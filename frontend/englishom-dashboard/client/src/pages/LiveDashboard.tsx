@@ -145,7 +145,7 @@ export default function LiveDashboard() {
         className="border-b border-cyan-500/30 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50"
       >
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="rounded-lg shadow-lg shadow-cyan-500/50 bg-red-900 p-2">
                 <img src="/logo.jpeg" alt="Logo" className="h-12 w-12 object-contain" />
@@ -155,7 +155,7 @@ export default function LiveDashboard() {
                 <p className="text-xs text-cyan-400/70">إنجليشوم</p>
               </div>
             </div>
-            <div className="flex items-center gap-6">
+            <div className="flex flex-wrap items-center justify-center md:justify-end gap-4 w-full md:w-auto">
               {/* الوقت والتاريخ في الرياض */}
               <div className="flex items-center gap-2 text-sm bg-cyan-500/10 px-4 py-2 rounded-lg border border-cyan-500/30">
                 <span className="text-2xl">
@@ -194,20 +194,20 @@ export default function LiveDashboard() {
               </div>
               <button
                 onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
-                className="px-3 py-2 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/40 transition-colors text-sm"
+                className="px-3 py-2 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/40 transition-colors text-sm font-bold"
               >
                 {language === 'ar' ? 'EN' : 'AR'}
               </button>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-3">
                 <div className="flex items-center gap-2 text-sm bg-cyan-500/10 px-4 py-2 rounded-lg border border-cyan-500/30">
                   <div className="text-right">
                     <div className="text-cyan-400 font-bold">3,847</div>
                     <div className="text-cyan-400/70 text-xs">{language === 'ar' ? 'زائر' : 'Visitor'}</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-                  <span className="text-green-400">{language === 'ar' ? 'بث حي' : 'Live'}</span>
+                <div className="flex items-center gap-2 text-sm bg-cyan-500/10 px-3 py-2 rounded-lg border border-cyan-500/30">
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></div>
+                  <span className="text-green-400 font-bold">{language === 'ar' ? 'بث حي' : 'Live'}</span>
                 </div>
               </div>
             </div>
@@ -271,20 +271,22 @@ export default function LiveDashboard() {
           />
         </motion.div>
 
-        {/* World Map Section (الخريطة تحتها) */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-          className="mb-12"
-        >
-          <div className="cyber-border-strong rounded-xl p-6 bg-slate-900/50 backdrop-blur-sm">
-            <h3 className="text-xl font-bold mb-6 neon-text">{t.globalDataFlow}</h3>
-            <div className="h-96 rounded-lg overflow-hidden">
-              <ArabicMapImage />
+        {/* World Map Section (الخريطة تحتها) - Hidden per Badr request */}
+        {false && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="mb-12"
+          >
+            <div className="cyber-border-strong rounded-xl p-6 bg-slate-900/50 backdrop-blur-sm">
+              <h3 className="text-xl font-bold mb-6 neon-text">{t.globalDataFlow}</h3>
+              <div className="h-96 rounded-lg overflow-hidden">
+                <ArabicMapImage />
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        )}
 
         {/* Statistics Ticker */}
         <StatisticsTicker language={language} />
