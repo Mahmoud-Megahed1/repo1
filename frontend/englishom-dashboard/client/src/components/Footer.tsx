@@ -179,7 +179,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
             </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <a href={`https://englishom.com${langPath}/signup`} className="text-gray-400 hover:text-cyan-400 transition-colors">
+                <a href="https://englishom.com/Landingpage/" className="text-gray-400 hover:text-cyan-400 transition-colors">
                   {t.startLearning}
                 </a>
               </li>

@@ -143,12 +143,12 @@ export function LandingFooter() {
             </h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link
-                  to="/signup"
+                <a
+                  href="/Landingpage/"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t('Landing.footer.learning.startLearning')}
-                </Link>
+                </a>
               </li>
               <li>
                 <Link

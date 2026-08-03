@@ -582,7 +582,7 @@ export default function Home() {
             <div className="space-y-4">
               <h4 className="font-bold text-lg">التدريب والممارسة</h4>
               <ul className="space-y-2 text-[#CCCCCC] text-sm">
-                <li><a href="https://englishom.com/ar/signup" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">ابدأ الممارسة الذكية</a></li>
+                <li><a href="https://englishom.com/Landingpage/" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">ابدأ الممارسة الذكية</a></li>
                 <li><a href="https://englishom.com/ar/login" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5BB41] transition-colors duration-300">تسجيل الدخول</a></li>
               </ul>
             </div>

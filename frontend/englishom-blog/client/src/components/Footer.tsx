@@ -179,7 +179,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
                 <a
-                  href={isAr ? "https://englishom.com/ar/signup" : "https://englishom.com/en/signup"}
+                  href="https://englishom.com/Landingpage/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
