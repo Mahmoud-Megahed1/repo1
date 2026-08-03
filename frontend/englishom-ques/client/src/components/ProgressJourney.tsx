@@ -55,8 +55,8 @@ export function ProgressJourney({ attempts }: ProgressJourneyProps) {
         <p className="text-base font-extrabold text-foreground mb-4">
           {language === "ar" ? "رحلة التقدم" : "Progress Journey"}
         </p>
-        <div className="space-y-3">
-          {attempts.slice(-7).reverse().map((attempt, index) => (
+        <div className="space-y-3 max-h-[340px] overflow-y-auto pr-1">
+          {attempts.slice().reverse().map((attempt, index) => (
             <div key={index} className="flex items-center gap-3">
               <div className="text-xs font-semibold text-muted-foreground w-14 whitespace-nowrap">
                 {new Date(attempt.date).toLocaleDateString(
@@ -67,7 +67,7 @@ export function ProgressJourney({ attempts }: ProgressJourneyProps) {
               <div className="flex-1">
                 <div className="bg-muted rounded-full h-8 flex items-center overflow-hidden p-0.5 border border-border/50">
                   <div
-                    className="bg-[#4A3B32] text-[#FCDFC2] dark:bg-[#FCDFC2] dark:text-[#120F0D] h-full rounded-full flex items-center justify-center text-xs font-extrabold transition-all duration-500 shadow-sm"
+                     className="bg-[#4A3B32] text-[#FCDFC2] dark:bg-[#FCDFC2] dark:text-[#120F0D] h-full rounded-full flex items-center justify-center text-xs font-extrabold transition-all duration-500 shadow-sm"
                     style={{ width: `${Math.max(12, attempt.accuracy)}%` }}
                   >
                     {attempt.accuracy}%
