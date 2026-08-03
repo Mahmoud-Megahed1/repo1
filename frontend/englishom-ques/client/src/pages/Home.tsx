@@ -3,7 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useLocation } from "wouter";
-import { BookOpen, Zap, BarChart } from "lucide-react";
+import { BookOpen, Zap, BarChart, Wind, Radio, Rocket, Flame, AlertTriangle } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ComingSoon from "@/components/ComingSoon";
@@ -16,6 +16,63 @@ export default function Home() {
   const { language, t } = useLanguage();
 
   const [isAvailable, setIsAvailable] = useState<boolean>(true);
+
+  const customLevels = [
+    {
+      code: "A1",
+      icon: Wind,
+      seconds: "15",
+      titleAr: "منطقة التنفس (15 ثانية)",
+      descAr: "محطة البداية؛ الوقت صديقك لتستدعي الكلمات وتجيب بهدوء ودون ضغط.",
+      titleEn: "Breathing Zone (15s)",
+      descEn: "Starting station; time is your friend to recall words calmly.",
+    },
+    {
+      code: "A2",
+      icon: Radio,
+      seconds: "12",
+      titleAr: "التقاط الإشارة (12 ثانية)",
+      descAr: "ينكمش الوقت ليرتفع إدراكك؛ لا مجال للتردد، فقط ألمع الإجابة الصحيحة.",
+      titleEn: "Signal Catch (12s)",
+      descEn: "Time shrinks to heighten awareness; no hesitation, pick the right answer.",
+    },
+    {
+      code: "B1",
+      icon: Rocket,
+      seconds: "10",
+      titleAr: "حافة الانطلاق (10 ثواني)",
+      descAr: "محطة كسر البطء؛ تضعك على أول طريق التفكير المباشر بالإنجليزية.",
+      titleEn: "Launch Edge (10s)",
+      descEn: "Break the slowness; puts you on the direct English thinking path.",
+    },
+    {
+      code: "B2",
+      icon: Flame,
+      seconds: "8",
+      titleAr: "المواجهة السريعة (8 ثواني)",
+      descAr: "الخوض في العمق؛ يداهمك الوقت لتختبر سرعة استجابتك في مواقف حقيقية.",
+      titleEn: "Fast Faceoff (8s)",
+      descEn: "Diving deep; time rushes you to test real-life reaction speed.",
+    },
+    {
+      code: "C1",
+      icon: AlertTriangle,
+      seconds: "6",
+      titleAr: "الثواني الحرجة (6 ثواني)",
+      descAr: "محطة التعثر الإيجابي؛ هنا تخطئ وتتعثر لتجبر عقلك على إلغاء الترجمة الحرفية.",
+      titleEn: "Critical Seconds (6s)",
+      descEn: "Positive stumble station; forces your brain to eliminate literal translation.",
+    },
+    {
+      code: "C2",
+      icon: Zap,
+      seconds: "4",
+      titleAr: "الرد اللحظي (4 ثواني)",
+      descAr: "ذروة الطلاقة؛ لا وقت للتفكير، الإجابة تخرج تلقائياً من عقلك الباطن.",
+      titleEn: "Instant Response (4s)",
+      descEn: "Peak fluency; no time to overthink, answers spring automatically.",
+    },
+  ];
 
   useEffect(() => {
     const checkAvailability = () => {
@@ -135,26 +192,33 @@ export default function Home() {
             {t("levels.title")}
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              { code: "A1", name: t("levels.a1"), desc: t("levels.a1.desc") },
-              { code: "A2", name: t("levels.a2"), desc: t("levels.a2.desc") },
-              { code: "B1", name: t("levels.b1"), desc: t("levels.b1.desc") },
-              { code: "B2", name: t("levels.b2"), desc: t("levels.b2.desc") },
-              { code: "C1", name: t("levels.c1"), desc: t("levels.c1.desc") },
-              { code: "C2", name: t("levels.c2"), desc: t("levels.c2.desc") },
-            ].map((level) => (
-              <Card 
-                key={level.code} 
-                className="p-6 border border-border/80 hover:border-[#4A3B32] dark:hover:border-[#FCDFC2] hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between min-h-[140px] rounded-2xl"
-                onClick={() => navigate(`/ques?level=${level.code}`)}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-extrabold text-[#4A3B32] dark:text-[#FCDFC2] bg-muted/60 px-2.5 py-0.5 rounded-lg">{level.code}</span>
-                </div>
-                <h4 className="text-xl md:text-2xl font-bold text-foreground text-center my-3">{level.name}</h4>
-                <p className="text-xs md:text-sm text-muted-foreground text-start">{level.desc}</p>
-              </Card>
-            ))}
+            {customLevels.map((lvl) => {
+              const IconComp = lvl.icon;
+              return (
+                <Card 
+                  key={lvl.code} 
+                  className="p-6 border border-border/80 hover:border-[#4A3B32] dark:hover:border-[#FCDFC2] hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between min-h-[160px] rounded-2xl"
+                  onClick={() => navigate(`/ques?level=${lvl.code}`)}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-black px-2.5 py-1 rounded-lg bg-muted text-muted-foreground">
+                      {lvl.code}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-base md:text-lg font-extrabold text-foreground">
+                        {language === "ar" ? lvl.titleAr : lvl.titleEn}
+                      </h4>
+                      <div className="p-2 rounded-xl bg-[#4A3B32]/10 text-[#4A3B32] dark:bg-[#FCDFC2]/15 dark:text-[#FCDFC2]">
+                        <IconComp className="w-5 h-5" />
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-xs md:text-sm text-muted-foreground text-start leading-relaxed">
+                    {language === "ar" ? lvl.descAr : lvl.descEn}
+                  </p>
+                </Card>
+              );
+            })}
           </div>
         </section>
 
