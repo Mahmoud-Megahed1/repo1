@@ -10,7 +10,7 @@ import { ExternalLink, ShieldCheck, Zap, Award, BookOpen, CheckCircle2, XCircle 
 import { toast } from 'sonner';
 
 interface TestItem {
-  id: 'ques' | 'test' | 'test1';
+  id: 'ques' | 'test' | 'test1' | 'dashboard';
   titleAr: string;
   titleEn: string;
   descAr: string;
@@ -51,6 +51,16 @@ const TESTS: TestItem[] = [
     adminUrl: 'https://englishom.com/test1/admin?admin=1',
     icon: Award,
   },
+  {
+    id: 'dashboard',
+    titleAr: 'لوحة البيانات الحية',
+    titleEn: 'Live Dashboard',
+    descAr: 'عرض تفاعلي مباشر لإحصائيات التسجيلات، مؤشرات الأداء، وتوزيع الكفاءة للمتعلمين.',
+    descEn: 'Live interactive display of registration stats, performance metrics, and learner proficiency distribution.',
+    publicUrl: 'https://englishom.com/dashboard/dashboard',
+    adminUrl: 'https://englishom.com/dashboard/dashboard',
+    icon: ShieldCheck,
+  },
 ];
 
 export default function TestsAdminPage() {
@@ -61,6 +71,7 @@ export default function TestsAdminPage() {
     ques: true,
     test: true,
     test1: true,
+    dashboard: true,
   });
 
   useEffect(() => {
@@ -126,7 +137,7 @@ export default function TestsAdminPage() {
       </div>
 
       {/* Test Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {TESTS.map((test) => {
           const Icon = test.icon;
           const isAvailable = availability[test.id] !== false;

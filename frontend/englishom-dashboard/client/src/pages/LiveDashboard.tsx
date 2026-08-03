@@ -49,7 +49,27 @@ export default function LiveDashboard() {
   const [stats, setStats] = useState<DashboardStats>(emptyData);
   const [isLoading, setIsLoading] = useState(false);
   const [language, setLanguage] = useState<'ar' | 'en'>('ar');
+  const [isAvailable, setIsAvailable] = useState<boolean>(true);
   const updateIntervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
+
+  useEffect(() => {
+    const checkAvailability = async () => {
+      try {
+        const res = await fetch(`https://api.englishom.com/api/settings?t=${Date.now()}`, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.testsAvailability && data.testsAvailability.dashboard === false) {
+            setIsAvailable(false);
+          } else {
+            setIsAvailable(true);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch dashboard availability:', err);
+      }
+    };
+    checkAvailability();
+  }, []);
 
   useEffect(() => {
     const updateData = async () => {
@@ -134,6 +154,57 @@ export default function LiveDashboard() {
   };
 
   const t = translations[language];
+
+  if (!isAvailable) {
+    return (
+      <div className={`min-h-screen flex flex-col justify-between bg-slate-950 text-white ${language === 'ar' ? 'rtl' : 'ltr'}`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
+        <header className="border-b border-cyan-500/30 bg-slate-900/50 backdrop-blur-sm py-6">
+          <div className="container mx-auto px-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="rounded-lg shadow-lg shadow-cyan-500/50 bg-red-900 p-2">
+                <img src="/logo.jpeg" alt="Logo" className="h-12 w-12 object-contain" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold neon-text">ENGLISHOM</h1>
+                <p className="text-xs text-cyan-400/70">إنجليشوم</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
+              className="px-3 py-2 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/40 transition-colors text-sm font-bold"
+            >
+              {language === 'ar' ? 'EN' : 'AR'}
+            </button>
+          </div>
+        </header>
+
+        <main className="flex-1 flex items-center justify-center w-full relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/80 to-slate-900 pointer-events-none z-0"></div>
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-4 py-20 text-center space-y-6">
+            <div className="w-20 h-20 bg-cyan-500/10 border border-cyan-500/30 rounded-2xl flex items-center justify-center mx-auto text-cyan-400 animate-pulse">
+              <Radio className="w-10 h-10" />
+            </div>
+            <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
+              {language === 'ar' ? 'لوحة البيانات الحية' : 'Live Dashboard'}
+            </h1>
+            <p className="text-lg md:text-xl text-cyan-400/70 max-w-lg mx-auto font-medium">
+              {language === 'ar'
+                ? 'لوحة البيانات قيد التحديث أو الصيانة حالياً. سنعود قريباً!'
+                : 'The dashboard is currently undergoing updates or maintenance. We will be back soon!'}
+            </p>
+            <div className="pt-4">
+              <span className="inline-block text-xl font-bold px-6 py-2.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300">
+                {language === 'ar' ? 'قريباً ستكون اللوحة متاحة للعامة' : 'Soon the dashboard will be publicly available'}
+              </span>
+            </div>
+          </div>
+        </main>
+
+        <Footer language={language} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-x-hidden" dir={language === 'ar' ? 'rtl' : 'ltr'}>
