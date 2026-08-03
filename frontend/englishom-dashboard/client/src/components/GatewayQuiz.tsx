@@ -82,15 +82,9 @@ export const GatewayQuiz: React.FC<GatewayQuizProps> = ({ language = 'ar' }) => 
             <p className="text-sm text-green-400/70 mb-2">
               {language === 'ar' ? 'المنتقلون لليوم التالي' : 'Passed to Next Day'}
             </p>
-            <motion.p
-              key={displayPassed}
-              initial={{ scale: 1.2, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              className="text-4xl font-bold text-green-300 mb-2"
-            >
+            <p className="text-4xl font-bold text-green-300 mb-2">
               {displayPassed.toLocaleString()}
-            </motion.p>
+            </p>
             <p className="text-xs text-green-400/60">
               {language === 'ar' ? 'طالباً اجتازوا الاختبار النهائي بنجاح' : 'students passed the final quiz successfully'}
             </p>
@@ -106,15 +100,9 @@ export const GatewayQuiz: React.FC<GatewayQuizProps> = ({ language = 'ar' }) => 
               {language === 'ar' ? 'معدل الاجتياز من المحاولة الأولى' : 'First Attempt Success Rate'}
             </p>
             <div className="flex items-baseline gap-2">
-              <motion.p
-                key={Math.floor(displayRate)}
-                initial={{ scale: 1.2, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.3 }}
-                className="text-4xl font-bold text-teal-300"
-              >
+              <p className="text-4xl font-bold text-teal-300">
                 {Math.floor(displayRate)}%
-              </motion.p>
+              </p>
             </div>
             <p className="text-xs text-teal-400/60 mt-2">
               {language === 'ar' ? 'معدل الاجتياز الإجمالي' : 'overall success rate'}

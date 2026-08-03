@@ -81,15 +81,9 @@ export const RealityChallenge: React.FC<RealityChallengeProps> = ({ language = '
             <p className="text-sm text-red-400/70 mb-2">
               {language === 'ar' ? 'قصص الواقع المسجلة' : 'Recorded Reality Stories'}
             </p>
-            <motion.p
-              key={recordedStories}
-              initial={{ scale: 1.2, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              className="text-4xl font-bold text-red-300 mb-2"
-            >
+            <p className="text-4xl font-bold text-red-300 mb-2">
               {recordedStories.toLocaleString()}
-            </motion.p>
+            </p>
             <p className="text-xs text-red-400/60">
               {language === 'ar' ? 'تحدي واقع مسجل اليوم' : 'reality challenges recorded today'}
             </p>
@@ -104,15 +98,9 @@ export const RealityChallenge: React.FC<RealityChallengeProps> = ({ language = '
             <p className="text-sm text-pink-400/70 mb-2">
               {language === 'ar' ? 'إجمالي ثواني التحدث' : 'Total Speaking Seconds'}
             </p>
-            <motion.p
-              key={displaySeconds}
-              initial={{ scale: 1.2, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              className="text-4xl font-bold text-pink-300 mb-2"
-            >
+            <p className="text-4xl font-bold text-pink-300 mb-2">
               {formatSeconds(displaySeconds)}
-            </motion.p>
+            </p>
             <p className="text-xs text-pink-400/60">
               {language === 'ar' ? 'من التحدث بالإنجليزية اليوم' : 'of English speaking today'}
             </p>

@@ -69,15 +69,9 @@ export const DailyShieldChallenges: React.FC<DailyShieldChallengesProps> = ({ la
             <p className="text-sm text-orange-400/70 mb-2">
               {language === 'ar' ? 'الدروع المكتسبة اليوم' : 'Shields Earned Today'}
             </p>
-            <motion.p
-              key={displayShields}
-              initial={{ scale: 1.2, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              className="text-4xl font-bold text-orange-300 mb-2"
-            >
+            <p className="text-4xl font-bold text-orange-300 mb-2">
               {displayShields.toLocaleString()}
-            </motion.p>
+            </p>
             <p className="text-xs text-orange-400/60">
               {language === 'ar' ? 'طالباً حصدوا درع اليوم' : 'students earned shields today'}
             </p>
