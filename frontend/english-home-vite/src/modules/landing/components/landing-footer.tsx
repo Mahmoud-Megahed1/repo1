@@ -73,7 +73,7 @@ export function LandingFooter() {
     <>
       <footer className="bg-muted/30 border-t">
       <div className="container mx-auto py-12">
-        <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5">
           {/* Brand */}
           <div className="col-span-full space-y-4 lg:col-span-1">
             <div className="text-primary text-2xl font-bold">
@@ -93,25 +93,46 @@ export function LandingFooter() {
             </ul>
           </div>
 
-          {/* Quick Links - Temporarily hidden until certification is issued
+          {/* Test Your Language */}
           <div>
             <h3 className="mb-4 font-semibold">
-              {t('Landing.footer.quickLinks.title')}
+              {useLocale() === 'ar' ? 'اختبر لغتك' : 'Test Your Language'}
             </h3>
             <ul className="space-y-2 text-sm">
-              {keys.map(({ href, key }) => (
-                <li key={key}>
-                  <Link
-                    to={href as never}
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {t(`Landing.footer.quickLinks.${key}`)}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <a
+                  href="/ques"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {useLocale() === 'ar' ? 'مستوى الكفاءة' : 'Proficiency Level'}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/test"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {useLocale() === 'ar' ? 'اكتشف مستواك' : 'Discover Your Level'}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/progress"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {useLocale() === 'ar' ? 'مؤشر الإنجاز' : 'Achievement Index'}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/blog"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {useLocale() === 'ar' ? 'المدونة' : 'Blog'}
+                </a>
+              </li>
             </ul>
           </div>
-          */}
 
           {/* Learning */}
           <div>
