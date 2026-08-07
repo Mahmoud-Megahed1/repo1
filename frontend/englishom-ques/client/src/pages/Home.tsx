@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useLocation } from "wouter";
 import { BookOpen, Zap, BarChart, Wind, Radio, Rocket, Flame, AlertTriangle } from "lucide-react";
+import { formatLevelCode } from "@/lib/i18n";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ComingSoon from "@/components/ComingSoon";
@@ -202,7 +203,7 @@ export default function Home() {
                 >
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-xs font-black px-2.5 py-1 rounded-lg bg-muted text-muted-foreground">
-                      {lvl.code}
+                      {formatLevelCode(lvl.code)}
                     </span>
                     <div className="flex items-center gap-2">
                       <h4 className="text-base md:text-lg font-extrabold text-foreground">

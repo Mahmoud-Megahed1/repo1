@@ -10,6 +10,7 @@ import { useLocation } from "wouter";
 import { ProgressJourney } from "@/components/ProgressJourney";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { t, formatLevelCode } from "@/lib/i18n";
 
 export default function MyResults() {
   const { user } = useAuth();
@@ -64,6 +65,10 @@ export default function MyResults() {
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
+    if (isAr) {
+      if (hours > 0) return `${hours} ساعة ${minutes} دقيقة`;
+      return `${minutes} دقيقة`;
+    }
     if (hours > 0) return `${hours}h ${minutes}m`;
     return `${minutes}m`;
   };
@@ -153,9 +158,11 @@ export default function MyResults() {
                     <p className="text-xs font-semibold text-muted-foreground mb-1">
                       {isAr ? "أفضل مستوى" : "Best Level"}
                     </p>
-                    <p className="text-3xl font-extrabold text-[#4A3B32] dark:text-[#FCDFC2]">{progress?.bestLevel || "A1"}</p>
+                    <p className="text-[#4A3B32] dark:text-[#FCDFC2] text-sm font-bold truncate max-w-[150px]">
+                      {progress?.bestLevel ? t(`levels.${progress.bestLevel.toLowerCase()}`, language) : t("levels.a1", language)}
+                    </p>
                   </div>
-                  <div className="w-10 h-10 rounded-xl bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/15 text-[#4A3B32] dark:text-[#FCDFC2] flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/15 text-[#4A3B32] dark:text-[#FCDFC2] flex items-center justify-center flex-shrink-0">
                     <Trophy className="w-5 h-5" />
                   </div>
                 </div>
@@ -190,8 +197,12 @@ export default function MyResults() {
                       <div className="w-12 h-12 rounded-full bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/15 text-[#4A3B32] dark:text-[#FCDFC2] flex items-center justify-center text-2xl mb-3 shadow-inner">
                         ⭐
                       </div>
-                      <p className="font-extrabold text-sm text-foreground mb-1">{achievement.badgeName}</p>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{achievement.badgeDescription}</p>
+                      <p className="font-extrabold text-sm text-foreground mb-1">
+                        {t(`badge.${achievement.badgeType}.name`, language)}
+                      </p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        {t(`badge.${achievement.badgeType}.desc`, language)}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -208,7 +219,7 @@ export default function MyResults() {
                 attempts={history.map((h: any) => ({
                   date: new Date(h.completedAt),
                   accuracy: h.accuracy,
-                  level: h.level,
+                  level: formatLevelCode(h.level),
                 }))}
               />
 
@@ -241,7 +252,7 @@ export default function MyResults() {
                         <tr key={result.id} className="hover:bg-muted/30 transition-colors">
                           <td className="py-3 px-6 text-foreground font-extrabold text-start">
                             <span className="inline-block px-3 py-1 rounded-lg bg-[#4A3B32]/10 text-[#4A3B32] dark:bg-[#FCDFC2]/15 dark:text-[#FCDFC2] font-bold border border-[#4A3B32]/20 dark:border-[#FCDFC2]/30">
-                              {result.level}
+                              {formatLevelCode(result.level)}
                             </span>
                           </td>
                           <td className="py-3 px-6 text-foreground font-bold text-center">{result.accuracy}%</td>

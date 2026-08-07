@@ -14,6 +14,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 import { getLoginUrl } from "@/const";
+import { formatLevelCode } from "@/lib/i18n";
 
 declare global {
   interface Window {
@@ -555,7 +556,7 @@ export default function Quiz() {
                           ? "bg-[#4A3B32] text-[#FCDFC2] dark:bg-[#FCDFC2] dark:text-[#120F0D]" 
                           : "bg-muted text-muted-foreground"
                       }`}>
-                        {lvl.code}
+                        {formatLevelCode(lvl.code)}
                       </span>
                     </div>
                     <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">

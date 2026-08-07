@@ -355,12 +355,12 @@ export default function AdminDashboard() {
                 </SelectTrigger>
                 <SelectContent dir={isAr ? "rtl" : "ltr"}>
                   <SelectItem value="all">{t("admin.allLevels")}</SelectItem>
-                  <SelectItem value="A1">A1 - {t("levels.a1")}</SelectItem>
-                  <SelectItem value="A2">A2 - {t("levels.a2")}</SelectItem>
-                  <SelectItem value="B1">B1 - {t("levels.b1")}</SelectItem>
-                  <SelectItem value="B2">B2 - {t("levels.b2")}</SelectItem>
-                  <SelectItem value="C1">C1 - {t("levels.c1")}</SelectItem>
-                  <SelectItem value="C2">C2 - {t("levels.c2")}</SelectItem>
+                  <SelectItem value="A1">{t("levels.a1")}</SelectItem>
+                  <SelectItem value="A2">{t("levels.a2")}</SelectItem>
+                  <SelectItem value="B1">{t("levels.b1")}</SelectItem>
+                  <SelectItem value="B2">{t("levels.b2")}</SelectItem>
+                  <SelectItem value="C1">{t("levels.c1")}</SelectItem>
+                  <SelectItem value="C2">{t("levels.c2")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -551,12 +551,12 @@ export default function AdminDashboard() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent dir={isAr ? "rtl" : "ltr"}>
-                      <SelectItem value="A1">A1 - {t("levels.a1")}</SelectItem>
-                      <SelectItem value="A2">A2 - {t("levels.a2")}</SelectItem>
-                      <SelectItem value="B1">B1 - {t("levels.b1")}</SelectItem>
-                      <SelectItem value="B2">B2 - {t("levels.b2")}</SelectItem>
-                      <SelectItem value="C1">C1 - {t("levels.c1")}</SelectItem>
-                      <SelectItem value="C2">C2 - {t("levels.c2")}</SelectItem>
+                      <SelectItem value="A1">{t("levels.a1")}</SelectItem>
+                      <SelectItem value="A2">{t("levels.a2")}</SelectItem>
+                      <SelectItem value="B1">{t("levels.b1")}</SelectItem>
+                      <SelectItem value="B2">{t("levels.b2")}</SelectItem>
+                      <SelectItem value="C1">{t("levels.c1")}</SelectItem>
+                      <SelectItem value="C2">{t("levels.c2")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

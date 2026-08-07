@@ -12,7 +12,7 @@ export const translations = {
 
     // Home Page
     "home.hero.title": "Master English with Speed",
-    "home.hero.subtitle": "Challenge yourself with our fast-paced English proficiency test. Test your knowledge across different proficiency levels from A1 (Beginner) to C2 (Proficiency).",
+    "home.hero.subtitle": "Challenge yourself with our fast-paced English proficiency test. Test your knowledge across different proficiency levels from A0 (Basic Proficiency) to A2 (Full Mastery).",
     "home.cta.start": "Start Test",
     "home.cta.login": "Login to Start",
     "home.cta.signup": "Sign Up",
@@ -20,7 +20,7 @@ export const translations = {
     // Features
     "features.title": "Why Choose Proficiency Level Test?",
     "features.levels.title": "Multiple Levels",
-    "features.levels.desc": "Test your English at your own level, from A1 (Beginner) to C2 (Proficiency). Each level is carefully designed to match international standards.",
+    "features.levels.desc": "Test your English at your own level, from A0 (Basic Proficiency) to A2 (Full Mastery). Each level is carefully designed to match international standards.",
     "features.fast.title": "Fast-Paced",
     "features.fast.desc": "Challenge yourself with timed questions. Improve your quick thinking and decision-making skills while learning English.",
     "features.feedback.title": "Instant Feedback",
@@ -28,18 +28,42 @@ export const translations = {
 
     // Levels Section
     "levels.title": "English Proficiency Levels",
-    "levels.a1": "Beginner",
-    "levels.a1.desc": "Elementary proficiency",
-    "levels.a2": "Elementary",
-    "levels.a2.desc": "Limited working proficiency",
-    "levels.b1": "Intermediate",
-    "levels.b1.desc": "Working proficiency",
-    "levels.b2": "Upper-Intermediate",
-    "levels.b2.desc": "Upper working proficiency",
-    "levels.c1": "Advanced",
-    "levels.c1.desc": "Professional working proficiency",
-    "levels.c2": "Proficiency",
-    "levels.c2.desc": "Mastery",
+    "levels.a1": "A0 - Basic Proficiency",
+    "levels.a1.desc": "Basic proficiency",
+    "levels.a2": "A01 - Limited Practical Proficiency",
+    "levels.a2.desc": "Limited practical proficiency",
+    "levels.b1": "A1 - Practical Proficiency",
+    "levels.b1.desc": "Practical proficiency",
+    "levels.b2": "A1 - Advanced Practical Proficiency",
+    "levels.b2.desc": "Advanced practical proficiency",
+    "levels.c1": "A2 - Professional Practical Proficiency",
+    "levels.c1.desc": "Professional practical proficiency",
+    "levels.c2": "A2 - Full Mastery",
+    "levels.c2.desc": "Full mastery",
+
+    // Badge translations
+    "badge.accuracy_90.name": "Accuracy 90%",
+    "badge.accuracy_90.desc": "Achieve 90% or higher accuracy in a quiz",
+    "badge.accuracy_100.name": "Perfect Score",
+    "badge.accuracy_100.desc": "Achieve 100% accuracy in a quiz",
+    "badge.speed_master.name": "Speed Master",
+    "badge.speed_master.desc": "Average response time under 3 seconds",
+    "badge.level_master_a1.name": "A0 Master",
+    "badge.level_master_a1.desc": "Complete 5 quizzes at A0 level with 80%+ accuracy",
+    "badge.level_master_a2.name": "A01 Master",
+    "badge.level_master_a2.desc": "Complete 5 quizzes at A01 level with 80%+ accuracy",
+    "badge.level_master_b1.name": "A1 Master",
+    "badge.level_master_b1.desc": "Complete 5 quizzes at A1 level with 80%+ accuracy",
+    "badge.level_master_b2.name": "A1 Advanced Master",
+    "badge.level_master_b2.desc": "Complete 5 quizzes at A1 Advanced level with 80%+ accuracy",
+    "badge.level_master_c1.name": "A2 Professional Master",
+    "badge.level_master_c1.desc": "Complete 5 quizzes at A2 Professional level with 80%+ accuracy",
+    "badge.level_master_c2.name": "A2 Mastery Master",
+    "badge.level_master_c2.desc": "Complete 5 quizzes at A2 Mastery level with 80%+ accuracy",
+    "badge.quiz_enthusiast.name": "Quiz Enthusiast",
+    "badge.quiz_enthusiast.desc": "Complete 10 quizzes",
+    "badge.quiz_addict.name": "Quiz Addict",
+    "badge.quiz_addict.desc": "Complete 50 quizzes",
 
     // CTA Section
     "cta.title": "Ready to Take the Proficiency Level Test?",
@@ -140,7 +164,7 @@ export const translations = {
 
     // Home Page
     "home.hero.title": "أتقن اللغة الإنجليزية بسرعة",
-    "home.hero.subtitle": "تحدَّ نفسك مع اختبار مستوى الكفاءة السريع. اختبر معرفتك عبر مستويات كفاءة مختلفة من A1 (مبتدئ) إلى C2 (متقن).",
+    "home.hero.subtitle": "تحدَّ نفسك مع اختبار مستوى الكفاءة السريع. اختبر معرفتك عبر مستويات كفاءة مختلفة من A0 (كفاءة أساسية) إلى A2 (إتقان كامل).",
     "home.cta.start": "ابدأ الاختبار",
     "home.cta.login": "سجل الدخول للبدء",
     "home.cta.signup": "إنشاء حساب",
@@ -148,7 +172,7 @@ export const translations = {
     // Features
     "features.title": "لماذا تختار اختبار مستوى الكفاءة؟",
     "features.levels.title": "مستويات متعددة",
-    "features.levels.desc": "اختبر اللغة الإنجليزية على مستواك الخاص، من A1 (مبتدئ) إلى C2 (متقن). تم تصميم كل مستوى بعناية ليطابق المعايير الدولية.",
+    "features.levels.desc": "اختبر اللغة الإنجليزية على مستواك الخاص، من A0 (كفاءة أساسية) إلى A2 (إتقان كامل). تم تصميم كل مستوى بعناية ليطابق المعايير الدولية.",
     "features.fast.title": "سريع الخطى",
     "features.fast.desc": "تحدَّ نفسك مع أسئلة محددة بوقت. حسّن مهارات التفكير السريع واتخاذ القرار أثناء تعلم اللغة الإنجليزية.",
     "features.feedback.title": "ملاحظات فورية",
@@ -156,18 +180,42 @@ export const translations = {
 
     // Levels Section
     "levels.title": "مستويات الكفاءة في اللغة الإنجليزية",
-    "levels.a1": "مبتدئ",
+    "levels.a1": "A0 - كفاءة أساسية",
     "levels.a1.desc": "كفاءة أساسية",
-    "levels.a2": "ابتدائي",
+    "levels.a2": "A01 - كفاءة عملية محدودة",
     "levels.a2.desc": "كفاءة عملية محدودة",
-    "levels.b1": "متوسط",
+    "levels.b1": "A1 - كفاءة عملية",
     "levels.b1.desc": "كفاءة عملية",
-    "levels.b2": "متوسط متقدم",
+    "levels.b2": "A1 - كفاءة عملية متقدمة",
     "levels.b2.desc": "كفاءة عملية متقدمة",
-    "levels.c1": "متقدم",
+    "levels.c1": "A2 - كفاءة عملية احترافية",
     "levels.c1.desc": "كفاءة عملية احترافية",
-    "levels.c2": "متقن",
+    "levels.c2": "A2 - إتقان كامل",
     "levels.c2.desc": "إتقان كامل",
+
+    // Badge translations
+    "badge.accuracy_90.name": "دقة 90%",
+    "badge.accuracy_90.desc": "حققت دقة 90% أو أعلى في اختبار",
+    "badge.accuracy_100.name": "الدرجة الكاملة",
+    "badge.accuracy_100.desc": "حققت دقة 100% في اختبار",
+    "badge.speed_master.name": "بطل السرعة",
+    "badge.speed_master.desc": "متوسط سرعة استجابتك أقل من 3 ثوانٍ",
+    "badge.level_master_a1.name": "بطل A0",
+    "badge.level_master_a1.desc": "أكملت 5 اختبارات في مستوى A0 بدقة 80% أو أكثر",
+    "badge.level_master_a2.name": "بطل A01",
+    "badge.level_master_a2.desc": "أكملت 5 اختبارات في مستوى A01 بدقة 80% أو أكثر",
+    "badge.level_master_b1.name": "بطل A1",
+    "badge.level_master_b1.desc": "أكملت 5 اختبارات في مستوى A1 بدقة 80% أو أكثر",
+    "badge.level_master_b2.name": "بطل A1 متقدم",
+    "badge.level_master_b2.desc": "أكملت 5 اختبارات في مستوى A1 متقدم بدقة 80% أو أكثر",
+    "badge.level_master_c1.name": "بطل A2 محترف",
+    "badge.level_master_c1.desc": "أكملت 5 اختبارات في مستوى A2 محترف بدقة 80% أو أكثر",
+    "badge.level_master_c2.name": "بطل الإتقان A2",
+    "badge.level_master_c2.desc": "أكملت 5 اختبارات في مستوى A2 متقن بدقة 80% أو أكثر",
+    "badge.quiz_enthusiast.name": "شغوف الاختبارات",
+    "badge.quiz_enthusiast.desc": "أكملت 10 اختبارات",
+    "badge.quiz_addict.name": "مدمن الاختبارات",
+    "badge.quiz_addict.desc": "أكملت 50 اختباراً",
 
     // CTA Section
     "cta.title": "هل أنت مستعد لاختبار مستوى الكفاءة؟",
@@ -282,5 +330,17 @@ export function t(key: string, lang: Language): string {
     return key;
   } catch (error) {
     return key;
+  }
+}
+
+export function formatLevelCode(code: string): string {
+  switch (code?.toUpperCase()) {
+    case "A1": return "A0";
+    case "A2": return "A01";
+    case "B1": return "A1";
+    case "B2": return "A1";
+    case "C1": return "A2";
+    case "C2": return "A2";
+    default: return code || "";
   }
 }

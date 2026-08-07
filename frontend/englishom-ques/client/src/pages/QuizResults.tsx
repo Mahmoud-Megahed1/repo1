@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Share2, Award, TrendingUp } from "lucide-react";
 import { useLocation } from "wouter";
+import { t as translate } from "@/lib/i18n";
 
 interface QuizResultsProps {
   level: string;
@@ -63,7 +64,9 @@ export default function QuizResults(props: QuizResultsProps) {
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${minutes}m ${secs}s`;
+    return language === "ar"
+      ? `${minutes} دقيقة و ${secs} ثانية`
+      : `${minutes}m ${secs}s`;
   };
 
   const shareResults = () => {
@@ -120,7 +123,8 @@ export default function QuizResults(props: QuizResultsProps) {
               {newAchievements.map((badge) => (
                 <div key={badge} className="flex flex-col items-center text-center p-3 bg-white dark:bg-slate-900 rounded-lg">
                   <span className="text-3xl mb-2">⭐</span>
-                  <p className="text-sm font-semibold text-foreground">{badge}</p>
+                  <p className="text-sm font-semibold text-foreground">{translate(`badge.${badge}.name`, language)}</p>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{translate(`badge.${badge}.desc`, language)}</p>
                 </div>
               ))}
             </div>
