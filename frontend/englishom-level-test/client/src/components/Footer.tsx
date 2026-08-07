@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const SocialIcons = [
@@ -81,195 +82,247 @@ const SocialIcons = [
       </svg>
     ),
   },
-];;
+];
 
 export function Footer() {
   const { language } = useLanguage();
   const isAr = language === "ar";
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   return (
-    <footer className="bg-card text-foreground border-t border-border py-12 px-4 md:px-8 transition-colors" dir={isAr ? "rtl" : "ltr"}>
-      <div className="max-w-6xl mx-auto space-y-10">
-        
-        {/* Banner Section */}
-        <div className="bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/10 border border-[#4A3B32]/20 dark:border-[#FCDFC2]/20 rounded-2xl p-6 md:p-8 backdrop-blur text-center md:text-start flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 max-w-3xl">
-            <h3 className="text-2xl font-bold tracking-tight text-foreground flex items-center justify-center md:justify-start gap-3">
-              <span className="w-3.5 h-3.5 rounded-full bg-[#4A3B32] dark:bg-[#FCDFC2]" />
-              {isAr ? "إنجلشوم | اكتشف مستواك" : "EnglishOM | Discover Your Level"}
-            </h3>
-            <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
-              {isAr
-                ? `"البداية الذكية لرحلتك اللغوية. صممنا هذه الأداة التفاعلية لتشخيص مهاراتك الحالية بدقة، لتنطلق في ممارستك الذاتية من نقطة تناسبك تماماً."`
-                : `"The smart start to your language journey. We designed this interactive tool to diagnose your current skills with precision, empowering your self-practice from your exact right starting point."`}
-            </p>
-          </div>
+    <>
+      <footer className="bg-card text-foreground border-t border-border py-12 px-4 md:px-8 transition-colors" dir={isAr ? "rtl" : "ltr"}>
+        <div className="max-w-6xl mx-auto space-y-10">
           
-          {/* Social Icons */}
-          <div className="flex flex-wrap items-center justify-center gap-2.5">
-            {SocialIcons.map((social) => (
-              <a
-                key={social.name}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={social.name}
-                className={`w-9 h-9 rounded-xl ${social.bg} flex items-center justify-center transition-all duration-200 shadow-md hover:scale-110 hover:shadow-lg`}
-              >
-                {social.svg}
+          {/* Banner Section */}
+          <div className="bg-[#4A3B32]/10 dark:bg-[#FCDFC2]/10 border border-[#4A3B32]/20 dark:border-[#FCDFC2]/20 rounded-2xl p-6 md:p-8 backdrop-blur text-center md:text-start flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="space-y-2 max-w-3xl">
+              <h3 className="text-2xl font-bold tracking-tight text-foreground flex items-center justify-center md:justify-start gap-3">
+                <span className="w-3.5 h-3.5 rounded-full bg-[#4A3B32] dark:bg-[#FCDFC2]" />
+                {isAr ? "إنجلشوم | اكتشف مستواك" : "EnglishOM | Discover Your Level"}
+              </h3>
+              <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
+                {isAr
+                  ? `"البداية الذكية لرحلتك اللغوية. صممنا هذه الأداة التفاعلية لتشخيص مهاراتك الحالية بدقة، لتنطلق في ممارستك الذاتية من نقطة تناسبك تماماً."`
+                  : `"The smart start to your language journey. We designed this interactive tool to diagnose your current skills with precision, empowering your self-practice from your exact right starting point."`}
+              </p>
+            </div>
+            
+            {/* Social Icons */}
+            <div className="flex flex-wrap items-center justify-center gap-2.5">
+              {SocialIcons.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={social.name}
+                  className={`w-9 h-9 rounded-xl ${social.bg} flex items-center justify-center transition-all duration-200 shadow-md hover:scale-110 hover:shadow-lg`}
+                >
+                  {social.svg}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer Navigation Columns */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pt-4">
+            
+            {/* Column 1: Test Your Language (اختبر لغتك) */}
+            <div className="space-y-4">
+              <h4 className="text-base font-extrabold text-foreground border-b-2 border-[#4A3B32] dark:border-[#FCDFC2] pb-2 inline-block">
+                {isAr ? "اختبر لغتك" : "Test Your Language"}
+              </h4>
+              <ul className="space-y-2.5 text-sm text-muted-foreground">
+                <li>
+                  <a
+                    href="https://englishom.com/ques"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors flex items-center gap-2"
+                  >
+                    <span className="text-xs text-[#4A3B32] dark:text-[#FCDFC2]">●</span>
+                    {isAr ? "مستوى الكفاءة" : "Proficiency Level"}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://englishom.com/test"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors flex items-center gap-2"
+                  >
+                    <span className="text-xs text-[#4A3B32] dark:text-[#FCDFC2]">●</span>
+                    {isAr ? "اكتشف مستواك" : "Discover Your Level"}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://englishom.com/test1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors flex items-center gap-2"
+                  >
+                    <span className="text-xs text-[#4A3B32] dark:text-[#FCDFC2]">●</span>
+                    {isAr ? "مؤشر الإنجاز" : "Achievement Indicator"}
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 2: Training & Practice */}
+            <div className="space-y-4">
+              <h4 className="text-base font-extrabold text-foreground border-b-2 border-[#4A3B32] dark:border-[#FCDFC2] pb-2 inline-block">
+                {isAr ? "التدريب والممارسة" : "Training & Practice"}
+              </h4>
+              <ul className="space-y-2.5 text-sm text-muted-foreground">
+                <li>
+                  <a
+                    href="https://englishom.com/Landingpage/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    {isAr ? "أبدأ الممارسة الذكية" : "Start Smart Practice"}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={isAr ? "https://englishom.com/ar/app" : "https://englishom.com/en/app"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    {isAr ? "تسجيل الدخول" : "Login"}
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3: Support */}
+            <div className="space-y-4">
+              <h4 className="text-base font-extrabold text-foreground border-b-2 border-[#4A3B32] dark:border-[#FCDFC2] pb-2 inline-block">
+                {isAr ? "الدعم" : "Support"}
+              </h4>
+              <ul className="space-y-2.5 text-sm text-muted-foreground">
+                <li>
+                  <a
+                    href={isAr ? "https://englishom.com/ar/user-guide" : "https://englishom.com/en/user-guide"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    {isAr ? "دليل المستخدم" : "User Guide"}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={isAr ? "https://englishom.com/ar/contact" : "https://englishom.com/en/contact"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    {isAr ? "اتصل بنا" : "Contact Us"}
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 4: Legal */}
+            <div className="space-y-4">
+              <h4 className="text-base font-extrabold text-foreground border-b-2 border-[#4A3B32] dark:border-[#FCDFC2] pb-2 inline-block">
+                {isAr ? "قانوني" : "Legal"}
+              </h4>
+              <ul className="space-y-2.5 text-sm text-muted-foreground">
+                <li>
+                  <a
+                    href={isAr ? "https://englishom.com/ar/terms-and-conditions" : "https://englishom.com/en/terms-and-conditions"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    {isAr ? "الشروط والأحكام" : "Terms & Conditions"}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={isAr ? "https://englishom.com/ar/privacy-policy" : "https://englishom.com/en/privacy-policy"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    {isAr ? "سياسة الخصوصية" : "Privacy Policy"}
+                  </a>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setShowDisclaimer(true)}
+                    className="hover:text-foreground transition-colors text-left rtl:text-right w-full bg-transparent border-0 p-0 cursor-pointer"
+                  >
+                    {isAr ? "إخلاء المسؤولية" : "Disclaimer"}
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+
+          {/* Bottom copyright */}
+          <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-muted-foreground gap-4">
+            <p>© 2026 {isAr ? "إنجلشوم (EnglishOM). جميع الحقوق محفوظة." : "EnglishOM. All rights reserved."}</p>
+            <div className="flex gap-4">
+              <a href="https://englishom.com/blog" className="hover:text-foreground transition-colors">
+                {isAr ? "المدونة" : "Blog"}
               </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Footer Navigation Columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pt-4">
-          
-          {/* Column 1: Test Your Language (اختبر لغتك) */}
-          <div className="space-y-4">
-            <h4 className="text-base font-extrabold text-foreground border-b-2 border-[#4A3B32] dark:border-[#FCDFC2] pb-2 inline-block">
-              {isAr ? "اختبر لغتك" : "Test Your Language"}
-            </h4>
-            <ul className="space-y-2.5 text-sm text-muted-foreground">
-              <li>
-                <a
-                  href="https://englishom.com/ques"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors flex items-center gap-2"
-                >
-                  <span className="text-xs text-[#4A3B32] dark:text-[#FCDFC2]">●</span>
-                  {isAr ? "مستوى الكفاءة" : "Proficiency Level"}
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://englishom.com/test"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors flex items-center gap-2"
-                >
-                  <span className="text-xs text-[#4A3B32] dark:text-[#FCDFC2]">●</span>
-                  {isAr ? "اكتشف مستواك" : "Discover Your Level"}
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://englishom.com/test1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors flex items-center gap-2"
-                >
-                  <span className="text-xs text-[#4A3B32] dark:text-[#FCDFC2]">●</span>
-                  {isAr ? "مؤشر الإنجاز" : "Achievement Indicator"}
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 2: Training & Practice */}
-          <div className="space-y-4">
-            <h4 className="text-base font-extrabold text-foreground border-b-2 border-[#4A3B32] dark:border-[#FCDFC2] pb-2 inline-block">
-              {isAr ? "التدريب والممارسة" : "Training & Practice"}
-            </h4>
-            <ul className="space-y-2.5 text-sm text-muted-foreground">
-              <li>
-                <a
-                  href="https://englishom.com/Landingpage/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
-                >
-                  {isAr ? "أبدأ الممارسة الذكية" : "Start Smart Practice"}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={isAr ? "https://englishom.com/ar/app" : "https://englishom.com/en/app"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
-                >
-                  {isAr ? "تسجيل الدخول" : "Login"}
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 3: Support */}
-          <div className="space-y-4">
-            <h4 className="text-base font-extrabold text-foreground border-b-2 border-[#4A3B32] dark:border-[#FCDFC2] pb-2 inline-block">
-              {isAr ? "الدعم" : "Support"}
-            </h4>
-            <ul className="space-y-2.5 text-sm text-muted-foreground">
-              <li>
-                <a
-                  href={isAr ? "https://englishom.com/ar/user-guide" : "https://englishom.com/en/user-guide"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
-                >
-                  {isAr ? "دليل المستخدم" : "User Guide"}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={isAr ? "https://englishom.com/ar/contact" : "https://englishom.com/en/contact"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
-                >
-                  {isAr ? "اتصل بنا" : "Contact Us"}
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 4: Legal */}
-          <div className="space-y-4">
-            <h4 className="text-base font-extrabold text-foreground border-b-2 border-[#4A3B32] dark:border-[#FCDFC2] pb-2 inline-block">
-              {isAr ? "قانوني" : "Legal"}
-            </h4>
-            <ul className="space-y-2.5 text-sm text-muted-foreground">
-              <li>
-                <a
-                  href={isAr ? "https://englishom.com/ar/terms-and-conditions" : "https://englishom.com/en/terms-and-conditions"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
-                >
-                  {isAr ? "الشروط والأحكام" : "Terms & Conditions"}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={isAr ? "https://englishom.com/ar/privacy-policy" : "https://englishom.com/en/privacy-policy"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
-                >
-                  {isAr ? "سياسة الخصوصية" : "Privacy Policy"}
-                </a>
-              </li>
-            </ul>
+              <a href="https://englishom.com" className="hover:text-foreground transition-colors">
+                EnglishOM.com
+              </a>
+            </div>
           </div>
 
         </div>
+      </footer>
 
-        {/* Bottom copyright */}
-        <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-muted-foreground gap-4">
-          <p>© 2026 {isAr ? "إنجلشوم (EnglishOM). جميع الحقوق محفوظة." : "EnglishOM. All rights reserved."}</p>
-          <div className="flex gap-4">
-            <a href="https://englishom.com/blog" className="hover:text-foreground transition-colors">
-              {isAr ? "المدونة" : "Blog"}
-            </a>
-            <a href="https://englishom.com" className="hover:text-foreground transition-colors">
-              EnglishOM.com
-            </a>
+      {showDisclaimer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div 
+            className="bg-card border border-border rounded-2xl max-w-xl w-full p-6 shadow-2xl relative animate-in zoom-in-95 duration-200 text-start text-foreground"
+            dir={isAr ? "rtl" : "ltr"}
+          >
+            <button
+              onClick={() => setShowDisclaimer(false)}
+              className="absolute top-4 left-4 rtl:left-auto rtl:right-4 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Close"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            <h3 className="text-xl font-bold mb-4 mt-2 text-center md:text-start">
+              {isAr ? "إخلاء المسؤولية" : "Disclaimer"}
+            </h3>
+            
+            <p className="text-muted-foreground text-sm md:text-base leading-relaxed text-justify mb-2 whitespace-pre-line">
+              {isAr ? (
+                "هذه الأداة مصممة لتكون بوصلتك السريعة نحو نقطة الانطلاق المناسبة في ممارستك الذاتية، وهي مؤشار تفاعلي تقريبي لتوجيه خطواتك وليست حكماً نهائياً أو مرجعاً رسمياً لتقدير القدرات."
+              ) : (
+                "This tool is designed to be your quick compass towards the appropriate starting point in your self-practice. It is an approximate interactive indicator to guide your steps, not a final judgment or an official reference for assessing abilities."
+              )}
+            </p>
+            
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={() => setShowDisclaimer(false)}
+                className="px-5 py-2.5 rounded-xl font-bold text-sm bg-[#4A3B32] text-[#FCDFC2] hover:bg-[#3B2E26] dark:bg-[#FCDFC2] dark:text-[#120F0D] dark:hover:bg-[#f3cfad] transition-all"
+              >
+                {isAr ? "إغلاق" : "Close"}
+              </button>
+            </div>
           </div>
         </div>
-
-      </div>
-    </footer>
+      )}
+    </>
   );
 }
