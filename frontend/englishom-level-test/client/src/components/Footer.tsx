@@ -330,7 +330,7 @@ export function Footer() {
             
             <p className="text-muted-foreground text-sm md:text-base leading-relaxed text-justify mb-2 whitespace-pre-line">
               {isAr ? (
-                "هذه الأداة مصممة لتكون بوصلتك السريعة نحو نقطة الانطلاق المناسبة في ممارستك الذاتية، وهي مؤشار تفاعلي تقريبي لتوجيه خطواتك وليست حكماً نهائياً أو مرجعاً رسمياً لتقدير القدرات."
+                "هذه الأداة مصممة لتكون بوصلتك السريعة نحو نقطة الانطلاق المناسبة في ممارستك الذاتية، وهي مؤشر تفاعلي تقريبي لتوجيه خطواتك وليست حكماً نهائياً أو مرجعاً رسمياً لتقدير القدرات."
               ) : (
                 "This tool is designed to be your quick compass towards the appropriate starting point in your self-practice. It is an approximate interactive indicator to guide your steps, not a final judgment or an official reference for assessing abilities."
               )}
