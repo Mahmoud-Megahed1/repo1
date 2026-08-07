@@ -44,7 +44,6 @@ const TextEditorFormField = <T extends FieldValues>({
     'strike',
     'align', // ✅ Allow alignment format
     'list',
-    'bullet',
     'link',
     'image',
   ];
