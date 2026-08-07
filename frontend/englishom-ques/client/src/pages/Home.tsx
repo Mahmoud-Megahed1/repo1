@@ -189,9 +189,12 @@ export default function Home() {
 
         {/* Levels Section */}
         <section className="mb-16">
-          <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-8 text-center">
+          <h3 className="text-2xl md:text-3xl font-extrabold text-foreground mb-2 text-center">
             {t("levels.title")}
           </h3>
+          <p className="text-sm md:text-base text-muted-foreground text-center mb-8 font-medium">
+            {t("levels.subtitle")}
+          </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {customLevels.map((lvl) => {
               const IconComp = lvl.icon;
@@ -228,7 +231,7 @@ export default function Home() {
           <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4 text-center">
             {t("cta.title")}
           </h3>
-          <p className="text-muted-foreground mb-8 max-w-2xl text-center leading-relaxed text-sm md:text-base">
+          <p className="text-muted-foreground mb-8 max-w-2xl text-center leading-relaxed text-sm md:text-base whitespace-pre-line">
             {t("cta.subtitle")}
           </p>
           <Button
