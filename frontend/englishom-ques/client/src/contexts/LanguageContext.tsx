@@ -30,6 +30,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       // Set HTML lang attribute and dir for RTL support
       document.documentElement.lang = lang;
       document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      document.body.style.fontFamily = lang === "ar" ? "'Cairo', 'Inter', sans-serif" : "'Inter', sans-serif";
     }
   };
 
@@ -37,6 +38,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     // Set initial HTML attributes
     document.documentElement.lang = language;
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+    document.body.style.fontFamily = language === "ar" ? "'Cairo', 'Inter', sans-serif" : "'Inter', sans-serif";
   }, [language]);
 
   const translate = (key: string) => t(key, language);

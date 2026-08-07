@@ -5,11 +5,11 @@
   --color-glass-border: rgba(255, 255, 255, 0.08);
   --color-glass-highlight: rgba(255, 255, 255, 0.15);
   
-  --font-tajawal: "Tajawal", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --font-cairo: "Cairo", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-  font-family: var(--font-tajawal);
+  font-family: var(--font-cairo);
   background: linear-gradient(160deg, #0c1222 0%, #111827 50%, #0f172a 100%);
   color: white;
   min-height: 100vh;

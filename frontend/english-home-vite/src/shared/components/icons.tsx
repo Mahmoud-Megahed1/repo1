@@ -327,3 +327,20 @@ export function XIcon({ className, ...props }: SVGProps) {
     </svg>
   );
 }
+
+export function BlogIcon(props: SVGProps) {
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <rect x="2" y="2" width="28" height="28" rx="6" fill="#800000" />
+      <path
+        d="M10 9a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V10a1 1 0 00-1-1H10zm1 3h10v2H11v-2zm0 4h10v2H11v-2zm0 4h7v2h-7v-2z"
+        fill="#FFD700"
+      />
+    </svg>
+  );
+}

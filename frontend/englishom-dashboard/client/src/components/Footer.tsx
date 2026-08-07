@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
 
 interface FooterProps {
@@ -8,7 +8,7 @@ interface FooterProps {
 const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
   const isArabic = language === 'ar';
   const langPath = isArabic ? '/ar' : '/en';
-  const [showDisclaimer, setShowDisclaimer] = useState(false);
+
 
   const translations = {
     ar: {
@@ -75,7 +75,7 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
       href: 'https://www.snapchat.com/add/englishom_sa',
       svg: (
         <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 11c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm-7 0c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm3.5 6c-2.21 0-4-1.79-4-4h8c0 2.21-1.79 4-4 4zm0-10c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" />
+          <path d="M12.007 2C8.031 2 5.617 4.738 5.617 7.688c0 1.09.289 2.05.612 2.879.167.433.208.571.127.81-.077.228-.35.393-.728.524-.766.265-1.761.642-2.207 1.472-.34.633-.186 1.417.379 1.906.592.512 1.341.65 2.083.786.195.035.39.07.574.11.393.084.58.261.54.549-.036.262-.259.626-.527 1.066-.372.609-.894 1.464-.894 2.502 0 1.996 2.016 3.197 4.908 3.197 1.025 0 2.029-.168 2.915-.499 1.037.331 2.04.499 3.065.499 2.893 0 4.909-1.201 4.909-3.197 0-1.038-.522-1.893-.895-2.502-.268-.44-.491-.804-.526-1.066-.041-.288.146-.465.539-.549.184-.04.379-.075.574-.11.742-.136 1.491-.274 2.083-.786.565-.489.719-1.273.379-1.906-.446-.83-.441-1.238-2.207-1.472-.378-.131-.651-.296-.728-.524-.081-.239-.04-.377.127-.81.323-.829.612-1.789.612-2.879C18.397 4.738 15.983 2 12.007 2z" />
         </svg>
       ),
     },
@@ -94,6 +94,16 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
       svg: (
         <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52.075-.149-.669-1.612-.916-2.206-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.194 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-4.869 1.171c-1.519.761-2.835 1.844-3.797 3.21C2.865 10.331 2.517 11.9 2.517 13.5c0 1.585.348 3.15 1.007 4.59l-1.07 3.899 3.993-1.068c1.429.779 3.031 1.188 4.782 1.188h.005c5.305 0 9.62-4.317 9.62-9.62 0-2.57-1.005-4.986-2.833-6.815-1.828-1.828-4.244-2.834-6.815-2.834" />
+        </svg>
+      ),
+    },
+    {
+      label: 'Blog',
+      href: 'https://englishom.com/blog',
+      svg: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
         </svg>
       ),
     },
@@ -226,14 +236,6 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
                   {t.privacy}
                 </a>
               </li>
-              <li>
-                <button
-                  onClick={() => setShowDisclaimer(true)}
-                  className="text-gray-400 hover:text-cyan-400 transition-colors text-right rtl:text-right w-full bg-transparent border-0 p-0 cursor-pointer text-sm"
-                >
-                  {t.disclaimer}
-                </button>
-              </li>
             </ul>
           </div>
         </div>
@@ -246,53 +248,8 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
           <p className="text-gray-400 text-sm">{t.copyright}</p>
         </div>
       </div>
-      <DisclaimerModal show={showDisclaimer} isAr={isArabic} onClose={() => setShowDisclaimer(false)} />
     </footer>
   );
 };
 
 export default Footer;
-
-// Disclaimer Modal Rendered Outside
-const DisclaimerModal: React.FC<{ show: boolean; isAr: boolean; onClose: () => void }> = ({ show, isAr, onClose }) => {
-  if (!show) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div 
-        className="bg-slate-900 text-white border border-cyan-500/30 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative text-right"
-        dir={isAr ? "rtl" : "ltr"}
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-4 left-4 rtl:left-auto rtl:right-4 text-gray-400 hover:text-cyan-400 transition-colors"
-          aria-label="Close"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-        
-        <h3 className="text-xl font-bold mb-4 mt-2 text-cyan-400 text-center md:text-start">
-          {isAr ? "إخلاء المسؤولية" : "Disclaimer"}
-        </h3>
-        
-        <p className="text-gray-300 text-sm md:text-base leading-relaxed text-justify mb-2 whitespace-pre-line">
-          {isAr ? (
-            "جميع المقالات والمحتويات المنشورة في هذه المدونة هي لأغراض تثقيفية وتعليمية عامة، وتُمثل وجهات نظر كتابها بناءً على الأبحاث والمصادر المتاحة. المسميات الوظيفية والتحريرية المذكورة (مثل: خبير، مستشار، أخصائي) تُستخدم في سياقها التحريري لإبراز زاوية الطرح وتخصص المقال، ولا تُعد بديلة عن الاستشارات المهنية والرسمية المباشرة. لا تتحمل المنصة أي مسؤولية قانونية عن قرار يُتخذ بناءً على المعلومات الواردة في الموقع."
-          ) : (
-            "All articles and content published on this blog are provided for general educational and informational purposes only, based on available research and resources. Editorial titles (such as Expert, Consultant, or Specialist) are used in a stylistic context to define the topic's scope and do not constitute legal, medical, or formal professional advice. The platform assumes no liability for actions taken based on the information provided herein."
-          )}
-        </p>
-        
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={onClose}
-            className="px-5 py-2.5 rounded-xl font-bold text-sm bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/40 transition-all"
-          >
-            {isAr ? "إغلاق" : "Close"}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
