@@ -12,6 +12,7 @@ import {
 } from '@/components/sidebar-items-provider';
 import { LessonIdEnum } from '@/constants';
 import useLessonsItems from '@/hooks/useLessonsItems';
+import useLessonQueryParams from '@/hooks/use-lesson-query-params';
 import { usePathname } from '@/i18n/routing';
 import { MessageSquare, PenBox, Bot, Palette, Settings, FileQuestion } from 'lucide-react';
 import { parseAsStringEnum, useQueryState } from 'nuqs';
@@ -49,11 +50,13 @@ const useAdminLayoutSetup = () => {
     'lesson',
     parseAsStringEnum<LessonIdEnum>(Object.values(LessonIdEnum)),
   );
+  const [queryParams] = useLessonQueryParams();
+  const { levelId, day } = queryParams;
   const t = useTranslations('Global.sidebar');
   const ITEMS = useMemo(
     () => [
       {
-        href: '/admin/cms?lesson=READ',
+        href: `/admin/cms?lesson=READ&levelId=${levelId}&day=${day}`,
         label: t('cms'),
         isActive: pathname === '/admin/cms/',
         type: 'group' as const,
@@ -61,7 +64,7 @@ const useAdminLayoutSetup = () => {
         children: lessonsItems
           .map((item) => ({
             ...item,
-            href: `/admin/cms?lesson=${item.id}`,
+            href: `/admin/cms?lesson=${item.id}&levelId=${levelId}&day=${day}`,
             isActive: lesson === item.id,
             isHidden: false,
           }))
@@ -77,7 +80,7 @@ const useAdminLayoutSetup = () => {
           ]),
       },
     ],
-    [pathname, lessonsItems, lesson, t],
+    [pathname, lessonsItems, lesson, t, levelId, day],
   );
   const SIDEBAR_ITEMS: SidebarProps['items'] & {
     isHidden?: boolean;
