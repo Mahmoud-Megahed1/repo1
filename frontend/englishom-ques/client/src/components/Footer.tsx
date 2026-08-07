@@ -287,7 +287,7 @@ export default function Footer() {
       {showDisclaimer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div 
-            className="bg-card border border-border rounded-2xl max-w-xl w-full p-6 shadow-2xl relative animate-in zoom-in-95 duration-200 text-right text-foreground"
+            className="bg-card border border-border rounded-2xl max-w-xl w-full p-6 shadow-2xl relative animate-in zoom-in-95 duration-200 text-start text-foreground"
             dir={isAr ? "rtl" : "ltr"}
           >
             <button
@@ -306,9 +306,9 @@ export default function Footer() {
             
             <p className="text-muted-foreground text-sm md:text-base leading-relaxed text-justify mb-2 whitespace-pre-line">
               {isAr ? (
-                "جميع المقالات والمحتويات المنشورة في هذه المدونة هي لأغراض تثقيفية وتعليمية عامة، وتُمثل وجهات نظر كتابها بناءً على الأبحاث والمصادر المتاحة. المسميات الوظيفية والتحريرية المذكورة (مثل: خبير، مستشار، أخصائي) تُستخدم في سياقها التحريري لإبراز زاوية الطرح وتخصص المقال، ولا تُعد بديلة عن الاستشارات المهنية والرسمية المباشرة. لا تتحمل المنصة أي مسؤولية قانونية عن قرار يُتخذ بناءً على المعلومات الواردة في الموقع."
+                "هذا المقياس مصمم لتقدير كفاءتك الحالية ووضعك على مسار التقدم الأنسب لك داخل النظام، وهو أداة استكشافية ذكية تمنحك مؤشراً تقريبياً لقدراتك وليس تقييماً نهائياً قاطعاً؛ فالهدف هو توجيه خطواتك القادمة بدقة، وتختلف التجربة الفعلية باختلاف تفاعلك المستمر وتطورك معنا"
               ) : (
-                "All articles and content published on this blog are provided for general educational and informational purposes only, based on available research and resources. Editorial titles (such as Expert, Consultant, or Specialist) are used in a stylistic context to define the topic's scope and do not constitute legal, medical, or formal professional advice. The platform assumes no liability for actions taken based on the information provided herein."
+                "This test is designed to estimate your current proficiency and place you on the most appropriate progress path within the system. It is a smart exploratory tool that provides an approximate indicator of your abilities, not a final or definitive evaluation; the goal is to guide your next steps accurately, and the actual experience varies based on your continuous interaction and progress with us."
               )}
             </p>
             
