@@ -81,10 +81,11 @@ const SocialIcons = [
     svg: (
       <svg className="w-5 h-5" viewBox="0 0 32 32" fill="none">
         <rect x="2" y="2" width="28" height="28" rx="6" fill="#800000" />
-        <path
-          d="M10 9a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V10a1 1 0 00-1-1H10zm1 3h10v2H11v-2zm0 4h10v2H11v-2zm0 4h7v2h-7v-2z"
-          fill="#FFD700"
-        />
+        <path d="M16 5l2.8 10.5h-5.6L16 5z" fill="#D4AF37"/>
+        <path d="M14.2 15.5h3.6v1.8a1 1 0 01-1 1h-1.6a1 1 0 01-1-1v-1.8z" fill="#D4AF37"/>
+        <circle cx="16" cy="15" r="0.7" fill="#800000"/>
+        <path d="M6 21c2.5-1.5 6-1.8 10 .5 4-2.3 7.5-2 10-.5v4.5c-2.5-1.5-6-1.8-10 .5-4-2.3-7.5-2-10-.5V21z" fill="#D4AF37"/>
+        <path d="M16 21.5v5" stroke="#800000" strokeWidth="0.5"/>
       </svg>
     ),
   },

@@ -101,9 +101,10 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
       label: 'Blog',
       href: 'https://englishom.com/blog',
       svg: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5">
+          <path d="M12 3l2 7.5h-4L12 3z" fill="currentColor"/>
+          <path d="M10.5 10.5h3v1.3a.75.75 0 01-.75.75h-1.5a.75.75 0 01-.75-.75v-1.3z" fill="currentColor"/>
+          <path d="M4 15.5c2-1.2 5-1.4 8 .4 3-1.8 6-1.6 8-.4v3.5c-2-1.2-5-1.4-8 .4-3-1.8-6-1.6-8-.4v-3.5z" fill="currentColor"/>
         </svg>
       ),
     },
