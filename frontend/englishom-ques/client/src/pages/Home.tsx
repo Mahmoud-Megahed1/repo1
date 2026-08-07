@@ -204,20 +204,20 @@ export default function Home() {
                   className="p-6 border border-border/80 hover:border-[#4A3B32] dark:hover:border-[#FCDFC2] hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between min-h-[160px] rounded-2xl"
                   onClick={() => navigate(`/ques?level=${lvl.code}`)}
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-black px-2.5 py-1 rounded-lg bg-muted text-muted-foreground">
-                      {formatLevelCode(lvl.code)}
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <h4 className="text-base md:text-lg font-extrabold text-foreground">
-                        {language === "ar" ? lvl.titleAr : lvl.titleEn}
-                      </h4>
+                  <div className="flex flex-col items-center text-center w-full mb-3">
+                    <div className="flex items-center justify-center gap-2 mb-2">
                       <div className="p-2 rounded-xl bg-[#4A3B32]/10 text-[#4A3B32] dark:bg-[#FCDFC2]/15 dark:text-[#FCDFC2]">
                         <IconComp className="w-5 h-5" />
                       </div>
+                      <h4 className="text-base md:text-lg font-extrabold text-foreground">
+                        {language === "ar" ? lvl.titleAr : lvl.titleEn}
+                      </h4>
+                      <span className="text-xs font-black px-2.5 py-1 rounded-lg bg-muted text-muted-foreground">
+                        {formatLevelCode(lvl.code)}
+                      </span>
                     </div>
                   </div>
-                  <p className="text-xs md:text-sm text-muted-foreground text-start leading-relaxed">
+                  <p className="text-xs md:text-sm text-muted-foreground text-center w-full leading-relaxed">
                     {language === "ar" ? lvl.descAr : lvl.descEn}
                   </p>
                 </Card>

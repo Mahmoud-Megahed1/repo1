@@ -538,8 +538,8 @@ export default function Quiz() {
                         : "border-border hover:border-[#4A3B32]/40 dark:hover:border-[#FCDFC2]/40 hover:bg-card/80"
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
+                    <div className="flex flex-col items-center text-center w-full mb-2">
+                      <div className="flex items-center justify-center gap-2 mb-2">
                         <div className={`p-2 rounded-xl transition-colors ${
                           isSelected 
                             ? "bg-[#4A3B32] text-[#FCDFC2] dark:bg-[#FCDFC2] dark:text-[#120F0D]" 
@@ -550,16 +550,16 @@ export default function Quiz() {
                         <h3 className="font-extrabold text-base md:text-lg text-foreground">
                           {language === "ar" ? lvl.titleAr : lvl.titleEn}
                         </h3>
+                        <span className={`text-xs font-black px-2.5 py-1 rounded-lg transition-colors ${
+                          isSelected 
+                            ? "bg-[#4A3B32] text-[#FCDFC2] dark:bg-[#FCDFC2] dark:text-[#120F0D]" 
+                            : "bg-muted text-muted-foreground"
+                        }`}>
+                          {formatLevelCode(lvl.code)}
+                        </span>
                       </div>
-                      <span className={`text-xs font-black px-2.5 py-1 rounded-lg transition-colors ${
-                        isSelected 
-                          ? "bg-[#4A3B32] text-[#FCDFC2] dark:bg-[#FCDFC2] dark:text-[#120F0D]" 
-                          : "bg-muted text-muted-foreground"
-                      }`}>
-                        {formatLevelCode(lvl.code)}
-                      </span>
                     </div>
-                    <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+                    <p className="text-xs md:text-sm text-muted-foreground text-center w-full leading-relaxed">
                       {language === "ar" ? lvl.descAr : lvl.descEn}
                     </p>
                   </button>
