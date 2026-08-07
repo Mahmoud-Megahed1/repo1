@@ -102,9 +102,12 @@ const Footer: React.FC<FooterProps> = ({ language = 'ar' }) => {
       href: 'https://englishom.com/blog',
       svg: (
         <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5">
-          <path d="M12 3l2 7.5h-4L12 3z" fill="currentColor"/>
-          <path d="M10.5 10.5h3v1.3a.75.75 0 01-.75.75h-1.5a.75.75 0 01-.75-.75v-1.3z" fill="currentColor"/>
-          <path d="M4 15.5c2-1.2 5-1.4 8 .4 3-1.8 6-1.6 8-.4v3.5c-2-1.2-5-1.4-8 .4-3-1.8-6-1.6-8-.4v-3.5z" fill="currentColor"/>
+          <path d="M12 3L14 11H10L12 3Z" fill="currentColor"/>
+          <path d="M10.8 11H13.2V12.3C13.2 12.6 13 12.8 12.7 12.8H11.3C11 12.8 10.8 12.6 10.8 12.3V11Z" fill="currentColor"/>
+          <circle cx="12" cy="10" r="0.5" fill="currentColor" fillOpacity="0.3"/>
+          <path d="M12 4L19 8.5V17.5H5V8.5L12 4Z" stroke="currentColor" strokeWidth="0.7" fill="none"/>
+          <path d="M5.5 15C7.5 13.8 10 13.6 12 15.5C14 13.6 16.5 13.8 18.5 15V18.5C16.5 17.3 14 17.1 12 19C10 17.1 7.5 17.3 5.5 18.5V15Z" fill="currentColor"/>
+          <path d="M12 15.5V19" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.3"/>
         </svg>
       ),
     },

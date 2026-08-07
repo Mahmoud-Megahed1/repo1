@@ -336,14 +336,28 @@ export function BlogIcon(props: SVGProps) {
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <rect x="2" y="2" width="28" height="28" rx="6" fill="#800000" />
-      {/* Pen nib */}
-      <path d="M16 5l2.8 10.5h-5.6L16 5z" fill="#D4AF37"/>
-      <path d="M14.2 15.5h3.6v1.8a1 1 0 01-1 1h-1.6a1 1 0 01-1-1v-1.8z" fill="#D4AF37"/>
-      <circle cx="16" cy="15" r="0.7" fill="#800000"/>
-      {/* Open book */}
-      <path d="M6 21c2.5-1.5 6-1.8 10 .5 4-2.3 7.5-2 10-.5v4.5c-2.5-1.5-6-1.8-10 .5-4-2.3-7.5-2-10-.5V21z" fill="#D4AF37"/>
-      <path d="M16 21.5v5" stroke="#800000" strokeWidth="0.5"/>
+      {/* Background with gold border */}
+      <rect x="1.5" y="1.5" width="29" height="29" rx="5.5" fill="#7A1A1A" stroke="#C9A94E" strokeWidth="1.5"/>
+      {/* Pentagon/house frame */}
+      <path d="M16 5L25 11.5V23H7V11.5L16 5Z" stroke="#C9A94E" strokeWidth="0.9" fill="none"/>
+      {/* Pen nib body */}
+      <path d="M16 7.5L18 14.5H14L16 7.5Z" fill="#C9A94E"/>
+      {/* Pen nib base */}
+      <path d="M14.5 14.5H17.5V16.2C17.5 16.6 17.2 16.8 16.8 16.8H15.2C14.8 16.8 14.5 16.6 14.5 16.2V14.5Z" fill="#C9A94E"/>
+      {/* Pen ink hole */}
+      <circle cx="16" cy="13.5" r="0.6" fill="#7A1A1A"/>
+      {/* Small window at top right */}
+      <rect x="17.2" y="8.5" width="1.6" height="1.6" rx="0.2" stroke="#C9A94E" strokeWidth="0.5" fill="none"/>
+      <line x1="17.2" y1="9.3" x2="18.8" y2="9.3" stroke="#C9A94E" strokeWidth="0.3"/>
+      <line x1="18" y1="8.5" x2="18" y2="10.1" stroke="#C9A94E" strokeWidth="0.3"/>
+      {/* Open book with fanned pages */}
+      <path d="M7.5 20C10 18.5 13 18.3 16 20.5C19 18.3 22 18.5 24.5 20V24C22 22.5 19 22.3 16 24.5C13 22.3 10 22.5 7.5 24V20Z" fill="#C9A94E"/>
+      <path d="M16 20.5V24.5" stroke="#7A1A1A" strokeWidth="0.4"/>
+      {/* Extra page fan lines */}
+      <path d="M8.5 19.5C10.5 18.2 13 18 15.5 19.8" stroke="#C9A94E" strokeWidth="0.35" fill="none"/>
+      <path d="M9 19C11 17.8 13.5 17.7 15 19.2" stroke="#C9A94E" strokeWidth="0.25" fill="none"/>
+      <path d="M23.5 19.5C21.5 18.2 19 18 16.5 19.8" stroke="#C9A94E" strokeWidth="0.35" fill="none"/>
+      <path d="M23 19C21 17.8 18.5 17.7 17 19.2" stroke="#C9A94E" strokeWidth="0.25" fill="none"/>
     </svg>
   );
 }

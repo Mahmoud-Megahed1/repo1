@@ -43,16 +43,18 @@ export function LocalizationProvider({ children }: { children: React.ReactNode }
     }
   }, [theme]);
 
-  // Apply language direction to document
+  // Apply language direction and font to document
   useEffect(() => {
     document.documentElement.lang = language;
     document.documentElement.dir = isRTL ? "rtl" : "ltr";
+    document.body.style.fontFamily = language === "ar" ? "'Cairo', 'Poppins', sans-serif" : "'Poppins', sans-serif";
   }, [language, isRTL]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     setIsRTL(lang === "ar");
     localStorage.setItem("englishom-language", lang);
+    document.body.style.fontFamily = lang === "ar" ? "'Cairo', 'Poppins', sans-serif" : "'Poppins', sans-serif";
   };
 
   const setTheme = (newTheme: Theme) => {

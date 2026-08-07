@@ -34,6 +34,10 @@ export default function PublicLive() {
   const [language, setLanguage] = useState<'ar' | 'en'>('ar');
   const { data: publicStats } = trpc.publicStats.get.useQuery();
 
+  useEffect(() => {
+    document.body.style.fontFamily = language === 'ar' ? "'Cairo', 'Poppins', sans-serif" : "'Poppins', sans-serif";
+  }, [language]);
+
   // Load stats from tRPC
   useEffect(() => {
     if (publicStats) {

@@ -53,6 +53,10 @@ export default function LiveDashboard() {
   const updateIntervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
+    document.body.style.fontFamily = language === 'ar' ? "'Cairo', 'Poppins', sans-serif" : "'Poppins', sans-serif";
+  }, [language]);
+
+  useEffect(() => {
     const checkAvailability = async () => {
       try {
         const res = await fetch(`https://api.englishom.com/api/settings?t=${Date.now()}`, { cache: 'no-store' });

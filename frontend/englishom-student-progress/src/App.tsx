@@ -95,12 +95,20 @@ const SOCIAL_LINKS = [
     bg: "bg-[#800000] border border-[#600000]",
     svg: (
       <svg className="w-5 h-5" viewBox="0 0 32 32" fill="none">
-        <rect x="2" y="2" width="28" height="28" rx="6" fill="#800000" />
-        <path d="M16 5l2.8 10.5h-5.6L16 5z" fill="#D4AF37"/>
-        <path d="M14.2 15.5h3.6v1.8a1 1 0 01-1 1h-1.6a1 1 0 01-1-1v-1.8z" fill="#D4AF37"/>
-        <circle cx="16" cy="15" r="0.7" fill="#800000"/>
-        <path d="M6 21c2.5-1.5 6-1.8 10 .5 4-2.3 7.5-2 10-.5v4.5c-2.5-1.5-6-1.8-10 .5-4-2.3-7.5-2-10-.5V21z" fill="#D4AF37"/>
-        <path d="M16 21.5v5" stroke="#800000" strokeWidth="0.5"/>
+        <rect x="1.5" y="1.5" width="29" height="29" rx="5.5" fill="#7A1A1A" stroke="#C9A94E" strokeWidth="1.5"/>
+        <path d="M16 5L25 11.5V23H7V11.5L16 5Z" stroke="#C9A94E" strokeWidth="0.9" fill="none"/>
+        <path d="M16 7.5L18 14.5H14L16 7.5Z" fill="#C9A94E"/>
+        <path d="M14.5 14.5H17.5V16.2C17.5 16.6 17.2 16.8 16.8 16.8H15.2C14.8 16.8 14.5 16.6 14.5 16.2V14.5Z" fill="#C9A94E"/>
+        <circle cx="16" cy="13.5" r="0.6" fill="#7A1A1A"/>
+        <rect x="17.2" y="8.5" width="1.6" height="1.6" rx="0.2" stroke="#C9A94E" strokeWidth="0.5" fill="none"/>
+        <line x1="17.2" y1="9.3" x2="18.8" y2="9.3" stroke="#C9A94E" strokeWidth="0.3"/>
+        <line x1="18" y1="8.5" x2="18" y2="10.1" stroke="#C9A94E" strokeWidth="0.3"/>
+        <path d="M7.5 20C10 18.5 13 18.3 16 20.5C19 18.3 22 18.5 24.5 20V24C22 22.5 19 22.3 16 24.5C13 22.3 10 22.5 7.5 24V20Z" fill="#C9A94E"/>
+        <path d="M16 20.5V24.5" stroke="#7A1A1A" strokeWidth="0.4"/>
+        <path d="M8.5 19.5C10.5 18.2 13 18 15.5 19.8" stroke="#C9A94E" strokeWidth="0.35" fill="none"/>
+        <path d="M9 19C11 17.8 13.5 17.7 15 19.2" stroke="#C9A94E" strokeWidth="0.25" fill="none"/>
+        <path d="M23.5 19.5C21.5 18.2 19 18 16.5 19.8" stroke="#C9A94E" strokeWidth="0.35" fill="none"/>
+        <path d="M23 19C21 17.8 18.5 17.7 17 19.2" stroke="#C9A94E" strokeWidth="0.25" fill="none"/>
       </svg>
     ),
   },
@@ -123,7 +131,7 @@ export default function App() {
   const [studentDays, setStudentDays] = useState(0);
   const [loadingState, setLoadingState] = useState<LoadingState>('loading');
   const [activeLevelName, setActiveLevelName] = useState<string>('');
-  const [showDisclaimer, setShowDisclaimer] = useState(false);
+
 
   useEffect(() => {
     const fetchProgress = async () => {
@@ -568,53 +576,12 @@ export default function App() {
               <a href="https://englishom.com" className="hover:text-slate-300 transition-colors">الرئيسية</a>
               <a href="https://englishom.com/test" className="hover:text-slate-300 transition-colors">اختبار المستوى</a>
               <a href="https://englishom.com/ar/contact" className="hover:text-slate-300 transition-colors">تواصل معنا</a>
-              <button
-                type="button"
-                onClick={() => setShowDisclaimer(true)}
-                className="hover:text-slate-300 transition-colors bg-transparent border-0 p-0 cursor-pointer"
-              >
-                إخلاء المسؤولية
-              </button>
+
             </div>
           </div>
         </div>
       </footer>
 
-      {showDisclaimer && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div 
-            className="bg-slate-900 border border-slate-800 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative animate-in zoom-in-95 duration-200 text-right text-white"
-            dir="rtl"
-          >
-            <button
-              onClick={() => setShowDisclaimer(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
-              aria-label="Close"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            
-            <h3 className="text-xl font-bold mb-4 mt-2 text-right">
-              إخلاء المسؤولية
-            </h3>
-            
-            <p className="text-slate-300 text-sm md:text-base leading-relaxed text-justify mb-2 whitespace-pre-line">
-              هذا المؤشر مصمم لقراءة مدى تمكنك الحالي ومساعدتك في رصد تقدمك وتوجيه خطواتك القادمة داخل المنصة، وهو قراءة تقنية تقديرية وليست معياراً نهائياً أو حاسماً؛ فالهدف هو دعم ممارستك الذاتية ومنحك رؤية واضحة ومستمرة لتطورك.
-            </p>
-            
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={() => setShowDisclaimer(false)}
-                className="px-5 py-2.5 rounded-xl font-bold text-sm bg-blue-600 text-white hover:bg-blue-700 transition-all"
-              >
-                إغلاق
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
