@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { FieldValues, Path, UseFormReturn } from 'react-hook-form';
-import 'react-quill/dist/quill.snow.css';
+import 'react-quill-new/dist/quill.snow.css';
 type Props<T extends FieldValues> = {
   form: UseFormReturn<T>;
   name: Path<T>;
@@ -10,7 +10,7 @@ type Props<T extends FieldValues> = {
 } & React.ComponentProps<any>;
 const ReactQuill = dynamic(
   async () => {
-    const mod = await import('react-quill');
+    const mod = await import('react-quill-new');
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (mod.default || mod) as any;
   },
