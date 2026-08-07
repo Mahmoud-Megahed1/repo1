@@ -27,7 +27,7 @@ export const translations = {
     "features.feedback.desc": "Get immediate results with detailed statistics showing your score, accuracy, and average response time.",
 
     // Levels Section
-    "levels.title": "English Proficiency Levels",
+    "levels.title": "Automatic Thinking Metrics",
     "levels.a1": "A0 - Basic Proficiency",
     "levels.a1.desc": "Basic proficiency",
     "levels.a2": "A01 - Limited Practical Proficiency",
@@ -65,10 +65,8 @@ export const translations = {
     "badge.quiz_addict.name": "Quiz Addict",
     "badge.quiz_addict.desc": "Complete 50 quizzes",
 
-    // CTA Section
     "cta.title": "Ready to Take the Proficiency Level Test?",
     "cta.subtitle": "Bypass the thinking stage and move towards the automatic response.\nChoose your response speed and discover your ability to select in fractions of a second.\nGet instant feedback on your performance and track your progress.",
-    "levels.subtitle": "Automatic Thinking Metrics",
 
     // Quiz Page
     "quiz.levelSelect": "Select your English level and test your knowledge",
@@ -180,7 +178,7 @@ export const translations = {
     "features.feedback.desc": "احصل على نتائج فورية مع إحصائيات تفصيلية تعرض درجتك والدقة ومتوسط وقت الاستجابة.",
 
     // Levels Section
-    "levels.title": "مستويات الكفاءة في اللغة الإنجليزية",
+    "levels.title": "مقاييس التفكير التلقائي",
     "levels.a1": "A0 - كفاءة أساسية",
     "levels.a1.desc": "كفاءة أساسية",
     "levels.a2": "A01 - كفاءة عملية محدودة",
@@ -218,10 +216,8 @@ export const translations = {
     "badge.quiz_addict.name": "مدمن الاختبارات",
     "badge.quiz_addict.desc": "أكملت 50 اختباراً",
 
-    // CTA Section
     "cta.title": "هل أنت مستعد لاختبار مستوى الكفاءة؟",
     "cta.subtitle": "تجاوز مرحلة التفكير، وانطلق نحو الرد التلقائي\nاختر سرعة استجابتك، واكتشف قدرتك على الاختيار في أجزاء من الثانية\nواحصل على ملاحظات فورية حول أدائك وتابع تقدمك",
-    "levels.subtitle": "مقاييس التفكير التلقائي",
 
     // Quiz Page
     "quiz.levelSelect": "اختر مستوى اللغة الإنجليزية الخاص بك واختبر معرفتك",
