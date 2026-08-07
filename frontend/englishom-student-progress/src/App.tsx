@@ -107,6 +107,7 @@ export default function App() {
   const [studentDays, setStudentDays] = useState(0);
   const [loadingState, setLoadingState] = useState<LoadingState>('loading');
   const [activeLevelName, setActiveLevelName] = useState<string>('');
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   useEffect(() => {
     const fetchProgress = async () => {
@@ -551,10 +552,53 @@ export default function App() {
               <a href="https://englishom.com" className="hover:text-slate-300 transition-colors">الرئيسية</a>
               <a href="https://englishom.com/test" className="hover:text-slate-300 transition-colors">اختبار المستوى</a>
               <a href="https://englishom.com/ar/contact" className="hover:text-slate-300 transition-colors">تواصل معنا</a>
+              <button
+                type="button"
+                onClick={() => setShowDisclaimer(true)}
+                className="hover:text-slate-300 transition-colors bg-transparent border-0 p-0 cursor-pointer"
+              >
+                إخلاء المسؤولية
+              </button>
             </div>
           </div>
         </div>
       </footer>
+
+      {showDisclaimer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div 
+            className="bg-slate-900 border border-slate-800 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative animate-in zoom-in-95 duration-200 text-right text-white"
+            dir="rtl"
+          >
+            <button
+              onClick={() => setShowDisclaimer(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
+              aria-label="Close"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            <h3 className="text-xl font-bold mb-4 mt-2 text-right">
+              إخلاء المسؤولية
+            </h3>
+            
+            <p className="text-slate-300 text-sm md:text-base leading-relaxed text-justify mb-2 whitespace-pre-line">
+              هذا المؤشر مصمم لقراءة مدى تمكنك الحالي ومساعدتك في رصد تقدمك وتوجيه خطواتك القادمة داخل المنصة، وهو قراءة تقنية تقديرية وليست معياراً نهائياً أو حاسماً؛ فالهدف هو دعم ممارستك الذاتية ومنحك رؤية واضحة ومستمرة لتطورك.
+            </p>
+            
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={() => setShowDisclaimer(false)}
+                className="px-5 py-2.5 rounded-xl font-bold text-sm bg-blue-600 text-white hover:bg-blue-700 transition-all"
+              >
+                إغلاق
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
