@@ -105,6 +105,7 @@ const SocialIcons = [
         <path d="M23 19C21 17.8 18.5 17.7 17 19.2" stroke="#C9A94E" strokeWidth="0.25" fill="none"/>
       </svg>
     ),
+  },
   {
     name: "Threads",
     href: "https://www.threads.net/@englishom_sa",
