@@ -46,27 +46,65 @@ export function LandingFooter() {
   ] as const;
   const socialLinks = [
     {
-      href: 'https://www.facebook.com/share/1JunPviNMg/',
-      icon: FacebookIcon,
+      href: 'https://www.youtube.com/@Englishom_sa',
+      icon: YoutubeIcon,
+      name: 'YouTube',
+      bg: 'bg-[#FF0000]',
     },
     {
-      href: 'https://www.snapchat.com/add/englishom_sa',
-      icon: SnapchatIcon,
+      href: 'https://x.com/Englishom_sa',
+      icon: XIcon,
+      name: 'X',
+      bg: 'bg-[#0f1419] border border-slate-700',
+    },
+    {
+      href: 'https://www.tiktok.com/@englishom_sa',
+      icon: TiktokIcon,
+      name: 'TikTok',
+      bg: 'bg-[#111111] border border-slate-800',
+    },
+    {
+      href: 'https://wa.me/966542577250',
+      icon: WhatsappIcon,
+      name: 'WhatsApp',
+      bg: 'bg-[#25D366]',
+    },
+    {
+      href: 'https://t.me/Englishom_sa',
+      icon: TelegramIcon,
+      name: 'Telegram',
+      bg: 'bg-[#229ED9]',
     },
     {
       href: 'https://www.instagram.com/englishom_sa?igsh=cTB6czYwYXR2Zmty',
       icon: InstagramIcon,
+      name: 'Instagram',
+      bg: 'bg-gradient-to-tr from-amber-500 via-pink-600 to-purple-600',
     },
-    { href: 'https://t.me/Englishom_sa', icon: TelegramIcon },
-    { href: 'https://wa.me/966542577250', icon: WhatsappIcon },
     {
-      href: 'https://www.tiktok.com/@englishom_sa',
-      icon: TiktokIcon,
+      href: 'https://www.snapchat.com/add/englishom_sa',
+      icon: SnapchatIcon,
+      name: 'Snapchat',
+      bg: 'bg-[#FFFA37] border border-[#e5e01b]',
     },
-    { href: 'https://x.com/Englishom_sa', icon: XIcon },
-    { href: 'https://www.youtube.com/@Englishom_sa', icon: YoutubeIcon },
-    { href: 'https://englishom.com/blog', icon: BlogIcon },
-    { href: 'https://www.threads.net/@englishom_sa', icon: ThreadsIcon },
+    {
+      href: 'https://englishom.com/blog',
+      icon: BlogIcon,
+      name: 'Blog',
+      bg: 'bg-[#3c0c0e] border border-[#2e0709]',
+    },
+    {
+      href: 'https://www.threads.net/@englishom_sa',
+      icon: ThreadsIcon,
+      name: 'Threads',
+      bg: 'bg-[#000000] border border-slate-700',
+    },
+    {
+      href: 'https://www.facebook.com/share/1JunPviNMg/',
+      icon: FacebookIcon,
+      name: 'Facebook',
+      bg: 'bg-[#1877F2]',
+    },
   ] as const;
   const locale = isAr ? 'ar-EG' : 'en-US';
   let currentYear: number | string = new Date().getFullYear();
@@ -85,11 +123,17 @@ export function LandingFooter() {
             <p className="text-muted-foreground text-sm">
               {t('Landing.footer.brand.description')}
             </p>
-            <ul className="flex flex-wrap items-center gap-2">
-              {socialLinks.map(({ href, icon: Icon }, index) => (
+            <ul className="flex flex-wrap items-center gap-2.5">
+              {socialLinks.map(({ href, icon: Icon, name, bg }, index) => (
                 <li key={index}>
-                  <a href={href} target="_blank" rel="noopener noreferrer">
-                    <Icon className="size-6" />
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={name}
+                    className={`w-9 h-9 rounded-xl ${bg} flex items-center justify-center transition-all duration-200 shadow-md hover:scale-110 hover:shadow-lg`}
+                  >
+                    <Icon className="size-5" />
                   </a>
                 </li>
               ))}
