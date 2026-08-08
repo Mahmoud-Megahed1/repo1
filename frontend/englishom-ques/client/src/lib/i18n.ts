@@ -3,7 +3,7 @@ export type Language = "en" | "ar";
 export const translations = {
   en: {
     // Header
-    "header.title": "Proficiency Level Test",
+    "header.title": "EnglishOM | Proficiency Level",
     "header.subtitle": "Test your English knowledge",
     "header.admin": "Admin",
     "header.myResults": "My Results",
@@ -154,7 +154,7 @@ export const translations = {
   },
   ar: {
     // Header
-    "header.title": "اختبار مستوى الكفاءة",
+    "header.title": "إنجلشوم | مستوى الكفاءة",
     "header.subtitle": "اختبر معرفتك باللغة الإنجليزية",
     "header.admin": "الإدارة",
     "header.myResults": "نتائجي",

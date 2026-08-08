@@ -12,16 +12,20 @@ export function Header() {
   return (
     <header className="border-b border-border/50 bg-background/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="container flex items-center justify-between h-16 px-4">
-        {/* Logo */}
+        {/* Logo & Title */}
         <div 
-          className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+          className="flex items-center gap-2 sm:gap-2.5 cursor-pointer hover:opacity-80 transition-opacity"
           onClick={() => navigate("/")}
         >
           <img 
             src="/logo.jpeg" 
             alt="Englishom" 
-            className="h-10 w-auto"
+            className="h-10 w-auto rounded-md"
           />
+          <span className="text-slate-500 text-sm">|</span>
+          <span className="text-foreground text-xs sm:text-sm font-bold whitespace-nowrap">
+            {language === "ar" ? "إنجلشوم | اكتشف مستواك" : "Englishom | Discover Your Level"}
+          </span>
         </div>
 
         {/* Navigation */}
