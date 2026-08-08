@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as Landingpage1RouteImport } from './routes/landingpage1'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as LocaleGlobalLayoutRouteImport } from './routes/$locale/_globalLayout'
@@ -38,6 +39,11 @@ import { Route as LocaleGlobalLayoutAuthAppLevelsIdDayLessonNameIndexRouteImport
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Landingpage1Route = Landingpage1RouteImport.update({
+  id: '/landingpage1',
+  path: '/landingpage1',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -181,6 +187,7 @@ const LocaleGlobalLayoutAuthAppLevelsIdDayLessonNameIndexRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/landingpage1': typeof Landingpage1Route
   '/privacy': typeof PrivacyRoute
   '/$locale': typeof LocaleGlobalLayoutAuthRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
@@ -207,6 +214,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/landingpage1': typeof Landingpage1Route
   '/privacy': typeof PrivacyRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/$locale': typeof LocaleGlobalLayoutIndexRoute
@@ -231,6 +239,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/landingpage1': typeof Landingpage1Route
   '/privacy': typeof PrivacyRoute
   '/$locale/_globalLayout': typeof LocaleGlobalLayoutRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
@@ -260,6 +269,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/landingpage1'
     | '/privacy'
     | '/$locale'
     | '/auth/callback'
@@ -286,6 +296,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/landingpage1'
     | '/privacy'
     | '/auth/callback'
     | '/$locale'
@@ -309,6 +320,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/landingpage1'
     | '/privacy'
     | '/$locale/_globalLayout'
     | '/auth/callback'
@@ -337,6 +349,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  Landingpage1Route: typeof Landingpage1Route
   PrivacyRoute: typeof PrivacyRoute
   LocaleGlobalLayoutRoute: typeof LocaleGlobalLayoutRouteWithChildren
   AuthCallbackRoute: typeof AuthCallbackRoute
@@ -349,6 +362,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/landingpage1': {
+      id: '/landingpage1'
+      path: '/landingpage1'
+      fullPath: '/landingpage1'
+      preLoaderRoute: typeof Landingpage1RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -619,6 +639,7 @@ const LocaleGlobalLayoutRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  Landingpage1Route: Landingpage1Route,
   PrivacyRoute: PrivacyRoute,
   LocaleGlobalLayoutRoute: LocaleGlobalLayoutRouteWithChildren,
   AuthCallbackRoute: AuthCallbackRoute,
