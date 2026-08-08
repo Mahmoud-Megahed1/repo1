@@ -58,6 +58,16 @@ npm install --legacy-peer-deps
 npm run build
 cd ..
 
+# 6.5. Landing Page 1 (Static Subapp - landingpage1)
+echo "--- Building Landing Page 1 (landingpage1) ---"
+cd ../englishom-landing-complete/englishom-landing
+npm install --legacy-peer-deps
+npm run build
+rm -rf /var/www/englishom/subapps/landingpage1/*
+cp -r dist/public/* /var/www/englishom/subapps/landingpage1/
+chmod -R 755 /var/www/englishom/subapps/landingpage1
+cd ../../frontend
+
 # 7. Rebuild Main Vite App to Trigger Symlinks
 echo "--- Rebuilding Main App for Symlinks ---"
 cd english-home-vite
