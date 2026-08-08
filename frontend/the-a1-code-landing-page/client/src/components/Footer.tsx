@@ -274,7 +274,7 @@ export default function Footer({ courseData }: { courseData?: any }) {
           </div>
 
           {/* Social Links */}
-          <div className={`flex gap-3 sm:gap-4 flex-wrap justify-center md:justify-end ${isRTL ? "pr-0 md:pr-24" : "pr-0 md:pr-24"} pb-16 md:pb-0`}>
+          <div className={`flex gap-2 sm:gap-2.5 flex-wrap justify-center md:flex-nowrap md:justify-end pb-16 md:pb-0`}>
             {SocialIcons.map((social) => (
               <a
                 key={social.name}
@@ -282,7 +282,7 @@ export default function Footer({ courseData }: { courseData?: any }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 title={social.name}
-                className={`w-9 h-9 rounded-xl ${social.bg} flex items-center justify-center transition-all duration-200 shadow-md hover:scale-110 hover:shadow-lg`}
+                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl ${social.bg} flex items-center justify-center transition-all duration-200 shadow-md hover:scale-110 hover:shadow-lg flex-shrink-0`}
               >
                 {social.svg}
               </a>
