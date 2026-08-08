@@ -75,12 +75,43 @@ export default function Header() {
           </Button>
         </div>
 
-        {/* Mobile Menu Toggle Button */}
-        <div className="md:hidden flex items-center">
+        {/* Mobile Controls & Menu Toggle Button */}
+        <div className="md:hidden flex items-center gap-2">
+          {/* Language Toggle */}
+          <div className="flex items-center bg-muted dark:bg-slate-800 rounded-lg p-0.5">
+            <button
+              onClick={() => setLanguage("en")}
+              className={`px-2 py-0.5 rounded text-[11px] font-bold transition-colors ${
+                language === "en"
+                  ? "bg-background text-primary shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              title="English"
+            >
+              EN
+            </button>
+            <button
+              onClick={() => setLanguage("ar")}
+              className={`px-2 py-0.5 rounded text-[11px] font-bold transition-colors ${
+                language === "ar"
+                  ? "bg-background text-primary shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              title="العربية"
+            >
+              AR
+            </button>
+          </div>
+
+          {/* Theme Switcher Slider */}
+          <ThemeSwitcher />
+
+          {/* Hamburger Menu button */}
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="w-9 h-9"
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </Button>
@@ -104,13 +135,6 @@ export default function Header() {
             )}
 
             <div className="space-y-3 pt-4 border-t border-border mt-2">
-              <div className="flex items-center justify-between gap-2">
-                <Button variant="ghost" onClick={handleLanguageToggle} className="flex items-center gap-2">
-                  <Globe className="h-4 w-4 text-muted-foreground" />
-                  {language === "ar" ? "English" : "العربية"}
-                </Button>
-                <ThemeSwitcher />
-              </div>
               <div className="flex flex-col space-y-2">
                 {isAuthenticated ? (
                   <Button variant="outline" className="w-full justify-start" onClick={() => window.location.href = "/blog"}>

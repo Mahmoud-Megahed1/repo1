@@ -97,17 +97,25 @@ export function LandingHeader() {
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
+          {/* Mobile Actions & Menu Button */}
+          <div className="flex items-center gap-1 md:hidden">
+            <ThemeSwitcher />
+            <Button variant="ghost" size="icon" asChild className="h-9 w-9">
+              <LanguageSwitcher>
+                <span className="text-xs font-bold uppercase">{locale === 'ar' ? 'EN' : 'AR'}</span>
+              </LanguageSwitcher>
+            </Button>
+            <button
+              className="text-muted-foreground hover:text-foreground p-2"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -157,16 +165,7 @@ export function LandingHeader() {
               >
                 {t('Landing.header.navigation.contact')}
               </Link>
-              <div className="space-y-3 pt-4">
-                <div className="flex items-center justify-between gap-2">
-                  <Button variant="ghost" asChild>
-                    <LanguageSwitcher>
-                      <Globe className="text-muted-foreground me-2 h-4 w-4" />
-                      {locale === 'ar' ? 'English' : 'العربية'}
-                    </LanguageSwitcher>
-                  </Button>
-                  <ThemeSwitcher />
-                </div>
+              <div className="space-y-3 pt-4 border-t">
                 <div className="flex flex-col space-y-2">
                   <Button variant="ghost" asChild className="justify-start">
                     <Link to="/login">{t('Landing.header.cta.login')}</Link>

@@ -8,6 +8,7 @@ import {
   XIcon,
   YoutubeIcon,
   BlogIcon,
+  ThreadsIcon,
 } from '@components/icons';
 import useLocale from '@hooks/use-locale';
 import { Link } from '@shared/i18n/routing';
@@ -65,6 +66,7 @@ export function LandingFooter() {
     { href: 'https://x.com/Englishom_sa', icon: XIcon },
     { href: 'https://www.youtube.com/@Englishom_sa', icon: YoutubeIcon },
     { href: 'https://englishom.com/blog', icon: BlogIcon },
+    { href: 'https://www.threads.net/@englishom_sa', icon: ThreadsIcon },
   ] as const;
   const locale = isAr ? 'ar-EG' : 'en-US';
   let currentYear: number | string = new Date().getFullYear();
