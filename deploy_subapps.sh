@@ -63,7 +63,10 @@ echo "--- Building Landing Page 1 (landingpage1) ---"
 cd ../englishom-landing-complete/englishom-landing
 npm install --legacy-peer-deps
 npm run build
-rm -rf /var/www/englishom/subapps/landingpage1/*
+# حذف المجلد أو الرابط الرمزي بالكامل لتجنب تكرار الملفات أو مشاكل الصلاحيات
+rm -rf /var/www/englishom/subapps/landingpage1
+mkdir -p /var/www/englishom/subapps/landingpage1
+# نسخ الملفات للمجلد الفعلي
 cp -r dist/public/* /var/www/englishom/subapps/landingpage1/
 chmod -R 755 /var/www/englishom/subapps/landingpage1
 cd ../../frontend
