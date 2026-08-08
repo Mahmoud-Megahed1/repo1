@@ -20,7 +20,20 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang);
     localStorage.setItem("englishom-language", lang);
+    if (typeof window !== "undefined") {
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      document.body.style.fontFamily = lang === "ar" ? "'Cairo', 'Inter', sans-serif" : "'Inter', sans-serif";
+    }
   };
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      document.documentElement.lang = language;
+      document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+      document.body.style.fontFamily = language === "ar" ? "'Cairo', 'Inter', sans-serif" : "'Inter', sans-serif";
+    }
+  }, [language]);
 
   const t = (key: string) => getTranslation(language, key);
   const isRTL = language === "ar";
