@@ -34,10 +34,10 @@ async function run() {
 
   const db = mongoose.connection.db;
 
-  // List all files in GridFS bucket
-  console.log('\n--- Listing GridFS files ---');
-  const files = await db.collection('fs.files').find({}).toArray();
-  console.log(`Found ${files.length} files in GridFS.`);
+  // List all files in GridFS bucket 'appFiles'
+  console.log('\n--- Listing GridFS files in appFiles ---');
+  const files = await db.collection('appFiles.files').find({}).toArray();
+  console.log(`Found ${files.length} files in GridFS (appFiles).`);
 
   for (const file of files) {
     if (file.filename.includes('json') || file.filename.includes('LISTEN')) {
@@ -45,7 +45,7 @@ async function run() {
       
       // Let's download and print JSON files
       if (file.filename.endsWith('.json')) {
-        const chunks = await db.collection('fs.chunks').find({ files_id: file._id }).sort({ n: 1 }).toArray();
+        const chunks = await db.collection('appFiles.chunks').find({ files_id: file._id }).sort({ n: 1 }).toArray();
         const buffer = Buffer.concat(chunks.map(c => c.data.buffer));
         console.log(`  Content: ${buffer.toString('utf-8')}`);
       }
