@@ -32,23 +32,28 @@ async function run() {
   await mongoose.connect(dbUrl);
   console.log('Connected!');
 
-  const db = mongoose.connection.db;
+  const adminDb = mongoose.connection.client.db('admin');
+  
+  // List all databases
+  console.log('\n--- Listing all databases ---');
+  const dbs = await adminDb.admin().listDatabases();
+  console.log(dbs.databases);
 
-  // List all files in GridFS bucket 'appFiles'
-  console.log('\n--- Listing GridFS files in appFiles ---');
-  const files = await db.collection('appFiles.files').find({}).toArray();
-  console.log(`Found ${files.length} files in GridFS (appFiles).`);
+  // For the current database, list all collections
+  const currentDb = mongoose.connection.db;
+  console.log(`\n--- Listing collections in current database (${currentDb.databaseName}) ---`);
+  const collections = await currentDb.listCollections().toArray();
+  console.log(collections.map(c => c.name));
 
-  for (const file of files) {
-    if (file.filename.includes('json') || file.filename.includes('LISTEN')) {
-      console.log(`- File: ${file.filename} (Size: ${file.length} bytes, Uploaded: ${file.uploadDate})`);
+  // Let's check for any collection name that contains 'files'
+  for (const col of collections) {
+    if (col.name.includes('files')) {
+      const count = await currentDb.collection(col.name).countDocuments();
+      console.log(`Collection ${col.name} has ${count} documents.`);
       
-      // Let's download and print JSON files
-      if (file.filename.endsWith('.json')) {
-        const chunks = await db.collection('appFiles.chunks').find({ files_id: file._id }).sort({ n: 1 }).toArray();
-        const buffer = Buffer.concat(chunks.map(c => c.data.buffer));
-        console.log(`  Content: ${buffer.toString('utf-8')}`);
-      }
+      // Let's print first few documents to see what is in there
+      const docs = await currentDb.collection(col.name).find({}).limit(5).toArray();
+      console.log(`Sample docs from ${col.name}:`, docs);
     }
   }
 
