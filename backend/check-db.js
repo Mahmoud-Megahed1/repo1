@@ -45,13 +45,6 @@ async function run() {
 
   for (const file of files) {
     console.log(`- File: ${file.filename} (Size: ${file.length} bytes, Uploaded: ${file.uploadDate})`);
-    
-    // Download and print JSON files
-    if (file.filename.endsWith('.json')) {
-      const chunks = await db.collection('appFiles.chunks').find({ files_id: file._id }).sort({ n: 1 }).toArray();
-      const buffer = Buffer.concat(chunks.map(c => c.data.buffer));
-      console.log(`  Content: ${buffer.toString('utf-8')}`);
-    }
   }
 
   // Also query if there is any other files for LEVEL_A1/2
@@ -64,18 +57,24 @@ async function run() {
     console.log(`- File: ${file.filename} (Size: ${file.length} bytes, Uploaded: ${file.uploadDate})`);
   }
 
-  // Also query if there is any other files for LEVEL_A2/2
-  console.log('\n--- Listing all GridFS files for LEVEL_A2/2/ ---');
-  const levelA2Files = await db.collection('appFiles.files').find({
-    filename: { $regex: /LEVEL_A2\/2\//i }
-  }).toArray();
-  console.log(`Found ${levelA2Files.length} files matching 'LEVEL_A2/2/'.`);
-  for (const file of levelA2Files) {
-    console.log(`- File: ${file.filename} (Size: ${file.length} bytes, Uploaded: ${file.uploadDate})`);
-  }
-
   await mongoose.disconnect();
   console.log('\nDisconnected.');
+
+  // Print Nginx access logs matching "/files" around 18:00 to 18:25
+  console.log('\n--- Searching Nginx Access Logs for "/files" ---');
+  const accessLogPath = '/var/log/nginx/access.log';
+  if (fs.existsSync(accessLogPath)) {
+    const logContent = fs.readFileSync(accessLogPath, 'utf8');
+    const lines = logContent.split('\n');
+    const matchedLines = lines.filter(line => {
+      return line.includes('/files') && (line.includes('12/Aug/2026:18:') || line.includes('12/Aug/2026:17:'));
+    });
+    console.log(`Found ${matchedLines.length} matching lines in Nginx access log.`);
+    // Print last 40 matched lines
+    matchedLines.slice(-40).forEach(line => console.log(line));
+  } else {
+    console.log(`Nginx access log not found at ${accessLogPath}`);
+  }
 }
 
 run().catch(console.error);
