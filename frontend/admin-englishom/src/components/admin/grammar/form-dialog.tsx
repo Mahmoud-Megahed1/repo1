@@ -47,7 +47,7 @@ const FormDialog: FC<Props> = ({ day, levelId }) => {
       },
       ...(filteredWords?.length ? { words: filteredWords } : {}),
     };
-    mutate(finalValues);
+    mutate(finalValues, { levelId: values.levelId, day: values.day });
   }
 
   useEffect(() => {

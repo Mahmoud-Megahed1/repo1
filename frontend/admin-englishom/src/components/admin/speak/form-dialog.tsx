@@ -43,19 +43,22 @@ const FormDialog: FC<Props> = ({ day, levelId }) => {
       values.sentences.map(async ({ soundSrc }) => {
         const response = await mutateAsync({
           file: soundSrc,
-          day,
-          level_name: levelId,
+          day: values.day,
+          level_name: values.levelId,
           lesson_name: 'SPEAK',
         });
         return response.data.url;
       }),
     );
-    mutate({
-      sentences: values.sentences.map((sentence, index) => ({
-        ...sentence,
-        soundSrc: urls[index],
-      })),
-    });
+    mutate(
+      {
+        sentences: values.sentences.map((sentence, index) => ({
+          ...sentence,
+          soundSrc: urls[index],
+        })),
+      },
+      { levelId: values.levelId, day: values.day }
+    );
   }
 
   useEffect(() => {

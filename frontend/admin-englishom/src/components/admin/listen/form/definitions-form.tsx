@@ -23,14 +23,37 @@ const DefinitionsForm = () => {
   });
   const transcript = watch('transcript') || '';
   useEffect(() => {
-    const matchedWords = transcript.match(/{(.*?)}/g) || [];
-    replace(
-      matchedWords.map((word) => ({
-        word: stripHtml(word.replace(/[{}]/g, '')),
-        definition: '',
-      })),
+    const matchedWords = (transcript.match(/{(.*?)}/g) || []).map(word => 
+      stripHtml(word.replace(/[{}]/g, ''))
     );
-  }, [replace, transcript]);
+    
+    // Get current definitions to merge
+    const currentDefs = watch('definitions') || [];
+    
+    // Merge: Keep existing definition and soundSrc if word is still in the matched list
+    const newDefs = matchedWords.map(word => {
+      const existing = currentDefs.find(d => d && d.word === word);
+      if (existing) {
+        return existing;
+      }
+      return {
+        word,
+        definition: '',
+        soundSrc: undefined
+      };
+    });
+    
+    // Compare newDefs with currentDefs to prevent infinite loop
+    const hasChanged = newDefs.length !== currentDefs.length || 
+      newDefs.some((d, idx) => {
+        const cur = currentDefs[idx];
+        return !cur || d.word !== cur.word || d.definition !== cur.definition || d.soundSrc !== cur.soundSrc;
+      });
+      
+    if (hasChanged) {
+      replace(newDefs as any);
+    }
+  }, [replace, transcript, watch]);
   if (fields.length === 0) return null;
   return (
     <>

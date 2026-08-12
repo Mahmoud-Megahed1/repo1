@@ -32,7 +32,7 @@ const FormDialog: FC<Props> = ({ day, levelId }) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    mutate(values);
+    mutate(values, { levelId: values.levelId, day: values.day });
   }
 
   useEffect(() => {

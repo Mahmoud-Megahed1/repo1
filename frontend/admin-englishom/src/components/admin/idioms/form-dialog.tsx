@@ -73,7 +73,7 @@ const FormDialog: FC<Props> = ({ day, levelId }) => {
         ar: useCasesAr,
         en: useCasesEn,
       },
-    });
+    }, { levelId, day });
   }
 
   useEffect(() => {

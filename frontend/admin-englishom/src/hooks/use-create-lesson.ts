@@ -51,11 +51,14 @@ const useCreateLesson = <T extends LessonName>({
       onSuccess?.();
     },
   });
-  const mutate = (data: Omit<DataMap[T], 'id'>) => {
+  const mutate = (
+    data: Omit<DataMap[T], 'id'>,
+    overrideParams?: { levelId?: LevelId; day?: string }
+  ) => {
     return fn({
       data: [{ ...data }],
-      level_name: levelId,
-      day,
+      level_name: overrideParams?.levelId ?? levelId,
+      day: overrideParams?.day ?? day,
       lesson_name: lessonName,
     });
   };
