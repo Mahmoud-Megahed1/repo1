@@ -1,6 +1,31 @@
 const mongoose = require('mongoose');
+const path = require('path');
+const fs = require('fs');
 
-const dbUrl = 'mongodb://127.0.0.1:27017/englishom';
+// Try to load env variables from .env or backend_prod.env
+let dbUrl = 'mongodb://127.0.0.1:27017/englishom';
+
+const envPaths = [
+  path.join(__dirname, '.env'),
+  path.join(__dirname, '..', 'backend_prod.env'),
+  path.join(__dirname, '..', '.env')
+];
+
+for (const envPath of envPaths) {
+  if (fs.existsSync(envPath)) {
+    console.log(`Loading env from ${envPath}`);
+    require('dotenv').config({ path: envPath });
+  }
+}
+
+if (process.env.DATABASE_URL) {
+  dbUrl = process.env.DATABASE_URL;
+  // Mask password for security in logs
+  const maskedUrl = dbUrl.replace(/\/\/([^:]+):([^@]+)@/, '//xxxx:xxxx@');
+  console.log(`Using DATABASE_URL from env: ${maskedUrl}`);
+} else {
+  console.log(`DATABASE_URL not found in env, using default: ${dbUrl}`);
+}
 
 async function run() {
   console.log('Connecting to database...');
