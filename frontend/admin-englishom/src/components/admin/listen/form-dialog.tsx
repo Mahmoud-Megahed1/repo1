@@ -8,6 +8,7 @@ import { z } from 'zod';
 import ListenForm, { formSchema } from './form';
 import { useMutation } from '@tanstack/react-query';
 import { uploadMedia } from '@/services/lessons';
+import { toast } from 'sonner';
 type Props = {
   levelId: LevelId;
   day: string;
@@ -71,7 +72,14 @@ const FormDialog: FC<Props> = ({ day, levelId }) => {
       <ListenForm
         className="px-1"
         form={form}
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit, (errors) => {
+          console.error(errors);
+          if (errors.definitions?.root?.message) {
+            toast.error(errors.definitions.root.message);
+          } else {
+            toast.error('Please fill in all required fields and upload all audio files.');
+          }
+        })}
         id={formId}
       />
     </CreateDialog>

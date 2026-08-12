@@ -70,9 +70,9 @@ const ListenForm = ({ form, className, ...props }: Props) => {
             )}
           </div>
           <DefinitionsForm />
-          {form.formState.errors.definitions && (
+          {((form.formState.errors.definitions as any)?.message || (form.formState.errors.definitions as any)?.root?.message) && (
             <p className="text-sm font-semibold text-destructive px-1 mt-2">
-              {form.formState.errors.definitions.message as string}
+              {((form.formState.errors.definitions as any).message || (form.formState.errors.definitions as any).root?.message)}
             </p>
           )}
         </form>
