@@ -25,23 +25,23 @@ const CreateDialog: FC<Props> = ({ children, formId, isPending, ...props }) => {
       <DialogTrigger asChild>
         <Button>{t('create')}</Button>
       </DialogTrigger>
-      <DialogContent className="p-0">
-        <ScrollArea className="flex max-h-[90vh] flex-col px-5 py-6">
-          <DialogHeader className="mb-4 px-1">
-            <DialogTitle className="text-xl">{t('createLesson')}</DialogTitle>
-            <DialogDescription className="sr-only">
-              {t('fillForm')}
-            </DialogDescription>
-          </DialogHeader>
+      <DialogContent className="flex max-h-[90vh] max-w-2xl flex-col p-6 gap-0">
+        <DialogHeader className="mb-4">
+          <DialogTitle className="text-xl">{t('createLesson')}</DialogTitle>
+          <DialogDescription className="sr-only">
+            {t('fillForm')}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex-1 overflow-y-auto pr-1 py-1">
           {children}
-          <Button
-            form={formId}
-            className="ms-auto mt-4 block"
-            disabled={isPending}
-          >
-            {isPending ? t('creating') : t('create')}
-          </Button>
-        </ScrollArea>
+        </div>
+        <Button
+          form={formId}
+          className="ms-auto mt-4 block"
+          disabled={isPending}
+        >
+          {isPending ? t('creating') : t('create')}
+        </Button>
       </DialogContent>
     </Dialog>
   );

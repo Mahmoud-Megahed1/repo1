@@ -15,7 +15,7 @@ function stripHtml(html: string): string {
 }
 
 const DefinitionsForm = () => {
-  const { control, setValue, watch } =
+  const { control, setValue, watch, formState: { errors } } =
     useFormContext<z.infer<typeof formSchema>>();
   const { fields, append, remove, replace } = useFieldArray({
     name: 'definitions',
@@ -54,26 +54,33 @@ const DefinitionsForm = () => {
                     className="flex-1"
                     label="Definition"
                   />
-                  <div className="flex w-full gap-2">
-                    <Input
-                      type="file"
-                      accept="audio/mp3"
-                      className="mt-auto"
-                      onChange={(e) => {
-                        setValue(
-                          `definitions.${index}.soundSrc`,
-                          e.target.files![0],
-                        );
-                      }}
-                    />
-                    <Button
-                      type="button"
-                      onClick={() =>
-                        append({ definition: '', word: '', soundSrc: '' })
-                      }
-                    >
-                      <PlusIcon />
-                    </Button>
+                  <div className="flex w-full flex-col gap-1">
+                    <div className="flex w-full gap-2">
+                      <Input
+                        type="file"
+                        accept="audio/mp3"
+                        className="mt-auto"
+                        onChange={(e) => {
+                          setValue(
+                            `definitions.${index}.soundSrc`,
+                            e.target.files![0],
+                          );
+                        }}
+                      />
+                      <Button
+                        type="button"
+                        onClick={() =>
+                          append({ definition: '', word: '', soundSrc: '' })
+                        }
+                      >
+                        <PlusIcon />
+                      </Button>
+                    </div>
+                    {errors.definitions?.[index]?.soundSrc && (
+                      <p className="text-xs font-semibold text-destructive">
+                        {errors.definitions[index].soundSrc.message as string}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -92,25 +99,32 @@ const DefinitionsForm = () => {
                     className="flex-1"
                     label="Definition"
                   />
-                  <div className="flex w-full gap-2">
-                    <Input
-                      type="file"
-                      accept="audio/mp3"
-                      className="mt-auto"
-                      onChange={(e) => {
-                        setValue(
-                          `definitions.${index}.soundSrc`,
-                          e.target.files![0],
-                        );
-                      }}
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      onClick={() => remove(index)}
-                    >
-                      <Trash2 />
-                    </Button>
+                  <div className="flex w-full flex-col gap-1">
+                    <div className="flex w-full gap-2">
+                      <Input
+                        type="file"
+                        accept="audio/mp3"
+                        className="mt-auto"
+                        onChange={(e) => {
+                          setValue(
+                            `definitions.${index}.soundSrc`,
+                            e.target.files![0],
+                          );
+                        }}
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={() => remove(index)}
+                      >
+                        <Trash2 />
+                      </Button>
+                    </div>
+                    {errors.definitions?.[index]?.soundSrc && (
+                      <p className="text-xs font-semibold text-destructive">
+                        {errors.definitions[index].soundSrc.message as string}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

@@ -42,6 +42,10 @@ const ListenForm = ({ form, className, ...props }: Props) => {
       <Form {...form}>
         <form className={cn('space-y-4', className)} {...props}>
           <DayLevelPicker control={form.control} />
+          <p className="px-1 text-sm text-muted-foreground">
+            Add words you want to define between curly brackets. For example:{' '}
+            <b>{`Anas was {excited} about school`}.</b>
+          </p>
           <TextEditorFormField
             form={form}
             name="transcript"
@@ -66,6 +70,11 @@ const ListenForm = ({ form, className, ...props }: Props) => {
             )}
           </div>
           <DefinitionsForm />
+          {form.formState.errors.definitions && (
+            <p className="text-sm font-semibold text-destructive px-1 mt-2">
+              {form.formState.errors.definitions.message as string}
+            </p>
+          )}
         </form>
       </Form>
     </FormProvider>
